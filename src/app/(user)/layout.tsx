@@ -1,17 +1,12 @@
-import {
-  HomeIcon,
-  MessageCirclePlus,
-  PlusCircleIcon,
-  PlusIcon,
-} from "lucide-react";
+import { HomeIcon } from "lucide-react";
 import { PropsWithChildren, Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";
 import { Link } from "@/components/link";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
+import { NewPostDrawer } from "./new-post-drawer";
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
-import { Button } from "@/components/ui/button";
 
 const MenuIcons = [
   {
@@ -56,9 +51,7 @@ export default function Layout({ children }: PropsWithChildren) {
           </div>
           <div className="text-center align-middle">App Name</div>
           <div className="size-[36px]">
-            <Button variant="outline" size="icon" className="rounded-full">
-              <MessageCirclePlus />
-            </Button>
+            <NewPostDrawer />
           </div>
         </header>
         <main className="overflow-y-scroll">{children}</main>

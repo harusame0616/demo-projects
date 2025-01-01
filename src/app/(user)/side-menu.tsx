@@ -96,7 +96,7 @@ function UserMiniProfile(props: UserMiniProfileProps) {
       <Avatar>
         {/* <Image src="" alt={""} /> */}
         <AvatarFallback>
-          {props.skeleton ? "" : props.name.at(0)}
+          {props.skeleton ? "" : props.name?.at(0) || ""}
         </AvatarFallback>
       </Avatar>
       <div className="grid grid-rows-2 font-normal">
