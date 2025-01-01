@@ -51,7 +51,7 @@ export default function Layout({ children }: PropsWithChildren) {
           <div className="text-center align-middle">App Name</div>
           <div className="size-[36px]"></div>
         </header>
-        <main className="overflow-y-auto text-center">{children}</main>
+        <main className="overflow-y-auto">{children}</main>
         <footer className="">
           <nav>
             <ul className="grid grid-cols-5">
