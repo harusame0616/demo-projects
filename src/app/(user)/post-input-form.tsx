@@ -40,7 +40,6 @@ export function PostInputForm({
     }),
 
     onSubmit: async (params, setErrorMessage) => {
-      console.log({ params });
       setErrorMessage("");
 
       const client = createClient();
@@ -54,7 +53,7 @@ export function PostInputForm({
 
       const actionResult = await action({
         ...params,
-        attachments: uploadResults.map((r) => r.data.path),
+        attachments: uploadResults.map((r) => r.data?.path!),
       });
 
       if (!actionResult.success) {
