@@ -1,4 +1,9 @@
-import { HomeIcon } from "lucide-react";
+import {
+  HomeIcon,
+  MessageCirclePlus,
+  PlusCircleIcon,
+  PlusIcon,
+} from "lucide-react";
 import { PropsWithChildren, Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";
@@ -6,6 +11,7 @@ import { Link } from "@/components/link";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
+import { Button } from "@/components/ui/button";
 
 const MenuIcons = [
   {
@@ -42,17 +48,21 @@ export default function Layout({ children }: PropsWithChildren) {
         <SideMenuContainer />
       </Suspense>
       <div className="grid size-full grid-rows-[auto,1fr,auto] overflow-hidden">
-        <header className="grid grid-cols-[auto,1fr,auto] p-4">
+        <header className="grid grid-cols-[auto,1fr,auto] p-4 shadow-md">
           <div className="flex items-center justify-center">
             <SidebarTrigger className="shrink-0">
               <Avatar name="test" src={""} alt={""} />
             </SidebarTrigger>
           </div>
           <div className="text-center align-middle">App Name</div>
-          <div className="size-[36px]"></div>
+          <div className="size-[36px]">
+            <Button variant="outline" size="icon" className="rounded-full">
+              <MessageCirclePlus />
+            </Button>
+          </div>
         </header>
-        <main className="overflow-y-auto">{children}</main>
-        <footer className="">
+        <main className="overflow-y-scroll">{children}</main>
+        <footer className="shadow-md">
           <nav>
             <ul className="grid grid-cols-5">
               {MenuIcons.map((item) => (
