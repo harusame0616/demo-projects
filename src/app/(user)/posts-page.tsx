@@ -7,10 +7,13 @@ import {
   MessageCircleIcon,
   TrashIcon,
 } from "lucide-react";
+import { useState } from "react";
 
+import { AlertDialog } from "@/components/alert-dialog";
 import { Avatar } from "@/components/avatar/avatar";
 import { Button } from "@/components/ui/button";
 
+import { deletePost } from "./_actions/delete-post";
 import { usePosts } from "./_hooks/use-posts";
 import { PostDto } from "./posts";
 
@@ -52,6 +55,9 @@ function Posts({ posts }: { posts: PostDto[] }) {
 }
 
 function Post({ post }: { post: PostDto }) {
+  const [deletionDialog, setDeletionDialog] = useState(false);
+  const { mutate } = usePosts();
+
   return (
     <div className="grid grid-cols-[auto,1fr] border-b p-4">
       <div className="pr-2">
@@ -75,7 +81,23 @@ function Post({ post }: { post: PostDto }) {
             </Button>
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost" size="icon">
+            <AlertDialog
+              title="投稿削除"
+              description={`「${post.title}」を削除しますがよろしいですか？`}
+              primaryButtonLabel={"削除する"}
+              open={deletionDialog}
+              onOpenChange={setDeletionDialog}
+              onPrimaryButtonClick={async () => {
+                await deletePost(post);
+                mutate();
+              }}
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setDeletionDialog(true)}
+              type="button"
+            >
               <TrashIcon />
             </Button>
           </div>
