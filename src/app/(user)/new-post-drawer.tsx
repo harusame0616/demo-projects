@@ -16,11 +16,14 @@ import {
 } from "@/components/ui/drawer";
 
 import { postNewPostAction } from "./_actions/post-new-post";
+import { usePosts } from "./_hooks/use-posts";
 import { PostInputForm } from "./post-input-form";
 
 export function NewPostDrawer() {
   const [open, setOpen] = useState(false);
   const formId = useId();
+
+  const { mutate } = usePosts();
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -36,7 +39,10 @@ export function NewPostDrawer() {
           <PostInputForm
             formId={formId}
             action={postNewPostAction}
-            onSuccess={() => setOpen(false)}
+            onSuccess={() => {
+              setOpen(false);
+              mutate();
+            }}
           />
         </div>
         <DrawerFooter className="flex flex-row justify-end">

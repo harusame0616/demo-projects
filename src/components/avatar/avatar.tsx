@@ -1,12 +1,7 @@
 import Image from "next/image";
 import { ComponentProps } from "react";
 
-import {
-  Avatar as ShadcnAvatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
-
+import { Skeleton } from "../ui/skeleton";
 import UserImage from "./user.png";
 
 type Props = {
@@ -19,7 +14,9 @@ export function Avatar({
   skeleton,
   ...props
 }: Props & ComponentProps<typeof Image>) {
-  return (
+  return skeleton ? (
+    <Skeleton className="size-8 rounded-full" />
+  ) : (
     <Image
       {...props}
       alt={props.alt ?? name}

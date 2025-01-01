@@ -1,7 +1,7 @@
 "use client";
 
 import { DeleteIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { uuidv7 } from "uuidv7";
 import * as v from "valibot";
 
@@ -53,7 +53,7 @@ export function PostInputForm({
 
       const actionResult = await action({
         ...params,
-        attachments: uploadResults.map((r) => r.data?.path!),
+        attachments: uploadResults.map((r) => r.data?.path),
       });
 
       if (!actionResult.success) {

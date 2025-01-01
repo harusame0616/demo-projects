@@ -18,13 +18,12 @@ export const postNewPostAction = createAction(
       title: params.title,
       text: params.text,
       attachments: params.attachments,
-      userId: uuidv7(),
     });
 
     if (result.error) {
       return fail("投稿に失敗しました");
     }
-    return succeed({ result });
+    return succeed();
   },
   {
     inputSchema: v.object({
