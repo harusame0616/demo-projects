@@ -1,5 +1,7 @@
 "use server";
 
+import * as v from "valibot";
+
 import { createClient } from "@/lib/supabase/server";
 import { createClientServiceRole } from "@/lib/supabase/service-role";
 
@@ -10,14 +12,17 @@ export type PostDto = {
   createdAt: string;
   likeCount: number;
   isLiked: boolean;
+  author: {
+    userId: string;
+    name: string;
+    avatarUrl: string;
+  };
 };
+
 export async function getPosts({ page }: { page: number }): Promise<PostDto[]> {
-  console.log({ page });
   const client = createClientServiceRole().schema("X_DEMO");
   const authClient = await createClient();
   const userResult = await authClient.auth.getUser();
-  console.log("wait");
-  console.log("resume");
 
   if (userResult.error) {
     throw new Error("test");
@@ -25,9 +30,13 @@ export async function getPosts({ page }: { page: number }): Promise<PostDto[]> {
 
   const result = await client
     .from("post")
-    .select(`postId, title, text, attachments, createdAt, likes:post_like(*)`)
+    .select(
+      `postId, title, text, attachments, createdAt, userId, profile!post_userId_fkey1(*), likes:post_like(*)`,
+    )
+    // .select(`postId, title, text, attachments, createdAt, likes:post_like(*)`)
     .order("createdAt", { ascending: false })
     .range(page * 10, (page + 1) * 10 - 1);
+  console.log(result, result.error);
 
   if (result.error) {
     throw new Error("error");
@@ -38,7 +47,6 @@ export async function getPosts({ page }: { page: number }): Promise<PostDto[]> {
     const isLiked = post.likes.some(
       (like) => like.userId === userResult.data.user.id,
     );
-
     return {
       postId: post.postId,
       title: post.title,
@@ -46,6 +54,14 @@ export async function getPosts({ page }: { page: number }): Promise<PostDto[]> {
       createdAt: post.createdAt,
       likeCount,
       isLiked,
+      author: v.parse(
+        v.object({
+          userId: v.string(),
+          name: v.string(),
+          avatarUrl: v.string(),
+        }),
+        post.profile,
+      ),
     };
   });
 

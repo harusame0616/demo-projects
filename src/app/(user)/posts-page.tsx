@@ -78,12 +78,12 @@ function Post({ post }: { post: PostDto }) {
   return (
     <div className="grid grid-cols-[auto,1fr] border-b p-4">
       <div className="pr-2">
-        {/* <Avatar src={post.user.icon} alt={post.user.name} name={""} /> */}
-        <Avatar src={"/user.png"} alt={"test"} name={""} />
+        <Avatar src={post.author.avatarUrl} name={post.author.name} />
       </div>
       <div className="flex flex-col gap-1 text-left">
-        {/* <div className="font-bold">{post.user.name}</div> */}
-        <div className="font-bold text-muted-foreground">user</div>
+        <div className="font-bold text-muted-foreground">
+          {post.author.name}
+        </div>
         <div className="flex items-center gap-1 font-bold">
           {post.title}
           <span className="text-xs text-muted-foreground">
