@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { deletePost } from "./_actions/delete-post";
 import { togglePostLikeAction } from "./_actions/toggle-post-like";
 import { usePosts } from "./_hooks/use-posts";
+import { LikesDrawer } from "./like-drawer";
 import { PostDto } from "./posts";
 
 export function PostsPage() {
@@ -58,14 +59,10 @@ function Post({ post }: { post: PostDto }) {
   const [deletionDialog, setDeletionDialog] = useState(false);
   const { mutate } = usePosts();
   const [optimisticLikes, setOptimisticLikes] = useOptimistic(post.isLiked);
-  const [optimisticLikeCount, setOptimisticLikeCount] = useOptimistic(
-    post.likeCount,
-  );
 
   async function handleClickLike() {
     startTransition(async () => {
       setOptimisticLikes((prev) => !prev);
-      setOptimisticLikeCount((prev) => (prev ? prev - 1 : prev + 1));
       const result = await togglePostLikeAction(post);
       if (!result.success) {
         return;
@@ -118,11 +115,11 @@ function Post({ post }: { post: PostDto }) {
               <TrashIcon />
             </Button>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center">
             <Button variant="ghost" size="icon" onClick={handleClickLike}>
               <HeartIcon fill={optimisticLikes ? "#000" : "#fff"} />
-              {optimisticLikeCount}
             </Button>
+            <LikesDrawer likes={post.likes} />
           </div>
           <div className="flex gap-2">
             <Button variant="ghost" size="icon">

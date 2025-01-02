@@ -6,15 +6,15 @@ import * as v from "valibot";
 
 import { succeed } from "@/lib/result";
 import { createAction } from "@/lib/server-action";
-import { createClient } from "@/lib/supabase/server";
+import { createClientServiceRole } from "@/lib/supabase/service-role";
 
 export const postNewPostAction = createAction(
-  async (params) => {
-    console.log("post new post");
-    const client = (await createClient()).schema("X_DEMO");
+  async (params, { user }) => {
+    const client = createClientServiceRole().schema("X_DEMO");
 
     const result = await client.from("post").insert({
       postId: uuidv7(),
+      userId: user?.userId,
       title: params.title,
       text: params.text,
       attachments: params.attachments,
