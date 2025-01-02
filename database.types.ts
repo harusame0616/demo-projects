@@ -24,7 +24,7 @@ export type Database = {
           postId: string
           text?: string | null
           title?: string | null
-          userId: string
+          userId?: string
         }
         Update: {
           attachments?: string[]
@@ -35,6 +35,32 @@ export type Database = {
           userId?: string
         }
         Relationships: []
+      }
+      post_like: {
+        Row: {
+          created_at: string
+          postId: string
+          userId: string
+        }
+        Insert: {
+          created_at?: string
+          postId: string
+          userId: string
+        }
+        Update: {
+          created_at?: string
+          postId?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_like_postId_fkey"
+            columns: ["postId"]
+            isOneToOne: false
+            referencedRelation: "post"
+            referencedColumns: ["postId"]
+          },
+        ]
       }
     }
     Views: {

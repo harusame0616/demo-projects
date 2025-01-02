@@ -2,13 +2,21 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import * as v from "valibot";
 
+import { User } from "@/app/admin/(private)/users/_data/user";
+
 import { fail, Failure, Result } from "./result";
+import { createClient } from "./supabase/server";
 
 export function createAction<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   InputSchema extends v.BaseSchema<any, any, any>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Handler extends (inputs: v.InferInput<InputSchema>) => Promise<Result<any>>,
+  Handler extends (
+    inputs: v.InferInput<InputSchema>,
+    context: {
+      user: null | User;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) => Promise<Result<any>>,
 >(
   handler: Handler,
   {
@@ -30,10 +38,21 @@ export function createAction<
 
       return fail(Object.values<string>(errors)[0]);
     }
+    const client = await createClient();
+    const getUserResult = await client.auth.getUser();
 
-    const result = (await handler(parsedParams.output)) as Awaited<
-      ReturnType<Handler>
-    >;
+    const user: User | null = getUserResult.error
+      ? null
+      : {
+          userId: getUserResult.data.user.id,
+          email: getUserResult.data.user.email!,
+          name: getUserResult.data.user.user_metadata.name,
+          role: getUserResult.data.user.user_metadata.role,
+        };
+
+    const result = (await handler(parsedParams.output, {
+      user,
+    })) as Awaited<ReturnType<Handler>>;
 
     if (result.success && revalidatePaths?.length) {
       revalidatePaths.forEach((path) => {

@@ -7,22 +7,22 @@ import {
   MessageCircleIcon,
   TrashIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
 
 import { AlertDialog } from "@/components/alert-dialog";
 import { Avatar } from "@/components/avatar/avatar";
 import { Button } from "@/components/ui/button";
 
 import { deletePost } from "./_actions/delete-post";
+import { togglePostLikeAction } from "./_actions/toggle-post-like";
 import { usePosts } from "./_hooks/use-posts";
 import { PostDto } from "./posts";
 
 export function PostsPage() {
-  const { data, isLoading, isValidating, setSize, size } = usePosts();
-
+  const { data, isValidating, isLoading, setSize, size } = usePosts();
   const canLoad = !isLoading && !isValidating;
-
   const lastFetchData = data?.at(-1);
+
   return (
     <div>
       {data?.map(
@@ -57,6 +57,23 @@ function Posts({ posts }: { posts: PostDto[] }) {
 function Post({ post }: { post: PostDto }) {
   const [deletionDialog, setDeletionDialog] = useState(false);
   const { mutate } = usePosts();
+  const [optimisticLikes, setOptimisticLikes] = useOptimistic(post.isLiked);
+  const [optimisticLikeCount, setOptimisticLikeCount] = useOptimistic(
+    post.likeCount,
+  );
+
+  async function handleClickLike() {
+    startTransition(async () => {
+      setOptimisticLikes((prev) => !prev);
+      setOptimisticLikeCount((prev) => (prev ? prev - 1 : prev + 1));
+      const result = await togglePostLikeAction(post);
+      if (!result.success) {
+        return;
+      }
+
+      await mutate();
+    });
+  }
 
   return (
     <div className="grid grid-cols-[auto,1fr] border-b p-4">
@@ -89,7 +106,7 @@ function Post({ post }: { post: PostDto }) {
               onOpenChange={setDeletionDialog}
               onPrimaryButtonClick={async () => {
                 await deletePost(post);
-                mutate();
+                await mutate();
               }}
             />
             <Button
@@ -102,8 +119,9 @@ function Post({ post }: { post: PostDto }) {
             </Button>
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost" size="icon">
-              <HeartIcon />5
+            <Button variant="ghost" size="icon" onClick={handleClickLike}>
+              <HeartIcon fill={optimisticLikes ? "#000" : "#fff"} />
+              {optimisticLikeCount}
             </Button>
           </div>
           <div className="flex gap-2">
