@@ -63,8 +63,10 @@ export function PostInputForm(props: UserInputFormProps) {
       const client = createClient();
 
       const uploadResults = await Promise.all(
-        attachments.map(async (attachment) =>
-          client.storage.from("attachments").upload(uuidv7(), attachment),
+        attachments.map((attachment) =>
+          client.storage
+            .from("attachments")
+            .upload(`${uuidv7()}/${attachment.name}`, attachment),
         ),
       );
 
@@ -133,7 +135,7 @@ export function PostInputForm(props: UserInputFormProps) {
       />
 
       <div>
-        <label>添付</label>
+        <label className="text-sm font-bold">添付</label>
         <div className="flex flex-col gap-1">
           {props.post?.attachments.map((attachment) => (
             <div key={attachment} className="grid grid-cols-[1fr,auto] gap-2">
@@ -156,7 +158,7 @@ export function PostInputForm(props: UserInputFormProps) {
                     deleteFiles.includes(attachment) && "line-through",
                   )}
                 >
-                  {attachment}
+                  {attachment.split("/")[1]}
                 </span>
               </div>
               <Button
@@ -183,10 +185,8 @@ export function PostInputForm(props: UserInputFormProps) {
           ))}
           {attachments.map((attachment, i) => {
             return (
-              <div
-                key={attachment.name}
-                className="grid grid-cols-[1fr,auto] gap-2"
-              >
+              // 同じファイル名の場合にエラーになってしまうので i を key にする
+              <div key={i} className="grid grid-cols-[1fr,auto] gap-2">
                 <Input
                   className="text-sm text-muted-foreground"
                   readOnly

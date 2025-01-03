@@ -3,6 +3,7 @@ import { EditIcon, MessageCircleIcon } from "lucide-react";
 import { Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";
+import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -10,7 +11,6 @@ import { PostDto } from "../../_data/posts";
 import { AttachmentContainer } from "./attachment-container";
 import { DeleteButton } from "./delete-button";
 import { LikeOperator } from "./like-operator";
-import { Link } from "@/components/link";
 
 type Props =
   | {
