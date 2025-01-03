@@ -8,7 +8,6 @@ import { Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";
 import { Link } from "@/components/link";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { PostDto } from "../../_data/posts";
@@ -64,11 +63,11 @@ export function Post(props: Props) {
         ) : (
           <div className="whitespace-pre-wrap break-all">{props.post.text}</div>
         )}
-        <div className="border rounded-md p-4 empty:hidden">
+        <div className="border rounded-md p-4 empty:hidden flex flex-col">
           {props.skeleton
             ? null
             : props.post.attachments.map((attachment) => (
-                <Suspense fallback={"loading"} key={attachment}>
+                <Suspense fallback={<div>loading.</div>} key={attachment}>
                   <AttachmentContainer path={attachment} key={attachment} />
                 </Suspense>
               ))}

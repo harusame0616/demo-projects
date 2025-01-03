@@ -8,7 +8,6 @@ import { Link } from "@/components/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { CommentDto } from "../_data/comments";
-import { DeleteButton } from "./delete-button";
 
 type Props =
   | {
@@ -59,7 +58,7 @@ export function Comment(props: Props) {
             {props.comment.text}
           </div>
         )}
-        <div className="border rounded-md p-4 empty:hidden">
+        <div className="rounded-md border p-4 empty:hidden">
           {props.skeleton
             ? null
             : props.comment.attachments.map((attachment) => (
@@ -74,7 +73,9 @@ export function Comment(props: Props) {
           ) : (
             <>
               <div className="flex gap-2">
-                <Link href={`/posts/${props.comment.postId}/edit`}>
+                <Link
+                  href={`/posts/${props.comment.postId}/comments/${props.comment.commentId}/edit`}
+                >
                   <EditIcon className="m-3 size-4" />
                 </Link>
               </div>
