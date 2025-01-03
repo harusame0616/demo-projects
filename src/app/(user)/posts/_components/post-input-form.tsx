@@ -7,6 +7,7 @@ import * as v from "valibot";
 
 import { Form, FormItem } from "@/components/form/form";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,7 +15,6 @@ import { Result } from "@/lib/result";
 import { createClient } from "@/lib/supabase/browser";
 import { useForm } from "@/lib/use-form";
 import { cn } from "@/lib/utils";
-import { Checkbox } from "@/components/ui/checkbox";
 
 type UserInputFormProps =
   | {
@@ -22,6 +22,7 @@ type UserInputFormProps =
       action: (params: {
         title: string;
         text: string;
+        canComment: boolean;
         attachments: string[];
       }) => Promise<Result>;
       post?: never;
@@ -30,6 +31,7 @@ type UserInputFormProps =
       onSuccess?: () => void;
       action: (params: {
         postId: string;
+        canComment: boolean;
         title: string;
         text: string;
         deleteAttachments: string[];
