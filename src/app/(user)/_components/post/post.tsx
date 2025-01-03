@@ -1,12 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import {
-  EditIcon,
-  HeartIcon,
-  MessageCircleIcon,
-  TrashIcon,
-} from "lucide-react";
+import { EditIcon, MessageCircleIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { startTransition, useOptimistic, useState } from "react";
 
@@ -18,7 +13,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { deletePost } from "../../_actions/delete-post";
 import { togglePostLikeAction } from "../../_actions/toggle-post-like";
 import { PostDto } from "../../_data/posts";
-import { LikesDrawer } from "../../like-drawer";
+import { Likes } from "../../likes";
+import { LikeOperator } from "./like-operator";
 
 type Props =
   | {
@@ -138,15 +134,12 @@ export function Post(props: Props) {
                   <TrashIcon />
                 </Button>
               </div>
-              <div className="flex items-center">
-                <Button variant="ghost" size="icon" onClick={handleClickLike}>
-                  <HeartIcon fill={optimisticLikes.isLiked ? "#000" : "#fff"} />
-                </Button>
-                <LikesDrawer
-                  likes={props.skeleton ? [] : props.post.likes}
-                  triggerLabel={`${optimisticLikes.likeCount}`}
-                />
-              </div>
+              <LikeOperator
+                isLiked={props.post.isLiked}
+                likes={props.post.likes}
+                postId={props.post.postId}
+                LikesPresenter={<Likes likes={props.post.likes} />}
+              />
               <div className="flex gap-2">
                 <Button variant="ghost" size="icon">
                   <MessageCircleIcon /> 5
