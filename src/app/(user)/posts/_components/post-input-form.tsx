@@ -15,7 +15,6 @@ import { createClient } from "@/lib/supabase/browser";
 import { useForm } from "@/lib/use-form";
 
 type UserInputFormProps = {
-  formId: string;
   onSuccess?: () => void;
   action: (params: {
     title: string;
@@ -23,11 +22,7 @@ type UserInputFormProps = {
     attachments: string[];
   }) => Promise<Result>;
 };
-export function PostInputForm({
-  onSuccess,
-  action,
-  formId,
-}: UserInputFormProps) {
+export function PostInputForm({ onSuccess, action }: UserInputFormProps) {
   const [attachments, setAttachments] = useState<File[]>([]);
   const [fileKey, setFileKey] = useState(uuidv7());
 
@@ -49,7 +44,6 @@ export function PostInputForm({
           client.storage.from("attachments").upload(uuidv7(), attachment),
         ),
       );
-      console.log({ uploadResults });
 
       const actionResult = await action({
         ...params,
@@ -75,7 +69,7 @@ export function PostInputForm({
   }
 
   return (
-    <Form {...form} noSubmitButton formId={formId}>
+    <Form {...form} submitButtonLabel="投稿する">
       <FormField
         control={form.control}
         name="title"

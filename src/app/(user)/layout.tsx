@@ -1,11 +1,10 @@
-import { HomeIcon } from "lucide-react";
-import { PropsWithChildren, Suspense } from "react";
+import { HomeIcon, MessageCirclePlusIcon } from "lucide-react";
+import { PropsWithChildren, ReactNode, Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";
 import { Link } from "@/components/link";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
-import { NewPostDrawer } from "./new-post-drawer";
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
 
 const MenuIcons = [
@@ -36,7 +35,10 @@ const MenuIcons = [
   },
 ];
 
-export default function Layout({ children }: PropsWithChildren) {
+export default function Layout({
+  children,
+  title,
+}: PropsWithChildren<{ title: ReactNode }>) {
   return (
     <SidebarProvider defaultOpen={false} className="h-full overflow-hidden">
       <Suspense fallback={<SideMenuPresenter skeleton />}>
@@ -46,15 +48,19 @@ export default function Layout({ children }: PropsWithChildren) {
         <header className="grid grid-cols-[auto,1fr,auto] p-4 shadow-md">
           <div className="flex items-center justify-center">
             <SidebarTrigger className="shrink-0">
-              <Avatar name="test" src={""} alt={""} />
+              <Avatar name="test" src={""} />
             </SidebarTrigger>
           </div>
-          <div className="text-center align-middle">App Name</div>
+          <h1 className="flex items-center justify-center text-lg font-bold">
+            {title}
+          </h1>
           <div className="size-[36px]">
-            <NewPostDrawer />
+            <Link href="/posts/new">
+              <MessageCirclePlusIcon role="img" aria-label="新しい投稿" />
+            </Link>
           </div>
         </header>
-        <main className="overflow-y-scroll">{children}</main>
+        <main className="overflow-y-scroll p-4">{children}</main>
         <footer className="shadow-md">
           <nav>
             <ul className="grid grid-cols-5">

@@ -34,5 +34,6 @@ export const postNewPostAction = createAction(
       ),
     }),
     revalidatePaths: ["/"],
+    redirectTo: "/",
   },
 );
