@@ -10,6 +10,7 @@ import { PostDto } from "../../_data/posts";
 import { AttachmentContainer } from "./attachment-container";
 import { DeleteButton } from "./delete-button";
 import { LikeOperator } from "./like-operator";
+import { Link } from "@/components/link";
 
 type Props =
   | {
@@ -74,9 +75,9 @@ export function Post(props: Props) {
           ) : (
             <>
               <div className="flex gap-2">
-                <Button variant="ghost" size="icon">
-                  <EditIcon />
-                </Button>
+                <Link href={`/posts/${props.post.postId}/edit`}>
+                  <EditIcon className="m-3 size-4" />
+                </Link>
               </div>
               <div className="flex gap-2">
                 <DeleteButton post={props.post} />

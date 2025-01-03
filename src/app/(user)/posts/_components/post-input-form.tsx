@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteIcon } from "lucide-react";
+import { LinkIcon, TrashIcon, UndoIcon, UnlinkIcon } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { uuidv7 } from "uuidv7";
 import * as v from "valibot";
@@ -13,22 +13,45 @@ import { Textarea } from "@/components/ui/textarea";
 import { Result } from "@/lib/result";
 import { createClient } from "@/lib/supabase/browser";
 import { useForm } from "@/lib/use-form";
+import { cn } from "@/lib/utils";
 
-type UserInputFormProps = {
-  onSuccess?: () => void;
-  action: (params: {
-    title: string;
-    text: string;
-    attachments: string[];
-  }) => Promise<Result>;
-};
-export function PostInputForm({ onSuccess, action }: UserInputFormProps) {
+type UserInputFormProps =
+  | {
+      onSuccess?: () => void;
+      action: (params: {
+        title: string;
+        text: string;
+        attachments: string[];
+      }) => Promise<Result>;
+      post?: never;
+    }
+  | {
+      onSuccess?: () => void;
+      action: (params: {
+        postId: string;
+        title: string;
+        text: string;
+        deleteAttachments: string[];
+        attachments: string[];
+      }) => Promise<Result>;
+      post: {
+        postId: string;
+        title: string;
+        text: string;
+        attachments: string[];
+      };
+    };
+export function PostInputForm(props: UserInputFormProps) {
   const [attachments, setAttachments] = useState<File[]>([]);
   const [fileKey, setFileKey] = useState(uuidv7());
+  const [deleteFiles, setDeleteFiles] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const form = useForm({
-    defaultValues: {},
+    defaultValues: {
+      title: props.post?.title ?? "",
+      text: props.post?.text ?? "",
+    },
     schema: v.object({
       title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
@@ -45,15 +68,25 @@ export function PostInputForm({ onSuccess, action }: UserInputFormProps) {
         ),
       );
 
-      const actionResult = await action({
-        ...params,
-        attachments: uploadResults.map((r) => r.data?.path),
-      });
+      let actionResult;
+      if (props.post) {
+        actionResult = await props.action({
+          ...params,
+          postId: props.post.postId,
+          deleteAttachments: deleteFiles,
+          attachments: uploadResults.map((r) => r.data?.path),
+        });
+      } else {
+        actionResult = await props.action({
+          ...params,
+          attachments: uploadResults.map((r) => r.data?.path),
+        });
+      }
 
       if (!actionResult.success) {
         setErrorMessage(actionResult.message);
       } else {
-        onSuccess?.();
+        props.onSuccess?.();
       }
     },
   });
@@ -102,6 +135,52 @@ export function PostInputForm({ onSuccess, action }: UserInputFormProps) {
       <div>
         <label>添付</label>
         <div className="flex flex-col gap-1">
+          {props.post?.attachments.map((attachment) => (
+            <div key={attachment} className="grid grid-cols-[1fr,auto] gap-2">
+              <div className="flex items-center gap-1 break-all">
+                {deleteFiles.includes(attachment) ? (
+                  <UnlinkIcon
+                    className="size-4 shrink-0"
+                    role="img"
+                    aria-label="削除予定ファイル"
+                  />
+                ) : (
+                  <LinkIcon
+                    className="size-4 shrink-0"
+                    role="img"
+                    aria-label="アップロード済みファイル"
+                  />
+                )}
+                <span
+                  className={cn(
+                    deleteFiles.includes(attachment) && "line-through",
+                  )}
+                >
+                  {attachment}
+                </span>
+              </div>
+              <Button
+                variant="destructive"
+                size="icon"
+                type="button"
+                onClick={() => {
+                  if (deleteFiles.includes(attachment)) {
+                    setDeleteFiles((current) =>
+                      current.filter((a) => a !== attachment),
+                    );
+                  } else {
+                    setDeleteFiles((current) => [...current, attachment]);
+                  }
+                }}
+              >
+                {deleteFiles.includes(attachment) ? (
+                  <UndoIcon />
+                ) : (
+                  <TrashIcon />
+                )}
+              </Button>
+            </div>
+          ))}
           {attachments.map((attachment, i) => {
             return (
               <div
@@ -125,7 +204,7 @@ export function PostInputForm({ onSuccess, action }: UserInputFormProps) {
                     });
                   }}
                 >
-                  <DeleteIcon />
+                  <TrashIcon />
                 </Button>
               </div>
             );
