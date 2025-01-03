@@ -3,7 +3,7 @@
 import { format } from "date-fns";
 import { EditIcon, MessageCircleIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { startTransition, useOptimistic, useState } from "react";
+import { useState } from "react";
 
 import { AlertDialog } from "@/components/alert-dialog";
 import { Avatar } from "@/components/avatar/avatar";
@@ -11,9 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { deletePost } from "../../_actions/delete-post";
-import { togglePostLikeAction } from "../../_actions/toggle-post-like";
 import { PostDto } from "../../_data/posts";
-import { Likes } from "../../likes";
 import { LikeOperator } from "./like-operator";
 
 type Props =
@@ -26,36 +24,7 @@ type Props =
     };
 export function Post(props: Props) {
   const [deletionDialog, setDeletionDialog] = useState(false);
-  const [optimisticLikes, setOptimisticLikes] = useOptimistic(
-    props.skeleton
-      ? {
-          likeCount: 0,
-          isLiked: false,
-        }
-      : {
-          likeCount: props.post.likes.length,
-          isLiked: props.post.isLiked,
-        },
-  );
   const router = useRouter();
-
-  async function handleClickLike() {
-    if (props.skeleton) {
-      return;
-    }
-
-    startTransition(async () => {
-      setOptimisticLikes((prev) => ({
-        likeCount: prev.likeCount + (prev.isLiked ? -1 : 1),
-        isLiked: !prev.isLiked,
-      }));
-      const result = await togglePostLikeAction(props.post);
-      if (!result.success) {
-        return;
-      }
-      router.refresh();
-    });
-  }
 
   return (
     <div className="grid grid-cols-[auto,1fr] border-b p-4">
@@ -138,7 +107,6 @@ export function Post(props: Props) {
                 isLiked={props.post.isLiked}
                 likes={props.post.likes}
                 postId={props.post.postId}
-                LikesPresenter={<Likes likes={props.post.likes} />}
               />
               <div className="flex gap-2">
                 <Button variant="ghost" size="icon">

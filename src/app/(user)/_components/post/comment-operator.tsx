@@ -1,9 +1,9 @@
 "use client";
 import { HeartIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { startTransition, useOptimistic } from "react";
+import { ReactNode, startTransition, useOptimistic } from "react";
 
-import { Link } from "@/components/link";
+import { Drawer } from "@/components/drawer";
 import { Button } from "@/components/ui/button";
 
 import { togglePostLikeAction } from "../../_actions/toggle-post-like";
@@ -13,6 +13,7 @@ type Props = {
   isLiked: boolean;
   likes: LikeDto[];
   postId: string;
+  LikesPresenter: ReactNode;
 };
 export function LikeOperator(props: Props) {
   const [optimisticLikes, setOptimisticLikes] = useOptimistic({
@@ -40,9 +41,9 @@ export function LikeOperator(props: Props) {
       <Button variant="ghost" size="icon" onClick={handleClickLike}>
         <HeartIcon fill={optimisticLikes.isLiked ? "#000" : "#fff"} />
       </Button>
-      <Link href={`/posts/${props.postId}/likes`}>
-        {optimisticLikes.likeCount}
-      </Link>
+      <Drawer likes={props.likes} triggerLabel={`${optimisticLikes.likeCount}`} title="いいね一覧">
+        {props.LikesPresenter}
+      </Drawer>
     </div>
   );
 }

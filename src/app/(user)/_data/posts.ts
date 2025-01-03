@@ -39,7 +39,6 @@ export async function getPosts({ page }: { page: number }): Promise<{
   const authClient = await createClient();
   const userResult = await authClient.auth.getUser();
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   if (userResult.error) {
     throw new Error("test");
   }
