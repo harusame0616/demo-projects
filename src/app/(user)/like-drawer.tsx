@@ -17,15 +17,15 @@ import { Likes } from "./likes";
 
 type Props = {
   likes: LikeDto[];
+  triggerLabel: string;
 };
-export function LikesDrawer({ likes }: Props) {
+export function LikesDrawer({ likes, triggerLabel }: Props) {
   const [open, setOpen] = useState(false);
-  console.log(likes);
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger>
-        <div className="px-2">{likes.length}</div>
+        <div className="px-2">{triggerLabel}</div>
       </DrawerTrigger>
       <DrawerContent className="grid h-full grid-rows-[auto,auto,1fr,auto] overflow-hidden">
         <DrawerHeader>

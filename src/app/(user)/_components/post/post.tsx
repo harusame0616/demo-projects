@@ -31,7 +31,15 @@ type Props =
 export function Post(props: Props) {
   const [deletionDialog, setDeletionDialog] = useState(false);
   const [optimisticLikes, setOptimisticLikes] = useOptimistic(
-    props.skeleton ? false : props.post.isLiked,
+    props.skeleton
+      ? {
+          likeCount: 0,
+          isLiked: false,
+        }
+      : {
+          likeCount: props.post.likes.length,
+          isLiked: props.post.isLiked,
+        },
   );
   const router = useRouter();
 
@@ -41,7 +49,10 @@ export function Post(props: Props) {
     }
 
     startTransition(async () => {
-      setOptimisticLikes((prev) => !prev);
+      setOptimisticLikes((prev) => ({
+        likeCount: prev.likeCount + (prev.isLiked ? -1 : 1),
+        isLiked: !prev.isLiked,
+      }));
       const result = await togglePostLikeAction(props.post);
       if (!result.success) {
         return;
@@ -129,9 +140,12 @@ export function Post(props: Props) {
               </div>
               <div className="flex items-center">
                 <Button variant="ghost" size="icon" onClick={handleClickLike}>
-                  <HeartIcon fill={optimisticLikes ? "#000" : "#fff"} />
+                  <HeartIcon fill={optimisticLikes.isLiked ? "#000" : "#fff"} />
                 </Button>
-                <LikesDrawer likes={props.skeleton ? [] : props.post.likes} />
+                <LikesDrawer
+                  likes={props.skeleton ? [] : props.post.likes}
+                  triggerLabel={`${optimisticLikes.likeCount}`}
+                />
               </div>
               <div className="flex gap-2">
                 <Button variant="ghost" size="icon">
