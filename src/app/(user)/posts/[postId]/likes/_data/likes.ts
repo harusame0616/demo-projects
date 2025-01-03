@@ -42,7 +42,6 @@ export async function getLikes({
     .range((page - 1) * 10, page * 10);
 
   if (result.error) {
-    console.log(result);
     throw new Error("error");
   }
 

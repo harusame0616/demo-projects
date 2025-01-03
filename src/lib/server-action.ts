@@ -26,7 +26,7 @@ export function createAction<
   }: {
     inputSchema: InputSchema;
     revalidatePaths?: string[];
-    redirectTo?: string;
+    redirectTo?: string | ((params: v.InferOutput<InputSchema>) => string);
   },
 ) {
   return async function action(
@@ -61,7 +61,11 @@ export function createAction<
     }
 
     if (result.success && redirectTo) {
-      redirect(redirectTo);
+      if (typeof redirectTo === "string") {
+        redirect(redirectTo);
+      } else {
+        redirect(redirectTo(parsedParams.output));
+      }
     }
 
     return result;

@@ -11,7 +11,6 @@ export const togglePostLikeAction = createAction(
   async (params, { user }) => {
     const client = createClientServiceRole().schema("X_DEMO");
 
-    console.log(params, user);
     const deleteResult = await client
       .from("post_like")
       .delete({ count: "exact" })
@@ -20,7 +19,6 @@ export const togglePostLikeAction = createAction(
     if (deleteResult.error) {
       return fail("投稿に失敗しました");
     }
-    console.log("deleteResult", deleteResult);
 
     if (deleteResult.count === 0) {
       const result = await client.from("post_like").insert({

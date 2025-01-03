@@ -2,7 +2,6 @@ import { fail, succeed } from "@/lib/result";
 import { createClient } from "@/lib/supabase/server";
 
 export async function reset({ email }: { email: string }) {
-  console.log("reset");
   const client = await createClient();
 
   const result = await client.auth.resetPasswordForEmail(email, {

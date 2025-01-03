@@ -54,7 +54,6 @@ export async function getPosts({ page }: { page: number }): Promise<{
     )
     .order("createdAt", { ascending: false })
     .range((page - 1) * 10, page * 10);
-  console.log(result, result.error);
 
   if (result.error) {
     throw new Error("error");

@@ -18,9 +18,7 @@ export const editPost = createAction(
       .eq("postId", params.postId)
       .single();
 
-    console.log(params);
     if (post.error) {
-      console.log(post);
       throw new Error("error");
     }
 
@@ -42,14 +40,10 @@ export const editPost = createAction(
       .eq("postId", params.postId);
 
     if (result.error) {
-      console.log(post);
       return fail("投稿に失敗しました");
     }
 
-    const removeResult = await client.storage
-      .from("attachment")
-      .remove(params.deleteAttachments);
-    console.log({ removeResult });
+    await client.storage.from("attachment").remove(params.deleteAttachments);
 
     return succeed();
   },

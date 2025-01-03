@@ -1,5 +1,9 @@
 import { format } from "date-fns";
-import { EditIcon, MessageCircleIcon } from "lucide-react";
+import {
+  EditIcon,
+  MessageCircleIcon,
+  MessageCirclePlusIcon,
+} from "lucide-react";
 import { Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";
@@ -77,6 +81,11 @@ export function Post(props: Props) {
               <div className="flex gap-2">
                 <Link href={`/posts/${props.post.postId}/edit`}>
                   <EditIcon className="m-3 size-4" />
+                </Link>
+              </div>
+              <div className="flex gap-2">
+                <Link href={`/posts/${props.post.postId}/comments/new`}>
+                  <MessageCirclePlusIcon className="m-3 size-4" />
                 </Link>
               </div>
               <div className="flex gap-2">

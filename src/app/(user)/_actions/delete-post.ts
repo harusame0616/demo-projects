@@ -11,7 +11,6 @@ export const deletePost = createAction(
   async (params) => {
     const client = createClientServiceRole().schema("X_DEMO");
 
-    console.log({ params });
     const result = await client
       .from("post")
       .delete()

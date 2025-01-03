@@ -42,7 +42,6 @@ export async function getComments({ page }: { page: number }): Promise<{
     )
     .order("createdAt", { ascending: false })
     .range((page - 1) * 10, page * 10);
-  console.log(result, result.error);
 
   if (result.error) {
     throw new Error("error");
@@ -52,6 +51,7 @@ export async function getComments({ page }: { page: number }): Promise<{
     return {
       commentId: comment.commentId,
       postId: comment.postId,
+      text: comment.text,
       createdAt: comment.createdAt,
       attachments: comment.attachments,
       author: v.parse(

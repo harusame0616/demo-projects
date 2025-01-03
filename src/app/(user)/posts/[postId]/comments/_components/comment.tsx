@@ -43,9 +43,8 @@ export function Comment(props: Props) {
           <Skeleton className="mt-2 h-4 w-40" />
         ) : (
           <div className="flex items-center gap-1 font-bold">
-            {props.comment.title}
             <span className="text-xs text-muted-foreground">
-              （{format(props.comment.createdAt, "yyyy/MM/dd hh:mm")}）
+              {format(props.comment.createdAt, "yyyy/MM/dd hh:mm")}
             </span>
           </div>
         )}

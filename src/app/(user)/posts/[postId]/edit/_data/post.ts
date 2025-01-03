@@ -31,7 +31,6 @@ export async function getPost(postId: string) {
     .single();
 
   if (result.error) {
-    console.log(result);
     throw new Error("error");
   }
 

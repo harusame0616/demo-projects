@@ -23,7 +23,7 @@ export async function CommentsPresenter(props: Props) {
               <Comment key={index} skeleton />
             ))
           : props.comments.map((post) => (
-              <Comment comment={post} key={post.postId} />
+              <Comment comment={post} key={post.commentId} />
             ))}
       </ul>
       {props.skeleton ? (
