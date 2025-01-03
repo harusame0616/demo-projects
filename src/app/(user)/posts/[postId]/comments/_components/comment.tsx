@@ -1,26 +1,24 @@
 import { format } from "date-fns";
-import { EditIcon, MessageCircleIcon } from "lucide-react";
+import { EditIcon } from "lucide-react";
 import { Suspense } from "react";
 
+import { AttachmentContainer } from "@/app/(user)/_components/post/attachment-container";
 import { Avatar } from "@/components/avatar/avatar";
 import { Link } from "@/components/link";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { PostDto } from "../../_data/posts";
-import { AttachmentContainer } from "./attachment-container";
+import { CommentDto } from "../_data/comments";
 import { DeleteButton } from "./delete-button";
-import { LikeOperator } from "./like-operator";
 
 type Props =
   | {
       skeleton?: boolean;
-      post: PostDto;
+      comment: CommentDto;
     }
   | {
       skeleton: true;
     };
-export function Post(props: Props) {
+export function Comment(props: Props) {
   return (
     <div className="grid grid-cols-[auto,1fr] border-b p-4">
       <div className="pr-2">
@@ -28,8 +26,8 @@ export function Post(props: Props) {
           <Skeleton className="size-8 rounded-full" />
         ) : (
           <Avatar
-            src={props.post.author.avatarUrl}
-            name={props.post.author.name}
+            src={props.comment.author.avatarUrl}
+            name={props.comment.author.name}
           />
         )}
       </div>
@@ -38,16 +36,16 @@ export function Post(props: Props) {
           <Skeleton className="mt-1 h-4 w-20" />
         ) : (
           <div className="font-bold text-muted-foreground">
-            {props.post.author.name}
+            {props.comment.author.name}
           </div>
         )}
         {props.skeleton ? (
           <Skeleton className="mt-2 h-4 w-40" />
         ) : (
           <div className="flex items-center gap-1 font-bold">
-            {props.post.title}
+            {props.comment.title}
             <span className="text-xs text-muted-foreground">
-              （{format(props.post.createdAt, "yyyy/MM/dd hh:mm")}）
+              （{format(props.comment.createdAt, "yyyy/MM/dd hh:mm")}）
             </span>
           </div>
         )}
@@ -58,12 +56,14 @@ export function Post(props: Props) {
             <Skeleton className="mt-1 h-5 w-full max-w-[180px]" />
           </div>
         ) : (
-          <div className="whitespace-pre-wrap break-all">{props.post.text}</div>
+          <div className="whitespace-pre-wrap break-all">
+            {props.comment.text}
+          </div>
         )}
         <div className="border rounded-md p-4 empty:hidden">
           {props.skeleton
             ? null
-            : props.post.attachments.map((attachment) => (
+            : props.comment.attachments.map((attachment) => (
                 <Suspense fallback={"loading"} key={attachment}>
                   <AttachmentContainer path={attachment} key={attachment} />
                 </Suspense>
@@ -75,25 +75,12 @@ export function Post(props: Props) {
           ) : (
             <>
               <div className="flex gap-2">
-                <Link href={`/posts/${props.post.postId}/edit`}>
+                <Link href={`/posts/${props.comment.postId}/edit`}>
                   <EditIcon className="m-3 size-4" />
                 </Link>
               </div>
               <div className="flex gap-2">
-                <DeleteButton post={props.post} />
-              </div>
-              <LikeOperator
-                isLiked={props.post.isLiked}
-                likes={props.post.likes}
-                postId={props.post.postId}
-              />
-              <div className="flex gap-2">
-                <Link
-                  href={`/posts/${props.post.postId}/comments`}
-                  className="flex items-center gap-1"
-                >
-                  <MessageCircleIcon className="size-4" /> 5
-                </Link>
+                {/* <DeleteButton post={props.comment} /> */}
               </div>
             </>
           )}
