@@ -8,6 +8,7 @@ import { Link } from "@/components/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { CommentDto } from "../_data/comments";
+import { DeleteButton } from "./delete-button/delete-button";
 
 type Props =
   | {
@@ -80,7 +81,7 @@ export function Comment(props: Props) {
                 </Link>
               </div>
               <div className="flex gap-2">
-                {/* <DeleteButton post={props.comment} /> */}
+                <DeleteButton commentId={props.comment.commentId} />
               </div>
             </>
           )}
