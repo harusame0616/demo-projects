@@ -13,26 +13,6 @@ const MenuIcons = [
     icon: HomeIcon,
     href: "/",
   },
-  {
-    name: "About",
-    icon: HomeIcon,
-    href: "/about",
-  },
-  {
-    name: "Contac1t",
-    icon: HomeIcon,
-    href: "/contact",
-  },
-  {
-    name: "Contacr2t",
-    icon: HomeIcon,
-    href: "/contact",
-  },
-  {
-    name: "Contact3",
-    icon: HomeIcon,
-    href: "/contact",
-  },
 ];
 
 export default function Layout({
@@ -61,9 +41,9 @@ export default function Layout({
           </div>
         </header>
         <main className="overflow-y-scroll p-4">{children}</main>
-        <footer className="shadow-md">
+        <footer className="border-t">
           <nav>
-            <ul className="grid grid-cols-5">
+            <ul className="grid grid-cols-1">
               {MenuIcons.map((item) => (
                 <li
                   key={item.name}
