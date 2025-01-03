@@ -8,6 +8,7 @@ export type PostDto = {
   title: string;
   text: string;
   createdAt: string;
+  commentCount: number;
   author: {
     userId: string;
     name: string;

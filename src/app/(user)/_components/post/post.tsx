@@ -100,7 +100,8 @@ export function Post(props: Props) {
                   href={`/posts/${props.post.postId}/comments`}
                   className="flex items-center gap-1"
                 >
-                  <MessageCircleIcon className="size-4" /> 5
+                  <MessageCircleIcon className="size-4" />{" "}
+                  {props.post.commentCount}
                 </Link>
               </div>
             </>

@@ -20,6 +20,7 @@ export type PostDto = {
   text: string;
   createdAt: string;
   likeCount: number;
+  commentCount: number;
   isLiked: boolean;
   likes: LikeDto[];
   author: {
@@ -47,7 +48,7 @@ export async function getPosts({ page }: { page: number }): Promise<{
   const result = await client
     .from("post")
     .select(
-      `postId, title, attachments, text, attachments, createdAt, userId, profile!post_userId_fkey1(*), likes:post_like(*, profile(*))`,
+      `postId, title, attachments, text, attachments, createdAt, userId, profile!post_userId_fkey1(*), likes:post_like(*, profile(*)), comment(*)`,
       {
         count: "exact",
       },
@@ -69,6 +70,7 @@ export async function getPosts({ page }: { page: number }): Promise<{
       title: post.title,
       text: post.text,
       createdAt: post.createdAt,
+      commentCount: post.comment.length,
       likeCount,
       isLiked,
       likes: post.likes,

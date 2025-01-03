@@ -15,6 +15,14 @@ type Props =
     }
   | { skeleton: true; page: number };
 export async function CommentsPresenter(props: Props) {
+  if (!props.skeleton && props.comments.length === 0) {
+    return (
+      <div className="text-muted-foreground text-sm py-2 text-center">
+        まだコメントはありません
+      </div>
+    );
+  }
+
   return (
     <div>
       <ul className="mb-4">
