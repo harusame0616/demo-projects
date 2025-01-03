@@ -14,6 +14,7 @@ import { Result } from "@/lib/result";
 import { createClient } from "@/lib/supabase/browser";
 import { useForm } from "@/lib/use-form";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type UserInputFormProps =
   | {
@@ -38,6 +39,7 @@ type UserInputFormProps =
         postId: string;
         title: string;
         text: string;
+        canComment: boolean;
         attachments: string[];
       };
     };
@@ -51,10 +53,12 @@ export function PostInputForm(props: UserInputFormProps) {
     defaultValues: {
       title: props.post?.title ?? "",
       text: props.post?.text ?? "",
+      canComment: props.post?.canComment ?? false,
     },
     schema: v.object({
       title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
+      canComment: v.boolean(),
     }),
 
     onSubmit: async (params, setErrorMessage) => {
@@ -129,6 +133,18 @@ export function PostInputForm(props: UserInputFormProps) {
               rows={5}
               className="w-full "
               disabled={form.formState.isSubmitting}
+            />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="canComment"
+        render={({ field }) => (
+          <FormItem label="コメント可" required>
+            <Checkbox
+              onCheckedChange={field.onChange}
+              defaultChecked={field.value}
             />
           </FormItem>
         )}

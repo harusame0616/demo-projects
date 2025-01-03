@@ -17,6 +17,7 @@ export const postNewPostAction = createAction(
       userId: user?.userId,
       title: params.title,
       text: params.text,
+      canComment: params.canComment,
       attachments: params.attachments,
     });
 
@@ -29,6 +30,7 @@ export const postNewPostAction = createAction(
     inputSchema: v.object({
       title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
+      canComment: v.boolean(),
       attachments: v.array(
         v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       ),

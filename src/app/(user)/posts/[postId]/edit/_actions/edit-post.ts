@@ -36,6 +36,7 @@ export const editPost = createAction(
         title: params.title,
         text: params.text,
         attachments: newAttachments,
+        canComment: params.canComment,
       })
       .eq("postId", params.postId);
 
@@ -52,6 +53,7 @@ export const editPost = createAction(
       postId: v.pipe(v.string()),
       title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
+      canComment: v.boolean(),
       deleteAttachments: v.array(v.string()),
       attachments: v.array(
         v.pipe(v.string(), v.minLength(1), v.maxLength(255)),

@@ -82,11 +82,13 @@ export function Post(props: Props) {
                   <EditIcon className="m-3 size-4" />
                 </Link>
               </div>
-              <div className="flex gap-2">
-                <Link href={`/posts/${props.post.postId}/comments/new`}>
-                  <MessageCirclePlusIcon className="m-3 size-4" />
-                </Link>
-              </div>
+              {props.post.canComment && (
+                <div className="flex gap-2">
+                  <Link href={`/posts/${props.post.postId}/comments/new`}>
+                    <MessageCirclePlusIcon className="m-3 size-4" />
+                  </Link>
+                </div>
+              )}
               <div className="flex gap-2">
                 <DeleteButton post={props.post} />
               </div>
