@@ -19,7 +19,7 @@ export function Avatar({
   ) : (
     <Image
       {...props}
-      alt={props.alt ?? name}
+      alt={name}
       width={32}
       height={32}
       src={UserImage}

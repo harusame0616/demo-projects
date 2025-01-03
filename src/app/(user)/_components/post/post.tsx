@@ -1,17 +1,14 @@
-"use client";
-
 import { format } from "date-fns";
-import { EditIcon, MessageCircleIcon, TrashIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { EditIcon, MessageCircleIcon } from "lucide-react";
+import { Suspense } from "react";
 
-import { AlertDialog } from "@/components/alert-dialog";
 import { Avatar } from "@/components/avatar/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { deletePost } from "../../_actions/delete-post";
 import { PostDto } from "../../_data/posts";
+import { AttachmentContainer } from "./attachment-container";
+import { DeleteButton } from "./delete-button";
 import { LikeOperator } from "./like-operator";
 
 type Props =
@@ -23,9 +20,6 @@ type Props =
       skeleton: true;
     };
 export function Post(props: Props) {
-  const [deletionDialog, setDeletionDialog] = useState(false);
-  const router = useRouter();
-
   return (
     <div className="grid grid-cols-[auto,1fr] border-b p-4">
       <div className="pr-2">
@@ -65,6 +59,15 @@ export function Post(props: Props) {
         ) : (
           <div className="whitespace-pre-wrap break-all">{props.post.text}</div>
         )}
+        <div className="border rounded-md p-4 empty:hidden">
+          {props.skeleton
+            ? null
+            : props.post.attachments.map((attachment) => (
+                <Suspense fallback={"loading"} key={attachment}>
+                  <AttachmentContainer path={attachment} key={attachment} />
+                </Suspense>
+              ))}
+        </div>
         <div className="flex flex-wrap items-center justify-end gap-4">
           {props.skeleton ? (
             <Skeleton className="m-1 h-7 w-[200px]" />
@@ -76,32 +79,7 @@ export function Post(props: Props) {
                 </Button>
               </div>
               <div className="flex gap-2">
-                <AlertDialog
-                  title="投稿削除"
-                  description={
-                    props.skeleton
-                      ? ""
-                      : `「${props.post.title}」を削除しますがよろしいですか？`
-                  }
-                  primaryButtonLabel={"削除する"}
-                  open={deletionDialog}
-                  onOpenChange={setDeletionDialog}
-                  onPrimaryButtonClick={async () => {
-                    if (props.skeleton) {
-                      return;
-                    }
-                    await deletePost(props.post);
-                    router.refresh();
-                  }}
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setDeletionDialog(true)}
-                  type="button"
-                >
-                  <TrashIcon />
-                </Button>
+                <DeleteButton post={props.post} />
               </div>
               <LikeOperator
                 isLiked={props.post.isLiked}

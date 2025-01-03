@@ -27,6 +27,7 @@ export type PostDto = {
     name: string;
     avatarUrl: string;
   };
+  attachments: string[];
 };
 export async function getPosts({ page }: { page: number }): Promise<{
   data: PostDto[];
@@ -46,7 +47,7 @@ export async function getPosts({ page }: { page: number }): Promise<{
   const result = await client
     .from("post")
     .select(
-      `postId, title, text, attachments, createdAt, userId, profile!post_userId_fkey1(*), likes:post_like(*, profile(*))`,
+      `postId, title, attachments, text, attachments, createdAt, userId, profile!post_userId_fkey1(*), likes:post_like(*, profile(*))`,
       {
         count: "exact",
       },
@@ -72,6 +73,7 @@ export async function getPosts({ page }: { page: number }): Promise<{
       likeCount,
       isLiked,
       likes: post.likes,
+      attachments: post.attachments,
       author: v.parse(
         v.object({
           userId: v.string(),
@@ -83,7 +85,6 @@ export async function getPosts({ page }: { page: number }): Promise<{
     };
   });
 
-  console.log(result);
   return {
     data: postsDto,
     pagination: {
