@@ -1,6 +1,6 @@
 import useSWRInfinite from "swr/infinite";
 
-import { getPosts } from "../posts";
+import { getPosts } from "../_data/posts";
 
 export function usePosts() {
   const { data, size, isLoading, isValidating, setSize, mutate } =

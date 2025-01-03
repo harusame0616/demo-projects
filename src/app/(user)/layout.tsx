@@ -1,6 +1,4 @@
-import {
-  HomeIcon
-} from "lucide-react";
+import { HomeIcon } from "lucide-react";
 import { PropsWithChildren, Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";

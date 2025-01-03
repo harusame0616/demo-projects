@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-import { LikeDto } from "@/app/(user)/posts";
+import { LikeDto } from "@/app/(user)/_data/posts";
 import { Avatar } from "@/components/avatar/avatar";
 
 type Props = {

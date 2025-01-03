@@ -28,11 +28,18 @@ export type PostDto = {
     avatarUrl: string;
   };
 };
-export async function getPosts({ page }: { page: number }): Promise<PostDto[]> {
+export async function getPosts({ page }: { page: number }): Promise<{
+  data: PostDto[];
+  pagination: {
+    totalPage: number;
+    page: number;
+  };
+}> {
   const client = createClientServiceRole().schema("X_DEMO");
   const authClient = await createClient();
   const userResult = await authClient.auth.getUser();
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   if (userResult.error) {
     throw new Error("test");
   }
@@ -41,9 +48,12 @@ export async function getPosts({ page }: { page: number }): Promise<PostDto[]> {
     .from("post")
     .select(
       `postId, title, text, attachments, createdAt, userId, profile!post_userId_fkey1(*), likes:post_like(*, profile(*))`,
+      {
+        count: "exact",
+      },
     )
     .order("createdAt", { ascending: false })
-    .range(page * 10, (page + 1) * 10 - 1);
+    .range((page - 1) * 10, page * 10);
   console.log(result, result.error);
 
   if (result.error) {
@@ -74,5 +84,12 @@ export async function getPosts({ page }: { page: number }): Promise<PostDto[]> {
     };
   });
 
-  return postsDto;
+  console.log(result);
+  return {
+    data: postsDto,
+    pagination: {
+      totalPage: result.count ? Math.ceil(result.count / 10) : 1,
+      page,
+    },
+  };
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { LikeDto } from "@/app/(user)/posts";
+import { LikeDto } from "@/app/(user)/_data/posts";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,

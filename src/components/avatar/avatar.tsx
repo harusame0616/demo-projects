@@ -13,7 +13,7 @@ export function Avatar({
   name,
   skeleton,
   ...props
-}: Props & ComponentProps<typeof Image>) {
+}: Props & Omit<ComponentProps<typeof Image>, "alt">) {
   return skeleton ? (
     <Skeleton className="size-8 rounded-full" />
   ) : (
