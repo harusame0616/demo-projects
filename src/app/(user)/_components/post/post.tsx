@@ -10,10 +10,11 @@ import { Avatar } from "@/components/avatar/avatar";
 import { Link } from "@/components/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { Like } from "../../../../components/like";
+import { togglePostLikeAction } from "../../_actions/toggle-post-like";
 import { PostDto } from "../../_data/posts";
 import { AttachmentContainer } from "./attachment-container";
 import { DeleteButton } from "./delete-button";
-import { LikeOperator } from "./like-operator";
 
 type Props =
   | {
@@ -92,10 +93,11 @@ export function Post(props: Props) {
               <div className="flex gap-2">
                 <DeleteButton post={props.post} />
               </div>
-              <LikeOperator
+              <Like
                 isLiked={props.post.isLiked}
-                likes={props.post.likes}
-                postId={props.post.postId}
+                likeCount={props.post.likeCount}
+                likesHref={`/posts/${props.post.postId}/likes`}
+                toggleLikeAction={togglePostLikeAction.bind(null, props.post)}
               />
               <div className="flex gap-2">
                 <Link

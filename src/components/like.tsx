@@ -5,18 +5,17 @@ import { startTransition, useOptimistic } from "react";
 
 import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
-
-import { togglePostLikeAction } from "../../_actions/toggle-post-like";
-import { LikeDto } from "../../_data/posts";
+import { Result } from "@/lib/result";
 
 type Props = {
   isLiked: boolean;
-  likes: LikeDto[];
-  postId: string;
+  likeCount: number;
+  likesHref: string;
+  toggleLikeAction: () => Promise<Result>;
 };
-export function LikeOperator(props: Props) {
+export function Like(props: Props) {
   const [optimisticLikes, setOptimisticLikes] = useOptimistic({
-    likeCount: props.likes.length,
+    likeCount: props.likeCount,
     isLiked: props.isLiked,
   });
   const router = useRouter();
@@ -27,7 +26,7 @@ export function LikeOperator(props: Props) {
         likeCount: prev.likeCount + (prev.isLiked ? -1 : 1),
         isLiked: !prev.isLiked,
       }));
-      const result = await togglePostLikeAction({ postId: props.postId });
+      const result = await props.toggleLikeAction();
       if (!result.success) {
         return;
       }
@@ -40,9 +39,7 @@ export function LikeOperator(props: Props) {
       <Button variant="ghost" size="icon" onClick={handleClickLike}>
         <HeartIcon fill={optimisticLikes.isLiked ? "#000" : "#fff"} />
       </Button>
-      <Link href={`/posts/${props.postId}/likes`}>
-        {optimisticLikes.likeCount}
-      </Link>
+      <Link href={props.likesHref}>{optimisticLikes.likeCount}</Link>
     </div>
   );
 }
