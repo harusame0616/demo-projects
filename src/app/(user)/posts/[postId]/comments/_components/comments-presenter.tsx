@@ -17,7 +17,7 @@ type Props =
 export async function CommentsPresenter(props: Props) {
   if (!props.skeleton && props.comments.length === 0) {
     return (
-      <div className="text-muted-foreground text-sm py-2 text-center">
+      <div className="py-2 text-center text-sm text-muted-foreground">
         まだコメントはありません
       </div>
     );

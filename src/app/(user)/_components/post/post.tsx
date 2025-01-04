@@ -63,7 +63,7 @@ export function Post(props: Props) {
         ) : (
           <div className="whitespace-pre-wrap break-all">{props.post.text}</div>
         )}
-        <div className="border rounded-md p-4 empty:hidden flex flex-col">
+        <div className="flex flex-col rounded-md border p-4 empty:hidden">
           {props.skeleton
             ? null
             : props.post.attachments.map((attachment) => (

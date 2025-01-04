@@ -8,7 +8,7 @@ type Props = {
 };
 export async function AttachmentPresenter({ path, url }: Props) {
   return (
-    <Link href={url} className="flex items-center gap-1" prefetch={false} >
+    <Link href={url} className="flex items-center gap-1" prefetch={false}>
       <FileIcon className="size-4" />
       {path.split("/")[1]}
     </Link>

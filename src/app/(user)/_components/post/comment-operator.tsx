@@ -41,7 +41,11 @@ export function LikeOperator(props: Props) {
       <Button variant="ghost" size="icon" onClick={handleClickLike}>
         <HeartIcon fill={optimisticLikes.isLiked ? "#000" : "#fff"} />
       </Button>
-      <Drawer likes={props.likes} triggerLabel={`${optimisticLikes.likeCount}`} title="いいね一覧">
+      <Drawer
+        likes={props.likes}
+        triggerLabel={`${optimisticLikes.likeCount}`}
+        title="いいね一覧"
+      >
         {props.LikesPresenter}
       </Drawer>
     </div>

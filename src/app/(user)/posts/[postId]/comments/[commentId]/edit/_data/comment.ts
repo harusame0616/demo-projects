@@ -31,7 +31,6 @@ export async function getComment(commentId: string) {
     .single();
 
   if (result.error) {
-    console.log(result.error, commentId);
     throw new Error("error");
   }
 

@@ -4,15 +4,14 @@ import { fail } from "assert";
 import { uuidv7 } from "uuidv7";
 import * as v from "valibot";
 
-import { succeed } from "@/lib/result";
 import { createAction } from "@/lib/next-file/server-action";
+import { succeed } from "@/lib/result";
 import { createClientServiceRole } from "@/lib/supabase/service-role";
 
 export const commentNewComment = createAction(
   async (params, { user }) => {
     const client = createClientServiceRole().schema("X_DEMO");
 
-    console.log({ params });
     const result = await client.from("comment").insert({
       commentId: uuidv7(),
       postId: params.postId,
