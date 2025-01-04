@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import * as v from "valibot";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Schema = v.ObjectEntries;
 
 type Page<
@@ -28,14 +27,6 @@ type NextPage = (props: {
 }) => Promise<ReactNode>;
 
 export function createPage(page: Page<undefined, undefined>): NextPage;
-export function createPage<SearchParamsSchema extends Schema>(
-  page: Page<SearchParamsSchema, undefined>,
-  option: { searchParamsSchema: SearchParamsSchema },
-): NextPage;
-export function createPage<ParamsSchema extends Schema>(
-  page: Page<undefined, ParamsSchema>,
-  option: { paramsSchema: ParamsSchema },
-): NextPage;
 export function createPage<
   SearchParamsSchema extends Schema,
   ParamsSchema extends Schema,
@@ -45,6 +36,14 @@ export function createPage<
     searchParamsSchema: SearchParamsSchema;
     paramsSchema: ParamsSchema;
   },
+): NextPage;
+export function createPage<SearchParamsSchema extends Schema>(
+  page: Page<SearchParamsSchema, undefined>,
+  option: { searchParamsSchema: SearchParamsSchema },
+): NextPage;
+export function createPage<ParamsSchema extends Schema>(
+  page: Page<undefined, ParamsSchema>,
+  option: { paramsSchema: ParamsSchema },
 ): NextPage;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createPage(page: any, option?: any) {
