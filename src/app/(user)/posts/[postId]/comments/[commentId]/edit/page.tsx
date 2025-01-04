@@ -9,9 +9,9 @@ export default createPage(
     return <PostEditionPage postId={postId} commentId={commentId} />;
   },
   {
-    paramsSchema: v.object({
+    paramsSchema: {
       postId: v.string(),
       commentId: v.string(),
-    }),
+    },
   },
 );

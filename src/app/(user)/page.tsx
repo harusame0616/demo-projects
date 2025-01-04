@@ -9,11 +9,11 @@ export default createPage(
     return <PostsPage page={page} />;
   },
   {
-    searchParamsSchema: v.object({
+    searchParamsSchema: {
       page: v.fallback(
         v.pipe(v.string(), v.decimal(), v.transform(Number)),
         () => 1,
       ),
-    }),
+    },
   },
 );

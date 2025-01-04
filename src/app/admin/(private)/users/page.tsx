@@ -14,8 +14,8 @@ export default createPage(
     return <UsersPage page={page} searchParams={searchParamsRaw} />;
   },
   {
-    searchParamsSchema: v.object({
+    searchParamsSchema: {
       page: v.optional(v.pipe(v.string(), v.transform(Number)), () => "1"),
-    }),
+    },
   },
 );

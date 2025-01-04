@@ -10,8 +10,6 @@ export default createPage(
     return <CommentInputForm postId={postId} action={commentNewComment} />;
   },
   {
-    paramsSchema: v.object({
-      postId: v.string(),
-    }),
+    paramsSchema: { postId: v.string() },
   },
 );

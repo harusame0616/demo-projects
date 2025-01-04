@@ -9,14 +9,12 @@ export default createPage(
     return <LikesPage page={page} postId={postId} />;
   },
   {
-    searchParamsSchema: v.object({
+    searchParamsSchema: {
       page: v.fallback(
         v.pipe(v.string(), v.decimal(), v.transform(Number)),
         () => 1,
       ),
-    }),
-    paramsSchema: v.object({
-      postId: v.string(),
-    }),
+    },
+    paramsSchema: { postId: v.string() },
   },
 );

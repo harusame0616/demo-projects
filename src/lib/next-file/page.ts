@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import * as v from "valibot";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Schema = v.BaseSchema<any, any, any>;
+type Schema = v.ObjectEntries;
 
 type Page<
   SearchParamsSchema extends Schema | undefined,
@@ -10,10 +10,14 @@ type Page<
 > = (props: {
   searchParams: SearchParamsSchema extends undefined
     ? undefined
-    : v.InferOutput<Exclude<SearchParamsSchema, undefined>>;
+    : v.InferOutput<
+        v.ObjectSchema<Exclude<SearchParamsSchema, undefined>, undefined>
+      >;
   params: ParamsSchema extends undefined
     ? undefined
-    : v.InferOutput<Exclude<ParamsSchema, undefined>>;
+    : v.InferOutput<
+        v.ObjectSchema<Exclude<ParamsSchema, undefined>, undefined>
+      >;
   searchParamsRaw: Record<string, string | string[] | undefined>;
   paramsRaw: Record<string, string>;
 }) => ReactNode;
@@ -57,10 +61,10 @@ export function createPage(page: any, option?: any) {
     ]);
 
     const parsedSearchParams = option?.searchParamsSchema
-      ? v.parse(option.searchParamsSchema, await searchParams)
+      ? v.parse(v.object(option.searchParamsSchema), await searchParams)
       : undefined;
     const parsedParams = option?.paramsSchema
-      ? v.parse(option.paramsSchema, await params)
+      ? v.parse(v.object(option.paramsSchema), await params)
       : undefined;
 
     return page({

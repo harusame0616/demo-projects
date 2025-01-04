@@ -9,8 +9,6 @@ export default createPage(
     return <PostEditionPage postId={postId} />;
   },
   {
-    paramsSchema: v.object({
-      postId: v.string(),
-    }),
+    paramsSchema: { postId: v.string() },
   },
 );
