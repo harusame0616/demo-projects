@@ -2,7 +2,7 @@
 
 import * as v from "valibot";
 
-import { createAction } from "@/lib/server-action";
+import { createAction } from "@/lib/next-file/server-action";
 
 import { invite } from "./invite";
 

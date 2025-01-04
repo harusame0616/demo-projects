@@ -4,8 +4,8 @@ import * as v from "valibot";
 
 import { User } from "@/app/admin/(private)/users/_data/user";
 
-import { fail, Failure, Result } from "./result";
-import { createClient } from "./supabase/server";
+import { fail, Failure, Result } from "../result";
+import { createClient } from "../supabase/server";
 
 export function createAction<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

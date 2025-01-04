@@ -3,7 +3,7 @@
 import * as v from "valibot";
 
 import { emailSchema, passwordSchema } from "@/domains/user/schema";
-import { createAction } from "@/lib/server-action";
+import { createAction } from "@/lib/next-file/server-action";
 
 import { login } from "./login";
 
