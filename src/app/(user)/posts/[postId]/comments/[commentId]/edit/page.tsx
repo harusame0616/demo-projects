@@ -1,9 +1,17 @@
+import * as v from "valibot";
+
+import { createPage } from "@/lib/next-file/page";
+
 import PostEditionPage from "./post-edition-page";
 
-type Props = {
-  params: Promise<{ postId: string; commentId: string }>;
-};
-export default async function NextPage({ params }: Props) {
-  const { postId, commentId } = await params;
-  return <PostEditionPage postId={postId} commentId={commentId} />;
-}
+export default createPage(
+  function ({ params: { postId, commentId } }) {
+    return <PostEditionPage postId={postId} commentId={commentId} />;
+  },
+  {
+    paramsSchema: v.object({
+      postId: v.string(),
+      commentId: v.string(),
+    }),
+  },
+);

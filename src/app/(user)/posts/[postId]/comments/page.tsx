@@ -1,8 +1,19 @@
+import * as v from "valibot";
+
+import { createPage } from "@/lib/next-file/page";
+
 import { CommentsPage } from "./_components/comments-page";
 
-type Props = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-export default function NextPage({ searchParams }: Props) {
-  return <CommentsPage page={1} />;
-}
+export default createPage(
+  function ({ searchParams: { page } }) {
+    return <CommentsPage page={page} />;
+  },
+  {
+    searchParamsSchema: v.object({
+      page: v.fallback(
+        v.pipe(v.string(), v.decimal(), v.transform(Number)),
+        () => 1,
+      ),
+    }),
+  },
+);
