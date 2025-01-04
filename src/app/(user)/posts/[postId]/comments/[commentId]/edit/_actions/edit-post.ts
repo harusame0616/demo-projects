@@ -47,14 +47,14 @@ export const editComment = createAction(
     return succeed();
   },
   {
-    inputSchema: v.object({
+    inputSchema: {
       commentId: v.pipe(v.string()),
       text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       deleteAttachments: v.array(v.string()),
       attachments: v.array(
         v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       ),
-    }),
+    },
     revalidatePaths: ["/"],
   },
 );

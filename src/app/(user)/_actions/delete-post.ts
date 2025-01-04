@@ -22,9 +22,7 @@ export const deletePost = createAction(
     return succeed();
   },
   {
-    inputSchema: v.object({
-      postId: v.pipe(v.string()),
-    }),
+    inputSchema: { postId: v.pipe(v.string()) },
     revalidatePaths: ["/"],
   },
 );

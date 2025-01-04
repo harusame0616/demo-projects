@@ -7,11 +7,16 @@ import { User } from "@/app/admin/(private)/users/_data/user";
 import { fail, Failure, Result } from "../result";
 import { createClient } from "../supabase/server";
 
+type Schema = v.ObjectEntries;
+
+type InferSchema<S extends Schema> = v.InferOutput<
+  v.ObjectSchema<S, undefined>
+>;
+
 export function createAction<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  InputSchema extends v.BaseSchema<any, any, any>,
+  InputSchema extends Schema,
   Handler extends (
-    inputs: v.InferInput<InputSchema>,
+    inputs: InferSchema<InputSchema>,
     context: {
       user: null | User;
     },
@@ -26,16 +31,17 @@ export function createAction<
   }: {
     inputSchema: InputSchema;
     revalidatePaths?: string[];
-    redirectTo?: string | ((params: v.InferOutput<InputSchema>) => string);
+    redirectTo?: string | ((params: InferSchema<InputSchema>) => string);
   },
 ) {
   return async function action(
-    input: v.InferOutput<InputSchema>,
+    input: InferSchema<InputSchema>,
   ): Promise<Awaited<ReturnType<Handler>> | Failure> {
-    const parsedParams = v.safeParse(inputSchema, input);
+    const parsedParams = v.safeParse(v.object(inputSchema), input);
     if (!parsedParams.success) {
-      const errors = v.flatten<InputSchema>(parsedParams.issues).nested || {};
-
+      const errors =
+        v.flatten<v.ObjectSchema<InputSchema, undefined>>(parsedParams.issues)
+          .nested || {};
       return fail(Object.values<string>(errors)[0]);
     }
     const client = await createClient();

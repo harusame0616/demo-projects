@@ -49,7 +49,7 @@ export const editPost = createAction(
     return succeed();
   },
   {
-    inputSchema: v.object({
+    inputSchema: {
       postId: v.pipe(v.string()),
       title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
@@ -58,7 +58,7 @@ export const editPost = createAction(
       attachments: v.array(
         v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       ),
-    }),
+    },
     revalidatePaths: ["/"],
   },
 );

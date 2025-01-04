@@ -26,13 +26,13 @@ export const commentNewComment = createAction(
     return succeed();
   },
   {
-    inputSchema: v.object({
+    inputSchema: {
       postId: v.pipe(v.string()),
       text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       attachments: v.array(
         v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       ),
-    }),
+    },
     revalidatePaths: ["/posts/[postId]/comments"],
     redirectTo: (params) => `/posts/${params.postId}/comments`,
   },

@@ -22,9 +22,7 @@ export const deleteCommentAction = createAction(
     return succeed();
   },
   {
-    inputSchema: v.object({
-      commentId: v.pipe(v.string()),
-    }),
+    inputSchema: { commentId: v.pipe(v.string()) },
     revalidatePaths: ["/"],
   },
 );

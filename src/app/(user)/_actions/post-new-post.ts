@@ -27,14 +27,14 @@ export const postNewPostAction = createAction(
     return succeed();
   },
   {
-    inputSchema: v.object({
+    inputSchema: {
       title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       canComment: v.boolean(),
       attachments: v.array(
         v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
       ),
-    }),
+    },
     revalidatePaths: ["/"],
     redirectTo: "/",
   },
