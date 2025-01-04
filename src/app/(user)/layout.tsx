@@ -21,24 +21,19 @@ export default function Layout({
 }: PropsWithChildren<{ title: ReactNode }>) {
   return (
     <SidebarProvider defaultOpen={false} className="h-full overflow-hidden">
-      <Suspense fallback={<SideMenuPresenter skeleton />}>
-        <SideMenuContainer />
-      </Suspense>
       <div className="grid size-full grid-rows-[auto,1fr,auto] overflow-hidden">
-        <header className="grid grid-cols-[auto,1fr,auto] p-4 shadow-md">
+        <header className="grid grid-cols-[auto,1fr,auto] px-8 py-4 shadow-md">
           <div className="flex items-center justify-center">
-            <SidebarTrigger className="shrink-0">
-              <Avatar name="test" src={""} />
-            </SidebarTrigger>
-          </div>
-          <h1 className="flex items-center justify-center text-lg font-bold">
-            {title}
-          </h1>
-          <div className="size-[36px]">
             <Link href="/posts/new">
               <MessageCirclePlusIcon role="img" aria-label="新しい投稿" />
             </Link>
           </div>
+          <h1 className="flex items-center justify-center text-lg font-bold">
+            {title}
+          </h1>
+          <SidebarTrigger className="shrink-0">
+            <Avatar name="test" src={""} />
+          </SidebarTrigger>
         </header>
         <main className="overflow-y-scroll p-4">{children}</main>
         <footer className="border-t">
@@ -58,6 +53,9 @@ export default function Layout({
           </nav>
         </footer>
       </div>
+      <Suspense fallback={<SideMenuPresenter skeleton />}>
+        <SideMenuContainer />
+      </Suspense>
     </SidebarProvider>
   );
 }

@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { createClient } from "@/lib/supabase/server";
@@ -55,7 +56,7 @@ export function SideMenuPresenter(
     | { skeleton: true },
 ) {
   return (
-    <Sidebar>
+    <Sidebar side="right">
       <SidebarHeader>
         {props.skeleton ? (
           <UserMiniProfile skeleton />
@@ -82,7 +83,11 @@ export function SideMenuPresenter(
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
+      <SidebarFooter className="flex justify-stretch">
+        <SidebarTrigger className="w-full" variant="outline">
+          閉じる
+        </SidebarTrigger>
+      </SidebarFooter>
     </Sidebar>
   );
 }
