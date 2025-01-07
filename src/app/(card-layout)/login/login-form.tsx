@@ -4,6 +4,7 @@ import * as v from "valibot";
 
 import { Form, FormItem } from "@/components/form/form";
 import { Link } from "@/components/link";
+import { PasswordInput } from "@/components/password-input";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { emailSchema, passwordSchema } from "@/domains/user/schema";
@@ -51,9 +52,8 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem label="パスワード">
-              <Input
+              <PasswordInput
                 {...field}
-                type="password"
                 autoComplete="current-password"
                 className="w-full"
                 disabled={form.formState.isSubmitting}
