@@ -5,11 +5,9 @@ import {
   LogOutIcon,
   User,
 } from "lucide-react";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { Link } from "@/components/link";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,10 +28,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
 import { createClient } from "@/lib/supabase/server";
 
-import UserImage from "./user.png";
+import { UserMiniProfile } from "@/components/user-mini-profile";
 
 const items = [
   {
@@ -127,33 +124,5 @@ export function SideMenuPresenter(
         </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
-  );
-}
-
-type UserMiniProfileProps =
-  | { skeleton?: false; name: string; email: string }
-  | { skeleton: true };
-function UserMiniProfile(props: UserMiniProfileProps) {
-  return (
-    <div className="grid grid-cols-[auto_1fr] items-center gap-2">
-      <Avatar>
-        <Image src={UserImage} alt={""} />
-        <AvatarFallback>
-          {props.skeleton ? "" : props.name.at(0)}
-        </AvatarFallback>
-      </Avatar>
-      <div className="grid grid-rows-2 font-normal">
-        <div className="truncate ">
-          {props.skeleton ? <Skeleton className="my-1 h-4 w-12" /> : props.name}
-        </div>
-        <div className="truncate text-muted-foreground">
-          {props.skeleton ? (
-            <Skeleton className="my-1 h-4 w-24" />
-          ) : (
-            props.email
-          )}
-        </div>
-      </div>
-    </div>
   );
 }
