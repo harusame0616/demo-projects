@@ -10,5 +10,13 @@
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.0.0",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "15.1.2",
+    "eslint-plugin-playwright": "^2.1.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-tailwindcss": "^3.17.5",
+    "neostandard": "^0.12.0"
+  }
 }
