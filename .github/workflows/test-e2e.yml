@@ -32,7 +32,7 @@ jobs:
       - name: パッケージインストール
         run: pnpm install
       - name: アプリビルド
-        run: pnpm build
+        run: pnpm --filter company-newsletter build
 
       - name: Playwright ブラウザインストール
         run: pnpm exec playwright install --with-deps
