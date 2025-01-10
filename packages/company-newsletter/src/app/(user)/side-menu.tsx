@@ -2,7 +2,6 @@ import { AtSignIcon, LockKeyholeIcon, LogOutIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { Link } from "@/components/link";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +15,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { UserMiniProfile } from "@/components/user-mini-profile";
 import { createClient } from "@/lib/supabase/server";
 
 const items = [
@@ -89,33 +88,5 @@ export function SideMenuPresenter(
         </SidebarTrigger>
       </SidebarFooter>
     </Sidebar>
-  );
-}
-
-type UserMiniProfileProps =
-  | { skeleton?: false; name: string; email: string }
-  | { skeleton: true };
-function UserMiniProfile(props: UserMiniProfileProps) {
-  return (
-    <div className="grid grid-cols-[auto_1fr] items-center gap-2">
-      <Avatar>
-        {/* <Image src="" alt={""} /> */}
-        <AvatarFallback>
-          {props.skeleton ? "" : props.name?.at(0) || ""}
-        </AvatarFallback>
-      </Avatar>
-      <div className="grid grid-rows-2 font-normal">
-        <div className="truncate ">
-          {props.skeleton ? <Skeleton className="my-1 h-4 w-12" /> : props.name}
-        </div>
-        <div className="truncate text-muted-foreground">
-          {props.skeleton ? (
-            <Skeleton className="my-1 h-4 w-24" />
-          ) : (
-            props.email
-          )}
-        </div>
-      </div>
-    </div>
   );
 }
