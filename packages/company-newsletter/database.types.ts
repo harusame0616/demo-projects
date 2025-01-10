@@ -7,11 +7,71 @@ export type Json =
   | Json[]
 
 export type Database = {
+  public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   X_DEMO: {
     Tables: {
+      comment: {
+        Row: {
+          attachments: string[]
+          commentId: string
+          createdAt: string
+          postId: string
+          text: string
+          userId: string
+        }
+        Insert: {
+          attachments: string[]
+          commentId: string
+          createdAt?: string
+          postId: string
+          text: string
+          userId: string
+        }
+        Update: {
+          attachments?: string[]
+          commentId?: string
+          createdAt?: string
+          postId?: string
+          text?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comment_postId_fkey"
+            columns: ["postId"]
+            isOneToOne: false
+            referencedRelation: "post"
+            referencedColumns: ["postId"]
+          },
+          {
+            foreignKeyName: "comment_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["userId"]
+          },
+        ]
+      }
       post: {
         Row: {
           attachments: string[]
+          canComment: boolean
           createdAt: string
           postId: string
           text: string
@@ -20,6 +80,7 @@ export type Database = {
         }
         Insert: {
           attachments: string[]
+          canComment?: boolean
           createdAt?: string
           postId: string
           text: string
@@ -28,6 +89,7 @@ export type Database = {
         }
         Update: {
           attachments?: string[]
+          canComment?: boolean
           createdAt?: string
           postId?: string
           text?: string
@@ -46,17 +108,17 @@ export type Database = {
       }
       post_like: {
         Row: {
-          created_at: string
+          createdAt: string
           postId: string
           userId: string
         }
         Insert: {
-          created_at?: string
+          createdAt?: string
           postId: string
           userId: string
         }
         Update: {
-          created_at?: string
+          createdAt?: string
           postId?: string
           userId?: string
         }
