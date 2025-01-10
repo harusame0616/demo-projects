@@ -32,12 +32,12 @@ jobs:
       - name: パッケージインストール
         run: pnpm install
       - name: アプリビルド
-        run: pnpm build
+        run: pnpm --filter company-newsletter build
 
       - name: Playwright ブラウザインストール
-        run: pnpm exec playwright install --with-deps
+        run: pnpm --filter exec playwright install --with-deps
       - name: テスト実行
-        run: pnpm exec playwright test
+        run: pnpm --filter exec playwright test
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
