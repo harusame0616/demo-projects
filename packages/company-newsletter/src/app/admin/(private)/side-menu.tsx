@@ -28,9 +28,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { createClient } from "@/lib/supabase/server";
-
 import { UserMiniProfile } from "@/components/user-mini-profile";
+import { createClient } from "@/lib/supabase/server";
 
 const items = [
   {
