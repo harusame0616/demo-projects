@@ -1,6 +1,5 @@
 "use server";
 
-
 import { emailSchema } from "@/domains/user/schema";
 import { createAction } from "@/lib/next-file/server-action";
 

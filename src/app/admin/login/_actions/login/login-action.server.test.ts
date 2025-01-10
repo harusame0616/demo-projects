@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, Mock, test, vi } from "vitest";
 
 import { login } from "./login";
 import { loginAction } from "./login-action";
@@ -8,6 +8,26 @@ vi.mock("./login", () => ({
   login: vi.fn().mockResolvedValue({ success: true }),
 }));
 vi.mock("next/navigation");
+vi.mock("@/lib/supabase/server.ts", () => ({
+  createClient: vi.fn().mockReturnValue({
+    auth: {
+      getUser() {
+        return {
+          data: {
+            user: {
+              id: "test",
+              email: "test@example.com",
+              user_metadata: {
+                name: "テスト太郎",
+                role: "admin",
+              },
+            },
+          },
+        };
+      },
+    },
+  }),
+}));
 
 describe("loginAction", () => {
   beforeEach(() => {
@@ -30,7 +50,7 @@ describe("loginAction", () => {
 
       const { email, password } = params;
 
-      expect(login).toHaveBeenCalledWith({ email, password });
+      expect((login as Mock).mock.lastCall?.[0]).toEqual({ email, password });
       expect(redirect).toHaveBeenCalledWith("/admin");
     },
   );

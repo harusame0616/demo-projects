@@ -4,10 +4,10 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, expect, test, vi } from "vitest";
 
-import { loginAction } from "./_actions/login";
-import Page from "./page";
+import { loginAction } from "../_actions/login";
+import { LoginPage } from "./login-page";
 
-vi.mock("./_actions/login", () => ({
+vi.mock("../_actions/login", () => ({
   loginAction: vi.fn().mockResolvedValue({ success: true }),
 }));
 
@@ -16,12 +16,12 @@ beforeEach(() => {
 });
 
 test("タイトルが表示されている", async () => {
-  render(<Page />);
+  render(<LoginPage />);
   expect(screen.getByText("管理画面ログイン")).toBeInTheDocument();
 });
 
 test("入力の初期状態は空", () => {
-  render(<Page />);
+  render(<LoginPage />);
 
   expect(screen.getByRole("textbox", { name: /^メールアドレス$/ })).toHaveValue(
     "",
@@ -51,7 +51,7 @@ test.each([
 ])(
   "不正な入力でバリデーション失敗のメッセージが表示され、ログイン処理が呼び出されない %s",
   async ({ email, password, messages }) => {
-    render(<Page />);
+    render(<LoginPage />);
 
     await userEvent.type(
       screen.getByRole("textbox", { name: /^メールアドレス$/ }),
@@ -67,7 +67,7 @@ test.each([
 );
 
 test("未入力の場合バリデーション失敗のメッセージが表示され、ログイン処理が呼び出されない", async () => {
-  render(<Page />);
+  render(<LoginPage />);
 
   await userEvent.click(screen.getByRole("button", { name: /^ログイン$/ }));
 
@@ -79,7 +79,7 @@ test("未入力の場合バリデーション失敗のメッセージが表示�
 });
 
 test("フォーム内容もとにログイン処理が呼び出される", async () => {
-  render(<Page />);
+  render(<LoginPage />);
 
   await userEvent.type(
     screen.getByRole("textbox", { name: /^メールアドレス$/ }),
@@ -98,7 +98,7 @@ test("ログイン失敗した場合、エラーメッセージを表示する",
   const message = "ログインに失敗しました";
   vi.mocked(loginAction).mockResolvedValueOnce({ success: false, message });
 
-  render(<Page />);
+  render(<LoginPage />);
 
   await userEvent.type(
     screen.getByRole("textbox", { name: /^メールアドレス$/ }),
