@@ -13,6 +13,7 @@ export type LikeDto = {
     name: string;
     avatarUrl: string;
   };
+  likedAt: string;
 };
 export type PostDto = {
   postId: string;
@@ -80,6 +81,7 @@ export async function getPosts({ page }: { page: number }): Promise<{
       likes: post.likes.map((like) => ({
         postId: like.postId,
         userId: like.userId,
+        likedAt: like.likedAt.toISOString(),
         profile: {
           userId: like.user.userId,
           name: like.user.name,

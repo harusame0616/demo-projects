@@ -18,11 +18,11 @@ export function Likes({ likes }: Props) {
     <ul>
       {likes.map((like) => (
         <li
-          key={like.likeId}
+          key={like.userId}
           className="flex flex-col gap-1 border-b py-4 first:pt-0 last:border-b-0"
         >
           <div className="text-xs text-muted-foreground">
-            {format(like.createdAt, "yyyy-MM-dd hh:MM")}
+            {format(like.likedAt, "yyyy-MM-dd hh:MM")}
           </div>
           <div className="flex items-center gap-2">
             <Avatar name={like.profile.name} src={like.profile.avatarUrl} />
