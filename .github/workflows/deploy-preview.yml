@@ -29,12 +29,15 @@ jobs:
 
       - name: DB デプロイ
         run: pnpm --filter database run migration:deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
       - name: Vercel CLI インストール
         run: npm install --global vercel@latest
       - name: Vercel 環境変数取得
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
+      - name: Vercel ビルド
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy Project Artifacts to Vercel
+      - name: Vercel デプロイ
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
