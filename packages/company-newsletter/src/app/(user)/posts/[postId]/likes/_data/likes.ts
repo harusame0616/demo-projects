@@ -1,7 +1,8 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
-import { createClientServiceRole } from "@/lib/supabase/service-role";
+import { Prisma } from "@prisma/client";
+
+import { getPrismaClient } from "@/lib/prisma";
 
 export type LikeDto = {
   createdAt: string;
@@ -23,39 +24,32 @@ export async function getLikes({
     page: number;
   };
 }> {
-  const client = createClientServiceRole().schema("X_DEMO");
-  const authClient = await createClient();
-  const userResult = await authClient.auth.getUser();
+  const prisma = getPrismaClient();
+  const where: Prisma.CnlPostLikeWhereInput = { postId };
+  const [likes, count] = await prisma.$transaction([
+    prisma.cnlPostLike.findMany({
+      include: { user: true },
+      orderBy: { likedAt: "desc" },
+      take: 10,
+      skip: (page - 1) * 10,
+      where,
+    }),
+    prisma.cnlPostLike.count({ where }),
+  ]);
 
-  if (userResult.error) {
-    throw new Error("test");
-  }
-
-  const result = await client
-    .from("post_like")
-    .select(`postId, userId, createdAt, profile(*)`, {
-      count: "exact",
-    })
-    .eq("postId", postId)
-    .order("createdAt", { ascending: false })
-    .range((page - 1) * 10, page * 10);
-
-  if (result.error) {
-    throw new Error("error");
-  }
-
-  const likesDto = result.data.map(
+  const likesDto = likes.map(
     (like) =>
       ({
-        ...like.profile,
+        ...like.user,
         ...like,
-      }) as unknown as LikeDto,
+        createdAt: like.likedAt.toISOString(),
+      }) satisfies LikeDto,
   );
 
   return {
     data: likesDto,
     pagination: {
-      totalPage: result.count ? Math.ceil(result.count / 10) : 1,
+      totalPage: count ? Math.ceil(count / 10) : 1,
       page,
     },
   };
