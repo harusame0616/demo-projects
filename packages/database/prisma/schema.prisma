@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["company_newsletter"]
+}
+
+model CnlPost {
+  postId String @id @db.Uuid
+
+  title       String   @db.Text
+  text        String   @db.Text
+  attachments String[] @db.Text
+  canComment  Boolean  @default(false)
+  userId      String   @db.Uuid
+  author      CnlUser  @relation(fields: [userId], references: [userId])
+  postedAt    DateTime @db.Timestamptz()
+
+  createdAt DateTime @default(now()) @ignore @db.Timestamptz()
+  updatedAt DateTime @updatedAt @ignore @db.Timestamptz()
+
+  likes    CnlPostLike[]
+  comments CnlPostComment[]
+
+  @@map("Post")
+  @@schema("company_newsletter")
+}
+
+model CnlPostLike {
+  postId String  @db.Uuid
+  userId String  @db.Uuid
+  post   CnlPost @relation(fields: [postId], references: [postId])
+  user   CnlUser @relation(fields: [userId], references: [userId])
+
+  @@id([postId, userId])
+  @@map("PostLike")
+  @@schema("company_newsletter")
+}
+
+model CnlPostComment {
+  commentId String @id @db.Uuid
+
+  postId String  @db.Uuid
+  post   CnlPost @relation(fields: [postId], references: [postId])
+  userId String  @db.Uuid
+  author CnlUser @relation(fields: [userId], references: [userId])
+  text   String  @db.Text
+
+  createdAt DateTime @default(now()) @ignore @db.Timestamptz()
+  updatedAt DateTime @updatedAt @ignore @db.Timestamptz()
+
+  @@map("PostComment")
+  @@schema("company_newsletter")
+}
+
+model CnlUser {
+  userId String @id @db.Uuid
+
+  email    String @unique
+  password String
+  name     String
+  role     String
+
+  createdAt DateTime @default(now()) @ignore @db.Timestamptz()
+  updatedAt DateTime @updatedAt @ignore @db.Timestamptz()
+
+  posts        CnlPost[]
+  postLikes    CnlPostLike[]
+  postComments CnlPostComment[]
+
+  @@map("User")
+  @@schema("company_newsletter")
+}
