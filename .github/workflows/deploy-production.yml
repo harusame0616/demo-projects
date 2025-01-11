@@ -28,7 +28,7 @@ jobs:
         run: pnpm install
 
       - name: DB デプロイ
-        run: pnpm --filter database run deploy
+        run: pnpm --filter database run migration:deploy
 
       - name: Vercel CLI インストール
         run: npm install --global vercel@latest
