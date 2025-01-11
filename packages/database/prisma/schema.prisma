@@ -72,6 +72,7 @@ model CnlUser {
 
   avatarUrl    String   @default("")
   name         String
+  email        String   @unique @default("")
   role         String
   registeredAt DateTime @default(now()) @db.Timestamptz()
 
