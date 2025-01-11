@@ -4,30 +4,25 @@ import { fail } from "assert";
 import * as v from "valibot";
 
 import { createAction } from "@/lib/next-file/server-action";
+import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
-import { createClientServiceRole } from "@/lib/supabase/service-role";
 
 export const togglePostLikeAction = createAction(
   async (params, { user }) => {
-    const client = createClientServiceRole().schema("X_DEMO");
-
-    const deleteResult = await client
-      .from("post_like")
-      .delete({ count: "exact" })
-      .eq("postId", params.postId)
-      .eq("userId", user!.userId);
-    if (deleteResult.error) {
-      return fail("投稿に失敗しました");
+    if (!user) {
+      return fail("ログインが必要です");
     }
 
-    if (deleteResult.count === 0) {
-      const result = await client.from("post_like").insert({
-        postId: params.postId,
-        userId: user!.userId,
-      });
-      if (result.error) {
-        return fail("投稿に失敗しました");
-      }
+    const prisma = getPrismaClient();
+    const id = { postId: params.postId, userId: user.userId };
+    const like = await prisma.cnlPostLike.findUnique({
+      where: { postId_userId: id },
+    });
+
+    if (like) {
+      await prisma.cnlPostLike.delete({ where: { postId_userId: id } });
+    } else {
+      await prisma.cnlPostLike.create({ data: id });
     }
 
     return succeed();
