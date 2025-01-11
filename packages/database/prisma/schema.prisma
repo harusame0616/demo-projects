@@ -26,7 +26,7 @@ model CnlPost {
   canComment  Boolean  @default(false)
   userId      String   @db.Uuid
   author      CnlUser  @relation(fields: [userId], references: [userId])
-  postedAt    DateTime @db.Timestamptz()
+  postedAt    DateTime @default(now()) @db.Timestamptz()
 
   createdAt DateTime @default(now()) @ignore @db.Timestamptz()
   updatedAt DateTime @updatedAt @ignore @db.Timestamptz()
@@ -39,10 +39,11 @@ model CnlPost {
 }
 
 model CnlPostLike {
-  postId String  @db.Uuid
-  userId String  @db.Uuid
-  post   CnlPost @relation(fields: [postId], references: [postId])
-  user   CnlUser @relation(fields: [userId], references: [userId])
+  postId  String   @db.Uuid
+  userId  String   @db.Uuid
+  post    CnlPost  @relation(fields: [postId], references: [postId])
+  user    CnlUser  @relation(fields: [userId], references: [userId])
+  likedAt DateTime @default(now()) @db.Timestamptz()
 
   @@id([postId, userId])
   @@map("PostLike")
@@ -52,11 +53,12 @@ model CnlPostLike {
 model CnlPostComment {
   commentId String @id @db.Uuid
 
-  postId String  @db.Uuid
-  post   CnlPost @relation(fields: [postId], references: [postId])
-  userId String  @db.Uuid
-  author CnlUser @relation(fields: [userId], references: [userId])
-  text   String  @db.Text
+  postId      String   @db.Uuid
+  post        CnlPost  @relation(fields: [postId], references: [postId])
+  userId      String   @db.Uuid
+  author      CnlUser  @relation(fields: [userId], references: [userId])
+  text        String   @db.Text
+  commentedAt DateTime @default(now()) @db.Timestamptz()
 
   createdAt DateTime @default(now()) @ignore @db.Timestamptz()
   updatedAt DateTime @updatedAt @ignore @db.Timestamptz()
@@ -68,10 +70,10 @@ model CnlPostComment {
 model CnlUser {
   userId String @id @db.Uuid
 
-  email    String @unique
-  password String
-  name     String
-  role     String
+  avatarUrl    String   @default("")
+  name         String
+  role         String
+  registeredAt DateTime @default(now()) @db.Timestamptz()
 
   createdAt DateTime @default(now()) @ignore @db.Timestamptz()
   updatedAt DateTime @updatedAt @ignore @db.Timestamptz()

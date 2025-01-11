@@ -2,12 +2,12 @@
 
 import * as v from "valibot";
 
+import { getPrismaClient } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { createClientServiceRole } from "@/lib/supabase/service-role";
 
 export type LikeDto = {
-  likeId: string;
-  createdAt: string;
+  postId: string;
+  userId: string;
   profile: {
     userId: string;
     name: string;
@@ -38,7 +38,6 @@ export async function getPosts({ page }: { page: number }): Promise<{
     page: number;
   };
 }> {
-  const client = createClientServiceRole().schema("X_DEMO");
   const authClient = await createClient();
   const userResult = await authClient.auth.getUser();
 
@@ -46,22 +45,25 @@ export async function getPosts({ page }: { page: number }): Promise<{
     throw new Error("test");
   }
 
-  const result = await client
-    .from("post")
-    .select(
-      `postId, canComment, title, attachments, text, attachments, createdAt, userId, profile!post_userId_fkey1(*), likes:post_like(*, profile(*)), comment(*)`,
-      {
-        count: "exact",
+  const prisma = getPrismaClient();
+  const [posts, count] = await prisma.$transaction([
+    prisma.cnlPost.findMany({
+      include: {
+        author: true,
+        likes: { include: { user: true }, orderBy: { likedAt: "desc" } },
+        comments: {
+          include: { author: true },
+          orderBy: { commentedAt: "desc" },
+        },
       },
-    )
-    .order("createdAt", { ascending: false })
-    .range((page - 1) * 10, page * 10);
+      orderBy: { postedAt: "desc" },
+      skip: (page - 1) * 10,
+      take: 10,
+    }),
+    prisma.cnlPost.count(),
+  ]);
 
-  if (result.error) {
-    throw new Error("error");
-  }
-
-  const postsDto = result.data.map((post) => {
+  const postsDto = posts.map((post) => {
     const likeCount = post.likes.length || 0;
     const isLiked = post.likes.some(
       (like) => like.userId === userResult.data.user.id,
@@ -70,12 +72,20 @@ export async function getPosts({ page }: { page: number }): Promise<{
       postId: post.postId,
       title: post.title,
       text: post.text,
-      createdAt: post.createdAt,
-      commentCount: post.comment.length,
+      createdAt: post.postedAt.toISOString(),
+      commentCount: post.comments.length,
       canComment: post.canComment,
       likeCount,
       isLiked,
-      likes: post.likes,
+      likes: post.likes.map((like) => ({
+        postId: like.postId,
+        userId: like.userId,
+        profile: {
+          userId: like.user.userId,
+          name: like.user.name,
+          avatarUrl: like.user.avatarUrl,
+        },
+      })),
       attachments: post.attachments,
       author: v.parse(
         v.object({
@@ -83,15 +93,15 @@ export async function getPosts({ page }: { page: number }): Promise<{
           name: v.string(),
           avatarUrl: v.string(),
         }),
-        post.profile,
+        post.author,
       ),
-    };
+    } satisfies PostDto;
   });
 
   return {
     data: postsDto,
     pagination: {
-      totalPage: result.count ? Math.ceil(result.count / 10) : 1,
+      totalPage: count ? Math.ceil(count / 10) : 1,
       page,
     },
   };
