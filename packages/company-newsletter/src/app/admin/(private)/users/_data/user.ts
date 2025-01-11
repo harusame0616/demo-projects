@@ -1,13 +1,8 @@
 import * as v from "valibot";
 
-import { createClient } from "@/lib/supabase/server";
+import { getPrismaClient } from "@/lib/prisma";
 
 import { Role, roleSchema } from "../role";
-
-const userMetadataSchema = v.object({
-  name: v.optional(v.string(), ""),
-  role: v.optional(roleSchema, () => Role.Viewer.value),
-});
 
 export type User = {
   userId: string;
@@ -16,27 +11,27 @@ export type User = {
   role: Role;
 };
 export async function getUsers(page: number) {
-  const supabase = await createClient();
+  const prisma = getPrismaClient();
   const perPage = 10;
-  const listUsersResult = await supabase.auth.admin.listUsers({
-    page,
-    perPage,
-  });
-
-  if (listUsersResult.error) {
-    throw new Error(listUsersResult.error.message);
-  }
+  const [users, count] = await prisma.$transaction([
+    prisma.cnlUser.findMany({
+      orderBy: { registeredAt: "desc" },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    }),
+    prisma.cnlUser.count(),
+  ]);
 
   return {
-    users: listUsersResult.data.users.map(
-      ({ email, id: userId, user_metadata: userMetadata }) => {
-        return {
-          userId,
-          email: v.parse(v.string(), email),
-          ...v.parse(userMetadataSchema, userMetadata),
-        };
-      },
-    ),
-    totalPage: Math.ceil(listUsersResult.data.total / perPage),
+    users: users.map(({ userId, name, email, role }) => ({
+      userId,
+      email,
+      name,
+      role: v.parse(
+        v.fallback(roleSchema, () => Role.Viewer.value),
+        role,
+      ),
+    })),
+    totalPage: Math.ceil(count / perPage),
   };
 }

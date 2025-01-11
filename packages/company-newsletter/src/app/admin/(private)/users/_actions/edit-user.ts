@@ -1,3 +1,4 @@
+import { getPrismaClient } from "@/lib/prisma";
 import { fail, Result, succeed } from "@/lib/result";
 import { createClient } from "@/lib/supabase/server";
 
@@ -19,14 +20,25 @@ export async function editUser({
 }: EditUserParams): Promise<Result<undefined>> {
   const supabase = await createClient();
 
-  const result = await supabase.auth.admin.updateUserById(userId, {
-    user_metadata: { name, role },
-    password: password || undefined,
-    email,
-    email_confirm: true,
-  });
+  const prisma = getPrismaClient();
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.cnlUser.update({
+        where: { userId },
+        data: { name, email, role },
+      });
+      const result = await supabase.auth.admin.updateUserById(userId, {
+        user_metadata: { name, role },
+        password: password || undefined,
+        email,
+        email_confirm: true,
+      });
 
-  if (result.error) {
+      if (result.error) {
+        throw result.error;
+      }
+    });
+  } catch {
     return fail("ユーザーの更新に失敗しました。");
   }
 
