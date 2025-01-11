@@ -5,17 +5,16 @@ import * as v from "valibot";
 
 import { createAction } from "@/lib/next-file/server-action";
 import { getPrismaClient } from "@/lib/prisma";
-import { succeed } from "@/lib/result";
+import { fail, succeed } from "@/lib/result";
 
 export const postNewPostAction = createAction(
   async (params, { user }) => {
-    const client = getPrismaClient();
-
     if (!user) {
-      throw new Error("ログインが必要です");
+      return fail("ログインが必要です");
     }
 
-    await client.cnlPost.create({
+    const prisma = getPrismaClient();
+    await prisma.cnlPost.create({
       data: {
         postId: uuidv7(),
         userId: user.userId!,
