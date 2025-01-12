@@ -58,6 +58,7 @@ model CnlPostComment {
   userId      String   @db.Uuid
   author      CnlUser  @relation(fields: [userId], references: [userId])
   text        String   @db.Text
+  attachments String[] @db.Text
   commentedAt DateTime @default(now()) @db.Timestamptz()
 
   createdAt DateTime @default(now()) @ignore @db.Timestamptz()

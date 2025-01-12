@@ -1,9 +1,9 @@
 "use server";
 
-import { fail } from "assert";
 import * as v from "valibot";
 
 import { createAction } from "@/lib/next-file/server-action";
+import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
 import { createClientServiceRole } from "@/lib/supabase/service-role";
 
@@ -11,38 +11,38 @@ export const editComment = createAction(
   async (params) => {
     const client = createClientServiceRole();
 
-    const post = await client
-      .schema("X_DEMO")
-      .from("comment")
-      .select("*")
-      .eq("commentId", params.commentId)
-      .single();
+    const prisma = getPrismaClient();
+    await prisma.$transaction(async (tx) => {
+      const comment = await tx.cnlPostComment.findUnique({
+        where: { commentId: params.commentId },
+      });
 
-    if (post.error) {
-      throw new Error("error");
-    }
+      if (!comment) {
+        throw new Error("error");
+      }
 
-    const newAttachments = [
-      ...post.data.attachments.filter(
-        (attachment: string) => !params.deleteAttachments.includes(attachment),
-      ),
-      ...params.attachments,
-    ];
+      const newAttachments = [
+        ...comment.attachments.filter(
+          (attachment: string) =>
+            !params.deleteAttachments.includes(attachment),
+        ),
+        ...params.attachments,
+      ];
 
-    const result = await client
-      .schema("X_DEMO")
-      .from("comment")
-      .update({
-        text: params.text,
-        attachments: newAttachments,
-      })
-      .eq("commentId", params.commentId);
+      await tx.cnlPostComment.update({
+        where: { commentId: params.commentId },
+        data: {
+          text: params.text,
+          attachments: newAttachments,
+        },
+      });
 
-    if (result.error) {
-      return fail("投稿に失敗しました");
-    }
-
-    await client.storage.from("attachment").remove(params.deleteAttachments);
+      if (params.deleteAttachments.length) {
+        await client.storage
+          .from("attachment")
+          .remove(params.deleteAttachments);
+      }
+    });
 
     return succeed();
   },

@@ -2,8 +2,7 @@
 
 import * as v from "valibot";
 
-import { createClient } from "@/lib/supabase/server";
-import { createClientServiceRole } from "@/lib/supabase/service-role";
+import { getPrismaClient } from "@/lib/prisma";
 
 export type CommentDto = {
   commentId: string;
@@ -24,35 +23,23 @@ export async function getComments({ page }: { page: number }): Promise<{
     page: number;
   };
 }> {
-  const client = createClientServiceRole().schema("X_DEMO");
-  const authClient = await createClient();
-  const userResult = await authClient.auth.getUser();
+  const prisma = getPrismaClient();
+  const [comments, count] = await prisma.$transaction([
+    prisma.cnlPostComment.findMany({
+      include: { author: true },
+      orderBy: { commentedAt: "desc" },
+      skip: (page - 1) * 10,
+      take: 10,
+    }),
+    prisma.cnlPostComment.count(),
+  ]);
 
-  if (userResult.error) {
-    throw new Error("test");
-  }
-
-  const result = await client
-    .from("comment")
-    .select(
-      `commentId, postId, attachments, text,  createdAt, userId, profile(*)`,
-      {
-        count: "exact",
-      },
-    )
-    .order("createdAt", { ascending: false })
-    .range((page - 1) * 10, page * 10);
-
-  if (result.error) {
-    throw new Error("error");
-  }
-
-  const postsDto = result.data.map((comment) => {
+  const postsDto = comments.map((comment) => {
     return {
       commentId: comment.commentId,
       postId: comment.postId,
       text: comment.text,
-      createdAt: comment.createdAt,
+      createdAt: comment.commentedAt.toISOString(),
       attachments: comment.attachments,
       author: v.parse(
         v.object({
@@ -60,7 +47,7 @@ export async function getComments({ page }: { page: number }): Promise<{
           name: v.string(),
           avatarUrl: v.string(),
         }),
-        comment.profile,
+        comment.author,
       ),
     };
   });
@@ -68,7 +55,7 @@ export async function getComments({ page }: { page: number }): Promise<{
   return {
     data: postsDto,
     pagination: {
-      totalPage: result.count ? Math.ceil(result.count / 10) : 1,
+      totalPage: count ? Math.ceil(count / 10) : 1,
       page,
     },
   };

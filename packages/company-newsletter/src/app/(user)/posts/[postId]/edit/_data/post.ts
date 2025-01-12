@@ -1,5 +1,6 @@
 "use server";
 
+import { getPrismaClient } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { createClientServiceRole } from "@/lib/supabase/service-role";
 
@@ -17,25 +18,19 @@ export type PostDto = {
   attachments: string[];
 };
 export async function getPost(postId: string) {
-  const client = createClientServiceRole().schema("X_DEMO");
   const authClient = await createClient();
   const userResult = await authClient.auth.getUser();
 
+  const prisma = getPrismaClient();
   if (userResult.error) {
     throw new Error("test");
   }
 
-  const result = await client
-    .from("post")
-    .select(`*`)
-    .eq("postId", postId)
-    .single();
-
-  if (result.error) {
-    throw new Error("error");
-  }
+  const post = await prisma.cnlPost.findUnique({
+    where: { postId },
+  });
 
   return {
-    data: result.data,
+    data: post,
   };
 }
