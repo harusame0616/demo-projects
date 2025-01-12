@@ -29,7 +29,5 @@ export async function getPost(postId: string) {
     where: { postId },
   });
 
-  return {
-    data: post,
-  };
+  return post;
 }
