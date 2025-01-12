@@ -1,15 +1,13 @@
-import { createServerClient } from "@supabase/ssr";
-import { HomeIcon, MessageCirclePlusIcon, PlusIcon } from "lucide-react";
+import { HomeIcon, PlusIcon } from "lucide-react";
 import { PropsWithChildren, ReactNode, Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";
 import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { createClient } from "@/lib/supabase/server";
+import { canPost } from "@/lib/user";
 
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
-import { canPost } from "@/lib/user";
 
 const MenuIcons = [
   {

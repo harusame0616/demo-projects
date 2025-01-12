@@ -40,7 +40,7 @@ export async function editUser({
         throw result.error;
       }
     });
-  } catch (e) {
+  } catch {
     return fail("ユーザーの更新に失敗しました。");
   }
 
