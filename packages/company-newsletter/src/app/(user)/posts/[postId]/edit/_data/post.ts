@@ -2,7 +2,6 @@
 
 import { getPrismaClient } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { createClientServiceRole } from "@/lib/supabase/service-role";
 
 export type PostDto = {
   postId: string;
