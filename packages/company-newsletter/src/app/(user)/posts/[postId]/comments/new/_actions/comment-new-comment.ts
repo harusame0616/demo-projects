@@ -5,24 +5,27 @@ import { uuidv7 } from "uuidv7";
 import * as v from "valibot";
 
 import { createAction } from "@/lib/next-file/server-action";
+import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
-import { createClientServiceRole } from "@/lib/supabase/service-role";
 
 export const commentNewComment = createAction(
   async (params, { user }) => {
-    const client = createClientServiceRole().schema("X_DEMO");
+    if (!user) {
+      return fail("ログインしてください");
+    }
 
-    const result = await client.from("comment").insert({
-      commentId: uuidv7(),
-      postId: params.postId,
-      userId: user?.userId,
-      text: params.text,
-      attachments: params.attachments,
+    const prisma = getPrismaClient();
+    await prisma.cnlPostComment.create({
+      data: {
+        commentId: uuidv7(),
+        postId: params.postId,
+        userId: user.userId,
+        text: params.text,
+        attachments: params.attachments,
+        commentedAt: new Date(),
+      },
     });
 
-    if (result.error) {
-      return fail("投稿に失敗しました");
-    }
     return succeed();
   },
   {

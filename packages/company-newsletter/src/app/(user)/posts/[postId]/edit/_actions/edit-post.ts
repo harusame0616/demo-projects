@@ -1,9 +1,9 @@
 "use server";
 
-import { fail } from "assert";
 import * as v from "valibot";
 
 import { createAction } from "@/lib/next-file/server-action";
+import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
 import { createClientServiceRole } from "@/lib/supabase/service-role";
 
@@ -11,40 +11,44 @@ export const editPost = createAction(
   async (params) => {
     const client = createClientServiceRole();
 
-    const post = await client
-      .schema("X_DEMO")
-      .from("post")
-      .select("*")
-      .eq("postId", params.postId)
-      .single();
+    const prisma = getPrismaClient();
+    await prisma.$transaction(async (tx) => {
+      const post = await tx.cnlPost.findUnique({
+        where: { postId: params.postId },
+      });
 
-    if (post.error) {
-      throw new Error("error");
-    }
+      if (!post) {
+        throw new Error("error");
+      }
 
-    const newAttachments = [
-      ...post.data.attachments.filter(
-        (attachment: string) => !params.deleteAttachments.includes(attachment),
-      ),
-      ...params.attachments,
-    ];
+      const newAttachments = [
+        ...post.attachments.filter(
+          (attachment: string) =>
+            !params.deleteAttachments.includes(attachment),
+        ),
+        ...params.attachments,
+      ];
 
-    const result = await client
-      .schema("X_DEMO")
-      .from("post")
-      .update({
-        title: params.title,
-        text: params.text,
-        attachments: newAttachments,
-        canComment: params.canComment,
-      })
-      .eq("postId", params.postId);
+      await tx.cnlPost.update({
+        where: { postId: params.postId },
+        data: {
+          title: params.title,
+          text: params.text,
+          attachments: newAttachments,
+          canComment: params.canComment,
+        },
+      });
 
-    if (result.error) {
-      return fail("投稿に失敗しました");
-    }
-
-    await client.storage.from("attachment").remove(params.deleteAttachments);
+      if (params.deleteAttachments.length) {
+        const removeResult = await client.storage
+          .from("attachment")
+          .remove(params.deleteAttachments);
+        if (removeResult.error) {
+          console.log(removeResult.error);
+          throw new Error("error");
+        }
+      }
+    });
 
     return succeed();
   },

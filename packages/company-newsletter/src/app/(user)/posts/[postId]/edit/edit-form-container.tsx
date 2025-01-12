@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { editPost } from "./_actions/edit-post";
 import { getPost } from "./_data/post";
 import EditFormPresenter from "./edit-form-presenter";
@@ -8,5 +10,9 @@ type Props = {
 export default async function EditFormContainer({ postId }: Props) {
   const post = await getPost(postId);
 
-  return <EditFormPresenter action={editPost} post={post.data} />;
+  if (!post) {
+    notFound();
+  }
+
+  return <EditFormPresenter action={editPost} post={post} />;
 }
