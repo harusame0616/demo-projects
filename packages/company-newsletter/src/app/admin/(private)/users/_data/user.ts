@@ -7,6 +7,7 @@ import { Role, roleSchema } from "../role";
 export type User = {
   userId: string;
   name: string;
+  canPost: boolean;
   email: string;
   role: Role;
 };
@@ -23,10 +24,11 @@ export async function getUsers(page: number) {
   ]);
 
   return {
-    users: users.map(({ userId, name, email, role }) => ({
+    users: users.map(({ userId, name, email, role, canPost }) => ({
       userId,
       email,
       name,
+      canPost,
       role: v.parse(
         v.fallback(roleSchema, () => Role.Viewer.value),
         role,

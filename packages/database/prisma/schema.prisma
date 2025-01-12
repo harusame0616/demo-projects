@@ -75,6 +75,7 @@ model CnlUser {
   name         String
   email        String   @unique @default("")
   role         String
+  canPost      Boolean  @default(false)
   registeredAt DateTime @default(now()) @db.Timestamptz()
 
   createdAt DateTime @default(now()) @ignore @db.Timestamptz()

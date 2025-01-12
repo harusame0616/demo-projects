@@ -9,12 +9,14 @@ import { Role } from "../role";
 type AddUserParams = {
   name: string;
   email: string;
+  canPost: boolean;
   password: string;
   role: Role;
 };
 export async function addUser({
   name,
   email,
+  canPost,
   password,
   role,
 }: AddUserParams): Promise<Result<undefined>> {
@@ -27,6 +29,7 @@ export async function addUser({
         data: {
           userId: uuidv7(),
           email,
+          canPost,
           name,
           role,
         },
@@ -34,7 +37,7 @@ export async function addUser({
 
       const result = await supabase.auth.admin.createUser({
         id: user.userId,
-        user_metadata: { name, role },
+        user_metadata: { name, role, canPost },
         password,
         email,
         email_confirm: true,
@@ -44,7 +47,8 @@ export async function addUser({
         throw result.error;
       }
     });
-  } catch {
+  } catch (e) {
+    console.log(e);
     return fail("ユーザーの作成に失敗しました");
   }
 

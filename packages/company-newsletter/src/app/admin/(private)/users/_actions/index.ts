@@ -16,6 +16,7 @@ export const addUserAction = createAction(addUser, {
     email: emailSchema,
     password: passwordSchema,
     role: roleSchema,
+    canPost: v.boolean(),
   },
   revalidatePaths: ["/admin/users"],
 });
@@ -25,6 +26,7 @@ export const editUserAction = createAction(editUser, {
     userId: v.pipe(v.string(), v.minLength(1), v.uuid()),
     name: nameSchema,
     email: emailSchema,
+    canPost: v.boolean(),
     password: v.union([passwordSchema, v.pipe(v.string(), v.length(0))]),
     role: roleSchema,
   },

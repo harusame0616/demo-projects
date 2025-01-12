@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
+import { setCanPostHeader } from "@/lib/user";
+
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   return await updateSession(request);
@@ -82,5 +84,5 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  return supabaseResponse;
+  return setCanPostHeader(supabaseResponse);
 }

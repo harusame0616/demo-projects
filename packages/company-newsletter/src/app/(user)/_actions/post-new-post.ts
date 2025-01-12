@@ -13,6 +13,10 @@ export const postNewPostAction = createAction(
       return fail("ログインが必要です");
     }
 
+    if (!user.canPost) {
+      return fail("投稿権限がありません");
+    }
+
     const prisma = getPrismaClient();
     await prisma.cnlPost.create({
       data: {

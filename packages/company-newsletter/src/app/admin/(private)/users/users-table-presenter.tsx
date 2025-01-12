@@ -47,6 +47,7 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
     email: string;
     userId: string;
     role: "admin" | "operator" | "viewer";
+    canPost: boolean;
   }>();
   const [deletionUser, setDeletionUser] = useState<{
     name: string;
@@ -74,10 +75,11 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
                 name: "",
                 email: "",
                 userId: "",
+                canPost: false,
                 role: "viewer" as const,
               }))
             : props.users
-          ).map(({ userId, email, name, role }, i) => (
+          ).map(({ userId, email, name, role, canPost }, i) => (
             <TableRow key={userId || i}>
               <TableCell>
                 {props.skeleton ? (
@@ -118,7 +120,7 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
                     <DropdownMenuGroup>
                       <DropdownMenuItem
                         onClick={() =>
-                          setEditionUser({ name, email, userId, role })
+                          setEditionUser({ name, email, userId, role, canPost })
                         }
                       >
                         <Edit />
@@ -161,7 +163,7 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
           }}
           open
           primaryButtonLabel="保存"
-          {...editionUser}
+          user={editionUser}
         />
       )}
       <AlertDialog

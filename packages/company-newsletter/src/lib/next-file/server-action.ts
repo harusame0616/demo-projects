@@ -54,6 +54,7 @@ export function createAction<
           email: getUserResult.data.user.email!,
           name: getUserResult.data.user.user_metadata.name,
           role: getUserResult.data.user.user_metadata.role,
+          canPost: getUserResult.data.user.user_metadata.canPost,
         };
 
     const result = (await handler(parsedParams.output, {
