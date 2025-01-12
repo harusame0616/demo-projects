@@ -1,17 +1,27 @@
-import { FileIcon } from "lucide-react";
+import { FileIcon, FileX2Icon } from "lucide-react";
 
 import { Link } from "@/components/link";
-import { decodeBase64 } from "@/lib/base64";
 
-type Props = {
-  path: string;
-  url: string;
-};
-export async function AttachmentPresenter({ path, url }: Props) {
-  return (
-    <Link href={url} className="flex items-center gap-1" prefetch={false}>
-      <FileIcon className="size-4" />
-      {decodeBase64(path.split("/")[1])}
+type Props =
+  | {
+      fileName: string;
+      url: string;
+      brokenLink?: false;
+    }
+  | {
+      fileName: string;
+      brokenLink: true;
+    };
+export async function AttachmentPresenter(props: Props) {
+  return props.brokenLink ? (
+    <div className="flex items-center gap-1">
+      <FileX2Icon className="size-4" aria-hidden />
+      {props.fileName}
+    </div>
+  ) : (
+    <Link href={props.url} className="flex items-center gap-1" prefetch={false}>
+      <FileIcon className="size-4" aria-hidden />
+      {props.fileName}
     </Link>
   );
 }
