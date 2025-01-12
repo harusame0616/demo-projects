@@ -8,6 +8,7 @@ type EditUserParams = {
   userId: string;
   name: string;
   email: string;
+  canPost: boolean;
   password: string;
   role: Role;
 };
@@ -15,6 +16,7 @@ export async function editUser({
   userId,
   name,
   email,
+  canPost,
   password,
   role,
 }: EditUserParams): Promise<Result<undefined>> {
@@ -25,10 +27,10 @@ export async function editUser({
     await prisma.$transaction(async (tx) => {
       await tx.cnlUser.update({
         where: { userId },
-        data: { name, email, role },
+        data: { name, email, role, canPost },
       });
       const result = await supabase.auth.admin.updateUserById(userId, {
-        user_metadata: { name, role },
+        user_metadata: { name, role, canPost },
         password: password || undefined,
         email,
         email_confirm: true,
