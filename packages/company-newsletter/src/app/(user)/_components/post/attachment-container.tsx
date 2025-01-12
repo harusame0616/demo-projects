@@ -1,3 +1,4 @@
+import { decodeBase64 } from "@/lib/base64";
 import { createClientServiceRole } from "@/lib/supabase/service-role";
 
 import { AttachmentPresenter } from "./attachment-presenter";
@@ -8,15 +9,19 @@ type Props = {
 export async function AttachmentContainer({ path }: Props) {
   const client = createClientServiceRole();
 
-  const getPublicUrlResult = await client.storage
+  const fileName = decodeBase64(path.split("/")[1]);
+  const createSignedUrlResult = await client.storage
     .from("attachments")
-    .createSignedUrl(path, 60 * 60 * 24 * 7);
+    .createSignedUrl(path, 60 * 60 * 24 * 7, {
+      download: fileName,
+    });
 
-  if (getPublicUrlResult.error) {
-    return <div>ファイルの取得に失敗しました</div>;
-  }
-
-  return (
-    <AttachmentPresenter path={path} url={getPublicUrlResult.data.signedUrl} />
+  return createSignedUrlResult.error ? (
+    <AttachmentPresenter brokenLink={true} fileName={fileName} />
+  ) : (
+    <AttachmentPresenter
+      fileName={fileName}
+      url={createSignedUrlResult.data.signedUrl}
+    />
   );
 }
