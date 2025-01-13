@@ -2,6 +2,7 @@
 
 import * as v from "valibot";
 
+import { Role } from "@/app/admin/(private)/users/role";
 import { getPrismaClient } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 
@@ -25,6 +26,7 @@ export type PostDto = {
   commentCount: number;
   isLiked: boolean;
   likes: LikeDto[];
+  isEditable: boolean;
   author: {
     userId: string;
     name: string;
@@ -78,6 +80,9 @@ export async function getPosts({ page }: { page: number }): Promise<{
       canComment: post.canComment,
       likeCount,
       isLiked,
+      isEditable:
+        post.author.userId === userResult.data.user.id ||
+        userResult.data.user.user_metadata.role === Role.Admin.value,
       likes: post.likes.map((like) => ({
         postId: like.postId,
         userId: like.userId,

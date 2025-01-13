@@ -78,11 +78,18 @@ export function Post(props: Props) {
             <Skeleton className="m-1 h-7 w-[200px]" />
           ) : (
             <>
-              <div className="flex gap-2">
-                <Link href={`/posts/${props.post.postId}/edit`}>
-                  <EditIcon className="m-3 size-4" />
-                </Link>
-              </div>
+              {props.post.isEditable && (
+                <>
+                  <div className="flex gap-2">
+                    <Link href={`/posts/${props.post.postId}/edit`}>
+                      <EditIcon className="m-3 size-4" />
+                    </Link>
+                  </div>
+                  <div className="flex gap-2">
+                    <DeleteButton post={props.post} />
+                  </div>
+                </>
+              )}
               {props.post.canComment && (
                 <div className="flex gap-2">
                   <Link href={`/posts/${props.post.postId}/comments/new`}>
@@ -90,9 +97,6 @@ export function Post(props: Props) {
                   </Link>
                 </div>
               )}
-              <div className="flex gap-2">
-                <DeleteButton post={props.post} />
-              </div>
               <Like
                 isLiked={props.post.isLiked}
                 likeCount={props.post.likeCount}
