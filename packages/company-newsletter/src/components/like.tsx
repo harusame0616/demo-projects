@@ -39,7 +39,9 @@ export function Like(props: Props) {
       <Button variant="ghost" size="icon" onClick={handleClickLike}>
         <HeartIcon fill={optimisticLikes.isLiked ? "#000" : "#fff"} />
       </Button>
-      <Link href={props.likesHref}>{optimisticLikes.likeCount}</Link>
+      <Link href={props.likesHref} className="-ml-2 block px-1">
+        {optimisticLikes.likeCount}
+      </Link>
     </div>
   );
 }

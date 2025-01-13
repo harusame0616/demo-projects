@@ -1,4 +1,9 @@
-import { AtSignIcon, LockKeyholeIcon, LogOutIcon } from "lucide-react";
+import {
+  AtSignIcon,
+  LockKeyholeIcon,
+  LogOutIcon,
+  WrenchIcon,
+} from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { Link } from "@/components/link";
@@ -17,20 +22,9 @@ import {
 } from "@/components/ui/sidebar";
 import { UserMiniProfile } from "@/components/user-mini-profile";
 import { createClient } from "@/lib/supabase/server";
+import { isRole } from "@/lib/user";
 
-const items = [
-  {
-    title: "パスワード更新",
-    url: "/admin/users",
-    icon: LockKeyholeIcon,
-  },
-  {
-    title: "メールアドレス更新",
-    url: "/admin/users",
-    icon: AtSignIcon,
-  },
-  { title: "ログアウト", url: "/admin/users", icon: LogOutIcon },
-];
+import { Role } from "../admin/(private)/users/role";
 
 export async function SideMenuContainer() {
   const supabaseClient = await createClient();
@@ -41,8 +35,9 @@ export async function SideMenuContainer() {
 
   const name = getUserResult.data.user.user_metadata.name;
   const email = getUserResult.data.user.email!;
+  const isAdmin = await isRole(Role.Admin.value);
 
-  return <SideMenuPresenter name={name} email={email} />;
+  return <SideMenuPresenter name={name} email={email} isAdmin={isAdmin} />;
 }
 
 export function SideMenuPresenter(
@@ -51,9 +46,33 @@ export function SideMenuPresenter(
         skeleton?: false;
         email: string;
         name: string;
+        isAdmin: boolean;
       }
     | { skeleton: true },
 ) {
+  const items = [
+    {
+      title: "パスワード更新",
+      url: "/admin/users",
+      icon: LockKeyholeIcon,
+    },
+    {
+      title: "メールアドレス更新",
+      url: "/admin/users",
+      icon: AtSignIcon,
+    },
+    ...(props.skeleton !== true && props.isAdmin
+      ? [
+          {
+            title: "管理画面",
+            url: "/admin",
+            icon: WrenchIcon,
+          },
+        ]
+      : []),
+    { title: "ログアウト", url: "/admin/users", icon: LogOutIcon },
+  ];
+
   return (
     <Sidebar side="right">
       <SidebarHeader>
