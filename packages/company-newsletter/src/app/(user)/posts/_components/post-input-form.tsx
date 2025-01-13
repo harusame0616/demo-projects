@@ -137,7 +137,7 @@ export function PostInputForm(props: UserInputFormProps) {
             <Textarea
               {...field}
               rows={5}
-              className="w-full "
+              className="w-full"
               disabled={form.formState.isSubmitting}
             />
           </FormItem>
