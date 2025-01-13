@@ -5,8 +5,9 @@ import { Avatar } from "@/components/avatar/avatar";
 import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { canPost } from "@/lib/user";
+import { canPost, isRole } from "@/lib/user";
 
+import { Role } from "../admin/(private)/users/role";
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
 
 const MenuIcons = [
@@ -28,18 +29,20 @@ export default function Layout({
     >
       <Suspense>
         <div className="absolute bottom-14 right-4">
-          <NewPostLink />
+          <NewPostLinkContainer />
         </div>
       </Suspense>
       <div className="grid size-full grid-rows-[auto,1fr,auto] overflow-hidden">
-        <header className="grid grid-cols-[auto,1fr,auto] px-8 py-4 shadow-md">
+        <header className="grid grid-cols-[1fr,auto,1fr] px-8 py-4 shadow-md">
           <div className="flex items-center justify-center"></div>
           <h1 className="flex items-center justify-center text-lg font-bold">
             {title}
           </h1>
-          <SidebarTrigger className="shrink-0">
-            <Avatar name="test" src={""} />
-          </SidebarTrigger>
+          <div className="flex justify-end">
+            <SidebarTrigger>
+              <Avatar name="test" src={""} />
+            </SidebarTrigger>
+          </div>
         </header>
         <main className="overflow-y-scroll p-4">{children}</main>
         <footer className="border-t">
@@ -66,11 +69,15 @@ export default function Layout({
   );
 }
 
-async function NewPostLink() {
-  if (!(await canPost())) {
+async function NewPostLinkContainer() {
+  if (!(await canPost()) && !(await isRole(Role.Admin.value))) {
     return null;
   }
 
+  return <NewPostLinkPresenter />;
+}
+
+function NewPostLinkPresenter() {
   return (
     <Button
       className="size-12 rounded-full p-0 [&_svg]:size-8"

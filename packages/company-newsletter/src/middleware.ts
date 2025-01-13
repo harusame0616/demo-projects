@@ -1,7 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-import { setCanPostHeader } from "@/lib/user";
+import { setCanPostHeader, setRoleHeader } from "@/lib/user";
+
+import { Role } from "./app/admin/(private)/users/role";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
@@ -71,6 +73,18 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  const role = user?.user_metadata.role;
+  const canPost = user?.user_metadata.canPost;
+  if (
+    request.nextUrl.pathname === "/posts/new" &&
+    role !== Role.Admin.value &&
+    canPost !== "true"
+  ) {
+    return NextResponse.rewrite(
+      new URL("/no-authorization", process.env.VERCEL_BRANCH_URL),
+    );
+  }
+
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:
@@ -84,5 +98,9 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  return setCanPostHeader(supabaseResponse);
+  if (user?.user_metadata.canPost) {
+    setCanPostHeader(supabaseResponse);
+  }
+  setRoleHeader(supabaseResponse, user?.user_metadata.role);
+  return supabaseResponse;
 }
