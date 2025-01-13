@@ -2,13 +2,16 @@
 
 import * as v from "valibot";
 
+import { Role } from "@/app/admin/(private)/users/role";
 import { getPrismaClient } from "@/lib/prisma";
+import { createClient } from "@/lib/supabase/server";
 
 export type CommentDto = {
   commentId: string;
   postId: string;
   text: string;
   createdAt: string;
+  isEditable: boolean;
   author: {
     userId: string;
     name: string;
@@ -23,6 +26,13 @@ export async function getComments({ page }: { page: number }): Promise<{
     page: number;
   };
 }> {
+  const authClient = await createClient();
+  const getUserResult = await authClient.auth.getUser();
+
+  if (getUserResult.error) {
+    throw new Error("error");
+  }
+
   const prisma = getPrismaClient();
   const [comments, count] = await prisma.$transaction([
     prisma.cnlPostComment.findMany({
@@ -41,6 +51,9 @@ export async function getComments({ page }: { page: number }): Promise<{
       text: comment.text,
       createdAt: comment.commentedAt.toISOString(),
       attachments: comment.attachments,
+      isEditable:
+        comment.author.userId === getUserResult.data.user.id ||
+        getUserResult.data.user.role === Role.Admin.value,
       author: v.parse(
         v.object({
           userId: v.string(),

@@ -72,18 +72,20 @@ export function Comment(props: Props) {
           {props.skeleton ? (
             <Skeleton className="m-1 h-7 w-[200px]" />
           ) : (
-            <>
-              <div className="flex gap-2">
-                <Link
-                  href={`/posts/${props.comment.postId}/comments/${props.comment.commentId}/edit`}
-                >
-                  <EditIcon className="m-3 size-4" />
-                </Link>
-              </div>
-              <div className="flex gap-2">
-                <DeleteButton commentId={props.comment.commentId} />
-              </div>
-            </>
+            props.comment.isEditable && (
+              <>
+                <div className="flex gap-2">
+                  <Link
+                    href={`/posts/${props.comment.postId}/comments/${props.comment.commentId}/edit`}
+                  >
+                    <EditIcon className="m-3 size-4" />
+                  </Link>
+                </div>
+                <div className="flex gap-2">
+                  <DeleteButton commentId={props.comment.commentId} />
+                </div>
+              </>
+            )
           )}
         </div>
       </div>
