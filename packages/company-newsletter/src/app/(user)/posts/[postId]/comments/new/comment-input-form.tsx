@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { decodeBase64, encodeToBase64 } from "@/lib/base64";
 import { Result } from "@/lib/result";
 import { createClient } from "@/lib/supabase/browser";
 import { useForm } from "@/lib/use-form";
@@ -64,7 +65,10 @@ export function CommentInputForm(props: UserInputFormProps) {
         attachments.map((attachment) =>
           client.storage
             .from("attachments")
-            .upload(`${uuidv7()}/${attachment.name}`, attachment),
+            .upload(
+              `${uuidv7()}/${encodeToBase64(attachment.name)}`,
+              attachment,
+            ),
         ),
       );
 
@@ -143,7 +147,7 @@ export function CommentInputForm(props: UserInputFormProps) {
                     deleteFiles.includes(attachment) && "line-through",
                   )}
                 >
-                  {attachment.split("/")[1]}
+                  {decodeBase64(attachment.split("/")[1])}
                 </span>
               </div>
               <Button

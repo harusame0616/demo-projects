@@ -76,10 +76,11 @@ export async function updateSession(request: NextRequest) {
 
   const role = user?.user_metadata.role;
   const canPost = user?.user_metadata.canPost;
+  console.log({ canPost });
   if (
     request.nextUrl.pathname === "/posts/new" &&
     role !== Role.Admin.value &&
-    canPost !== "true"
+    canPost !== true
   ) {
     return NextResponse.rewrite(
       new URL("/no-authorization", process.env.VERCEL_BRANCH_URL),
