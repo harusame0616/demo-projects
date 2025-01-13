@@ -12,6 +12,7 @@ import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { decodeBase64, encodeToBase64 } from "@/lib/base64";
+import { postTextSchema, postTitleSchema } from "@/lib/post";
 import { Result } from "@/lib/result";
 import { createClient } from "@/lib/supabase/browser";
 import { useForm } from "@/lib/use-form";
@@ -59,8 +60,8 @@ export function PostInputForm(props: UserInputFormProps) {
       canComment: props.post?.canComment ?? false,
     },
     schema: v.object({
-      title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
-      text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
+      title: postTitleSchema,
+      text: postTextSchema,
       canComment: v.boolean(),
     }),
 

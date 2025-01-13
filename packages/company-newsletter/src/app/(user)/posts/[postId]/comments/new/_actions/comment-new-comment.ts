@@ -2,9 +2,10 @@
 
 import { fail } from "assert";
 import { uuidv7 } from "uuidv7";
-import * as v from "valibot";
 
+import { idSchema } from "@/lib/id";
 import { createAction } from "@/lib/next-file/server-action";
+import { attachmentsSchema, postTextSchema } from "@/lib/post";
 import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
 
@@ -30,11 +31,9 @@ export const commentNewComment = createAction(
   },
   {
     inputSchema: {
-      postId: v.pipe(v.string()),
-      text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
-      attachments: v.array(
-        v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
-      ),
+      postId: idSchema,
+      text: postTextSchema,
+      attachments: attachmentsSchema,
     },
     revalidatePaths: ["/posts/[postId]/comments"],
     redirectTo: (params) => `/posts/${params.postId}/comments`,

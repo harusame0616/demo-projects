@@ -1,12 +1,11 @@
 "use server";
 
-import * as v from "valibot";
-
+import { emailSchema } from "@/domains/user/schema";
 import { createAction } from "@/lib/next-file/server-action";
 
 import { invite } from "./invite";
 
 export const invitationAction = createAction(invite, {
-  inputSchema: { email: v.string() },
+  inputSchema: { email: emailSchema },
   redirectTo: "/register/message",
 });

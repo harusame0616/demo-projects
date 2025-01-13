@@ -1,9 +1,10 @@
 "use server";
 
-import * as v from "valibot";
-
 import { Role } from "@/app/admin/(private)/users/role";
+import { commentTextSchema } from "@/lib/comment";
+import { idSchema } from "@/lib/id";
 import { createAction } from "@/lib/next-file/server-action";
+import { attachmentsSchema } from "@/lib/post";
 import { getPrismaClient } from "@/lib/prisma";
 import { fail, succeed } from "@/lib/result";
 import { createClient } from "@/lib/supabase/server";
@@ -71,12 +72,10 @@ export const editComment = createAction(
   },
   {
     inputSchema: {
-      commentId: v.pipe(v.string()),
-      text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
-      deleteAttachments: v.array(v.string()),
-      attachments: v.array(
-        v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
-      ),
+      commentId: idSchema,
+      text: commentTextSchema,
+      deleteAttachments: attachmentsSchema,
+      attachments: attachmentsSchema,
     },
     revalidatePaths: ["/"],
   },

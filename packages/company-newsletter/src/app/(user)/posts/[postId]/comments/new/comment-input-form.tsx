@@ -11,6 +11,7 @@ import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { decodeBase64, encodeToBase64 } from "@/lib/base64";
+import { commentTextSchema } from "@/lib/comment";
 import { Result } from "@/lib/result";
 import { createClient } from "@/lib/supabase/browser";
 import { useForm } from "@/lib/use-form";
@@ -53,7 +54,7 @@ export function CommentInputForm(props: UserInputFormProps) {
       text: props.comment?.text ?? "",
     },
     schema: v.object({
-      text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
+      text: commentTextSchema,
     }),
 
     onSubmit: async (params, setErrorMessage) => {

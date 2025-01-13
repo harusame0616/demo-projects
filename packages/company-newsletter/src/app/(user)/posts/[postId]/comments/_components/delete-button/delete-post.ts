@@ -1,7 +1,6 @@
 "use server";
 
-import * as v from "valibot";
-
+import { idSchema } from "@/lib/id";
 import { createAction } from "@/lib/next-file/server-action";
 import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
@@ -16,7 +15,7 @@ export const deleteCommentAction = createAction(
     return succeed();
   },
   {
-    inputSchema: { commentId: v.pipe(v.string()) },
+    inputSchema: { commentId: idSchema },
     revalidatePaths: ["/"],
   },
 );

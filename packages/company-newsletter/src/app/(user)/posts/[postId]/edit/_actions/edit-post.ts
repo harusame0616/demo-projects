@@ -4,6 +4,7 @@ import * as v from "valibot";
 
 import { Role } from "@/app/admin/(private)/users/role";
 import { createAction } from "@/lib/next-file/server-action";
+import { postTextSchema, postTitleSchema } from "@/lib/post";
 import { getPrismaClient } from "@/lib/prisma";
 import { fail, succeed } from "@/lib/result";
 import { createClientServiceRole } from "@/lib/supabase/service-role";
@@ -70,8 +71,8 @@ export const editPost = createAction(
   {
     inputSchema: {
       postId: v.pipe(v.string()),
-      title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
-      text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
+      title: postTitleSchema,
+      text: postTextSchema,
       canComment: v.boolean(),
       deleteAttachments: v.array(v.string()),
       attachments: v.array(
