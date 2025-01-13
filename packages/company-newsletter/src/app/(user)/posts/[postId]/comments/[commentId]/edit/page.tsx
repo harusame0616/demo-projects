@@ -1,5 +1,4 @@
-import * as v from "valibot";
-
+import { idSchema } from "@/lib/id";
 import { createPage } from "@/lib/next-file/page";
 
 import PostEditionPage from "./post-edition-page";
@@ -10,8 +9,8 @@ export default createPage(
   },
   {
     paramsSchema: {
-      postId: v.string(),
-      commentId: v.string(),
+      postId: idSchema,
+      commentId: idSchema,
     },
   },
 );

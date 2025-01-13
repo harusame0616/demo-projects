@@ -1,5 +1,4 @@
-import * as v from "valibot";
-
+import { idSchema } from "@/lib/id";
 import { createPage } from "@/lib/next-file/page";
 
 import { commentNewComment } from "./_actions/comment-new-comment";
@@ -10,6 +9,8 @@ export default createPage(
     return <CommentInputForm postId={postId} action={commentNewComment} />;
   },
   {
-    paramsSchema: { postId: v.string() },
+    paramsSchema: {
+      postId: idSchema,
+    },
   },
 );

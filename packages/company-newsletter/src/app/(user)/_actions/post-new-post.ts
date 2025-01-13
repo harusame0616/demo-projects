@@ -4,6 +4,7 @@ import { uuidv7 } from "uuidv7";
 import * as v from "valibot";
 
 import { createAction } from "@/lib/next-file/server-action";
+import { attachmentsSchema, postTextSchema, postTitleSchema } from "@/lib/post";
 import { getPrismaClient } from "@/lib/prisma";
 import { fail, succeed } from "@/lib/result";
 
@@ -34,12 +35,10 @@ export const postNewPostAction = createAction(
   },
   {
     inputSchema: {
-      title: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
-      text: v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
+      title: postTitleSchema,
+      text: postTextSchema,
       canComment: v.boolean(),
-      attachments: v.array(
-        v.pipe(v.string(), v.minLength(1), v.maxLength(255)),
-      ),
+      attachments: attachmentsSchema,
     },
     revalidatePaths: ["/"],
     redirectTo: "/",

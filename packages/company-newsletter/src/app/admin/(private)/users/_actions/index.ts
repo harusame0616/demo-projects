@@ -3,6 +3,7 @@
 import * as v from "valibot";
 
 import { emailSchema, nameSchema, passwordSchema } from "@/domains/user/schema";
+import { idSchema } from "@/lib/id";
 import { createAction } from "@/lib/next-file/server-action";
 
 import { roleSchema } from "../role";
@@ -23,7 +24,7 @@ export const addUserAction = createAction(addUser, {
 
 export const editUserAction = createAction(editUser, {
   inputSchema: {
-    userId: v.pipe(v.string(), v.minLength(1), v.uuid()),
+    userId: idSchema,
     name: nameSchema,
     email: emailSchema,
     canPost: v.boolean(),
@@ -34,6 +35,6 @@ export const editUserAction = createAction(editUser, {
 });
 
 export const deleteUserAction = createAction(deleteUser, {
-  inputSchema: { userId: v.pipe(v.string(), v.minLength(1), v.uuid()) },
+  inputSchema: { userId: idSchema },
   revalidatePaths: ["/admin/users"],
 });

@@ -1,8 +1,8 @@
 "use server";
 
 import { fail } from "assert";
-import * as v from "valibot";
 
+import { idSchema } from "@/lib/id";
 import { createAction } from "@/lib/next-file/server-action";
 import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
@@ -28,7 +28,7 @@ export const togglePostLikeAction = createAction(
     return succeed();
   },
   {
-    inputSchema: { postId: v.pipe(v.string()) },
+    inputSchema: { postId: idSchema },
     // revalidatePaths: ["/"],
   },
 );
