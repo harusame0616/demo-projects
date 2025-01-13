@@ -73,25 +73,28 @@ export function Post(props: Props) {
                 </Suspense>
               ))}
         </div>
-        <div className="flex flex-wrap items-center justify-end gap-4">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           {props.skeleton ? (
             <Skeleton className="m-1 h-7 w-[200px]" />
           ) : (
             <>
               {props.post.isEditable && (
                 <>
-                  <div className="flex gap-2">
-                    <Link href={`/posts/${props.post.postId}/edit`}>
-                      <EditIcon className="m-3 size-4" />
+                  <div>
+                    <Link
+                      href={`/posts/${props.post.postId}/edit`}
+                      className="block p-3"
+                    >
+                      <EditIcon className="size-4" />
                     </Link>
                   </div>
-                  <div className="flex gap-2">
+                  <div>
                     <DeleteButton post={props.post} />
                   </div>
                 </>
               )}
               {props.post.canComment && (
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                   <Link href={`/posts/${props.post.postId}/comments/new`}>
                     <MessageCirclePlusIcon className="m-3 size-4" />
                   </Link>
@@ -103,13 +106,15 @@ export function Post(props: Props) {
                 likesHref={`/posts/${props.post.postId}/likes`}
                 toggleLikeAction={togglePostLikeAction.bind(null, props.post)}
               />
-              <div className="flex gap-2">
+              <div className="flex gap-1">
                 <Link
                   href={`/posts/${props.post.postId}/comments`}
-                  className="flex items-center gap-1"
+                  className="flex items-center justify-center"
                 >
-                  <MessageCircleIcon className="size-4" />{" "}
-                  {props.post.commentCount}
+                  <div className="flex size-9 items-center justify-center">
+                    <MessageCircleIcon className="size-4" />
+                  </div>
+                  <div className="-ml-3 px-2">{props.post.commentCount}</div>
                 </Link>
               </div>
             </>
