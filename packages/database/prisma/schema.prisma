@@ -25,7 +25,7 @@ model CnlPost {
   attachments String[] @db.Text
   canComment  Boolean  @default(false)
   userId      String   @db.Uuid
-  author      CnlUser  @relation(fields: [userId], references: [userId])
+  author      CnlUser  @relation(fields: [userId], references: [userId], onDelete: Cascade)
   postedAt    DateTime @default(now()) @db.Timestamptz()
 
   createdAt DateTime @default(now()) @ignore @db.Timestamptz()
@@ -41,8 +41,8 @@ model CnlPost {
 model CnlPostLike {
   postId  String   @db.Uuid
   userId  String   @db.Uuid
-  post    CnlPost  @relation(fields: [postId], references: [postId])
-  user    CnlUser  @relation(fields: [userId], references: [userId])
+  post    CnlPost  @relation(fields: [postId], references: [postId], onDelete: Cascade)
+  user    CnlUser  @relation(fields: [userId], references: [userId], onDelete: Cascade)
   likedAt DateTime @default(now()) @db.Timestamptz()
 
   @@id([postId, userId])
@@ -54,9 +54,9 @@ model CnlPostComment {
   commentId String @id @db.Uuid
 
   postId      String   @db.Uuid
-  post        CnlPost  @relation(fields: [postId], references: [postId])
+  post        CnlPost  @relation(fields: [postId], references: [postId], onDelete: Cascade)
   userId      String   @db.Uuid
-  author      CnlUser  @relation(fields: [userId], references: [userId])
+  author      CnlUser  @relation(fields: [userId], references: [userId], onDelete: Cascade)
   text        String   @db.Text
   attachments String[] @db.Text
   commentedAt DateTime @default(now()) @db.Timestamptz()
