@@ -11,7 +11,7 @@ export async function AttachmentContainer({ path }: Props) {
 
   const fileName = decodeBase64(path.split("/")[1]);
   const createSignedUrlResult = await client.storage
-    .from("attachments")
+    .from("company-newsletter")
     .createSignedUrl(path, 60 * 60 * 24 * 7, {
       download: fileName,
     });

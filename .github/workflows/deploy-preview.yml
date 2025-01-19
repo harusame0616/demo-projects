@@ -28,10 +28,12 @@ jobs:
         run: pnpm install
 
       - name: DB デプロイ
-        run: pnpm --filter database run migration:deploy
+        run: pnpm --filter database migration:deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      - name: DB シーディング
+        run: pnpm --filter database run seed
 
       - name: Vercel CLI インストール
         run: npm install --global vercel@latest
