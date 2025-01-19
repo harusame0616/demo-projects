@@ -33,7 +33,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
       - name: DB シーディング
-        run: pnpm --filter database run seed
+        run: pnpm --filter database seed
 
       - name: Vercel CLI インストール
         run: npm install --global vercel@latest
