@@ -1,3 +1,5 @@
+import { DemoDescription } from "@/app/demo-description";
+
 import { LoginCard } from "./login-card";
 
 export function LoginPage() {
@@ -7,6 +9,7 @@ export function LoginPage() {
       <div className="w-full max-w-sm">
         <LoginCard />
       </div>
+      <DemoDescription />
     </div>
   );
 }

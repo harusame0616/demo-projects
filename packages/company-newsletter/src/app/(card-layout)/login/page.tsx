@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { Link } from "@/components/link";
+import { DemoDescription } from "@/app/demo-description";
 
 import { LoginCard } from "./login-card";
 
@@ -12,9 +12,9 @@ export default function Page() {
   return (
     <>
       <LoginCard />
-      <Link href="/register" className="text-center">
-        新規登録
-      </Link>
+      <div className="py-4">
+        <DemoDescription />
+      </div>
     </>
   );
 }
