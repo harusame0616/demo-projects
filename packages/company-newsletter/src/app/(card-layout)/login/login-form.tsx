@@ -15,8 +15,8 @@ import { loginAction } from "./_actions";
 export function LoginForm() {
   const form = useForm({
     defaultValues: {
-      email: "",
-      password: "",
+      email: "admin@example.com",
+      password: "password",
     },
     schema: v.object({
       email: emailSchema,
