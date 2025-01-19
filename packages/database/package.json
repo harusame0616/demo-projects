@@ -6,13 +6,22 @@
   "scripts": {
     "type:generate": "prisma generate",
     "migration:deploy": "prisma migrate deploy",
-    "migration:dev": "prisma migrate dev"
+    "migration:dev": "prisma migrate dev",
+    "seed": "pnpm --filter database type:generate && prisma db seed"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.2.1",
-    "prisma": "^6.2.1"
+    "@supabase/supabase-js": "^2.47.10",
+    "prisma": "^6.2.1",
+    "database": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
   }
 }

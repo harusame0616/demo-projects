@@ -28,10 +28,17 @@ jobs:
         run: pnpm install
 
       - name: DB デプロイ
-        run: pnpm --filter database run migration:deploy
+        run: pnpm --filter database migration:deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      - name: DB シーディング
+        run: pnpm --filter database seed
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Vercel CLI インストール
         run: npm install --global vercel@latest

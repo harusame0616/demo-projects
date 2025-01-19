@@ -73,7 +73,7 @@ export function PostInputForm(props: UserInputFormProps) {
       const uploadResults = await Promise.all(
         attachments.map((attachment) =>
           client.storage
-            .from("attachments")
+            .from("company-newsletter")
             .upload(
               `${uuidv7()}/${encodeToBase64(attachment.name)}`,
               attachment,
