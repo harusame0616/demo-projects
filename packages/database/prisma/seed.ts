@@ -7,15 +7,13 @@ async function main() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
   );
 
-  const result = await supabase.storage.getBucket("company-newslettexr");
-  if (result.error && result.error.message !== "Bucket not found") {
-    throw new Error(result.error.message);
-  }
-
-  await supabase.storage.createBucket("company-newsletter", {
+  const result = await supabase.storage.createBucket("company-newsletter", {
     public: false,
     fileSizeLimit: 1024 * 1024 * 10, // 10MB
   });
+  if (result.error && result.error.message !== "The resource already exists") {
+    throw new Error(result.error.message);
+  }
 
   const prisma = new PrismaClient();
   try {
