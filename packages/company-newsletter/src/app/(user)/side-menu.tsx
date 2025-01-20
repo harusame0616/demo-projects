@@ -53,13 +53,15 @@ export function SideMenuPresenter(
   const items = [
     {
       title: "パスワード更新",
-      url: "/admin/users",
       icon: LockKeyholeIcon,
+      url: "/auth/change-password",
+      disabled: true,
     },
     {
       title: "メールアドレス更新",
-      url: "/admin/users",
       icon: AtSignIcon,
+      url: "/auth/change-email",
+      disabled: true,
     },
     ...(props.skeleton !== true && props.isAdmin
       ? [
@@ -90,10 +92,17 @@ export function SideMenuPresenter(
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url} className="no-underline">
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
+                    {item.disabled ? (
+                      <div className="cursor-not-allowed text-muted-foreground">
+                        <item.icon />
+                        {item.title}
+                      </div>
+                    ) : (
+                      <Link href={item.url} className="no-underline">
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
