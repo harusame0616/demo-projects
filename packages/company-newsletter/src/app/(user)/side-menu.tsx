@@ -72,7 +72,7 @@ export function SideMenuPresenter(
           },
         ]
       : []),
-    { title: "ログアウト", url: "/admin/users", icon: LogOutIcon },
+    { title: "ログアウト", url: "/logout", icon: LogOutIcon },
   ];
 
   return (
