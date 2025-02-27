@@ -1,0 +1,30 @@
+name: Renovate 設定検証
+
+on:
+  pull_request:
+    paths:
+      - ".github/renovate.json"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Renovateのインストール
+        run: npm install -g renovate
+
+      - name: 設定ファイルの検証
+        run: renovate-config-validator
+        env:
+          LOG_LEVEL: debug
