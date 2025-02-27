@@ -16,12 +16,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.2.1",
-    "@supabase/supabase-js": "^2.47.10",
-    "prisma": "^6.2.1",
+    "@prisma/client": "6.2.1",
+    "@supabase/supabase-js": "2.47.10",
+    "prisma": "6.2.1",
     "database": "workspace:*"
   },
   "devDependencies": {
-    "tsx": "^4.19.2"
+    "tsx": "4.19.2"
   }
 }
