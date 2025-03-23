@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusIcon } from "lucide-react";
 import { Suspense } from "react";
 import { DepartmentListContainer } from "./_components/department-list-container";
+import { departmentData } from "./_data/departments-data";
 
 import type { Metadata } from "next";
 
@@ -11,90 +12,6 @@ export const metadata: Metadata = {
 	title: "部署一覧 | 人材管理システム",
 	description: "人材管理システムの部署一覧",
 };
-
-// モックデータ (部署の上下関係を表現)
-const departments = [
-	{
-		id: "001",
-		name: "営業部",
-		parentId: null,
-		level: 0,
-		memberCount: 12,
-		createdAt: "2015-04-01",
-	},
-	{
-		id: "002",
-		name: "人事部",
-		parentId: null,
-		level: 0,
-		memberCount: 8,
-		createdAt: "2015-04-01",
-	},
-	{
-		id: "003",
-		name: "開発部",
-		parentId: null,
-		level: 0,
-		memberCount: 25,
-		createdAt: "2015-04-01",
-	},
-	{
-		id: "004",
-		name: "マーケティング部",
-		parentId: null,
-		level: 0,
-		memberCount: 10,
-		createdAt: "2018-04-01",
-	},
-	{
-		id: "005",
-		name: "財務部",
-		parentId: null,
-		level: 0,
-		memberCount: 7,
-		createdAt: "2015-04-01",
-	},
-	{
-		id: "006",
-		name: "第一営業課",
-		parentId: "001",
-		level: 1,
-		memberCount: 6,
-		createdAt: "2017-04-01",
-	},
-	{
-		id: "007",
-		name: "第二営業課",
-		parentId: "001",
-		level: 1,
-		memberCount: 6,
-		createdAt: "2019-04-01",
-	},
-	{
-		id: "008",
-		name: "Web開発課",
-		parentId: "003",
-		level: 1,
-		memberCount: 12,
-		createdAt: "2018-04-01",
-	},
-	{
-		id: "009",
-		name: "モバイル開発課",
-		parentId: "003",
-		level: 1,
-		memberCount: 8,
-		createdAt: "2020-04-01",
-	},
-	{
-		id: "010",
-		name: "インフラ課",
-		parentId: "003",
-		level: 1,
-		memberCount: 5,
-		createdAt: "2019-04-01",
-	},
-];
 
 // ローディング状態を表示するスケルトンコンポーネント
 function DepartmentListSkeleton() {
@@ -129,7 +46,7 @@ export default function DepartmentsPage() {
 				</CardHeader>
 				<CardContent>
 					<Suspense fallback={<DepartmentListSkeleton />}>
-						<DepartmentListContainer departments={departments} />
+						<DepartmentListContainer departments={departmentData} />
 					</Suspense>
 				</CardContent>
 			</Card>
