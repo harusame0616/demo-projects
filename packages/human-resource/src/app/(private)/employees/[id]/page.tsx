@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ArrowLeftIcon } from "lucide-react";
 import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { ArrowLeftIcon, PencilIcon } from "lucide-react";
+	ContactInfoCard,
+	EvaluationHistoryCard,
+	GoalsCard,
+	PageHeader,
+	ProfileHeader,
+	SkillsAndCertificationsCard,
+} from "./_components";
 
 export const metadata = {
 	title: "従業員詳細 | 人材管理システム",
@@ -22,11 +23,34 @@ const employees = {
 		nameKana: "ヤマダ タロウ",
 		department: "営業部",
 		position: "課長",
+		grade: "G3",
 		email: "yamada.taro@example.com",
 		phone: "090-1234-5678",
 		address: "東京都渋谷区渋谷1-1-1",
 		birthDate: "1985-05-15",
 		joinDate: "2018-04-01",
+		skills: ["Excel", "PowerPoint", "営業戦略立案"],
+		certifications: ["TOEIC 800点", "営業士2級"],
+		evaluations: [
+			{ period: "2023年上期", overallRating: "A", date: "2023-06-30" },
+			{ period: "2022年下期", overallRating: "B", date: "2023-01-31" },
+		],
+		goals: [
+			{
+				id: "goal001",
+				title: "新規顧客開拓",
+				description: "今期中に新規顧客10社との契約を目指す",
+				progress: 60,
+				dueDate: "2023-12-31",
+			},
+			{
+				id: "goal002",
+				title: "チームビルディング",
+				description: "メンバーのスキル向上施策を実施する",
+				progress: 40,
+				dueDate: "2023-12-31",
+			},
+		],
 	},
 	"002": {
 		id: "002",
@@ -99,104 +123,43 @@ export default function EmployeeDetailPage({
 
 	return (
 		<>
-			<div className="flex items-center justify-between mb-6">
-				<div className="flex items-center">
-					<Button variant="outline" size="icon" className="mr-4" asChild>
-						<Link href="/employees">
-							<ArrowLeftIcon className="h-4 w-4" />
-						</Link>
-					</Button>
-					<h2 className="text-3xl font-bold tracking-tight">従業員詳細</h2>
-				</div>
-				<Button asChild>
-					<Link href={`/employees/${employee.id}/edit`}>
-						<PencilIcon className="mr-2 h-4 w-4" />
-						編集
-					</Link>
-				</Button>
+			<PageHeader employeeId={employee.id} />
+
+			<ProfileHeader employee={employee} />
+
+			<div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+				<ContactInfoCard
+					contactInfo={{
+						email: employee.email,
+						phone: employee.phone,
+						address: employee.address,
+						birthDate: employee.birthDate,
+					}}
+				/>
+
+				{"skills" in employee && "certifications" in employee && (
+					<SkillsAndCertificationsCard
+						skills={employee.skills}
+						certifications={employee.certifications}
+					/>
+				)}
 			</div>
 
-			<Card>
-				<CardHeader>
-					<CardTitle>{employee.name}</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<div className="space-y-4">
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									社員ID
-								</h3>
-								<p>{employee.id}</p>
-							</div>
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									氏名
-								</h3>
-								<p>{employee.name}</p>
-							</div>
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									氏名（カナ）
-								</h3>
-								<p>{employee.nameKana}</p>
-							</div>
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									部署
-								</h3>
-								<p>{employee.department}</p>
-							</div>
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									役職
-								</h3>
-								<p>{employee.position}</p>
-							</div>
-						</div>
-						<div className="space-y-4">
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									メールアドレス
-								</h3>
-								<p>{employee.email}</p>
-							</div>
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									電話番号
-								</h3>
-								<p>{employee.phone}</p>
-							</div>
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									住所
-								</h3>
-								<p>{employee.address}</p>
-							</div>
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									生年月日
-								</h3>
-								<p>{employee.birthDate}</p>
-							</div>
-							<div>
-								<h3 className="text-sm font-medium text-muted-foreground">
-									入社日
-								</h3>
-								<p>{employee.joinDate}</p>
-							</div>
-						</div>
-					</div>
-				</CardContent>
-				<CardFooter className="flex justify-end space-x-2">
+			<div className="space-y-6">
+				{"evaluations" in employee && employee.evaluations?.length > 0 && (
+					<EvaluationHistoryCard evaluations={employee.evaluations} />
+				)}
+
+				{"goals" in employee && employee.goals?.length > 0 && (
+					<GoalsCard goals={employee.goals} />
+				)}
+
+				<div className="mt-8 flex justify-end space-x-2">
 					<Button variant="outline" asChild>
-						<Link href="/employees">キャンセル</Link>
+						<Link href="/employees">従業員一覧へ戻る</Link>
 					</Button>
-					<Button asChild>
-						<Link href={`/employees/${employee.id}/edit`}>編集</Link>
-					</Button>
-				</CardFooter>
-			</Card>
+				</div>
+			</div>
 		</>
 	);
 }
