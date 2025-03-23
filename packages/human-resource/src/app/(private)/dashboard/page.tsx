@@ -29,7 +29,7 @@ export default function DashboardPage() {
 							従業員データの登録・更新・検索ができます。
 						</p>
 						<Button className="w-full" asChild>
-							<Link href="#">従業員一覧を見る</Link>
+							<Link href="/employees">従業員一覧を見る</Link>
 						</Button>
 					</CardContent>
 				</Card>
