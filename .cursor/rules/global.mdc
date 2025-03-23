@@ -1,0 +1,46 @@
+---
+description: global rules
+globs:
+alwaysApply: true
+---
+## ディレクトリ構成
+
+pnpm を使ったモノレポ構成で packages に各アプリケーションなどを配置する構成です
+
+├── e2e/                      # E2Eテスト関連
+│   └── admin/                # 管理画面向けE2Eテスト
+├── packages/                 # アプリケーションパッケージ
+│   ├── company-newsletter/   # 社内報システムデモ
+│   └── human-resource/       # 人材管理システムでも
+│       └── docs/             # ドキュメント
+├── supabase/                 # Supabase関連
+│   └── migrations/           # データベースマイグレーション
+├── .github/                  # GitHub Actions等の設定
+├── .vscode/                  # VSCode設定
+├── biome.json                # Biome設定
+├── package.json              # プロジェクト全体の依存関係
+├── pnpm-lock.yaml            # 依存関係ロックファイル
+├── pnpm-workspace.yaml       # pnpmワークスペース設定
+└── .node-version             # Node.jsバージョン指定
+
+## 技術スタック
+
+| カテゴリ               | 技術                     |
+|------------------------|-------------------------|
+| 言語                   | TypeScript              |
+| Webフレームワーク      | Next.js（app router）    |
+| データベース           | Supabase                |
+| 認証                   | Supabase Auth           |
+| ホスティング           | Vercel                  |
+| バリデーション         | Valibot                 |
+| スタイリング           | Tailwind CSS            |
+| UIライブラリ           | shadcn/ui               |
+| フォームライブラリ     | React Hook Form         |
+| リンター               | Biome                   |
+| フォーマッター         | Biome                   |
+| VCS                    | Git / GitHub            |
+| CI/CD                  | GitHub Actions          |
+| テストランナー         | Vitest                  |
+| コンポーネントテスト   | Testing Library         |
+| E2Eテスト              | Playwright              |
+| パッケージマネージャー | pnpm                    |
