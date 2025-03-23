@@ -1,6 +1,6 @@
 ---
 description: global rules
-globs:
+globs: 
 alwaysApply: true
 ---
 ## ディレクトリ構成
@@ -44,3 +44,9 @@ pnpm を使ったモノレポ構成で packages に各アプリケーション�
 | コンポーネントテスト   | Testing Library         |
 | E2Eテスト              | Playwright              |
 | パッケージマネージャー | pnpm                    |
+
+## 設計方針
+- ファイルの配置はコロケーションを基本とする
+- valibot のインポートは import * as v from 'valibot' で行ってください
+
+
