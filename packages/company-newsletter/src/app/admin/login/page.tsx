@@ -1,13 +1,11 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 import { createPage } from "@/lib/next-file/page";
 
 import { LoginPage } from "./_components/login-page";
 
 export const metadata: Metadata = {
-  title: "ログイン",
+	title: "ログイン",
 };
 
-export default createPage(function () {
-  return <LoginPage />;
-});
+export default createPage(() => <LoginPage />);

@@ -1,14 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 
 import { PostInputForm } from "../../_components/post-input-form";
 
 export default function EditFormPresenter(
-  props: ComponentProps<typeof PostInputForm>,
+	props: ComponentProps<typeof PostInputForm>,
 ) {
-  const router = useRouter();
+	const router = useRouter();
 
-  return <PostInputForm {...props} onSuccess={() => router.back()} />;
+	return <PostInputForm {...props} onSuccess={() => router.back()} />;
 }

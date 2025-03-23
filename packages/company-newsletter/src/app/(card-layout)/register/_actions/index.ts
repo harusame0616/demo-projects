@@ -6,6 +6,6 @@ import { createAction } from "@/lib/next-file/server-action";
 import { invite } from "./invite";
 
 export const invitationAction = createAction(invite, {
-  inputSchema: { email: emailSchema },
-  redirectTo: "/register/message",
+	inputSchema: { email: emailSchema },
+	redirectTo: "/register/message",
 });

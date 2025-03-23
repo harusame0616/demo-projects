@@ -1,5 +1,3 @@
 import { createPage } from "@/lib/next-file/page";
 
-export default createPage(function () {
-  return "投稿一覧";
-});
+export default createPage(() => "投稿一覧");

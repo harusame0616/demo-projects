@@ -4,24 +4,24 @@ import { createClientServiceRole } from "@/lib/supabase/service-role";
 import { AttachmentPresenter } from "./attachment-presenter";
 
 type Props = {
-  path: string;
+	path: string;
 };
 export async function AttachmentContainer({ path }: Props) {
-  const client = createClientServiceRole();
+	const client = createClientServiceRole();
 
-  const fileName = decodeBase64(path.split("/")[1]);
-  const createSignedUrlResult = await client.storage
-    .from("company-newsletter")
-    .createSignedUrl(path, 60 * 60 * 24 * 7, {
-      download: fileName,
-    });
+	const fileName = decodeBase64(path.split("/")[1]);
+	const createSignedUrlResult = await client.storage
+		.from("company-newsletter")
+		.createSignedUrl(path, 60 * 60 * 24 * 7, {
+			download: fileName,
+		});
 
-  return createSignedUrlResult.error ? (
-    <AttachmentPresenter brokenLink={true} fileName={fileName} />
-  ) : (
-    <AttachmentPresenter
-      fileName={fileName}
-      url={createSignedUrlResult.data.signedUrl}
-    />
-  );
+	return createSignedUrlResult.error ? (
+		<AttachmentPresenter brokenLink={true} fileName={fileName} />
+	) : (
+		<AttachmentPresenter
+			fileName={fileName}
+			url={createSignedUrlResult.data.signedUrl}
+		/>
+	);
 }

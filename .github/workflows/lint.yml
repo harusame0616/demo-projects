@@ -26,7 +26,5 @@ jobs:
       - name: パッケージインストール
         run: pnpm install
 
-      - name: Lint
-        run: pnpm --filter company-newsletter run lint:check
-      - name: フォーマットチェック
-        run: pnpm --filter company-newsletter run format:check
+      - name: Lint と フォーマットチェック
+        run: pnpm lint:check && pnpm format:check

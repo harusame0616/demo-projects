@@ -11,60 +11,63 @@ import { passwordSchema } from "@/domains/user/schema";
 import { useForm } from "@/lib/use-form";
 
 export function PasswordRegistrationForm() {
-  const router = useRouter();
+	const router = useRouter();
 
-  const form = useForm({
-    defaultValues: { password: "" },
-    schema: v.object({
-      password: passwordSchema,
-    }),
-    onSubmit: async ({ password }, setErrorMessage) => {
-      const searchParams = new URLSearchParams(
-        window.location.hash.substring(1),
-      );
+	const form = useForm({
+		defaultValues: { password: "" },
+		schema: v.object({
+			password: passwordSchema,
+		}),
+		onSubmit: async ({ password }, setErrorMessage) => {
+			const searchParams = new URLSearchParams(
+				window.location.hash.substring(1),
+			);
 
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      );
-      const { refresh_token: refreshToken } = Object.fromEntries(
-        searchParams.entries(),
-      );
-      if (refreshToken) {
-        await supabase.auth.refreshSession({
-          refresh_token: searchParams.get("refresh_token")!,
-        });
-      }
+			const supabase = createBrowserClient(
+				// biome-ignore lint/style/noNonNullAssertion: 環境変数は常に設定されるため
+				process.env.NEXT_PUBLIC_SUPABASE_URL!,
+				// biome-ignore lint/style/noNonNullAssertion: 環境変数は常に設定されるため
+				process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+			);
+			const { refresh_token: refreshToken } = Object.fromEntries(
+				searchParams.entries(),
+			);
+			if (refreshToken) {
+				await supabase.auth.refreshSession({
+					// biome-ignore lint/style/noNonNullAssertion: 検証済みパラメータのため
+					refresh_token: searchParams.get("refresh_token")!,
+				});
+			}
 
-      const result = await supabase.auth.updateUser({
-        password,
-      });
-      if (result.error) {
-        setErrorMessage(result.error.message);
-        return;
-      }
+			const result = await supabase.auth.updateUser({
+				password,
+			});
+			if (result.error) {
+				setErrorMessage(result.error.message);
+				return;
+			}
 
-      router.push("/");
-    },
-  });
+			router.push("/");
+		},
+	});
 
-  return (
-    <Form {...form} submitButtonLabel="パスワードを登録">
-      <FormField
-        control={form.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem label="パスワード">
-            <Input
-              {...field}
-              autoComplete="password"
-              type="password"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            />
-          </FormItem>
-        )}
-      />
-    </Form>
-  );
+	return (
+		<Form {...form} submitButtonLabel="パスワードを登録">
+			<FormField
+				control={form.control}
+				name="password"
+				render={({ field }) => (
+					<FormItem label="パスワード">
+						<Input
+							{...field}
+							autoComplete="password"
+							type="password"
+							className="w-full"
+							disabled={form.formState.isSubmitting}
+						/>
+					</FormItem>
+				)}
+			/>
+		</Form>
+	);
 }

@@ -1,11 +1,11 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 import { LogoutPage } from "./logout-page";
 
 export const metadata: Metadata = {
-  title: "ログアウト",
+	title: "ログアウト",
 };
 
 export default function NextPage() {
-  return <LogoutPage />;
+	return <LogoutPage />;
 }

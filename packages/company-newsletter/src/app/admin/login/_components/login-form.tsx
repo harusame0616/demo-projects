@@ -13,55 +13,55 @@ import { useForm } from "@/lib/use-form";
 import { loginAction } from "../_actions/login";
 
 export function LoginForm() {
-  const form = useForm({
-    defaultValues: { email: "", password: "" },
-    schema: v.object({
-      email: emailSchema,
-      password: passwordSchema,
-    }),
-    onSubmit: async (params, setErrorMessage) => {
-      const result = await loginAction(params);
-      if (!result.success) {
-        setErrorMessage(result.message);
-      }
-    },
-  });
+	const form = useForm({
+		defaultValues: { email: "", password: "" },
+		schema: v.object({
+			email: emailSchema,
+			password: passwordSchema,
+		}),
+		onSubmit: async (params, setErrorMessage) => {
+			const result = await loginAction(params);
+			if (!result.success) {
+				setErrorMessage(result.message);
+			}
+		},
+	});
 
-  return (
-    <Form {...form} submitButtonLabel="ログイン">
-      <FormField
-        control={form.control}
-        name="email"
-        render={({ field }) => (
-          <FormItem label="メールアドレス">
-            <Input
-              {...field}
-              type="email"
-              autoComplete="username"
-              disabled={form.formState.isSubmitting}
-            />
-          </FormItem>
-        )}
-      />
-      <div>
-        <FormField
-          name="password"
-          render={({ field }) => (
-            <FormItem label="パスワード">
-              <PasswordInput
-                {...field}
-                autoComplete="current-password"
-                disabled={form.formState.isSubmitting}
-              />
-            </FormItem>
-          )}
-        />
-        <div className="mt-2 text-right">
-          <Link href="/signin/reset" className="text-sm">
-            パスワードを忘れた場合
-          </Link>
-        </div>
-      </div>
-    </Form>
-  );
+	return (
+		<Form {...form} submitButtonLabel="ログイン">
+			<FormField
+				control={form.control}
+				name="email"
+				render={({ field }) => (
+					<FormItem label="メールアドレス">
+						<Input
+							{...field}
+							type="email"
+							autoComplete="username"
+							disabled={form.formState.isSubmitting}
+						/>
+					</FormItem>
+				)}
+			/>
+			<div>
+				<FormField
+					name="password"
+					render={({ field }) => (
+						<FormItem label="パスワード">
+							<PasswordInput
+								{...field}
+								autoComplete="current-password"
+								disabled={form.formState.isSubmitting}
+							/>
+						</FormItem>
+					)}
+				/>
+				<div className="mt-2 text-right">
+					<Link href="/signin/reset" className="text-sm">
+						パスワードを忘れた場合
+					</Link>
+				</div>
+			</div>
+		</Form>
+	);
 }
