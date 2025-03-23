@@ -1,14 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 
 import { CommentInputForm } from "../../new/comment-input-form";
 
 export default function EditFormPresenter(
-  props: ComponentProps<typeof CommentInputForm>,
+	props: ComponentProps<typeof CommentInputForm>,
 ) {
-  const router = useRouter();
+	const router = useRouter();
 
-  return <CommentInputForm {...props} onSuccess={() => router.back()} />;
+	return <CommentInputForm {...props} onSuccess={() => router.back()} />;
 }

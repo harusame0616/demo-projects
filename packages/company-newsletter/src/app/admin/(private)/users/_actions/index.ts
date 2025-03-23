@@ -14,40 +14,40 @@ import { roleSchema } from "../role";
 
 // export const addUserAction = createAction(addUser, {
 export const addUserAction = createAction(
-  async () => fail("デモ環境ではユーザーを追加できません"),
-  {
-    inputSchema: {
-      name: nameSchema,
-      email: emailSchema,
-      password: passwordSchema,
-      role: roleSchema,
-      canPost: v.boolean(),
-    },
-    revalidatePaths: ["/admin/users"],
-  },
+	async () => fail("デモ環境ではユーザーを追加できません"),
+	{
+		inputSchema: {
+			name: nameSchema,
+			email: emailSchema,
+			password: passwordSchema,
+			role: roleSchema,
+			canPost: v.boolean(),
+		},
+		revalidatePaths: ["/admin/users"],
+	},
 );
 
 // export const editUserAction = createAction(editUser, {
 export const editUserAction = createAction(
-  async () => fail("デモ環境ではユーザーを編集できません"),
-  {
-    inputSchema: {
-      userId: idSchema,
-      name: nameSchema,
-      email: emailSchema,
-      canPost: v.boolean(),
-      password: v.union([passwordSchema, v.pipe(v.string(), v.length(0))]),
-      role: roleSchema,
-    },
-    revalidatePaths: ["/admin/users"],
-  },
+	async () => fail("デモ環境ではユーザーを編集できません"),
+	{
+		inputSchema: {
+			userId: idSchema,
+			name: nameSchema,
+			email: emailSchema,
+			canPost: v.boolean(),
+			password: v.union([passwordSchema, v.pipe(v.string(), v.length(0))]),
+			role: roleSchema,
+		},
+		revalidatePaths: ["/admin/users"],
+	},
 );
 
 // export const deleteUserAction = createAction(deleteUser, {
 export const deleteUserAction = createAction(
-  async () => fail("デモ環境ではユーザーを削除できません"),
-  {
-    inputSchema: { userId: idSchema },
-    revalidatePaths: ["/admin/users"],
-  },
+	async () => fail("デモ環境ではユーザーを削除できません"),
+	{
+		inputSchema: { userId: idSchema },
+		revalidatePaths: ["/admin/users"],
+	},
 );

@@ -6,6 +6,6 @@ import { createAction } from "@/lib/next-file/server-action";
 import { reset } from "./reset";
 
 export const resetAction = createAction(reset, {
-  inputSchema: { email: emailSchema },
-  redirectTo: "/login/reset/message",
+	inputSchema: { email: emailSchema },
+	redirectTo: "/login/reset/message",
 });

@@ -1,48 +1,48 @@
 import { getPrismaClient } from "@/lib/prisma";
-import { fail, Result, succeed } from "@/lib/result";
+import { type Result, fail, succeed } from "@/lib/result";
 import { createClient } from "@/lib/supabase/server";
 
-import { Role } from "../role";
+import type { Role } from "../role";
 
 type EditUserParams = {
-  userId: string;
-  name: string;
-  email: string;
-  canPost: boolean;
-  password: string;
-  role: Role;
+	userId: string;
+	name: string;
+	email: string;
+	canPost: boolean;
+	password: string;
+	role: Role;
 };
 export async function editUser({
-  userId,
-  name,
-  email,
-  canPost,
-  password,
-  role,
+	userId,
+	name,
+	email,
+	canPost,
+	password,
+	role,
 }: EditUserParams): Promise<Result<undefined>> {
-  const supabase = await createClient();
+	const supabase = await createClient();
 
-  const prisma = getPrismaClient();
-  try {
-    await prisma.$transaction(async (tx) => {
-      await tx.cnlUser.update({
-        where: { userId },
-        data: { name, email, role, canPost },
-      });
-      const result = await supabase.auth.admin.updateUserById(userId, {
-        user_metadata: { name, role, canPost },
-        password: password || undefined,
-        email,
-        email_confirm: true,
-      });
+	const prisma = getPrismaClient();
+	try {
+		await prisma.$transaction(async (tx) => {
+			await tx.cnlUser.update({
+				where: { userId },
+				data: { name, email, role, canPost },
+			});
+			const result = await supabase.auth.admin.updateUserById(userId, {
+				user_metadata: { name, role, canPost },
+				password: password || undefined,
+				email,
+				email_confirm: true,
+			});
 
-      if (result.error) {
-        throw result.error;
-      }
-    });
-  } catch {
-    return fail("ユーザーの更新に失敗しました。");
-  }
+			if (result.error) {
+				throw result.error;
+			}
+		});
+	} catch {
+		return fail("ユーザーの更新に失敗しました。");
+	}
 
-  return succeed();
+	return succeed();
 }

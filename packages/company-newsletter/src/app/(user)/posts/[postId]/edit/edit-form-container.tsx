@@ -5,14 +5,14 @@ import { getPost } from "./_data/post";
 import EditFormPresenter from "./edit-form-presenter";
 
 type Props = {
-  postId: string;
+	postId: string;
 };
 export default async function EditFormContainer({ postId }: Props) {
-  const post = await getPost(postId);
+	const post = await getPost(postId);
 
-  if (!post) {
-    notFound();
-  }
+	if (!post) {
+		notFound();
+	}
 
-  return <EditFormPresenter action={editPost} post={post} />;
+	return <EditFormPresenter action={editPost} post={post} />;
 }

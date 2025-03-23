@@ -5,10 +5,8 @@ import { createPage } from "@/lib/next-file/page";
 import PostEditionPage from "./post-edition-page";
 
 export default createPage(
-  function ({ params: { postId } }) {
-    return <PostEditionPage postId={postId} />;
-  },
-  {
-    paramsSchema: { postId: v.string() },
-  },
+	({ params: { postId } }) => <PostEditionPage postId={postId} />,
+	{
+		paramsSchema: { postId: v.string() },
+	},
 );

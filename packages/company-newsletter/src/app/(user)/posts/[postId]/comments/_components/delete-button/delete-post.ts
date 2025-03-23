@@ -6,16 +6,16 @@ import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
 
 export const deleteCommentAction = createAction(
-  async (params) => {
-    const prisma = getPrismaClient();
-    await prisma.cnlPostComment.delete({
-      where: { commentId: params.commentId },
-    });
+	async (params) => {
+		const prisma = getPrismaClient();
+		await prisma.cnlPostComment.delete({
+			where: { commentId: params.commentId },
+		});
 
-    return succeed();
-  },
-  {
-    inputSchema: { commentId: idSchema },
-    revalidatePaths: ["/"],
-  },
+		return succeed();
+	},
+	{
+		inputSchema: { commentId: idSchema },
+		revalidatePaths: ["/"],
+	},
 );

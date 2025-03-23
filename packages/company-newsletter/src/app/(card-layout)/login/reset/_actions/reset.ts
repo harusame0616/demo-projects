@@ -2,15 +2,16 @@ import { fail, succeed } from "@/lib/result";
 import { createClient } from "@/lib/supabase/server";
 
 export async function reset({ email }: { email: string }) {
-  const client = await createClient();
+	const client = await createClient();
 
-  const result = await client.auth.resetPasswordForEmail(email, {
-    redirectTo: new URL(`/password`, process.env.SERVICE_URL!).href,
-  });
-  if (result.error) {
-    return fail(
-      "リセットメールの送信に失敗しました。時間をおいてお試しください",
-    );
-  }
-  return succeed();
+	const result = await client.auth.resetPasswordForEmail(email, {
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		redirectTo: new URL("/password", process.env.SERVICE_URL!).href,
+	});
+	if (result.error) {
+		return fail(
+			"リセットメールの送信に失敗しました。時間をおいてお試しください",
+		);
+	}
+	return succeed();
 }

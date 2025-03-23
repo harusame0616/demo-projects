@@ -11,35 +11,35 @@ import { useForm } from "@/lib/use-form";
 import { resetAction } from "./_actions";
 
 export function ResetForm() {
-  const form = useForm({
-    defaultValues: { email: "" },
-    schema: v.object({
-      email: emailSchema,
-    }),
-    onSubmit: async (params, setErrorMessage) => {
-      const result = await resetAction(params);
-      if (!result.success) {
-        setErrorMessage(result.message);
-      }
-    },
-  });
+	const form = useForm({
+		defaultValues: { email: "" },
+		schema: v.object({
+			email: emailSchema,
+		}),
+		onSubmit: async (params, setErrorMessage) => {
+			const result = await resetAction(params);
+			if (!result.success) {
+				setErrorMessage(result.message);
+			}
+		},
+	});
 
-  return (
-    <Form {...form} submitButtonLabel="リセットメール送信">
-      <FormField
-        control={form.control}
-        name="email"
-        render={({ field }) => (
-          <FormItem label="メールアドレス">
-            <Input
-              {...field}
-              autoComplete="email"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            />
-          </FormItem>
-        )}
-      />
-    </Form>
-  );
+	return (
+		<Form {...form} submitButtonLabel="リセットメール送信">
+			<FormField
+				control={form.control}
+				name="email"
+				render={({ field }) => (
+					<FormItem label="メールアドレス">
+						<Input
+							{...field}
+							autoComplete="email"
+							className="w-full"
+							disabled={form.formState.isSubmitting}
+						/>
+					</FormItem>
+				)}
+			/>
+		</Form>
+	);
 }

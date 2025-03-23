@@ -6,13 +6,13 @@ import { getPrismaClient } from "@/lib/prisma";
 import { succeed } from "@/lib/result";
 
 export const deletePost = createAction(
-  async (params) => {
-    const prisma = getPrismaClient();
-    await prisma.cnlPost.delete({ where: { postId: params.postId } });
-    return succeed();
-  },
-  {
-    inputSchema: { postId: idSchema },
-    revalidatePaths: ["/"],
-  },
+	async (params) => {
+		const prisma = getPrismaClient();
+		await prisma.cnlPost.delete({ where: { postId: params.postId } });
+		return succeed();
+	},
+	{
+		inputSchema: { postId: idSchema },
+		revalidatePaths: ["/"],
+	},
 );
