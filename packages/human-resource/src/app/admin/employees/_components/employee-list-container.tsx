@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import { EmployeeFilter } from "./employee-filter";
 import { EmployeeTable } from "./employee-table";
-import { Pagination } from "@/components/ui/pagination";
+import { PaginationNav } from "@/components/common/pagination-nav";
 import type { Employee } from "../_actions/employee-actions";
 
 interface EmployeeListContainerProps {
@@ -135,8 +135,8 @@ export function EmployeeListContainer({
 			</div>
 
 			{pagination.totalPages > 1 && (
-				<div className="mt-4 w-full">
-					<Pagination
+				<div className="mt-4 flex justify-center w-full">
+					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
 						onPageChange={handlePageChange}

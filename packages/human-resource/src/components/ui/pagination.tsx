@@ -1,124 +1,127 @@
-import * as React from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import * as React from "react"
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MoreHorizontalIcon,
+} from "lucide-react"
 
-export interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
-	currentPage: number;
-	totalPages: number;
-	onPageChange: (page: number) => void;
-	siblingCount?: number;
+import { cn } from "@/lib/utils"
+import { Button, buttonVariants } from "@/components/ui/button"
+
+function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
+  return (
+    <nav
+      role="navigation"
+      aria-label="pagination"
+      data-slot="pagination"
+      className={cn("mx-auto flex w-full justify-center", className)}
+      {...props}
+    />
+  )
 }
 
-export function Pagination({
-	currentPage,
-	totalPages,
-	onPageChange,
-	siblingCount = 1,
-	className,
-	...props
-}: PaginationProps) {
-	// ページボタンの範囲を計算
-	const getPageRange = () => {
-		// 常に表示するページ数（現在のページ + 兄弟ページ + 最初と最後のページ + 省略記号）
-		const totalPageNumbers = siblingCount * 2 + 5;
+function PaginationContent({
+  className,
+  ...props
+}: React.ComponentProps<"ul">) {
+  return (
+    <ul
+      data-slot="pagination-content"
+      className={cn("flex flex-row items-center gap-1", className)}
+      {...props}
+    />
+  )
+}
 
-		// ページ総数が表示できるページ数より少ない場合は全ページを表示
-		if (totalPageNumbers >= totalPages) {
-			return Array.from({ length: totalPages }, (_, i) => i + 1);
-		}
+function PaginationItem({ ...props }: React.ComponentProps<"li">) {
+  return <li data-slot="pagination-item" {...props} />
+}
 
-		// 左右の兄弟ページの範囲を計算
-		const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
-		const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPages);
+type PaginationLinkProps = {
+  isActive?: boolean
+} & Pick<React.ComponentProps<typeof Button>, "size"> &
+  React.ComponentProps<"a">
 
-		// 省略記号を表示するかどうか
-		const shouldShowLeftDots = leftSiblingIndex > 2;
-		const shouldShowRightDots = rightSiblingIndex < totalPages - 1;
+function PaginationLink({
+  className,
+  isActive,
+  size = "icon",
+  ...props
+}: PaginationLinkProps) {
+  return (
+    <a
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      className={cn(
+        buttonVariants({
+          variant: isActive ? "outline" : "ghost",
+          size,
+        }),
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-		// 最初のページと最後のページは常に表示
-		const firstPageIndex = 1;
-		const lastPageIndex = totalPages;
+function PaginationPrevious({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to previous page"
+      size="default"
+      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      {...props}
+    >
+      <ChevronLeftIcon />
+      <span className="hidden sm:block">Previous</span>
+    </PaginationLink>
+  )
+}
 
-		// 左側の省略記号のみ表示する場合
-		if (!shouldShowLeftDots && shouldShowRightDots) {
-			const leftItemCount = 3 + 2 * siblingCount;
-			const leftRange = Array.from({ length: leftItemCount }, (_, i) => i + 1);
-			return [...leftRange, "dots-right", totalPages];
-		}
+function PaginationNext({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to next page"
+      size="default"
+      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      {...props}
+    >
+      <span className="hidden sm:block">Next</span>
+      <ChevronRightIcon />
+    </PaginationLink>
+  )
+}
 
-		// 右側の省略記号のみ表示する場合
-		if (shouldShowLeftDots && !shouldShowRightDots) {
-			const rightItemCount = 3 + 2 * siblingCount;
-			const rightRange = Array.from(
-				{ length: rightItemCount },
-				(_, i) => totalPages - rightItemCount + i + 1,
-			);
-			return [1, "dots-left", ...rightRange];
-		}
+function PaginationEllipsis({
+  className,
+  ...props
+}: React.ComponentProps<"span">) {
+  return (
+    <span
+      aria-hidden
+      data-slot="pagination-ellipsis"
+      className={cn("flex size-9 items-center justify-center", className)}
+      {...props}
+    >
+      <MoreHorizontalIcon className="size-4" />
+      <span className="sr-only">More pages</span>
+    </span>
+  )
+}
 
-		// 両方の省略記号を表示する場合
-		if (shouldShowLeftDots && shouldShowRightDots) {
-			const middleRange = Array.from(
-				{ length: rightSiblingIndex - leftSiblingIndex + 1 },
-				(_, i) => leftSiblingIndex + i,
-			);
-			return [1, "dots-left", ...middleRange, "dots-right", totalPages];
-		}
-
-		// デフォルトケース（通常はここには到達しない）
-		return [1];
-	};
-
-	const pages = getPageRange();
-
-	return (
-		<div
-			className={cn("flex items-center justify-center space-x-2", className)}
-			{...props}
-		>
-			<Button
-				variant="outline"
-				size="icon"
-				onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
-				disabled={currentPage === 1}
-			>
-				<ChevronLeftIcon className="h-4 w-4" />
-				<span className="sr-only">前のページ</span>
-			</Button>
-
-			{pages.map((page) => {
-				if (page === "dots-left" || page === "dots-right") {
-					return (
-						<div key={`${page}`} className="px-4 py-2">
-							...
-						</div>
-					);
-				}
-
-				return (
-					<Button
-						key={`page-${page}`}
-						variant={currentPage === page ? "default" : "outline"}
-						onClick={() => typeof page === "number" && onPageChange(page)}
-						className="h-9 w-9"
-					>
-						{page}
-					</Button>
-				);
-			})}
-
-			<Button
-				variant="outline"
-				size="icon"
-				onClick={() =>
-					currentPage < totalPages && onPageChange(currentPage + 1)
-				}
-				disabled={currentPage === totalPages || totalPages === 0}
-			>
-				<ChevronRightIcon className="h-4 w-4" />
-				<span className="sr-only">次のページ</span>
-			</Button>
-		</div>
-	);
+export {
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
 }

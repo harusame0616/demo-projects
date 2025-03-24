@@ -43,7 +43,7 @@ import {
 	type ApplicationStatus,
 	type ApplicationSearchParams,
 } from "../_actions/application-actions";
-import { Pagination } from "@/components/ui/pagination";
+import { PaginationNav } from "@/components/common/pagination-nav";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {
@@ -304,12 +304,14 @@ export function ApplicationTable({
 			</div>
 
 			{/* ページネーション */}
-			{applications.length > 0 && (
-				<Pagination
-					currentPage={pagination.page}
-					totalPages={pagination.totalPages}
-					onPageChange={handlePageChange}
-				/>
+			{applications.length > 0 && pagination.totalPages > 1 && (
+				<div className="flex justify-center mt-6">
+					<PaginationNav
+						currentPage={pagination.page}
+						totalPages={pagination.totalPages}
+						onPageChange={handlePageChange}
+					/>
+				</div>
 			)}
 
 			{/* 申請詳細ダイアログ */}

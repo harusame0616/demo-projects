@@ -5,7 +5,7 @@ import { PositionFilter } from "./position-filter";
 import { PositionTable } from "./position-table";
 import type { Position } from "../_data/positions-data";
 import type { PositionSearchParams } from "../_actions/position-actions";
-import { Pagination } from "@/components/ui/pagination";
+import { PaginationNav } from "@/components/common/pagination-nav";
 
 interface PositionListContainerProps {
 	positions: Position[];
@@ -89,7 +89,7 @@ export function PositionListContainer({
 			</div>
 			{pagination.totalPages > 1 && (
 				<div className="flex justify-center mt-4 w-full">
-					<Pagination
+					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
 						onPageChange={handlePageChange}

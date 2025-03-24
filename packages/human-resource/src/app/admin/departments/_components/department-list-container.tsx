@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DepartmentFilter } from "./department-filter";
 import { DepartmentTable } from "./department-table";
-import { Pagination } from "@/components/ui/pagination";
+import { PaginationNav } from "@/components/common/pagination-nav";
 import type { DepartmentSearchParams } from "../_actions/department-actions";
 
 type Department = {
@@ -68,7 +68,7 @@ export function DepartmentListContainer({
 
 			{pagination.totalPages > 1 && (
 				<div className="mt-4 w-full flex justify-center">
-					<Pagination
+					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
 						onPageChange={handlePageChange}

@@ -47,6 +47,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { PaginationNav } from "@/components/common/pagination-nav";
 
 const TYPE_LABELS = {
 	skill: "スキル",
@@ -257,7 +258,7 @@ export function SkillCertificationList({
 
 			{pagination.totalPages > 1 && (
 				<div className="flex justify-center mt-6 w-full">
-					<Pagination
+					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
 						onPageChange={handlePageChange}

@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PaginationNav } from "@/components/common/pagination-nav";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -23,7 +24,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { Grade } from "../_data/grades-data";
 import type { GradeSearchParams } from "../_actions/grade-actions";
-import { Pagination } from "@/components/ui/pagination";
 
 // 日付をフォーマットする関数
 function formatDate(dateString: string): string {
@@ -220,7 +220,7 @@ export function GradeListContainer({
 
 			{pagination.totalPages > 1 && (
 				<div className="flex justify-center mt-6 w-full">
-					<Pagination
+					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
 						onPageChange={handlePageChange}
