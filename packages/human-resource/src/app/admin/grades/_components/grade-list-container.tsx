@@ -148,15 +148,6 @@ export function GradeListContainer({
 								</div>
 							</TableHead>
 							<TableHead
-								className="cursor-pointer w-[100px] whitespace-nowrap"
-								onClick={() => handleSort("employeeCount")}
-							>
-								<div className="flex items-center">
-									人数
-									{getSortIcon("employeeCount")}
-								</div>
-							</TableHead>
-							<TableHead
 								className="cursor-pointer w-[150px] whitespace-nowrap"
 								onClick={() => handleSort("createdAt")}
 							>
@@ -170,7 +161,7 @@ export function GradeListContainer({
 					<TableBody>
 						{grades.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={6} className="text-center py-6">
+								<TableCell colSpan={5} className="text-center py-6">
 									該当するグレードがありません
 								</TableCell>
 							</TableRow>
@@ -206,12 +197,6 @@ export function GradeListContainer({
 											grade.salaryRange.min,
 											grade.salaryRange.max,
 										)}
-									</TableCell>
-									<TableCell className="whitespace-nowrap">
-										<div className="flex items-center">
-											<UsersIcon className="h-4 w-4 mr-1 text-gray-500" />
-											{grade.employeeCount}人
-										</div>
 									</TableCell>
 									<TableCell className="text-gray-500 whitespace-nowrap">
 										{formatDate(grade.createdAt)}

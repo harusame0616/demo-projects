@@ -84,14 +84,6 @@ export function PositionTable({
 							説明
 						</TableHead>
 						<TableHead
-							className="hidden md:table-cell cursor-pointer w-[100px] whitespace-nowrap"
-							onClick={() => onSort("memberCount")}
-						>
-							<div className="flex items-center">
-								人数 {getSortIcon("memberCount")}
-							</div>
-						</TableHead>
-						<TableHead
 							className="hidden md:table-cell cursor-pointer w-[120px] whitespace-nowrap"
 							onClick={() => onSort("createdAt")}
 						>
@@ -107,7 +99,7 @@ export function PositionTable({
 				<TableBody>
 					{positions.length === 0 ? (
 						<TableRow>
-							<TableCell colSpan={7} className="text-center py-6">
+							<TableCell colSpan={6} className="text-center py-6">
 								該当する役職がありません
 							</TableCell>
 						</TableRow>
@@ -139,9 +131,6 @@ export function PositionTable({
 											</TooltipContent>
 										</Tooltip>
 									</TooltipProvider>
-								</TableCell>
-								<TableCell className="hidden md:table-cell whitespace-nowrap">
-									{position.memberCount}名
 								</TableCell>
 								<TableCell className="hidden md:table-cell whitespace-nowrap">
 									{formatDate(position.createdAt)}

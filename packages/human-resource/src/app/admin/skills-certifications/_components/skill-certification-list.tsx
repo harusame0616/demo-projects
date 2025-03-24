@@ -178,12 +178,6 @@ export function SkillCertificationList({
 								レベル/認定機関 {getSortIcon("levelOrAuthority")}
 							</TableHead>
 							<TableHead
-								className="text-center cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
-								onClick={() => handleSort("holdersCount")}
-							>
-								取得者数 {getSortIcon("holdersCount")}
-							</TableHead>
-							<TableHead
 								className="cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
 								onClick={() => handleSort("createdAt")}
 							>
@@ -214,9 +208,6 @@ export function SkillCertificationList({
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{item.levelOrAuthority}
-								</TableCell>
-								<TableCell className="text-center whitespace-nowrap">
-									{item.holdersCount}名
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{format(new Date(item.createdAt), "yyyy年MM月dd日", {
