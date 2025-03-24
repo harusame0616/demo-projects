@@ -9,9 +9,22 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { SearchIcon } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import * as v from "valibot";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+
+// フォームのスキーマを定義
+const employeeFilterSchema = v.object({
+	query: v.string(),
+	department: v.string(),
+	position: v.string(),
+});
+
+type EmployeeFilterFormValues = v.InferType<typeof employeeFilterSchema>;
 
 interface EmployeeFilterProps {
 	departmentOptions: { value: string; label: string }[];
@@ -30,26 +43,40 @@ export function EmployeeFilter({
 }: EmployeeFilterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const [query, setQuery] = useState(searchQuery);
-	const [department, setDepartment] = useState(currentDepartment);
-	const [position, setPosition] = useState(currentPosition);
 
-	// プロップが変更されたら内部の状態を更新
+	// フォームの初期値を設定
+	const defaultValues: EmployeeFilterFormValues = {
+		query: searchQuery || "",
+		department: currentDepartment || "all",
+		position: currentPosition || "all",
+	};
+
+	// フォームを初期化
+	const form = useForm<EmployeeFilterFormValues>({
+		resolver: valibotResolver(employeeFilterSchema),
+		defaultValues,
+	});
+
+	// 外部からのpropsが変更されたらフォームの値をリセット
 	useEffect(() => {
-		setQuery(searchQuery || "");
-		setDepartment(currentDepartment || "all");
-		setPosition(currentPosition || "all");
-	}, [searchQuery, currentDepartment, currentPosition]);
+		form.reset({
+			query: searchQuery || "",
+			department: currentDepartment || "all",
+			position: currentPosition || "all",
+		});
+	}, [searchQuery, currentDepartment, currentPosition, form]);
 
-	const handleSearch = () => {
+	// 検索を実行する関数
+	const handleSearch = (values: EmployeeFilterFormValues) => {
 		// 現在のURLパラメータを取得
 		const params = new URLSearchParams();
 
 		// 有効な値のみパラメータに追加
-		if (query) params.set("query", query);
-		if (department && department !== "all")
-			params.set("department", department);
-		if (position && position !== "all") params.set("position", position);
+		if (values.query) params.set("query", values.query);
+		if (values.department && values.department !== "all")
+			params.set("department", values.department);
+		if (values.position && values.position !== "all")
+			params.set("position", values.position);
 
 		// ページは1に戻す（フィルタリング時はページをリセット）
 		params.set("page", "1");
@@ -60,10 +87,13 @@ export function EmployeeFilter({
 		router.push(url);
 	};
 
+	// フォームをクリアする関数
 	const handleClear = () => {
-		setQuery("");
-		setDepartment("all");
-		setPosition("all");
+		form.reset({
+			query: "",
+			department: "all",
+			position: "all",
+		});
 
 		// URLをリセット（すべてのフィルタパラメータを削除）
 		router.push(pathname);
@@ -71,87 +101,103 @@ export function EmployeeFilter({
 
 	return (
 		<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
-			<div className="space-y-6">
-				{/* 検索フィールド行 */}
-				<div className="flex flex-col md:flex-row gap-4 items-center">
-					{/* 検索入力フィールド */}
-					<div className="relative flex-1 w-full">
-						<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-						<Input
-							placeholder="名前、メール、IDで検索..."
-							className="pl-10 w-full h-10 rounded-lg"
-							value={query}
-							onChange={(e) => setQuery(e.target.value)}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") {
-									handleSearch();
-								}
-							}}
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(handleSearch)} className="space-y-6">
+					<div className="flex flex-col md:flex-row gap-4 items-center">
+						{/* 検索入力フィールド */}
+						<FormField
+							control={form.control}
+							name="query"
+							render={({ field }) => (
+								<FormItem className="relative flex-1 w-full">
+									<FormControl>
+										<div className="relative w-full">
+											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+											<Input
+												placeholder="名前、メール、IDで検索..."
+												className="pl-10 w-full h-10 rounded-lg"
+												{...field}
+											/>
+										</div>
+									</FormControl>
+								</FormItem>
+							)}
 						/>
-					</div>
 
-					{/* 部署選択 */}
-					<div className="w-full md:w-48">
-						<Select
-							value={department}
-							onValueChange={(value) => {
-								setDepartment(value);
-							}}
-						>
-							<SelectTrigger className="h-10 rounded-lg">
-								<SelectValue placeholder="すべての部署" />
-							</SelectTrigger>
-							<SelectContent>
-								{departmentOptions.map((department) => (
-									<SelectItem key={department.value} value={department.value}>
-										{department.label}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-					</div>
+						{/* 部署選択 */}
+						<FormField
+							control={form.control}
+							name="department"
+							render={({ field }) => (
+								<FormItem className="w-full md:w-48">
+									<FormControl>
+										<Select value={field.value} onValueChange={field.onChange}>
+											<SelectTrigger className="h-10 rounded-lg">
+												<SelectValue placeholder="すべての部署" />
+											</SelectTrigger>
+											<SelectContent>
+												{departmentOptions.map((department) => (
+													<SelectItem
+														key={department.value}
+														value={department.value}
+													>
+														{department.label}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
 
-					{/* 役職選択 */}
-					<div className="w-full md:w-48">
-						<Select
-							value={position}
-							onValueChange={(value) => {
-								setPosition(value);
-							}}
-						>
-							<SelectTrigger className="h-10 rounded-lg">
-								<SelectValue placeholder="すべての役職" />
-							</SelectTrigger>
-							<SelectContent>
-								{positionOptions.map((position) => (
-									<SelectItem key={position.value} value={position.value}>
-										{position.label}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-					</div>
+						{/* 役職選択 */}
+						<FormField
+							control={form.control}
+							name="position"
+							render={({ field }) => (
+								<FormItem className="w-full md:w-48">
+									<FormControl>
+										<Select value={field.value} onValueChange={field.onChange}>
+											<SelectTrigger className="h-10 rounded-lg">
+												<SelectValue placeholder="すべての役職" />
+											</SelectTrigger>
+											<SelectContent>
+												{positionOptions.map((position) => (
+													<SelectItem
+														key={position.value}
+														value={position.value}
+													>
+														{position.label}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
 
-					{/* ボタン */}
-					<div className="flex gap-4 w-full md:w-auto">
-						<Button
-							onClick={handleSearch}
-							type="button"
-							className="flex-1 md:flex-none md:w-32 bg-black text-white h-10 rounded-lg"
-						>
-							検索
-						</Button>
-						<Button
-							onClick={handleClear}
-							variant="outline"
-							type="button"
-							className="flex-1 md:flex-none md:w-32 border-gray-300 h-10 rounded-lg"
-						>
-							クリア
-						</Button>
+						{/* ボタン */}
+						<div className="flex gap-4 w-full md:w-auto">
+							<Button
+								type="submit"
+								className="flex-1 md:flex-none md:w-32 bg-black text-white h-10 rounded-lg"
+							>
+								検索
+							</Button>
+							<Button
+								onClick={handleClear}
+								type="button"
+								variant="outline"
+								className="flex-1 md:flex-none md:w-32 border-gray-300 h-10 rounded-lg"
+							>
+								クリア
+							</Button>
+						</div>
 					</div>
-				</div>
-			</div>
+				</form>
+			</Form>
 		</div>
 	);
 }

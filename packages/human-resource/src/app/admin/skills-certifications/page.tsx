@@ -25,8 +25,7 @@ export default async function SkillsCertificationsPage({
 	searchParams,
 }: SkillsCertificationsPageProps) {
 	// 検索条件を基にデータを取得
-	const { skillCertifications, pagination } =
-		await getSkillCertifications(searchParams);
+	const { items, pagination } = await getSkillCertifications(searchParams);
 
 	return (
 		<div className="space-y-4">
@@ -57,7 +56,7 @@ export default async function SkillsCertificationsPage({
 			/>
 
 			<SkillCertificationList
-				skillCertifications={skillCertifications}
+				skillCertifications={items}
 				searchParams={searchParams}
 				pagination={pagination}
 			/>

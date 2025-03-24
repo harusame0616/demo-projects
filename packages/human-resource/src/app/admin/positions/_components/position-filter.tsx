@@ -9,9 +9,21 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { SearchIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import * as v from "valibot";
+import { valibotResolver } from "@hookform/resolvers/valibot";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+// フォームのスキーマを定義
+const positionFilterSchema = v.object({
+	query: v.string(),
+	level: v.string(),
+});
+
+type PositionFilterFormValues = v.InferType<typeof positionFilterSchema>;
 
 interface PositionFilterProps {
 	searchQuery: string;
@@ -29,31 +41,43 @@ export function PositionFilter({
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
-	const [query, setQuery] = useState(searchQuery);
-	const [level, setLevel] = useState(currentLevel);
 
-	// 外部からのprops変更に対応
+	// フォームの初期値を設定
+	const defaultValues: PositionFilterFormValues = {
+		query: searchQuery || "",
+		level: currentLevel || "all",
+	};
+
+	// フォームを初期化
+	const form = useForm<PositionFilterFormValues>({
+		resolver: valibotResolver(positionFilterSchema),
+		defaultValues,
+	});
+
+	// 外部からのpropsが変更されたらフォームの値をリセット
 	useEffect(() => {
-		setQuery(searchQuery);
-		setLevel(currentLevel);
-	}, [searchQuery, currentLevel]);
+		form.reset({
+			query: searchQuery || "",
+			level: currentLevel || "all",
+		});
+	}, [searchQuery, currentLevel, form]);
 
-	const handleSearch = () => {
+	const handleSearch = (values: PositionFilterFormValues) => {
 		if (onFilter) {
-			onFilter(query, level);
+			onFilter(values.query, values.level);
 			return;
 		}
 
 		// onFilterが提供されていない場合は内部でナビゲーション
 		const updatedParams = new URLSearchParams(params.toString());
-		if (query) {
-			updatedParams.set("query", query);
+		if (values.query) {
+			updatedParams.set("query", values.query);
 		} else {
 			updatedParams.delete("query");
 		}
 
-		if (level && level !== "all") {
-			updatedParams.set("level", level);
+		if (values.level && values.level !== "all") {
+			updatedParams.set("level", values.level);
 		} else {
 			updatedParams.delete("level");
 		}
@@ -64,8 +88,10 @@ export function PositionFilter({
 	};
 
 	const handleClear = () => {
-		setQuery("");
-		setLevel("all");
+		form.reset({
+			query: "",
+			level: "all",
+		});
 
 		if (onFilter) {
 			onFilter("", "all");
@@ -82,59 +108,70 @@ export function PositionFilter({
 
 	return (
 		<div className="w-full mb-4 bg-white rounded-3xl shadow-sm flex flex-wrap items-center gap-2 p-2">
-			<div className="relative flex-1 min-w-[200px]">
-				<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-				<Input
-					placeholder="役職名や説明で検索..."
-					className="pl-10 h-10 rounded-lg border-gray-200"
-					value={query}
-					onChange={(e) => {
-						setQuery(e.target.value);
-					}}
-					onKeyDown={(e) => {
-						if (e.key === "Enter") {
-							handleSearch();
-						}
-					}}
-				/>
-			</div>
-
-			<div className="w-auto">
-				<Select
-					value={level}
-					onValueChange={(value) => {
-						setLevel(value);
-					}}
+			<Form {...form}>
+				<form
+					onSubmit={form.handleSubmit(handleSearch)}
+					className="flex flex-wrap items-center gap-2 w-full"
 				>
-					<SelectTrigger className="h-10 rounded-lg w-[180px] border-gray-200">
-						<SelectValue placeholder="レベルでフィルター" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">すべて</SelectItem>
-						{levelOptions.map((level) => (
-							<SelectItem key={level} value={level}>
-								レベル {level}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-			</div>
+					<FormField
+						control={form.control}
+						name="query"
+						render={({ field }) => (
+							<FormItem className="relative flex-1 min-w-[200px]">
+								<FormControl>
+									<div className="relative w-full">
+										<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+										<Input
+											placeholder="役職名や説明で検索..."
+											className="pl-10 h-10 rounded-lg border-gray-200"
+											{...field}
+										/>
+									</div>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
 
-			<Button
-				onClick={handleSearch}
-				type="button"
-				className="bg-black text-white h-10 rounded-lg w-24"
-			>
-				検索
-			</Button>
-			<Button
-				onClick={handleClear}
-				variant="outline"
-				type="button"
-				className="border-gray-300 h-10 rounded-lg w-24"
-			>
-				クリア
-			</Button>
+					<FormField
+						control={form.control}
+						name="level"
+						render={({ field }) => (
+							<FormItem className="w-auto">
+								<FormControl>
+									<Select value={field.value} onValueChange={field.onChange}>
+										<SelectTrigger className="h-10 rounded-lg w-[180px] border-gray-200">
+											<SelectValue placeholder="レベルでフィルター" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="all">すべて</SelectItem>
+											{levelOptions.map((level) => (
+												<SelectItem key={level} value={level}>
+													レベル {level}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+
+					<Button
+						type="submit"
+						className="bg-black text-white h-10 rounded-lg w-24"
+					>
+						検索
+					</Button>
+					<Button
+						onClick={handleClear}
+						variant="outline"
+						type="button"
+						className="border-gray-300 h-10 rounded-lg w-24"
+					>
+						クリア
+					</Button>
+				</form>
+			</Form>
 		</div>
 	);
 }
