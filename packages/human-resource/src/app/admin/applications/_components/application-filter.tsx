@@ -15,7 +15,13 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
 import { Calendar, SearchIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -119,13 +125,16 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 					className="space-y-6"
 				>
 					{/* 検索フィールド行 */}
-					<div className="flex flex-col md:flex-row gap-4 items-center">
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 						{/* 検索入力フィールド */}
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="relative flex-1 w-full">
+								<FormItem className="w-full">
+									<FormLabel className="text-sm font-medium mb-1 block">
+										キーワード（社員名、内容、コメント）
+									</FormLabel>
 									<FormControl>
 										<div className="relative w-full">
 											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
@@ -133,6 +142,7 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 												placeholder="社員名や内容、コメントで検索..."
 												className="pl-10 w-full h-10 rounded-lg"
 												{...field}
+												aria-label="社員名や内容、コメントで検索"
 											/>
 										</div>
 									</FormControl>
@@ -145,10 +155,16 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 							control={form.control}
 							name="type"
 							render={({ field }) => (
-								<FormItem className="w-full md:w-48">
+								<FormItem className="w-full">
+									<FormLabel className="text-sm font-medium mb-1 block">
+										申請タイプ
+									</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
-											<SelectTrigger className="h-10 rounded-lg">
+											<SelectTrigger
+												className="h-10 rounded-lg"
+												aria-label="申請タイプ"
+											>
 												<SelectValue placeholder="申請タイプ" />
 											</SelectTrigger>
 											<SelectContent>
@@ -174,10 +190,16 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 							control={form.control}
 							name="status"
 							render={({ field }) => (
-								<FormItem className="w-full md:w-48">
+								<FormItem className="w-full">
+									<FormLabel className="text-sm font-medium mb-1 block">
+										ステータス
+									</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
-											<SelectTrigger className="h-10 rounded-lg">
+											<SelectTrigger
+												className="h-10 rounded-lg"
+												aria-label="ステータス"
+											>
 												<SelectValue placeholder="ステータス" />
 											</SelectTrigger>
 											<SelectContent>
@@ -197,7 +219,10 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 							control={form.control}
 							name="date"
 							render={({ field }) => (
-								<FormItem className="w-full md:w-48">
+								<FormItem className="w-full">
+									<FormLabel className="text-sm font-medium mb-1 block">
+										日付
+									</FormLabel>
 									<FormControl>
 										<Popover>
 											<PopoverTrigger asChild>
@@ -206,6 +231,7 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 													className={`w-full h-10 rounded-lg justify-start text-left font-normal ${
 														!field.value ? "text-muted-foreground" : ""
 													}`}
+													aria-label="日付選択"
 												>
 													<Calendar className="mr-2 h-4 w-4" />
 													{field.value
@@ -230,10 +256,10 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 						/>
 
 						{/* ボタン */}
-						<div className="flex gap-4 w-full md:w-auto">
+						<div className="flex gap-4 w-full col-span-1 md:col-span-2 lg:col-span-4 justify-end">
 							<Button
 								type="submit"
-								className="flex-1 md:flex-none md:w-32 bg-black text-white h-10 rounded-lg"
+								className="bg-black text-white h-10 rounded-lg w-32"
 							>
 								検索
 							</Button>
@@ -241,7 +267,7 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 								onClick={handleClear}
 								variant="outline"
 								type="button"
-								className="flex-1 md:flex-none md:w-32 border-gray-300 h-10 rounded-lg"
+								className="border-gray-300 h-10 rounded-lg w-32"
 							>
 								クリア
 							</Button>

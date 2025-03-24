@@ -9,7 +9,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
 import { SearchIcon } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -103,13 +109,16 @@ export function EmployeeFilter({
 		<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSearch)} className="space-y-6">
-					<div className="flex flex-col md:flex-row gap-4 items-center">
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 						{/* 検索入力フィールド */}
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="relative flex-1 w-full">
+								<FormItem className="w-full">
+									<FormLabel className="text-sm font-medium mb-1 block">
+										キーワード（名前、メール、ID）
+									</FormLabel>
 									<FormControl>
 										<div className="relative w-full">
 											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
@@ -117,6 +126,7 @@ export function EmployeeFilter({
 												placeholder="名前、メール、IDで検索..."
 												className="pl-10 w-full h-10 rounded-lg"
 												{...field}
+												aria-label="名前、メール、IDで検索"
 											/>
 										</div>
 									</FormControl>
@@ -129,10 +139,16 @@ export function EmployeeFilter({
 							control={form.control}
 							name="department"
 							render={({ field }) => (
-								<FormItem className="w-full md:w-48">
+								<FormItem className="w-full">
+									<FormLabel className="text-sm font-medium mb-1 block">
+										部署
+									</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
-											<SelectTrigger className="h-10 rounded-lg">
+											<SelectTrigger
+												className="h-10 rounded-lg"
+												aria-label="部署でフィルター"
+											>
 												<SelectValue placeholder="すべての部署" />
 											</SelectTrigger>
 											<SelectContent>
@@ -156,10 +172,16 @@ export function EmployeeFilter({
 							control={form.control}
 							name="position"
 							render={({ field }) => (
-								<FormItem className="w-full md:w-48">
+								<FormItem className="w-full">
+									<FormLabel className="text-sm font-medium mb-1 block">
+										役職
+									</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
-											<SelectTrigger className="h-10 rounded-lg">
+											<SelectTrigger
+												className="h-10 rounded-lg"
+												aria-label="役職でフィルター"
+											>
 												<SelectValue placeholder="すべての役職" />
 											</SelectTrigger>
 											<SelectContent>
@@ -179,10 +201,10 @@ export function EmployeeFilter({
 						/>
 
 						{/* ボタン */}
-						<div className="flex gap-4 w-full md:w-auto">
+						<div className="flex gap-4 col-span-1 md:col-span-3 justify-end mt-2">
 							<Button
 								type="submit"
-								className="flex-1 md:flex-none md:w-32 bg-black text-white h-10 rounded-lg"
+								className="bg-black text-white h-10 rounded-lg w-32"
 							>
 								検索
 							</Button>
@@ -190,7 +212,7 @@ export function EmployeeFilter({
 								onClick={handleClear}
 								type="button"
 								variant="outline"
-								className="flex-1 md:flex-none md:w-32 border-gray-300 h-10 rounded-lg"
+								className="border-gray-300 h-10 rounded-lg w-32"
 							>
 								クリア
 							</Button>
