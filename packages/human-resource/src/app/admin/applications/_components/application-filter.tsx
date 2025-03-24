@@ -32,15 +32,28 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 	const [date, setDate] = useState<Date | undefined>(
 		searchParams.date ? new Date(searchParams.date) : undefined,
 	);
+	const [type, setType] = useState<string>(searchParams.type || "all");
+	const [status, setStatus] = useState<string>(searchParams.status || "all");
+	const [query, setQuery] = useState<string>(searchParams.query || "");
 
 	// フィルターの変更を処理
-	const handleFilterChange = (key: string, value: string) => {
-		const params = new URLSearchParams(searchParams as Record<string, string>);
+	const handleFilterChange = () => {
+		const params = new URLSearchParams();
 
-		if (value === "all") {
-			params.delete(key);
-		} else {
-			params.set(key, value);
+		if (query) {
+			params.set("query", query);
+		}
+
+		if (type !== "all") {
+			params.set("type", type);
+		}
+
+		if (status !== "all") {
+			params.set("status", status);
+		}
+
+		if (date) {
+			params.set("date", format(date, "yyyy-MM-dd"));
 		}
 
 		// フィルター変更時はページをリセット
@@ -50,56 +63,28 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 		router.push(newPath);
 	};
 
-	// 日付フィルターの変更を処理
-	const handleDateChange = (newDate: Date | undefined) => {
-		setDate(newDate);
-
-		const params = new URLSearchParams(searchParams as Record<string, string>);
-
-		if (newDate) {
-			params.set("date", format(newDate, "yyyy-MM-dd"));
-		} else {
-			params.delete("date");
-		}
-
-		// 日付変更時はページをリセット
-		params.delete("page");
-
-		const newPath = `${pathname}?${params.toString()}`;
-		router.push(newPath);
-	};
-
-	// 検索クエリの変更を処理
-	const handleSearchChange = (query: string) => {
-		const params = new URLSearchParams(searchParams as Record<string, string>);
-
-		if (query) {
-			params.set("query", query);
-		} else {
-			params.delete("query");
-		}
-
-		// 検索時はページをリセット
-		params.delete("page");
-
-		const newPath = `${pathname}?${params.toString()}`;
-		router.push(newPath);
+	// フォームをクリア
+	const handleClear = () => {
+		setQuery("");
+		setType("all");
+		setStatus("all");
+		setDate(undefined);
+		router.push(pathname);
 	};
 
 	return (
 		<div className="w-full flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 mb-6">
-			<div className="flex-1">
-				<div className="relative">
+			<div className="flex-1 flex gap-2">
+				<div className="relative flex-1">
 					<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 					<Input
 						placeholder="社員名や内容、コメントで検索..."
-						defaultValue={searchParams.query || ""}
-						onChange={(e) => {
-							// デバウンス処理
-							const timeoutId = setTimeout(() => {
-								handleSearchChange(e.target.value);
-							}, 500);
-							return () => clearTimeout(timeoutId);
+						value={query}
+						onChange={(e) => setQuery(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								handleFilterChange();
+							}
 						}}
 						className="pl-10 w-full"
 					/>
@@ -107,10 +92,7 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 			</div>
 
 			<div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
-				<Select
-					defaultValue={searchParams.type || "all"}
-					onValueChange={(value) => handleFilterChange("type", value)}
-				>
+				<Select value={type} onValueChange={(value) => setType(value)}>
 					<SelectTrigger className="w-full sm:w-[180px]">
 						<SelectValue placeholder="申請タイプ" />
 					</SelectTrigger>
@@ -124,10 +106,7 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 					</SelectContent>
 				</Select>
 
-				<Select
-					defaultValue={searchParams.status || "all"}
-					onValueChange={(value) => handleFilterChange("status", value)}
-				>
+				<Select value={status} onValueChange={(value) => setStatus(value)}>
 					<SelectTrigger className="w-full sm:w-[180px]">
 						<SelectValue placeholder="ステータス" />
 					</SelectTrigger>
@@ -157,11 +136,20 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 						<CalendarComponent
 							mode="single"
 							selected={date}
-							onSelect={handleDateChange}
+							onSelect={setDate}
 							initialFocus
 						/>
 					</PopoverContent>
 				</Popover>
+
+				<div className="flex gap-2">
+					<Button onClick={handleFilterChange} type="button">
+						検索
+					</Button>
+					<Button onClick={handleClear} variant="outline" type="button">
+						クリア
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -43,6 +44,13 @@ export function EmployeeFilter({
 		onFilter(query, department, position);
 	};
 
+	const handleClear = () => {
+		setQuery("");
+		setDepartment("all");
+		setPosition("all");
+		onFilter("", "all", "all");
+	};
+
 	return (
 		<>
 			<div className="flex flex-col gap-4 md:flex-row md:items-center mb-6">
@@ -66,7 +74,6 @@ export function EmployeeFilter({
 							value={department}
 							onValueChange={(value) => {
 								setDepartment(value);
-								onFilter(query, value, position);
 							}}
 						>
 							<SelectTrigger>
@@ -86,7 +93,6 @@ export function EmployeeFilter({
 							value={position}
 							onValueChange={(value) => {
 								setPosition(value);
-								onFilter(query, department, value);
 							}}
 						>
 							<SelectTrigger>
@@ -100,6 +106,14 @@ export function EmployeeFilter({
 								))}
 							</SelectContent>
 						</Select>
+					</div>
+					<div className="flex gap-2">
+						<Button onClick={handleSearch} type="button">
+							検索
+						</Button>
+						<Button onClick={handleClear} variant="outline" type="button">
+							クリア
+						</Button>
 					</div>
 				</div>
 			</div>

@@ -66,6 +66,15 @@ export function GradeListContainer({
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
+	// クリアハンドラー
+	const handleClear = () => {
+		setSearchTerm("");
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.delete("query");
+		updatedParams.delete("page"); // ページもリセット
+		router.push(`${pathname}?${updatedParams.toString()}`);
+	};
+
 	// ソートハンドラー
 	const handleSort = (key: keyof Grade) => {
 		const newOrder = sort === key && order === "asc" ? "desc" : "asc";
@@ -94,7 +103,7 @@ export function GradeListContainer({
 
 	return (
 		<div className="space-y-4 w-full">
-			<div className="w-full">
+			<div className="w-full flex gap-2">
 				<Input
 					placeholder="グレードを検索..."
 					value={searchTerm}
@@ -112,9 +121,16 @@ export function GradeListContainer({
 							handleSearch();
 						}
 					}}
-					onBlur={handleSearch}
 					className="max-w-md"
 				/>
+				<div className="flex gap-2">
+					<Button onClick={handleSearch} type="button">
+						検索
+					</Button>
+					<Button onClick={handleClear} variant="outline" type="button">
+						クリア
+					</Button>
+				</div>
 			</div>
 
 			<div className="border rounded-md w-full overflow-auto">

@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, XIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface PositionFilterProps {
@@ -38,6 +38,12 @@ export function PositionFilter({
 		onFilter(query, level);
 	};
 
+	const handleClear = () => {
+		setQuery("");
+		setLevel("all");
+		onFilter("", "all");
+	};
+
 	return (
 		<div className="flex flex-col gap-4 md:flex-row md:items-center mb-6">
 			<div className="relative flex-1">
@@ -48,9 +54,6 @@ export function PositionFilter({
 					value={query}
 					onChange={(e) => {
 						setQuery(e.target.value);
-						if (e.target.value === "") {
-							onFilter("", level);
-						}
 					}}
 					onKeyDown={(e) => {
 						if (e.key === "Enter") {
@@ -63,7 +66,6 @@ export function PositionFilter({
 				value={level}
 				onValueChange={(value) => {
 					setLevel(value);
-					onFilter(query, value);
 				}}
 			>
 				<SelectTrigger className="w-[180px]">
@@ -78,7 +80,14 @@ export function PositionFilter({
 					))}
 				</SelectContent>
 			</Select>
-			<Button onClick={handleSearch}>フィルター</Button>
+			<div className="flex gap-2">
+				<Button onClick={handleSearch} type="button">
+					フィルター
+				</Button>
+				<Button onClick={handleClear} variant="outline" type="button">
+					クリア
+				</Button>
+			</div>
 		</div>
 	);
 }

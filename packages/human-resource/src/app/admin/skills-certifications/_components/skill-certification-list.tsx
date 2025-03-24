@@ -35,7 +35,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import {
 	type SkillCertification,
 	type SkillCertificationType,
@@ -85,6 +85,7 @@ export function SkillCertificationList({
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
+	const searchInputRef = useRef<HTMLInputElement>(null);
 
 	// 検索パラメータを更新する関数
 	const createQueryString = useCallback(
@@ -153,7 +154,32 @@ export function SkillCertificationList({
 								handleSearch(e.currentTarget.value);
 							}
 						}}
+						ref={searchInputRef}
 					/>
+				</div>
+				<div className="flex gap-2">
+					<Button
+						onClick={() => {
+							if (searchInputRef.current) {
+								handleSearch(searchInputRef.current.value);
+							}
+						}}
+						type="button"
+					>
+						検索
+					</Button>
+					<Button
+						onClick={() => {
+							if (searchInputRef.current) {
+								searchInputRef.current.value = "";
+								handleSearch("");
+							}
+						}}
+						variant="outline"
+						type="button"
+					>
+						クリア
+					</Button>
 				</div>
 				<Select defaultValue={type} onValueChange={handleTypeChange}>
 					<SelectTrigger className="w-[180px]">
