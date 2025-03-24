@@ -1,15 +1,12 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { EmployeeFilter } from "./employee-filter";
 import { EmployeeTable } from "./employee-table";
 import { PaginationNav } from "@/components/common/pagination-nav";
 import type { Employee } from "../_actions/employee-actions";
 
 interface EmployeeListContainerProps {
 	employees: Employee[];
-	departmentOptions: { value: string; label: string }[];
-	positionOptions: { value: string; label: string }[];
 	searchParams: {
 		query?: string;
 		department?: string;
@@ -28,40 +25,11 @@ interface EmployeeListContainerProps {
 
 export function EmployeeListContainer({
 	employees,
-	departmentOptions,
-	positionOptions,
 	searchParams,
 	pagination,
 }: EmployeeListContainerProps) {
 	const router = useRouter();
 	const pathname = usePathname();
-
-	const handleFilter = (
-		query: string,
-		department: string,
-		position: string,
-	) => {
-		// 現在のURLパラメータを取得
-		const params = new URLSearchParams();
-
-		// 有効な値のみパラメータに追加
-		if (query) params.set("query", query);
-		if (department && department !== "all")
-			params.set("department", department);
-		if (position && position !== "all") params.set("position", position);
-
-		// ソート条件があれば維持
-		if (searchParams.sortBy) params.set("sortBy", searchParams.sortBy);
-		if (searchParams.sortOrder) params.set("sortOrder", searchParams.sortOrder);
-
-		// ページは1に戻す（フィルタリング時はページをリセット）
-		params.set("page", "1");
-
-		// URLをアップデート
-		const queryString = params.toString();
-		const url = queryString ? `${pathname}?${queryString}` : pathname;
-		router.push(url);
-	};
 
 	const handleSort = (column: string) => {
 		// 現在のURLパラメータを取得
@@ -118,14 +86,6 @@ export function EmployeeListContainer({
 
 	return (
 		<div className="space-y-6 w-full">
-			<EmployeeFilter
-				departmentOptions={departmentOptions}
-				positionOptions={positionOptions}
-				searchQuery={searchParams.query || ""}
-				currentDepartment={searchParams.department || "all"}
-				currentPosition={searchParams.position || "all"}
-				onFilter={handleFilter}
-			/>
 			<div className="w-full overflow-auto">
 				<EmployeeTable
 					employees={employees}

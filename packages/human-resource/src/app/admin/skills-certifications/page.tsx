@@ -1,68 +1,66 @@
+import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { getSkillCertifications } from "./_actions/skill-certification-actions";
 import { SkillCertificationList } from "./_components/skill-certification-list";
-import {
-	getSkillCertifications,
-	type SkillCertificationSearchParams,
-} from "./_actions/skill-certification-actions";
-import type { Metadata } from "next";
+import { SkillSearch } from "./_components/skill-search";
+import type { SkillCertificationType } from "./_data/skills-certifications-data";
 
 export const metadata: Metadata = {
-	title: "スキル・資格一覧 | 人材管理システム",
-	description: "社内のスキル・資格情報の一覧と管理を行います。",
+	title: "スキル・資格管理 | 人材管理システム",
+	description: "社員のスキルと資格を管理します",
 };
 
-// ローディング状態のスケルトン
-function SkillCertificationListSkeleton() {
-	return (
-		<div className="space-y-4 w-full">
-			<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			<div className="h-96 w-full bg-gray-200 animate-pulse rounded-md" />
-			{/* ページネーションスケルトン */}
-			<div className="flex justify-center mt-4 w-full">
-				<div className="h-10 w-40 bg-gray-200 animate-pulse rounded-md" />
-			</div>
-		</div>
-	);
+interface SkillsCertificationsPageProps {
+	searchParams: {
+		query?: string;
+		type?: SkillCertificationType | "all";
+		sort?: string;
+		order?: "asc" | "desc";
+		page?: string;
+	};
 }
 
-export default async function SkillCertificationsPage({
+export default async function SkillsCertificationsPage({
 	searchParams,
-}: {
-	searchParams: SkillCertificationSearchParams;
-}) {
-	// ページ番号の取得（デフォルトは1ページ目）
-	const currentPage = searchParams.page || "1";
-
-	// サーバーアクションを使用してデータを取得
-	const skillCertificationsData = await getSkillCertifications({
-		...searchParams,
-		page: currentPage,
-	});
+}: SkillsCertificationsPageProps) {
+	// 検索条件を基にデータを取得
+	const { skillCertifications, pagination } =
+		await getSkillCertifications(searchParams);
 
 	return (
-		<div className="w-full flex-1">
-			<div className="flex justify-between items-center mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">スキル・資格一覧</h2>
-				<Button asChild>
-					<Link href="/admin/skills-certifications/new">
-						<PlusIcon className="mr-2 h-4 w-4" />
-						新規登録
-					</Link>
-				</Button>
+		<div className="space-y-4">
+			<div className="flex justify-between items-center">
+				<h1 className="text-2xl font-bold tracking-tight">スキル・資格管理</h1>
+				<div className="flex space-x-2">
+					<Button asChild>
+						<Link href="/admin/skills-certifications/new?type=skill">
+							スキル追加
+						</Link>
+					</Button>
+					<Button asChild variant="outline">
+						<Link href="/admin/skills-certifications/new?type=certification">
+							資格追加
+						</Link>
+					</Button>
+				</div>
 			</div>
+			<p className="text-gray-500">
+				社員が持つスキルと資格の一覧を管理します。
+			</p>
 
-			<div className="w-full">
-				<Suspense fallback={<SkillCertificationListSkeleton />}>
-					<SkillCertificationList
-						skillCertifications={skillCertificationsData.items}
-						pagination={skillCertificationsData.pagination}
-						searchParams={searchParams}
-					/>
-				</Suspense>
-			</div>
+			<SkillSearch
+				initialQuery={searchParams.query || ""}
+				initialType={
+					(searchParams.type as SkillCertificationType | "all") || "all"
+				}
+			/>
+
+			<SkillCertificationList
+				skillCertifications={skillCertifications}
+				searchParams={searchParams}
+				pagination={pagination}
+			/>
 		</div>
 	);
 }

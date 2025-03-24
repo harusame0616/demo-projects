@@ -2,15 +2,6 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import {
 	Table,
 	TableBody,
@@ -21,20 +12,14 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import {
-	SearchIcon,
-	ArrowDownIcon,
-	ArrowUpIcon,
-	MoreHorizontalIcon,
-} from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
-import {
+import { useCallback } from "react";
+import type {
 	SkillCertification,
 	SkillCertificationType,
 } from "../_data/skills-certifications-data";
-import { Pagination } from "@/components/ui/pagination";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -70,16 +55,10 @@ export function SkillCertificationList({
 	pagination,
 	searchParams = {},
 }: SkillCertificationListProps) {
-	const {
-		query = "",
-		type = "all",
-		sort = "name",
-		order = "asc",
-	} = searchParams;
+	const { sort = "name", order = "asc" } = searchParams;
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
-	const searchInputRef = useRef<HTMLInputElement>(null);
 
 	// 検索パラメータを更新する関数
 	const createQueryString = useCallback(
@@ -90,23 +69,6 @@ export function SkillCertificationList({
 		},
 		[params],
 	);
-
-	// フィルターとソートを適用する
-	const handleSearch = (searchQuery: string) => {
-		const updatedParams = new URLSearchParams(params.toString());
-		updatedParams.set("query", searchQuery);
-		// 検索時はページをリセット
-		updatedParams.delete("page");
-		router.push(`${pathname}?${updatedParams.toString()}`);
-	};
-
-	const handleTypeChange = (value: string) => {
-		const updatedParams = new URLSearchParams(params.toString());
-		updatedParams.set("type", value);
-		// フィルター変更時はページをリセット
-		updatedParams.delete("page");
-		router.push(`${pathname}?${updatedParams.toString()}`);
-	};
 
 	const handleSort = (column: keyof SkillCertification) => {
 		const newOrder = sort === column && order === "asc" ? "desc" : "asc";
@@ -131,76 +93,6 @@ export function SkillCertificationList({
 
 	return (
 		<div className="space-y-4 w-full">
-			<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
-				<div className="space-y-6">
-					{/* 検索フィールド行 */}
-					<div className="flex flex-col md:flex-row gap-4 items-center">
-						{/* 検索入力フィールド */}
-						<div className="relative flex-1 w-full">
-							<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-							<Input
-								placeholder="名称または説明で検索..."
-								className="pl-10 w-full h-10 rounded-lg"
-								defaultValue={query}
-								onChange={(e) => {
-									if (e.target.value === "") {
-										handleSearch("");
-									}
-								}}
-								onKeyDown={(e) => {
-									if (e.key === "Enter") {
-										handleSearch(e.currentTarget.value);
-									}
-								}}
-								ref={searchInputRef}
-							/>
-						</div>
-
-						{/* 種類選択 */}
-						<div className="w-full md:w-48">
-							<Select defaultValue={type} onValueChange={handleTypeChange}>
-								<SelectTrigger className="h-10 rounded-lg">
-									<SelectValue placeholder="種類でフィルター" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="all">すべて</SelectItem>
-									<SelectItem value="skill">スキル</SelectItem>
-									<SelectItem value="certification">資格</SelectItem>
-								</SelectContent>
-							</Select>
-						</div>
-
-						{/* ボタン */}
-						<div className="flex gap-4 w-full md:w-auto">
-							<Button
-								onClick={() => {
-									if (searchInputRef.current) {
-										handleSearch(searchInputRef.current.value);
-									}
-								}}
-								type="button"
-								className="flex-1 md:flex-none md:w-32 bg-black text-white h-10 rounded-lg"
-							>
-								検索
-							</Button>
-							<Button
-								onClick={() => {
-									if (searchInputRef.current) {
-										searchInputRef.current.value = "";
-										handleSearch("");
-									}
-								}}
-								variant="outline"
-								type="button"
-								className="flex-1 md:flex-none md:w-32 border-gray-300 h-10 rounded-lg"
-							>
-								クリア
-							</Button>
-						</div>
-					</div>
-				</div>
-			</div>
-
 			<div className="w-full overflow-auto rounded-md border">
 				<Table>
 					<TableHeader>

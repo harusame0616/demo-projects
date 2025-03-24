@@ -6,60 +6,32 @@ import { SearchIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-interface DepartmentFilterProps {
-	searchQuery: string;
-	onSearch?: (query: string) => void; // オプショナルに変更
+interface GradeSearchProps {
+	initialQuery?: string;
 }
 
-export function DepartmentFilter({
-	searchQuery,
-	onSearch,
-}: DepartmentFilterProps) {
+export function GradeSearch({ initialQuery = "" }: GradeSearchProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
-	const [searchTerm, setSearchTerm] = useState(searchQuery);
+	const [searchTerm, setSearchTerm] = useState(initialQuery);
 
-	// フィルター変更時にURLを更新
+	// 検索ハンドラー
 	const handleSearch = () => {
-		if (onSearch) {
-			onSearch(searchTerm);
-			return;
-		}
-
-		// onSearchが提供されていない場合は内部でナビゲーション
 		const updatedParams = new URLSearchParams(params.toString());
-		if (searchTerm) {
-			updatedParams.set("query", searchTerm);
-		} else {
-			updatedParams.delete("query");
-		}
+		updatedParams.set("query", searchTerm);
 		// 検索時はページをリセット
 		updatedParams.delete("page");
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
-	// フォームをクリア
+	// クリアハンドラー
 	const handleClear = () => {
 		setSearchTerm("");
-
-		if (onSearch) {
-			onSearch("");
-			return;
-		}
-
-		// onSearchが提供されていない場合は内部でナビゲーション
 		const updatedParams = new URLSearchParams(params.toString());
 		updatedParams.delete("query");
 		updatedParams.delete("page"); // ページもリセット
 		router.push(`${pathname}?${updatedParams.toString()}`);
-	};
-
-	// Enterキーでの検索
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			handleSearch();
-		}
 	};
 
 	return (
@@ -67,16 +39,23 @@ export function DepartmentFilter({
 			<div className="relative flex-1 min-w-[200px]">
 				<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 				<Input
-					placeholder="部署名で検索..."
-					className="pl-10 h-10 rounded-lg border-gray-200"
+					placeholder="グレードを検索..."
 					value={searchTerm}
 					onChange={(e) => {
 						setSearchTerm(e.target.value);
-						if (e.target.value === "" && onSearch) {
-							onSearch("");
+						if (e.target.value === "") {
+							const updatedParams = new URLSearchParams(params.toString());
+							updatedParams.delete("query");
+							updatedParams.delete("page"); // ページもリセット
+							router.push(`${pathname}?${updatedParams.toString()}`);
 						}
 					}}
-					onKeyDown={handleKeyDown}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							handleSearch();
+						}
+					}}
+					className="pl-10 h-10 rounded-lg border-gray-200"
 				/>
 			</div>
 

@@ -3,6 +3,7 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { EmployeeListContainer } from "./_components/employee-list-container";
+import { EmployeeFilter } from "./_components/employee-filter";
 import {
 	getEmployees,
 	getDepartments,
@@ -81,12 +82,18 @@ export default async function EmployeesPage({
 				</Button>
 			</div>
 
+			<EmployeeFilter
+				departmentOptions={departmentOptions}
+				positionOptions={positionOptions}
+				searchQuery={searchParams.query}
+				currentDepartment={searchParams.department}
+				currentPosition={searchParams.position}
+			/>
+
 			<div className="w-full">
 				<Suspense fallback={<EmployeeListSkeleton />}>
 					<EmployeeListContainer
 						employees={employeesData.items}
-						departmentOptions={departmentOptions}
-						positionOptions={positionOptions}
 						searchParams={searchParams}
 						pagination={employeesData.pagination}
 					/>

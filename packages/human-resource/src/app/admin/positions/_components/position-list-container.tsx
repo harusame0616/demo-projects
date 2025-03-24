@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { PositionFilter } from "./position-filter";
 import { PositionTable } from "./position-table";
 import type { Position } from "../_data/positions-data";
 import type { PositionSearchParams } from "../_actions/position-actions";
@@ -29,27 +28,6 @@ export function PositionListContainer({
 	const pathname = usePathname();
 	const params = useSearchParams();
 
-	// 検索とフィルター処理
-	const handleFilter = (query: string, level: string) => {
-		const updatedParams = new URLSearchParams(params.toString());
-		if (query) {
-			updatedParams.set("query", query);
-		} else {
-			updatedParams.delete("query");
-		}
-
-		if (level && level !== "all") {
-			updatedParams.set("level", level);
-		} else {
-			updatedParams.delete("level");
-		}
-
-		// ページをリセット
-		updatedParams.delete("page");
-
-		router.push(`${pathname}?${updatedParams.toString()}`);
-	};
-
 	// ソート処理
 	const handleSort = (column: keyof Position) => {
 		const currentSort = searchParams.sort || "level";
@@ -71,15 +49,7 @@ export function PositionListContainer({
 	};
 
 	return (
-		<>
-			<div className="w-full">
-				<PositionFilter
-					searchQuery={searchParams.query || ""}
-					currentLevel={searchParams.level || "all"}
-					levelOptions={levelOptions}
-					onFilter={handleFilter}
-				/>
-			</div>
+		<div className="space-y-6 w-full">
 			<div className="w-full overflow-auto">
 				<PositionTable
 					positions={positions}
@@ -96,6 +66,6 @@ export function PositionListContainer({
 					/>
 				</div>
 			)}
-		</>
+		</div>
 	);
 }

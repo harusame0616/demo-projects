@@ -10,72 +10,66 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { SearchIcon } from "lucide-react";
-import { useState, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRef } from "react";
+import type { SkillCertificationType } from "../_data/skills-certifications-data";
 
-interface PositionFilterProps {
-	searchQuery: string;
-	currentLevel: string;
-	levelOptions: string[];
-	onFilter?: (query: string, level: string) => void; // オプショナルに変更
+interface SkillSearchProps {
+	initialQuery?: string;
+	initialType?: SkillCertificationType | "all";
 }
 
-export function PositionFilter({
-	searchQuery,
-	currentLevel,
-	levelOptions,
-	onFilter,
-}: PositionFilterProps) {
+export function SkillSearch({
+	initialQuery = "",
+	initialType = "all",
+}: SkillSearchProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
-	const [query, setQuery] = useState(searchQuery);
-	const [level, setLevel] = useState(currentLevel);
+	const searchInputRef = useRef<HTMLInputElement>(null);
 
-	// 外部からのprops変更に対応
-	useEffect(() => {
-		setQuery(searchQuery);
-		setLevel(currentLevel);
-	}, [searchQuery, currentLevel]);
-
+	// 検索処理
 	const handleSearch = () => {
-		if (onFilter) {
-			onFilter(query, level);
-			return;
-		}
+		if (!searchInputRef.current) return;
 
-		// onFilterが提供されていない場合は内部でナビゲーション
+		const searchQuery = searchInputRef.current.value;
 		const updatedParams = new URLSearchParams(params.toString());
-		if (query) {
-			updatedParams.set("query", query);
+
+		if (searchQuery) {
+			updatedParams.set("query", searchQuery);
 		} else {
 			updatedParams.delete("query");
 		}
 
-		if (level && level !== "all") {
-			updatedParams.set("level", level);
-		} else {
-			updatedParams.delete("level");
-		}
-
-		// ページをリセット
+		// 検索時はページをリセット
 		updatedParams.delete("page");
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
-	const handleClear = () => {
-		setQuery("");
-		setLevel("all");
+	// タイプ変更処理
+	const handleTypeChange = (value: string) => {
+		const updatedParams = new URLSearchParams(params.toString());
 
-		if (onFilter) {
-			onFilter("", "all");
-			return;
+		if (value === "all") {
+			updatedParams.delete("type");
+		} else {
+			updatedParams.set("type", value);
 		}
 
-		// onFilterが提供されていない場合は内部でナビゲーション
+		// フィルター変更時はページをリセット
+		updatedParams.delete("page");
+		router.push(`${pathname}?${updatedParams.toString()}`);
+	};
+
+	// クリア処理
+	const handleClear = () => {
+		if (searchInputRef.current) {
+			searchInputRef.current.value = "";
+		}
+
 		const updatedParams = new URLSearchParams(params.toString());
 		updatedParams.delete("query");
-		updatedParams.delete("level");
+		updatedParams.delete("type");
 		updatedParams.delete("page");
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
@@ -85,37 +79,35 @@ export function PositionFilter({
 			<div className="relative flex-1 min-w-[200px]">
 				<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 				<Input
-					placeholder="役職名や説明で検索..."
+					placeholder="名称または説明で検索..."
 					className="pl-10 h-10 rounded-lg border-gray-200"
-					value={query}
+					defaultValue={initialQuery}
 					onChange={(e) => {
-						setQuery(e.target.value);
+						if (e.target.value === "") {
+							const updatedParams = new URLSearchParams(params.toString());
+							updatedParams.delete("query");
+							updatedParams.delete("page");
+							router.push(`${pathname}?${updatedParams.toString()}`);
+						}
 					}}
 					onKeyDown={(e) => {
 						if (e.key === "Enter") {
 							handleSearch();
 						}
 					}}
+					ref={searchInputRef}
 				/>
 			</div>
 
 			<div className="w-auto">
-				<Select
-					value={level}
-					onValueChange={(value) => {
-						setLevel(value);
-					}}
-				>
+				<Select defaultValue={initialType} onValueChange={handleTypeChange}>
 					<SelectTrigger className="h-10 rounded-lg w-[180px] border-gray-200">
-						<SelectValue placeholder="レベルでフィルター" />
+						<SelectValue placeholder="種類でフィルター" />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="all">すべて</SelectItem>
-						{levelOptions.map((level) => (
-							<SelectItem key={level} value={level}>
-								レベル {level}
-							</SelectItem>
-						))}
+						<SelectItem value="skill">スキル</SelectItem>
+						<SelectItem value="certification">資格</SelectItem>
 					</SelectContent>
 				</Select>
 			</div>

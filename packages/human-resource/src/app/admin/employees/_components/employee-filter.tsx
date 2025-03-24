@@ -10,45 +10,63 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { SearchIcon } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface EmployeeFilterProps {
 	departmentOptions: { value: string; label: string }[];
 	positionOptions: { value: string; label: string }[];
-	searchQuery: string;
-	currentDepartment: string;
-	currentPosition: string;
-	onFilter: (query: string, department: string, position: string) => void;
+	searchQuery?: string;
+	currentDepartment?: string;
+	currentPosition?: string;
 }
 
 export function EmployeeFilter({
 	departmentOptions,
 	positionOptions,
-	searchQuery,
-	currentDepartment,
-	currentPosition,
-	onFilter,
+	searchQuery = "",
+	currentDepartment = "all",
+	currentPosition = "all",
 }: EmployeeFilterProps) {
+	const router = useRouter();
+	const pathname = usePathname();
 	const [query, setQuery] = useState(searchQuery);
 	const [department, setDepartment] = useState(currentDepartment);
 	const [position, setPosition] = useState(currentPosition);
 
 	// プロップが変更されたら内部の状態を更新
 	useEffect(() => {
-		setQuery(searchQuery);
-		setDepartment(currentDepartment);
-		setPosition(currentPosition);
+		setQuery(searchQuery || "");
+		setDepartment(currentDepartment || "all");
+		setPosition(currentPosition || "all");
 	}, [searchQuery, currentDepartment, currentPosition]);
 
 	const handleSearch = () => {
-		onFilter(query, department, position);
+		// 現在のURLパラメータを取得
+		const params = new URLSearchParams();
+
+		// 有効な値のみパラメータに追加
+		if (query) params.set("query", query);
+		if (department && department !== "all")
+			params.set("department", department);
+		if (position && position !== "all") params.set("position", position);
+
+		// ページは1に戻す（フィルタリング時はページをリセット）
+		params.set("page", "1");
+
+		// URLをアップデート
+		const queryString = params.toString();
+		const url = queryString ? `${pathname}?${queryString}` : pathname;
+		router.push(url);
 	};
 
 	const handleClear = () => {
 		setQuery("");
 		setDepartment("all");
 		setPosition("all");
-		onFilter("", "all", "all");
+
+		// URLをリセット（すべてのフィルタパラメータを削除）
+		router.push(pathname);
 	};
 
 	return (

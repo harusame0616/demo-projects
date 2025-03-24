@@ -4,12 +4,13 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { GradeListContainer } from "./_components/grade-list-container";
 import { getGrades, type GradeSearchParams } from "./_actions/grade-actions";
+import { GradeSearch } from "./_components/grade-search";
 
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "グレード一覧 | 人材管理システム",
-	description: "人材管理システムのグレード一覧",
+	title: "グレード管理 | 人材管理システム",
+	description: "社員のグレードを管理します",
 };
 
 // ローディング状態を表示するスケルトンコンポーネント
@@ -30,41 +31,38 @@ function GradeListSkeleton() {
 	);
 }
 
-export default async function GradesPage({
-	searchParams,
-}: {
-	searchParams: GradeSearchParams;
-}) {
-	// ページ番号の取得（デフォルトは1ページ目）
-	const currentPage = searchParams.page || "1";
+interface GradePageProps {
+	searchParams: {
+		query?: string;
+		sort?: string;
+		order?: "asc" | "desc";
+		page?: string;
+	};
+}
 
-	// サーバーアクションでデータを取得
-	const gradesData = await getGrades({
-		...searchParams,
-		page: currentPage,
-	});
+export default async function GradePage({ searchParams }: GradePageProps) {
+	// 検索条件を基にデータを取得
+	const { items, pagination } = await getGrades(searchParams);
 
 	return (
-		<div className="w-full flex-1">
-			<div className="flex items-center justify-between mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">グレード一覧</h2>
+		<div className="space-y-4">
+			<div className="flex justify-between items-center">
+				<h1 className="text-2xl font-bold tracking-tight">グレード管理</h1>
 				<Button asChild>
-					<Link href="/admin/grades/new">
-						<PlusIcon className="mr-2 h-4 w-4" />
-						グレードを追加
-					</Link>
+					<Link href="/admin/grades/new">新規グレード作成</Link>
 				</Button>
 			</div>
+			<p className="text-gray-500">
+				社員のスキルレベルや経験に基づくグレードを管理します。
+			</p>
 
-			<div className="w-full">
-				<Suspense fallback={<GradeListSkeleton />}>
-					<GradeListContainer
-						grades={gradesData.items}
-						pagination={gradesData.pagination}
-						searchParams={searchParams}
-					/>
-				</Suspense>
-			</div>
+			<GradeSearch initialQuery={searchParams.query || ""} />
+
+			<GradeListContainer
+				grades={items}
+				searchParams={searchParams}
+				pagination={pagination}
+			/>
 		</div>
 	);
 }
