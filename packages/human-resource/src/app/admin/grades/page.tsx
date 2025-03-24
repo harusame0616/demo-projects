@@ -4,7 +4,7 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { GradeListContainer } from "./_components/grade-list-container";
-import { gradeData } from "./_data/grades-data";
+import { getGrades, type GradeSearchParams } from "./_actions/grade-actions";
 
 import type { Metadata } from "next";
 
@@ -27,13 +27,20 @@ function GradeListSkeleton() {
 	);
 }
 
-export default function GradesPage() {
+export default async function GradesPage({
+	searchParams,
+}: {
+	searchParams: GradeSearchParams;
+}) {
+	// サーバーアクションでデータを取得
+	const filteredData = await getGrades(searchParams);
+
 	return (
 		<>
 			<div className="flex items-center justify-between mb-6">
 				<h2 className="text-3xl font-bold tracking-tight">グレード一覧</h2>
 				<Button asChild>
-					<Link href="/grades/new">
+					<Link href="/admin/grades/new">
 						<PlusIcon className="mr-2 h-4 w-4" />
 						グレードを追加
 					</Link>
@@ -46,7 +53,10 @@ export default function GradesPage() {
 				</CardHeader>
 				<CardContent>
 					<Suspense fallback={<GradeListSkeleton />}>
-						<GradeListContainer grades={gradeData} />
+						<GradeListContainer
+							grades={filteredData}
+							searchParams={searchParams}
+						/>
 					</Suspense>
 				</CardContent>
 			</Card>

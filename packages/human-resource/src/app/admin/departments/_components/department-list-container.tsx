@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DepartmentFilter } from "./department-filter";
 import { DepartmentTable } from "./department-table";
+import type { DepartmentSearchParams } from "../_actions/department-actions";
 
 type Department = {
 	id: string;
@@ -15,21 +16,31 @@ type Department = {
 
 interface DepartmentListContainerProps {
 	departments: Department[];
+	searchParams: DepartmentSearchParams;
 }
 
 export function DepartmentListContainer({
 	departments,
+	searchParams,
 }: DepartmentListContainerProps) {
-	const [filteredDepartments, setFilteredDepartments] =
-		useState<Department[]>(departments);
+	const router = useRouter();
+	const pathname = usePathname();
+	const params = useSearchParams();
+
+	// 検索パラメータを更新する関数
+	const handleSearch = (query: string) => {
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("query", query);
+		router.push(`${pathname}?${updatedParams.toString()}`);
+	};
 
 	return (
 		<>
 			<DepartmentFilter
-				departments={departments}
-				onFilterChange={setFilteredDepartments}
+				searchQuery={searchParams.query || ""}
+				onSearch={handleSearch}
 			/>
-			<DepartmentTable departments={filteredDepartments} />
+			<DepartmentTable departments={departments} searchParams={searchParams} />
 		</>
 	);
 }

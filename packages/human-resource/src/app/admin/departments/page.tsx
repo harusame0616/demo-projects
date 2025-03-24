@@ -4,7 +4,10 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { DepartmentListContainer } from "./_components/department-list-container";
-import { departmentData } from "./_data/departments-data";
+import {
+	getDepartments,
+	type DepartmentSearchParams,
+} from "./_actions/department-actions";
 
 import type { Metadata } from "next";
 
@@ -27,13 +30,20 @@ function DepartmentListSkeleton() {
 	);
 }
 
-export default function DepartmentsPage() {
+export default async function DepartmentsPage({
+	searchParams,
+}: {
+	searchParams: DepartmentSearchParams;
+}) {
+	// サーバーアクションでデータを取得
+	const filteredData = await getDepartments(searchParams);
+
 	return (
 		<>
 			<div className="flex items-center justify-between mb-6">
 				<h2 className="text-3xl font-bold tracking-tight">部署一覧</h2>
 				<Button asChild>
-					<Link href="/departments/new">
+					<Link href="/admin/departments/new">
 						<PlusIcon className="mr-2 h-4 w-4" />
 						部署を追加
 					</Link>
@@ -46,7 +56,10 @@ export default function DepartmentsPage() {
 				</CardHeader>
 				<CardContent>
 					<Suspense fallback={<DepartmentListSkeleton />}>
-						<DepartmentListContainer departments={departmentData} />
+						<DepartmentListContainer
+							departments={filteredData}
+							searchParams={searchParams}
+						/>
 					</Suspense>
 				</CardContent>
 			</Card>

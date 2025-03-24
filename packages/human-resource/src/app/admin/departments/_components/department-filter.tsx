@@ -4,39 +4,28 @@ import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
-type Department = {
-	id: string;
-	name: string;
-	parentId: string | null;
-	level: number;
-	memberCount: number;
-	createdAt: string;
-};
-
 interface DepartmentFilterProps {
-	departments: Department[];
-	onFilterChange: (filteredDepartments: Department[]) => void;
+	searchQuery: string;
+	onSearch: (query: string) => void;
 }
 
 export function DepartmentFilter({
-	departments,
-	onFilterChange,
+	searchQuery,
+	onSearch,
 }: DepartmentFilterProps) {
-	const [searchTerm, setSearchTerm] = useState("");
+	const [searchTerm, setSearchTerm] = useState(searchQuery);
 
-	useEffect(() => {
-		let filtered = [...departments];
+	// フィルター変更時にURLを更新
+	const handleSearch = () => {
+		onSearch(searchTerm);
+	};
 
-		// キーワード検索
-		if (searchTerm) {
-			const term = searchTerm.toLowerCase();
-			filtered = filtered.filter((department) =>
-				department.name.toLowerCase().includes(term),
-			);
+	// Enterキーでの検索
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			handleSearch();
 		}
-
-		onFilterChange(filtered);
-	}, [searchTerm, departments, onFilterChange]);
+	};
 
 	return (
 		<div className="flex flex-col gap-4 md:flex-row md:items-center mb-6">
@@ -46,7 +35,14 @@ export function DepartmentFilter({
 					placeholder="部署名で検索..."
 					className="pl-8"
 					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
+					onChange={(e) => {
+						setSearchTerm(e.target.value);
+						if (e.target.value === "") {
+							onSearch("");
+						}
+					}}
+					onKeyDown={handleKeyDown}
+					onBlur={handleSearch}
 				/>
 			</div>
 		</div>

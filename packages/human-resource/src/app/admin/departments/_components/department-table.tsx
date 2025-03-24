@@ -15,8 +15,16 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { BuildingIcon, MoreHorizontalIcon, UsersIcon } from "lucide-react";
+import {
+	ArrowDownIcon,
+	ArrowUpIcon,
+	BuildingIcon,
+	MoreHorizontalIcon,
+	UsersIcon,
+} from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { DepartmentSearchParams } from "../_actions/department-actions";
 
 type Department = {
 	id: string;
@@ -29,9 +37,18 @@ type Department = {
 
 interface DepartmentTableProps {
 	departments: Department[];
+	searchParams: DepartmentSearchParams;
 }
 
-export function DepartmentTable({ departments }: DepartmentTableProps) {
+export function DepartmentTable({
+	departments,
+	searchParams,
+}: DepartmentTableProps) {
+	const router = useRouter();
+	const pathname = usePathname();
+	const params = useSearchParams();
+	const { sort = "name", order = "asc" } = searchParams;
+
 	// 親部署名を取得する関数
 	const getParentName = (parentId: string | null): string => {
 		if (!parentId) return "-";
@@ -49,15 +66,55 @@ export function DepartmentTable({ departments }: DepartmentTableProps) {
 		}).format(date);
 	};
 
+	// ソート処理
+	const handleSort = (column: keyof Department) => {
+		const newOrder = sort === column && order === "asc" ? "desc" : "asc";
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("sort", column);
+		updatedParams.set("order", newOrder);
+		router.push(`${pathname}?${updatedParams.toString()}`);
+	};
+
+	// ソートアイコンの表示
+	const getSortIcon = (column: string) => {
+		if (sort !== column) return null;
+		return order === "asc" ? (
+			<ArrowUpIcon className="h-4 w-4 ml-1" />
+		) : (
+			<ArrowDownIcon className="h-4 w-4 ml-1" />
+		);
+	};
+
 	return (
 		<div className="rounded-md border">
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead>部署名</TableHead>
+						<TableHead
+							className="cursor-pointer"
+							onClick={() => handleSort("name")}
+						>
+							<div className="flex items-center">
+								部署名 {getSortIcon("name")}
+							</div>
+						</TableHead>
 						<TableHead>上位部署</TableHead>
-						<TableHead>人数</TableHead>
-						<TableHead>作成日</TableHead>
+						<TableHead
+							className="cursor-pointer"
+							onClick={() => handleSort("memberCount")}
+						>
+							<div className="flex items-center">
+								人数 {getSortIcon("memberCount")}
+							</div>
+						</TableHead>
+						<TableHead
+							className="cursor-pointer"
+							onClick={() => handleSort("createdAt")}
+						>
+							<div className="flex items-center">
+								作成日 {getSortIcon("createdAt")}
+							</div>
+						</TableHead>
 						<TableHead className="w-[80px]" />
 					</TableRow>
 				</TableHeader>
@@ -73,7 +130,7 @@ export function DepartmentTable({ departments }: DepartmentTableProps) {
 							<TableRow key={department.id}>
 								<TableCell className="font-medium">
 									<Link
-										href={`/departments/${department.id}`}
+										href={`/admin/departments/${department.id}`}
 										className="hover:underline flex items-center"
 									>
 										<BuildingIcon className="h-4 w-4 mr-2" />
@@ -98,10 +155,12 @@ export function DepartmentTable({ departments }: DepartmentTableProps) {
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
 											<DropdownMenuItem asChild>
-												<Link href={`/departments/${department.id}`}>詳細</Link>
+												<Link href={`/admin/departments/${department.id}`}>
+													詳細
+												</Link>
 											</DropdownMenuItem>
 											<DropdownMenuItem asChild>
-												<Link href={`/departments/${department.id}/edit`}>
+												<Link href={`/admin/departments/${department.id}/edit`}>
 													編集
 												</Link>
 											</DropdownMenuItem>

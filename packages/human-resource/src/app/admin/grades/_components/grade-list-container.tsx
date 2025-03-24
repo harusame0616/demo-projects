@@ -12,8 +12,10 @@ import {
 } from "@/components/ui/table";
 import { ArrowDownIcon, ArrowUpIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { Grade } from "../_data/grades-data";
+import type { GradeSearchParams } from "../_actions/grade-actions";
 
 // 日付をフォーマットする関数
 function formatDate(dateString: string): string {
@@ -32,64 +34,39 @@ function formatSalaryRange(min: number, max: number): string {
 
 interface GradeListContainerProps {
 	grades: Grade[];
+	searchParams: GradeSearchParams;
 }
 
-export function GradeListContainer({ grades }: GradeListContainerProps) {
-	const [searchTerm, setSearchTerm] = useState("");
-	const [sortConfig, setSortConfig] = useState<{
-		key: keyof Grade | "salaryMin" | "salaryMax";
-		direction: "asc" | "desc";
-	}>({
-		key: "level",
-		direction: "desc",
-	});
+export function GradeListContainer({
+	grades,
+	searchParams,
+}: GradeListContainerProps) {
+	const router = useRouter();
+	const pathname = usePathname();
+	const params = useSearchParams();
+	const { query = "", sort = "level", order = "desc" } = searchParams;
+	const [searchTerm, setSearchTerm] = useState(query);
 
-	// 検索フィルター
-	const filteredGrades = grades.filter(
-		(grade) =>
-			grade.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			grade.description.toLowerCase().includes(searchTerm.toLowerCase()),
-	);
+	// 検索ハンドラー
+	const handleSearch = () => {
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("query", searchTerm);
+		router.push(`${pathname}?${updatedParams.toString()}`);
+	};
 
-	// ソート関数
-	const sortedGrades = [...filteredGrades].sort((a, b) => {
-		let aValue: any = a[sortConfig.key as keyof Grade];
-		let bValue: any = b[sortConfig.key as keyof Grade];
-
-		// 給与最小・最大値でのソート対応
-		if (sortConfig.key === "salaryMin") {
-			aValue = a.salaryRange.min;
-			bValue = b.salaryRange.min;
-		} else if (sortConfig.key === "salaryMax") {
-			aValue = a.salaryRange.max;
-			bValue = b.salaryRange.max;
-		}
-
-		if (aValue < bValue) {
-			return sortConfig.direction === "asc" ? -1 : 1;
-		}
-		if (aValue > bValue) {
-			return sortConfig.direction === "asc" ? 1 : -1;
-		}
-		return 0;
-	});
-
-	// ソートリクエストハンドラー
-	const requestSort = (key: keyof Grade | "salaryMin" | "salaryMax") => {
-		if (sortConfig.key === key) {
-			setSortConfig({
-				key,
-				direction: sortConfig.direction === "asc" ? "desc" : "asc",
-			});
-		} else {
-			setSortConfig({ key, direction: "asc" });
-		}
+	// ソートハンドラー
+	const handleSort = (key: keyof Grade | "salaryMin" | "salaryMax") => {
+		const newOrder = sort === key && order === "asc" ? "desc" : "asc";
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("sort", key);
+		updatedParams.set("order", newOrder);
+		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	// ソートアイコンの表示
 	const getSortIcon = (key: keyof Grade | "salaryMin" | "salaryMax") => {
-		if (sortConfig.key !== key) return null;
-		return sortConfig.direction === "asc" ? (
+		if (sort !== key) return null;
+		return order === "asc" ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
 		) : (
 			<ArrowDownIcon className="h-4 w-4 ml-1" />
@@ -101,7 +78,20 @@ export function GradeListContainer({ grades }: GradeListContainerProps) {
 			<Input
 				placeholder="グレードを検索..."
 				value={searchTerm}
-				onChange={(e) => setSearchTerm(e.target.value)}
+				onChange={(e) => {
+					setSearchTerm(e.target.value);
+					if (e.target.value === "") {
+						const updatedParams = new URLSearchParams(params.toString());
+						updatedParams.delete("query");
+						router.push(`${pathname}?${updatedParams.toString()}`);
+					}
+				}}
+				onKeyDown={(e) => {
+					if (e.key === "Enter") {
+						handleSearch();
+					}
+				}}
+				onBlur={handleSearch}
 				className="max-w-md"
 			/>
 
@@ -111,7 +101,7 @@ export function GradeListContainer({ grades }: GradeListContainerProps) {
 						<TableRow>
 							<TableHead
 								className="w-[180px] cursor-pointer"
-								onClick={() => requestSort("name")}
+								onClick={() => handleSort("name")}
 							>
 								<div className="flex items-center">
 									グレード名
@@ -120,7 +110,7 @@ export function GradeListContainer({ grades }: GradeListContainerProps) {
 							</TableHead>
 							<TableHead
 								className="w-[80px] cursor-pointer"
-								onClick={() => requestSort("level")}
+								onClick={() => handleSort("level")}
 							>
 								<div className="flex items-center">
 									レベル
@@ -130,7 +120,7 @@ export function GradeListContainer({ grades }: GradeListContainerProps) {
 							<TableHead>説明</TableHead>
 							<TableHead
 								className="cursor-pointer"
-								onClick={() => requestSort("salaryMin")}
+								onClick={() => handleSort("salaryMin")}
 							>
 								<div className="flex items-center">
 									給与範囲
@@ -139,7 +129,7 @@ export function GradeListContainer({ grades }: GradeListContainerProps) {
 							</TableHead>
 							<TableHead
 								className="cursor-pointer"
-								onClick={() => requestSort("employeeCount")}
+								onClick={() => handleSort("employeeCount")}
 							>
 								<div className="flex items-center">
 									人数
@@ -148,7 +138,7 @@ export function GradeListContainer({ grades }: GradeListContainerProps) {
 							</TableHead>
 							<TableHead
 								className="cursor-pointer"
-								onClick={() => requestSort("createdAt")}
+								onClick={() => handleSort("createdAt")}
 							>
 								<div className="flex items-center">
 									作成日
@@ -158,18 +148,18 @@ export function GradeListContainer({ grades }: GradeListContainerProps) {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{sortedGrades.length === 0 ? (
+						{grades.length === 0 ? (
 							<TableRow>
 								<TableCell colSpan={6} className="text-center py-6">
 									該当するグレードがありません
 								</TableCell>
 							</TableRow>
 						) : (
-							sortedGrades.map((grade) => (
+							grades.map((grade) => (
 								<TableRow key={grade.id}>
 									<TableCell>
 										<Link
-											href={`/grades/${grade.id}`}
+											href={`/admin/grades/${grade.id}`}
 											className="font-medium text-blue-600 hover:underline"
 										>
 											{grade.name}

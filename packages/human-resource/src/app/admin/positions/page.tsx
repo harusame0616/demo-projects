@@ -4,7 +4,11 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PositionListContainer } from "./_components/position-list-container";
-import { positionData } from "./_data/positions-data";
+import {
+	getPositions,
+	getPositionLevels,
+	type PositionSearchParams,
+} from "./_actions/position-actions";
 
 import type { Metadata } from "next";
 
@@ -27,7 +31,15 @@ function PositionListSkeleton() {
 	);
 }
 
-export default function PositionsPage() {
+export default async function PositionsPage({
+	searchParams,
+}: {
+	searchParams: PositionSearchParams;
+}) {
+	// サーバーアクションでデータを取得
+	const filteredData = await getPositions(searchParams);
+	const levelOptions = await getPositionLevels();
+
 	return (
 		<>
 			<div className="flex items-center justify-between mb-6">
@@ -46,7 +58,11 @@ export default function PositionsPage() {
 				</CardHeader>
 				<CardContent>
 					<Suspense fallback={<PositionListSkeleton />}>
-						<PositionListContainer positions={positionData} />
+						<PositionListContainer
+							positions={filteredData}
+							levelOptions={levelOptions}
+							searchParams={searchParams}
+						/>
 					</Suspense>
 				</CardContent>
 			</Card>

@@ -35,102 +35,14 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { Calendar, FileTextIcon, SearchIcon } from "lucide-react";
+import { Calendar, FileTextIcon, SearchIcon, XIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-
-// 申請タイプの定義
-type ApplicationType = "attendance_correction" | "leave_request";
-
-// 申請ステータスの定義
-type ApplicationStatus = "pending" | "approved" | "rejected";
-
-// 申請データの型定義
-interface Application {
-	id: string;
-	type: ApplicationType;
-	employeeId: string;
-	employeeName: string;
-	submittedDate: string;
-	targetDate: string;
-	content: string;
-	reason: string;
-	status: ApplicationStatus;
-	approvedDate?: string;
-	approvedBy?: string;
-	comment?: string;
-}
-
-// 履歴用モックデータ
-const mockHistoryApplications: Application[] = [
-	{
-		id: "APP006",
-		type: "attendance_correction",
-		employeeId: "001",
-		employeeName: "山田 太郎",
-		submittedDate: "2023-11-25",
-		targetDate: "2023-11-24",
-		content: "退勤時間修正：18:00 → 20:00",
-		reason: "クライアントミーティングが長引いたため",
-		status: "approved",
-		approvedDate: "2023-11-26",
-		approvedBy: "人事部 鈴木",
-		comment: "タイムカードの記録と一致することを確認しました。",
-	},
-	{
-		id: "APP007",
-		type: "leave_request",
-		employeeId: "002",
-		employeeName: "佐藤 花子",
-		submittedDate: "2023-11-20",
-		targetDate: "2023-11-30",
-		content: "有給休暇",
-		reason: "家族旅行のため",
-		status: "approved",
-		approvedDate: "2023-11-21",
-		approvedBy: "人事部 鈴木",
-	},
-	{
-		id: "APP008",
-		type: "attendance_correction",
-		employeeId: "003",
-		employeeName: "鈴木 一郎",
-		submittedDate: "2023-11-15",
-		targetDate: "2023-11-14",
-		content: "出勤時間修正：9:00 → 8:30",
-		reason: "早朝会議のため",
-		status: "rejected",
-		approvedDate: "2023-11-16",
-		approvedBy: "人事部 鈴木",
-		comment: "会議の記録がありません。詳細な証明が必要です。",
-	},
-	{
-		id: "APP009",
-		type: "leave_request",
-		employeeId: "004",
-		employeeName: "田中 美咲",
-		submittedDate: "2023-11-10",
-		targetDate: "2023-11-17",
-		content: "半休（午前）",
-		reason: "私用のため",
-		status: "approved",
-		approvedDate: "2023-11-11",
-		approvedBy: "人事部 鈴木",
-	},
-	{
-		id: "APP010",
-		type: "attendance_correction",
-		employeeId: "005",
-		employeeName: "伊藤 健太",
-		submittedDate: "2023-11-05",
-		targetDate: "2023-11-04",
-		content: "休日出勤申請：9:00-17:00",
-		reason: "システム更新作業のため",
-		status: "approved",
-		approvedDate: "2023-11-06",
-		approvedBy: "人事部 鈴木",
-		comment: "休日手当対象となります。",
-	},
-];
+import type {
+	Application,
+	ApplicationType,
+	ApplicationStatus,
+} from "../_actions/approval-actions";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {
@@ -205,15 +117,28 @@ const getStatusBadge = (status: ApplicationStatus) => {
 	}
 };
 
-export function ApprovalHistory() {
-	const [applications] = useState<Application[]>(mockHistoryApplications);
+interface ApprovalHistoryProps {
+	applications: Application[];
+	searchParams: {
+		query?: string;
+		type?: string;
+		status?: string;
+		date?: string;
+	};
+}
+
+export function ApprovalHistory({
+	applications,
+	searchParams,
+}: ApprovalHistoryProps) {
+	const router = useRouter();
+	const pathname = usePathname();
 	const [selectedApplication, setSelectedApplication] =
 		useState<Application | null>(null);
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-	const [filterType, setFilterType] = useState<string>("all");
-	const [filterStatus, setFilterStatus] = useState<string>("all");
-	const [searchQuery, setSearchQuery] = useState("");
-	const [date, setDate] = useState<Date | undefined>(undefined);
+	const [date, setDate] = useState<Date | undefined>(
+		searchParams.date ? new Date(searchParams.date) : undefined,
+	);
 
 	// 申請の詳細を表示する
 	const openDetails = (application: Application) => {
@@ -221,128 +146,170 @@ export function ApprovalHistory() {
 		setIsDetailsOpen(true);
 	};
 
-	// フィルタリングされた申請リストを取得
-	const filteredApplications = applications.filter((app) => {
-		// タイプでフィルタリング
-		if (filterType !== "all" && app.type !== filterType) return false;
+	// フィルターの変更を処理
+	const handleFilterChange = (key: string, value: string) => {
+		const params = new URLSearchParams(searchParams as Record<string, string>);
 
-		// ステータスでフィルタリング
-		if (filterStatus !== "all" && app.status !== filterStatus) return false;
-
-		// 日付でフィルタリング
-		if (date) {
-			const formattedDate = format(date, "yyyy-MM-dd");
-			if (!app.approvedDate?.startsWith(formattedDate)) return false;
+		if (value === "all") {
+			params.delete(key);
+		} else {
+			params.set(key, value);
 		}
 
-		// 検索クエリでフィルタリング
-		if (searchQuery.trim() !== "") {
-			const query = searchQuery.toLowerCase();
-			return (
-				app.employeeName.toLowerCase().includes(query) ||
-				app.employeeId.toLowerCase().includes(query) ||
-				app.content.toLowerCase().includes(query) ||
-				app.comment?.toLowerCase().includes(query)
-			);
+		// タブ情報を維持
+		params.set("tab", "history");
+
+		const newPath = `${pathname}?${params.toString()}`;
+		router.push(newPath);
+	};
+
+	// 日付フィルターの変更を処理
+	const handleDateChange = (newDate: Date | undefined) => {
+		setDate(newDate);
+
+		const params = new URLSearchParams(searchParams as Record<string, string>);
+
+		if (newDate) {
+			params.set("date", format(newDate, "yyyy-MM-dd"));
+		} else {
+			params.delete("date");
 		}
 
-		return true;
-	});
+		// タブ情報を維持
+		params.set("tab", "history");
+
+		const newPath = `${pathname}?${params.toString()}`;
+		router.push(newPath);
+	};
+
+	// 検索クエリの変更を処理
+	const handleSearchChange = (query: string) => {
+		const params = new URLSearchParams(searchParams as Record<string, string>);
+
+		if (query) {
+			params.set("query", query);
+		} else {
+			params.delete("query");
+		}
+
+		// タブ情報を維持
+		params.set("tab", "history");
+
+		const newPath = `${pathname}?${params.toString()}`;
+		router.push(newPath);
+	};
 
 	return (
 		<div className="space-y-4">
 			{/* フィルターとサーチ */}
-			<div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-6">
-				<div className="flex-1 min-w-[200px]">
+			<div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+				<div className="flex-1">
 					<div className="relative">
 						<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 						<Input
-							placeholder="社員名や内容で検索..."
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
+							placeholder="社員名や内容、コメントで検索..."
+							defaultValue={searchParams.query || ""}
+							onChange={(e) => {
+								// デバウンス処理
+								const timeoutId = setTimeout(() => {
+									handleSearchChange(e.target.value);
+								}, 500);
+								return () => clearTimeout(timeoutId);
+							}}
 							className="pl-10"
 						/>
 					</div>
 				</div>
 
-				<Select value={filterType} onValueChange={setFilterType}>
-					<SelectTrigger className="w-[150px]">
-						<SelectValue placeholder="申請タイプ" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">すべての申請</SelectItem>
-						<SelectItem value="attendance_correction">勤怠修正</SelectItem>
-						<SelectItem value="leave_request">休暇申請</SelectItem>
-					</SelectContent>
-				</Select>
-
-				<Select value={filterStatus} onValueChange={setFilterStatus}>
-					<SelectTrigger className="w-[150px]">
-						<SelectValue placeholder="ステータス" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">すべて</SelectItem>
-						<SelectItem value="approved">承認済み</SelectItem>
-						<SelectItem value="rejected">却下</SelectItem>
-					</SelectContent>
-				</Select>
-
-				<Popover>
-					<PopoverTrigger asChild>
-						<Button
-							variant="outline"
-							className={`w-[150px] justify-start text-left font-normal ${!date ? "text-muted-foreground" : ""}`}
-						>
-							<Calendar className="mr-2 h-4 w-4" />
-							{date ? format(date, "yyyy/MM/dd") : "日付で絞り込み"}
-						</Button>
-					</PopoverTrigger>
-					<PopoverContent className="w-auto p-0" align="start">
-						<CalendarComponent
-							mode="single"
-							selected={date}
-							onSelect={setDate}
-							locale={ja}
-							initialFocus
-						/>
-					</PopoverContent>
-				</Popover>
-
-				{date && (
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={() => setDate(undefined)}
-						className="h-10"
+				<div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+					<Select
+						defaultValue={searchParams.type || "all"}
+						onValueChange={(value) => handleFilterChange("type", value)}
 					>
-						日付の絞り込みを解除
-					</Button>
-				)}
+						<SelectTrigger className="w-[180px]">
+							<SelectValue placeholder="申請タイプ" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="all">すべての申請</SelectItem>
+							<SelectItem value="attendance_correction">勤怠修正</SelectItem>
+							<SelectItem value="leave_request">休暇申請</SelectItem>
+						</SelectContent>
+					</Select>
+
+					<Select
+						defaultValue={searchParams.status || "all"}
+						onValueChange={(value) => handleFilterChange("status", value)}
+					>
+						<SelectTrigger className="w-[180px]">
+							<SelectValue placeholder="ステータス" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="all">すべてのステータス</SelectItem>
+							<SelectItem value="approved">承認済み</SelectItem>
+							<SelectItem value="rejected">却下</SelectItem>
+						</SelectContent>
+					</Select>
+
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button
+								variant="outline"
+								className="w-[180px] justify-start text-left font-normal"
+							>
+								<Calendar className="mr-2 h-4 w-4" />
+								{date ? (
+									format(date, "yyyy年MM月dd日", { locale: ja })
+								) : (
+									<span>日付でフィルター</span>
+								)}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className="w-auto p-0">
+							<CalendarComponent
+								mode="single"
+								selected={date}
+								onSelect={handleDateChange}
+								initialFocus
+							/>
+						</PopoverContent>
+					</Popover>
+					{date && (
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={() => handleDateChange(undefined)}
+							className="h-10 w-10"
+						>
+							<XIcon className="h-4 w-4" />
+							<span className="sr-only">日付フィルターをクリア</span>
+						</Button>
+					)}
+				</div>
 			</div>
 
-			{/* 申請履歴リスト */}
+			{/* 申請リスト */}
 			<div className="rounded-md border">
 				<Table>
 					<TableHeader>
 						<TableRow>
 							<TableHead>申請ID</TableHead>
-							<TableHead>種類</TableHead>
-							<TableHead>申請者</TableHead>
-							<TableHead>対象日</TableHead>
+							<TableHead>申請種類</TableHead>
+							<TableHead>社員</TableHead>
 							<TableHead>ステータス</TableHead>
+							<TableHead>申請日</TableHead>
 							<TableHead>承認/却下日</TableHead>
-							<TableHead className="text-right">操作</TableHead>
+							<TableHead className="text-right">アクション</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{filteredApplications.length === 0 ? (
+						{applications.length === 0 ? (
 							<TableRow>
 								<TableCell colSpan={7} className="h-24 text-center">
 									該当する申請履歴はありません
 								</TableCell>
 							</TableRow>
 						) : (
-							filteredApplications.map((application) => (
+							applications.map((application) => (
 								<TableRow key={application.id}>
 									<TableCell className="font-medium">
 										{application.id}
@@ -351,15 +318,19 @@ export function ApprovalHistory() {
 										{getApplicationTypeBadge(application.type)}
 									</TableCell>
 									<TableCell>
-										{application.employeeName} ({application.employeeId})
+										{application.employeeName}
+										<br />
+										<span className="text-xs text-muted-foreground">
+											ID: {application.employeeId}
+										</span>
 									</TableCell>
-									<TableCell>{application.targetDate}</TableCell>
 									<TableCell>{getStatusBadge(application.status)}</TableCell>
+									<TableCell>{application.submittedDate}</TableCell>
 									<TableCell>{application.approvedDate}</TableCell>
 									<TableCell className="text-right">
 										<Button
-											variant="outline"
 											size="sm"
+											variant="ghost"
 											onClick={() => openDetails(application)}
 										>
 											<FileTextIcon className="h-4 w-4 mr-1" />
@@ -376,92 +347,79 @@ export function ApprovalHistory() {
 			{/* 申請詳細ダイアログ */}
 			{selectedApplication && (
 				<Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-					<DialogContent className="sm:max-w-[600px]">
+					<DialogContent className="max-w-md">
 						<DialogHeader>
-							<DialogTitle>申請詳細（履歴）</DialogTitle>
-							<DialogDescription>
-								過去の申請内容と承認/却下結果を確認できます。
-							</DialogDescription>
+							<DialogTitle>申請詳細 - {selectedApplication.id}</DialogTitle>
+							<DialogDescription>承認/却下済みの申請詳細</DialogDescription>
 						</DialogHeader>
 
-						<div className="grid gap-4 py-4">
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<Label className="text-sm text-gray-500">申請ID</Label>
-									<div className="font-medium">{selectedApplication.id}</div>
+						<div className="space-y-4 py-4">
+							<div className="grid grid-cols-4 gap-4 text-sm">
+								<div className="font-medium">申請種類</div>
+								<div className="col-span-3">
+									{getApplicationTypeName(selectedApplication.type)}
 								</div>
-								<div>
-									<Label className="text-sm text-gray-500">申請種類</Label>
-									<div>{getApplicationTypeName(selectedApplication.type)}</div>
-								</div>
-							</div>
 
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<Label className="text-sm text-gray-500">申請者</Label>
-									<div className="font-medium">
-										{selectedApplication.employeeName} (
-										{selectedApplication.employeeId})
-									</div>
+								<div className="font-medium">社員</div>
+								<div className="col-span-3">
+									{selectedApplication.employeeName} (ID:{" "}
+									{selectedApplication.employeeId})
 								</div>
-								<div>
-									<Label className="text-sm text-gray-500">提出日</Label>
-									<div>{selectedApplication.submittedDate}</div>
-								</div>
-							</div>
 
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<Label className="text-sm text-gray-500">対象日</Label>
-									<div>{selectedApplication.targetDate}</div>
+								<div className="font-medium">ステータス</div>
+								<div className="col-span-3">
+									{getStatusBadge(selectedApplication.status)}
 								</div>
-								<div>
-									<Label className="text-sm text-gray-500">ステータス</Label>
-									<div className="flex items-center mt-1">
-										{getStatusBadge(selectedApplication.status)}
-									</div>
-								</div>
-							</div>
 
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<Label className="text-sm text-gray-500">承認/却下日</Label>
-									<div>{selectedApplication.approvedDate || "-"}</div>
+								<div className="font-medium">申請日</div>
+								<div className="col-span-3">
+									{selectedApplication.submittedDate}
 								</div>
-								<div>
-									<Label className="text-sm text-gray-500">承認/却下者</Label>
-									<div>{selectedApplication.approvedBy || "-"}</div>
-								</div>
-							</div>
 
-							<div>
-								<Label className="text-sm text-gray-500">申請内容</Label>
-								<div className="p-2 border rounded-md bg-gray-50 min-h-[40px]">
-									{selectedApplication.content}
+								<div className="font-medium">対象日</div>
+								<div className="col-span-3">
+									{selectedApplication.targetDate}
 								</div>
-							</div>
 
-							<div>
-								<Label className="text-sm text-gray-500">申請理由</Label>
-								<div className="p-2 border rounded-md bg-gray-50 min-h-[60px]">
-									{selectedApplication.reason}
-								</div>
-							</div>
+								<div className="font-medium">内容</div>
+								<div className="col-span-3">{selectedApplication.content}</div>
 
-							{selectedApplication.comment && (
-								<div>
-									<Label className="text-sm text-gray-500">
-										承認/却下コメント
-									</Label>
-									<div className="p-2 border rounded-md bg-gray-50 min-h-[60px]">
-										{selectedApplication.comment}
-									</div>
-								</div>
-							)}
+								<div className="font-medium">理由</div>
+								<div className="col-span-3">{selectedApplication.reason}</div>
+
+								{selectedApplication.approvedDate && (
+									<>
+										<div className="font-medium">承認/却下日</div>
+										<div className="col-span-3">
+											{selectedApplication.approvedDate}
+										</div>
+									</>
+								)}
+
+								{selectedApplication.approvedBy && (
+									<>
+										<div className="font-medium">担当者</div>
+										<div className="col-span-3">
+											{selectedApplication.approvedBy}
+										</div>
+									</>
+								)}
+
+								{selectedApplication.comment && (
+									<>
+										<div className="font-medium">コメント</div>
+										<div className="col-span-3">
+											{selectedApplication.comment}
+										</div>
+									</>
+								)}
+							</div>
 						</div>
 
 						<DialogFooter>
-							<Button onClick={() => setIsDetailsOpen(false)}>閉じる</Button>
+							<Button variant="default" onClick={() => setIsDetailsOpen(false)}>
+								閉じる
+							</Button>
 						</DialogFooter>
 					</DialogContent>
 				</Dialog>

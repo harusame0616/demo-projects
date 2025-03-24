@@ -15,36 +15,83 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontalIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
-
-type Employee = {
-	id: string;
-	name: string;
-	department: string;
-	position: string;
-	email: string;
-	joinDate: string;
-};
+import type { Employee } from "../_actions/employee-actions";
 
 interface EmployeeTableProps {
 	employees: Employee[];
+	searchParams: {
+		sortBy?: string;
+		sortOrder?: string;
+	};
+	onSort: (column: string) => void;
 }
 
-export function EmployeeTable({ employees }: EmployeeTableProps) {
+export function EmployeeTable({
+	employees,
+	searchParams,
+	onSort,
+}: EmployeeTableProps) {
+	// ソート状態に応じたアイコンを表示
+	const getSortIcon = (column: string) => {
+		if (searchParams.sortBy !== column) return null;
+
+		return searchParams.sortOrder === "asc" ? (
+			<ArrowUpIcon className="ml-1 h-4 w-4 inline" />
+		) : (
+			<ArrowDownIcon className="ml-1 h-4 w-4 inline" />
+		);
+	};
+
+	// 日付をフォーマット
+	const formatDate = (dateString: string) => {
+		const date = new Date(dateString);
+		return new Intl.DateTimeFormat("ja-JP", {
+			year: "numeric",
+			month: "short",
+			day: "numeric",
+		}).format(date);
+	};
+
 	return (
 		<div className="rounded-md border">
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead>社員ID</TableHead>
-						<TableHead>氏名</TableHead>
-						<TableHead>部署</TableHead>
-						<TableHead>役職</TableHead>
+						<TableHead
+							className="cursor-pointer hover:bg-gray-50"
+							onClick={() => onSort("id")}
+						>
+							社員ID {getSortIcon("id")}
+						</TableHead>
+						<TableHead
+							className="cursor-pointer hover:bg-gray-50"
+							onClick={() => onSort("name")}
+						>
+							氏名 {getSortIcon("name")}
+						</TableHead>
+						<TableHead
+							className="cursor-pointer hover:bg-gray-50"
+							onClick={() => onSort("department")}
+						>
+							部署 {getSortIcon("department")}
+						</TableHead>
+						<TableHead
+							className="cursor-pointer hover:bg-gray-50"
+							onClick={() => onSort("position")}
+						>
+							役職 {getSortIcon("position")}
+						</TableHead>
 						<TableHead className="hidden md:table-cell">
 							メールアドレス
 						</TableHead>
-						<TableHead className="hidden md:table-cell">入社日</TableHead>
+						<TableHead
+							className="hidden md:table-cell cursor-pointer hover:bg-gray-50"
+							onClick={() => onSort("joinDate")}
+						>
+							入社日 {getSortIcon("joinDate")}
+						</TableHead>
 						<TableHead className="w-[80px]" />
 					</TableRow>
 				</TableHeader>
@@ -66,7 +113,7 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
 									{employee.email}
 								</TableCell>
 								<TableCell className="hidden md:table-cell">
-									{employee.joinDate}
+									{formatDate(employee.joinDate)}
 								</TableCell>
 								<TableCell>
 									<DropdownMenu>

@@ -10,43 +10,32 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { SearchIcon } from "lucide-react";
-import { useState } from "react";
-import { type Position } from "../_data/positions-data";
+import { useState, useEffect } from "react";
 
 interface PositionFilterProps {
-	positions: Position[];
-	onFilterChange: (filteredPositions: Position[]) => void;
+	searchQuery: string;
+	currentLevel: string;
+	levelOptions: string[];
+	onFilter: (query: string, level: string) => void;
 }
 
 export function PositionFilter({
-	positions,
-	onFilterChange,
+	searchQuery,
+	currentLevel,
+	levelOptions,
+	onFilter,
 }: PositionFilterProps) {
-	const [searchQuery, setSearchQuery] = useState("");
-	const [levelFilter, setLevelFilter] = useState("all");
+	const [query, setQuery] = useState(searchQuery);
+	const [level, setLevel] = useState(currentLevel);
 
-	const handleFilter = () => {
-		let filteredResults = [...positions];
+	// 外部からのprops変更に対応
+	useEffect(() => {
+		setQuery(searchQuery);
+		setLevel(currentLevel);
+	}, [searchQuery, currentLevel]);
 
-		// 検索フィルター
-		if (searchQuery) {
-			filteredResults = filteredResults.filter(
-				(position) =>
-					position.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-					position.description
-						.toLowerCase()
-						.includes(searchQuery.toLowerCase()),
-			);
-		}
-
-		// レベルフィルター
-		if (levelFilter !== "all") {
-			filteredResults = filteredResults.filter(
-				(position) => position.level.toString() === levelFilter,
-			);
-		}
-
-		onFilterChange(filteredResults);
+	const handleSearch = () => {
+		onFilter(query, level);
 	};
 
 	return (
@@ -56,18 +45,25 @@ export function PositionFilter({
 				<Input
 					placeholder="役職名や説明で検索..."
 					className="pl-8"
-					value={searchQuery}
+					value={query}
 					onChange={(e) => {
-						setSearchQuery(e.target.value);
-						handleFilter();
+						setQuery(e.target.value);
+						if (e.target.value === "") {
+							onFilter("", level);
+						}
+					}}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							handleSearch();
+						}
 					}}
 				/>
 			</div>
 			<Select
-				value={levelFilter}
+				value={level}
 				onValueChange={(value) => {
-					setLevelFilter(value);
-					handleFilter();
+					setLevel(value);
+					onFilter(query, value);
 				}}
 			>
 				<SelectTrigger className="w-[180px]">
@@ -75,18 +71,14 @@ export function PositionFilter({
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value="all">すべて</SelectItem>
-					{Array.from(
-						new Set(positions.map((position) => position.level.toString())),
-					)
-						.sort((a, b) => parseInt(b) - parseInt(a))
-						.map((level) => (
-							<SelectItem key={level} value={level}>
-								レベル {level}
-							</SelectItem>
-						))}
+					{levelOptions.map((level) => (
+						<SelectItem key={level} value={level}>
+							レベル {level}
+						</SelectItem>
+					))}
 				</SelectContent>
 			</Select>
-			<Button onClick={handleFilter}>フィルター</Button>
+			<Button onClick={handleSearch}>フィルター</Button>
 		</div>
 	);
 }

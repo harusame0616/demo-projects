@@ -29,85 +29,14 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckIcon, FileTextIcon, SearchIcon, XIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-
-// 申請タイプの定義
-type ApplicationType = "attendance_correction" | "leave_request";
-
-// 申請ステータスの定義
-type ApplicationStatus = "pending" | "approved" | "rejected";
-
-// 申請データの型定義
-interface Application {
-	id: string;
-	type: ApplicationType;
-	employeeId: string;
-	employeeName: string;
-	submittedDate: string;
-	targetDate: string;
-	content: string;
-	reason: string;
-	status: ApplicationStatus;
-}
-
-// モックデータ
-const mockApplications: Application[] = [
-	{
-		id: "APP001",
-		type: "attendance_correction",
-		employeeId: "001",
-		employeeName: "山田 太郎",
-		submittedDate: "2023-12-01",
-		targetDate: "2023-11-30",
-		content: "出勤時間修正：9:30 → 9:00",
-		reason: "打ち合わせのため早く来ていましたが、打刻を忘れていました。",
-		status: "pending",
-	},
-	{
-		id: "APP002",
-		type: "leave_request",
-		employeeId: "002",
-		employeeName: "佐藤 花子",
-		submittedDate: "2023-12-02",
-		targetDate: "2023-12-15",
-		content: "有給休暇",
-		reason: "私用のため",
-		status: "pending",
-	},
-	{
-		id: "APP003",
-		type: "attendance_correction",
-		employeeId: "003",
-		employeeName: "鈴木 一郎",
-		submittedDate: "2023-12-02",
-		targetDate: "2023-12-01",
-		content: "退勤時間修正：17:30 → 19:00",
-		reason: "システムトラブル対応のため残業しましたが、打刻を忘れました。",
-		status: "pending",
-	},
-	{
-		id: "APP004",
-		type: "leave_request",
-		employeeId: "004",
-		employeeName: "田中 美咲",
-		submittedDate: "2023-12-03",
-		targetDate: "2023-12-20",
-		content: "半休（午後）",
-		reason: "通院のため",
-		status: "pending",
-	},
-	{
-		id: "APP005",
-		type: "attendance_correction",
-		employeeId: "005",
-		employeeName: "伊藤 健太",
-		submittedDate: "2023-12-03",
-		targetDate: "2023-12-02",
-		content: "出勤時間修正：10:00 → 9:00、退勤時間修正：18:00 → 19:00",
-		reason: "客先訪問のため社外で業務を行いました。",
-		status: "pending",
-	},
-];
+import {
+	approveApplication,
+	rejectApplication,
+	type Application,
+	type ApplicationType,
+} from "../_actions/approval-actions";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {
@@ -147,15 +76,25 @@ const getApplicationTypeBadge = (type: ApplicationType) => {
 	}
 };
 
-export function ApprovalList() {
-	const [applications, setApplications] =
-		useState<Application[]>(mockApplications);
+interface ApprovalListProps {
+	applications: Application[];
+	searchParams: {
+		query?: string;
+		type?: string;
+	};
+}
+
+export function ApprovalList({
+	applications,
+	searchParams,
+}: ApprovalListProps) {
+	const router = useRouter();
+	const pathname = usePathname();
 	const [selectedApplication, setSelectedApplication] =
 		useState<Application | null>(null);
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 	const [comment, setComment] = useState("");
-	const [filterType, setFilterType] = useState<string>("all");
-	const [searchQuery, setSearchQuery] = useState("");
+	const [isProcessing, setIsProcessing] = useState(false);
 
 	// 申請の詳細を表示する
 	const openDetails = (application: Application) => {
@@ -165,55 +104,66 @@ export function ApprovalList() {
 	};
 
 	// 申請を承認する
-	const approveApplication = () => {
+	const handleApprove = async () => {
 		if (!selectedApplication) return;
 
-		const updatedApplications = applications.map((app) =>
-			app.id === selectedApplication.id
-				? { ...app, status: "approved" as const }
-				: app,
-		);
-
-		setApplications(updatedApplications);
-		setIsDetailsOpen(false);
-		setSelectedApplication(null);
+		setIsProcessing(true);
+		try {
+			await approveApplication(selectedApplication.id, comment);
+			// 現在のURLパラメータを維持したままページをリロード
+			router.refresh();
+			setIsDetailsOpen(false);
+		} catch (error) {
+			console.error("承認処理に失敗しました", error);
+		} finally {
+			setIsProcessing(false);
+		}
 	};
 
 	// 申請を却下する
-	const rejectApplication = () => {
+	const handleReject = async () => {
 		if (!selectedApplication) return;
 
-		const updatedApplications = applications.map((app) =>
-			app.id === selectedApplication.id
-				? { ...app, status: "rejected" as const }
-				: app,
-		);
-
-		setApplications(updatedApplications);
-		setIsDetailsOpen(false);
-		setSelectedApplication(null);
+		setIsProcessing(true);
+		try {
+			await rejectApplication(selectedApplication.id, comment);
+			// 現在のURLパラメータを維持したままページをリロード
+			router.refresh();
+			setIsDetailsOpen(false);
+		} catch (error) {
+			console.error("却下処理に失敗しました", error);
+		} finally {
+			setIsProcessing(false);
+		}
 	};
 
-	// フィルタリングされた申請リストを取得
-	const filteredApplications = applications.filter((app) => {
-		// ステータスでフィルタリング (未承認のみ)
-		if (app.status !== "pending") return false;
+	// フィルターの変更を処理
+	const handleFilterChange = (value: string) => {
+		const params = new URLSearchParams(searchParams as Record<string, string>);
 
-		// タイプでフィルタリング
-		if (filterType !== "all" && app.type !== filterType) return false;
-
-		// 検索クエリでフィルタリング
-		if (searchQuery.trim() !== "") {
-			const query = searchQuery.toLowerCase();
-			return (
-				app.employeeName.toLowerCase().includes(query) ||
-				app.employeeId.toLowerCase().includes(query) ||
-				app.content.toLowerCase().includes(query)
-			);
+		if (value === "all") {
+			params.delete("type");
+		} else {
+			params.set("type", value);
 		}
 
-		return true;
-	});
+		const newPath = `${pathname}?${params.toString()}`;
+		router.push(newPath);
+	};
+
+	// 検索クエリの変更を処理
+	const handleSearchChange = (query: string) => {
+		const params = new URLSearchParams(searchParams as Record<string, string>);
+
+		if (query) {
+			params.set("query", query);
+		} else {
+			params.delete("query");
+		}
+
+		const newPath = `${pathname}?${params.toString()}`;
+		router.push(newPath);
+	};
 
 	return (
 		<div className="space-y-4">
@@ -224,13 +174,22 @@ export function ApprovalList() {
 						<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 						<Input
 							placeholder="社員名や内容で検索..."
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
+							defaultValue={searchParams.query || ""}
+							onChange={(e) => {
+								// デバウンス処理
+								const timeoutId = setTimeout(() => {
+									handleSearchChange(e.target.value);
+								}, 500);
+								return () => clearTimeout(timeoutId);
+							}}
 							className="pl-10"
 						/>
 					</div>
 				</div>
-				<Select value={filterType} onValueChange={setFilterType}>
+				<Select
+					defaultValue={searchParams.type || "all"}
+					onValueChange={handleFilterChange}
+				>
 					<SelectTrigger className="w-[180px]">
 						<SelectValue placeholder="申請タイプ" />
 					</SelectTrigger>
@@ -248,23 +207,23 @@ export function ApprovalList() {
 					<TableHeader>
 						<TableRow>
 							<TableHead>申請ID</TableHead>
-							<TableHead>種類</TableHead>
-							<TableHead>申請者</TableHead>
-							<TableHead>提出日</TableHead>
-							<TableHead>申請内容</TableHead>
+							<TableHead>申請種類</TableHead>
+							<TableHead>社員</TableHead>
+							<TableHead>申請日</TableHead>
 							<TableHead>対象日</TableHead>
-							<TableHead className="text-right">操作</TableHead>
+							<TableHead>内容</TableHead>
+							<TableHead className="text-right">アクション</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{filteredApplications.length === 0 ? (
+						{applications.length === 0 ? (
 							<TableRow>
 								<TableCell colSpan={7} className="h-24 text-center">
-									承認待ちの申請はありません
+									未承認の申請はありません
 								</TableCell>
 							</TableRow>
 						) : (
-							filteredApplications.map((application) => (
+							applications.map((application) => (
 								<TableRow key={application.id}>
 									<TableCell className="font-medium">
 										{application.id}
@@ -273,18 +232,21 @@ export function ApprovalList() {
 										{getApplicationTypeBadge(application.type)}
 									</TableCell>
 									<TableCell>
-										{application.employeeName} ({application.employeeId})
+										{application.employeeName}
+										<br />
+										<span className="text-xs text-muted-foreground">
+											ID: {application.employeeId}
+										</span>
 									</TableCell>
 									<TableCell>{application.submittedDate}</TableCell>
+									<TableCell>{application.targetDate}</TableCell>
 									<TableCell className="max-w-xs truncate">
 										{application.content}
 									</TableCell>
-									<TableCell>{application.targetDate}</TableCell>
 									<TableCell className="text-right">
 										<Button
-											variant="outline"
 											size="sm"
-											className="mr-2"
+											variant="ghost"
 											onClick={() => openDetails(application)}
 										>
 											<FileTextIcon className="h-4 w-4 mr-1" />
@@ -301,84 +263,80 @@ export function ApprovalList() {
 			{/* 申請詳細ダイアログ */}
 			{selectedApplication && (
 				<Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-					<DialogContent className="sm:max-w-[600px]">
+					<DialogContent className="max-w-md">
 						<DialogHeader>
-							<DialogTitle>申請詳細</DialogTitle>
+							<DialogTitle>申請詳細 - {selectedApplication.id}</DialogTitle>
 							<DialogDescription>
-								申請内容を確認し、承認または却下してください。
+								申請内容を確認して、承認または却下してください
 							</DialogDescription>
 						</DialogHeader>
 
-						<div className="grid gap-4 py-4">
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<Label className="text-sm text-gray-500">申請ID</Label>
-									<div className="font-medium">{selectedApplication.id}</div>
+						<div className="space-y-4 py-4">
+							<div className="grid grid-cols-4 gap-4 text-sm">
+								<div className="font-medium">申請種類</div>
+								<div className="col-span-3">
+									{getApplicationTypeName(selectedApplication.type)}
 								</div>
-								<div>
-									<Label className="text-sm text-gray-500">申請種類</Label>
-									<div>{getApplicationTypeName(selectedApplication.type)}</div>
+
+								<div className="font-medium">社員</div>
+								<div className="col-span-3">
+									{selectedApplication.employeeName} (ID:{" "}
+									{selectedApplication.employeeId})
 								</div>
+
+								<div className="font-medium">申請日</div>
+								<div className="col-span-3">
+									{selectedApplication.submittedDate}
+								</div>
+
+								<div className="font-medium">対象日</div>
+								<div className="col-span-3">
+									{selectedApplication.targetDate}
+								</div>
+
+								<div className="font-medium">内容</div>
+								<div className="col-span-3">{selectedApplication.content}</div>
+
+								<div className="font-medium">理由</div>
+								<div className="col-span-3">{selectedApplication.reason}</div>
 							</div>
 
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<Label className="text-sm text-gray-500">申請者</Label>
-									<div className="font-medium">
-										{selectedApplication.employeeName} (
-										{selectedApplication.employeeId})
-									</div>
-								</div>
-								<div>
-									<Label className="text-sm text-gray-500">提出日</Label>
-									<div>{selectedApplication.submittedDate}</div>
-								</div>
-							</div>
-
-							<div>
-								<Label className="text-sm text-gray-500">対象日</Label>
-								<div>{selectedApplication.targetDate}</div>
-							</div>
-
-							<div>
-								<Label className="text-sm text-gray-500">申請内容</Label>
-								<div className="p-2 border rounded-md bg-gray-50 min-h-[40px]">
-									{selectedApplication.content}
-								</div>
-							</div>
-
-							<div>
-								<Label className="text-sm text-gray-500">申請理由</Label>
-								<div className="p-2 border rounded-md bg-gray-50 min-h-[60px]">
-									{selectedApplication.reason}
-								</div>
-							</div>
-
-							<div>
-								<Label htmlFor="comment">コメント（任意）</Label>
+							<div className="space-y-2">
+								<Label htmlFor="comment">コメント（オプション）</Label>
 								<Textarea
 									id="comment"
-									placeholder="承認/却下に関するコメントを入力してください"
 									value={comment}
 									onChange={(e) => setComment(e.target.value)}
+									placeholder="承認/却下に関するコメントを入力してください"
+									rows={3}
 								/>
 							</div>
 						</div>
 
-						<DialogFooter>
-							<Button variant="outline" onClick={() => setIsDetailsOpen(false)}>
+						<DialogFooter className="gap-2 sm:gap-0">
+							<Button
+								type="button"
+								variant="outline"
+								onClick={() => setIsDetailsOpen(false)}
+							>
 								キャンセル
 							</Button>
 							<Button
+								type="button"
 								variant="destructive"
-								onClick={rejectApplication}
-								className="gap-1"
+								onClick={handleReject}
+								disabled={isProcessing}
 							>
-								<XIcon className="h-4 w-4" />
+								<XIcon className="h-4 w-4 mr-1" />
 								却下
 							</Button>
-							<Button onClick={approveApplication} className="gap-1">
-								<CheckIcon className="h-4 w-4" />
+							<Button
+								type="button"
+								variant="default"
+								onClick={handleApprove}
+								disabled={isProcessing}
+							>
+								<CheckIcon className="h-4 w-4 mr-1" />
 								承認
 							</Button>
 						</DialogFooter>
