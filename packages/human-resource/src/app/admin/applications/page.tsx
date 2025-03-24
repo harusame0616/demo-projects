@@ -1,11 +1,4 @@
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import {
 	getApplicationList,
 	type ApplicationSearchParams,
 } from "./_actions/application-actions";
@@ -37,24 +30,16 @@ export default async function ApplicationsPage({
 		<div className="w-full flex-1">
 			<h2 className="text-3xl font-bold tracking-tight mb-6">申請管理</h2>
 
-			<Card className="w-full">
-				<CardHeader>
-					<CardTitle>申請一覧</CardTitle>
-					<CardDescription>
-						従業員からの各種申請とその処理状況を表示します
-					</CardDescription>
-				</CardHeader>
-				<CardContent className="p-0 sm:p-6">
-					<div className="px-4 sm:px-0">
-						<ApplicationFilter searchParams={searchParams} />
-					</div>
-					<ApplicationTable
-						applications={applicationsData.items}
-						pagination={applicationsData.pagination}
-						searchParams={searchParams}
-					/>
-				</CardContent>
-			</Card>
+			<div className="w-full">
+				<div className="mb-6">
+					<ApplicationFilter searchParams={searchParams} />
+				</div>
+				<ApplicationTable
+					applications={applicationsData.items}
+					pagination={applicationsData.pagination}
+					searchParams={searchParams}
+				/>
+			</div>
 		</div>
 	);
 }

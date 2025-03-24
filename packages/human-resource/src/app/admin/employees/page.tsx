@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -82,22 +81,17 @@ export default async function EmployeesPage({
 				</Button>
 			</div>
 
-			<Card className="w-full">
-				<CardHeader>
-					<CardTitle>従業員一覧</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<Suspense fallback={<EmployeeListSkeleton />}>
-						<EmployeeListContainer
-							employees={employeesData.items}
-							departmentOptions={departmentOptions}
-							positionOptions={positionOptions}
-							searchParams={searchParams}
-							pagination={employeesData.pagination}
-						/>
-					</Suspense>
-				</CardContent>
-			</Card>
+			<div className="w-full">
+				<Suspense fallback={<EmployeeListSkeleton />}>
+					<EmployeeListContainer
+						employees={employeesData.items}
+						departmentOptions={departmentOptions}
+						positionOptions={positionOptions}
+						searchParams={searchParams}
+						pagination={employeesData.pagination}
+					/>
+				</Suspense>
+			</div>
 		</div>
 	);
 }

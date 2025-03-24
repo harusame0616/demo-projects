@@ -4,13 +4,6 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { SkillCertificationList } from "./_components/skill-certification-list";
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import {
 	getSkillCertifications,
 	type SkillCertificationSearchParams,
 } from "./_actions/skill-certification-actions";
@@ -61,23 +54,15 @@ export default async function SkillCertificationsPage({
 				</Button>
 			</div>
 
-			<Card className="w-full">
-				<CardHeader>
-					<CardTitle>スキル・資格一覧</CardTitle>
-					<CardDescription>
-						社内で登録されているスキルと資格の一覧です。詳細を確認するには項目をクリックしてください。
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<Suspense fallback={<SkillCertificationListSkeleton />}>
-						<SkillCertificationList
-							skillCertifications={skillCertificationsData.items}
-							pagination={skillCertificationsData.pagination}
-							searchParams={searchParams}
-						/>
-					</Suspense>
-				</CardContent>
-			</Card>
+			<div className="w-full">
+				<Suspense fallback={<SkillCertificationListSkeleton />}>
+					<SkillCertificationList
+						skillCertifications={skillCertificationsData.items}
+						pagination={skillCertificationsData.pagination}
+						searchParams={searchParams}
+					/>
+				</Suspense>
+			</div>
 		</div>
 	);
 }

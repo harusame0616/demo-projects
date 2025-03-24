@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -59,20 +58,15 @@ export default async function DepartmentsPage({
 				</Button>
 			</div>
 
-			<Card className="w-full">
-				<CardHeader>
-					<CardTitle>部署一覧</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<Suspense fallback={<DepartmentListSkeleton />}>
-						<DepartmentListContainer
-							departments={departmentsData.items}
-							searchParams={searchParams}
-							pagination={departmentsData.pagination}
-						/>
-					</Suspense>
-				</CardContent>
-			</Card>
+			<div className="w-full">
+				<Suspense fallback={<DepartmentListSkeleton />}>
+					<DepartmentListContainer
+						departments={departmentsData.items}
+						searchParams={searchParams}
+						pagination={departmentsData.pagination}
+					/>
+				</Suspense>
+			</div>
 		</div>
 	);
 }

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -62,21 +61,16 @@ export default async function PositionsPage({
 				</Button>
 			</div>
 
-			<Card className="w-full">
-				<CardHeader>
-					<CardTitle>役職一覧</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<Suspense fallback={<PositionListSkeleton />}>
-						<PositionListContainer
-							positions={positionsData.items}
-							pagination={positionsData.pagination}
-							levelOptions={levelOptions}
-							searchParams={searchParams}
-						/>
-					</Suspense>
-				</CardContent>
-			</Card>
+			<div className="w-full">
+				<Suspense fallback={<PositionListSkeleton />}>
+					<PositionListContainer
+						positions={positionsData.items}
+						pagination={positionsData.pagination}
+						levelOptions={levelOptions}
+						searchParams={searchParams}
+					/>
+				</Suspense>
+			</div>
 		</div>
 	);
 }
