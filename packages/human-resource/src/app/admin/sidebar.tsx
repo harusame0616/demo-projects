@@ -10,6 +10,7 @@ import {
 	PanelLeftIcon,
 	PanelRightIcon,
 	MenuIcon,
+	ClipboardCheck,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -123,6 +124,20 @@ export function AppSidebar() {
 								<div>
 									<BookOpenCheck className="h-5 w-5" />
 									<span>スキル・資格管理</span>
+								</div>
+							</SidebarMenuButton>
+						</Link>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<Link href="/admin/approvals">
+							<SidebarMenuButton
+								asChild
+								isActive={pathname === "/admin/approvals"}
+								tooltip="承認管理"
+							>
+								<div>
+									<ClipboardCheck className="h-5 w-5" />
+									<span>承認管理</span>
 								</div>
 							</SidebarMenuButton>
 						</Link>
