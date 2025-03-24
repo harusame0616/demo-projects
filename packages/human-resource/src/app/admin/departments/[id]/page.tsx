@@ -69,7 +69,7 @@ export default function DepartmentDetailPage({
 					指定された部署ID: {departmentId} の部署は存在しません。
 				</p>
 				<Button asChild>
-					<Link href="/departments">
+					<Link href="/admin/departments">
 						<ArrowLeftIcon className="mr-2 h-4 w-4" />
 						部署一覧に戻る
 					</Link>
@@ -93,7 +93,7 @@ export default function DepartmentDetailPage({
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-2">
 					<Button variant="outline" size="sm" asChild>
-						<Link href="/departments">
+						<Link href="/admin/departments">
 							<ArrowLeftIcon className="mr-2 h-4 w-4" />
 							戻る
 						</Link>
@@ -103,7 +103,7 @@ export default function DepartmentDetailPage({
 					</h2>
 				</div>
 				<Button asChild>
-					<Link href={`/departments/${departmentId}/edit`}>
+					<Link href={`/admin/departments/${departmentId}/edit`}>
 						<PencilIcon className="mr-2 h-4 w-4" />
 						編集
 					</Link>
@@ -135,7 +135,7 @@ export default function DepartmentDetailPage({
 										<dd className="mt-1">
 											{parentDepartment ? (
 												<Link
-													href={`/departments/${parentDepartment.id}`}
+													href={`/admin/departments/${parentDepartment.id}`}
 													className="text-blue-600 hover:underline flex items-center"
 												>
 													<BuildingIcon className="h-4 w-4 mr-1" />
@@ -187,7 +187,7 @@ export default function DepartmentDetailPage({
 								{childDepartments.map((childDept: Department) => (
 									<Link
 										key={childDept.id}
-										href={`/departments/${childDept.id}`}
+										href={`/admin/departments/${childDept.id}`}
 										className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
 									>
 										<div className="flex items-center mb-2">

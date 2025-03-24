@@ -44,10 +44,10 @@ export function AppSidebar() {
 			<SidebarContent>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<Link href="/dashboard">
+						<Link href="/admin/dashboard">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/dashboard"}
+								isActive={pathname === "/admin/dashboard"}
 								tooltip="ダッシュボード"
 							>
 								<div>
@@ -58,10 +58,10 @@ export function AppSidebar() {
 						</Link>
 					</SidebarMenuItem>
 					<SidebarMenuItem>
-						<Link href="/employees">
+						<Link href="/admin/employees">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/employees"}
+								isActive={pathname === "/admin/employees"}
 								tooltip="従業員管理"
 							>
 								<div>
@@ -72,10 +72,10 @@ export function AppSidebar() {
 						</Link>
 					</SidebarMenuItem>
 					<SidebarMenuItem>
-						<Link href="/departments">
+						<Link href="/admin/departments">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/departments"}
+								isActive={pathname === "/admin/departments"}
 								tooltip="部署管理"
 							>
 								<div>
@@ -86,10 +86,10 @@ export function AppSidebar() {
 						</Link>
 					</SidebarMenuItem>
 					<SidebarMenuItem>
-						<Link href="/positions">
+						<Link href="/admin/positions">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/positions"}
+								isActive={pathname === "/admin/positions"}
 								tooltip="役職管理"
 							>
 								<div>
@@ -100,10 +100,10 @@ export function AppSidebar() {
 						</Link>
 					</SidebarMenuItem>
 					<SidebarMenuItem>
-						<Link href="/grades">
+						<Link href="/admin/grades">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/grades"}
+								isActive={pathname === "/admin/grades"}
 								tooltip="グレード管理"
 							>
 								<div>
@@ -114,10 +114,10 @@ export function AppSidebar() {
 						</Link>
 					</SidebarMenuItem>
 					<SidebarMenuItem>
-						<Link href="/skills-certifications">
+						<Link href="/admin/skills-certifications">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/skills-certifications"}
+								isActive={pathname === "/admin/skills-certifications"}
 								tooltip="スキル・資格管理"
 							>
 								<div>

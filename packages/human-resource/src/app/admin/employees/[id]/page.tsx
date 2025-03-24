@@ -112,7 +112,7 @@ export default function EmployeeDetailPage({
 			<div className="flex flex-col items-center justify-center h-96">
 				<h2 className="text-2xl font-bold mb-4">従業員が見つかりません</h2>
 				<Button asChild>
-					<Link href="/employees">
+					<Link href="/admin/employees">
 						<ArrowLeftIcon className="mr-2 h-4 w-4" />
 						従業員一覧に戻る
 					</Link>
@@ -156,7 +156,7 @@ export default function EmployeeDetailPage({
 
 				<div className="mt-8 flex justify-end space-x-2">
 					<Button variant="outline" asChild>
-						<Link href="/employees">従業員一覧へ戻る</Link>
+						<Link href="/admin/employees">従業員一覧へ戻る</Link>
 					</Button>
 				</div>
 			</div>

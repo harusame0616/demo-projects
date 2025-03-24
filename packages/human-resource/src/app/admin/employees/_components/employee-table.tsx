@@ -78,12 +78,12 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
 											<DropdownMenuItem asChild>
-												<Link href={`/employees/${employee.id}`}>
+												<Link href={`/admin/employees/${employee.id}`}>
 													詳細を表示
 												</Link>
 											</DropdownMenuItem>
 											<DropdownMenuItem asChild>
-												<Link href={`/employees/${employee.id}/edit`}>
+												<Link href={`/admin/employees/${employee.id}/edit`}>
 													編集
 												</Link>
 											</DropdownMenuItem>
