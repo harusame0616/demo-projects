@@ -73,82 +73,103 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 	};
 
 	return (
-		<div className="w-full flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 mb-6">
-			<div className="flex-1 flex gap-2">
-				<div className="relative flex-1">
-					<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-					<Input
-						placeholder="社員名や内容、コメントで検索..."
-						value={query}
-						onChange={(e) => setQuery(e.target.value)}
-						onKeyDown={(e) => {
-							if (e.key === "Enter") {
-								handleFilterChange();
-							}
-						}}
-						className="pl-10 w-full"
-					/>
-				</div>
-			</div>
-
-			<div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
-				<Select value={type} onValueChange={(value) => setType(value)}>
-					<SelectTrigger className="w-full sm:w-[180px]">
-						<SelectValue placeholder="申請タイプ" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">すべての申請</SelectItem>
-						<SelectItem value="attendance_correction">勤怠修正</SelectItem>
-						<SelectItem value="leave_request">休暇申請</SelectItem>
-						<SelectItem value="remote_work">リモートワーク</SelectItem>
-						<SelectItem value="overtime">残業申請</SelectItem>
-						<SelectItem value="business_trip">出張申請</SelectItem>
-					</SelectContent>
-				</Select>
-
-				<Select value={status} onValueChange={(value) => setStatus(value)}>
-					<SelectTrigger className="w-full sm:w-[180px]">
-						<SelectValue placeholder="ステータス" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">すべてのステータス</SelectItem>
-						<SelectItem value="pending">承認待ち</SelectItem>
-						<SelectItem value="approved">承認済み</SelectItem>
-						<SelectItem value="rejected">却下</SelectItem>
-					</SelectContent>
-				</Select>
-
-				<Popover>
-					<PopoverTrigger asChild>
-						<Button
-							variant="outline"
-							className={`w-full sm:w-[180px] justify-start text-left font-normal ${
-								!date ? "text-muted-foreground" : ""
-							}`}
-						>
-							<Calendar className="mr-2 h-4 w-4" />
-							{date
-								? format(date, "yyyy年MM月dd日", { locale: ja })
-								: "日付を選択"}
-						</Button>
-					</PopoverTrigger>
-					<PopoverContent className="w-auto p-0" align="start">
-						<CalendarComponent
-							mode="single"
-							selected={date}
-							onSelect={setDate}
-							initialFocus
+		<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
+			<div className="space-y-6">
+				{/* 検索フィールド行 */}
+				<div className="flex flex-col md:flex-row gap-4 items-center">
+					{/* 検索入力フィールド */}
+					<div className="relative flex-1 w-full">
+						<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+						<Input
+							placeholder="社員名や内容、コメントで検索..."
+							value={query}
+							onChange={(e) => setQuery(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter") {
+									handleFilterChange();
+								}
+							}}
+							className="pl-10 w-full h-10 rounded-lg"
 						/>
-					</PopoverContent>
-				</Popover>
+					</div>
 
-				<div className="flex gap-2">
-					<Button onClick={handleFilterChange} type="button">
-						検索
-					</Button>
-					<Button onClick={handleClear} variant="outline" type="button">
-						クリア
-					</Button>
+					{/* 申請タイプ選択 */}
+					<div className="w-full md:w-48">
+						<Select value={type} onValueChange={(value) => setType(value)}>
+							<SelectTrigger className="h-10 rounded-lg">
+								<SelectValue placeholder="申請タイプ" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="all">すべての申請</SelectItem>
+								<SelectItem value="attendance_correction">勤怠修正</SelectItem>
+								<SelectItem value="leave_request">休暇申請</SelectItem>
+								<SelectItem value="remote_work">リモートワーク</SelectItem>
+								<SelectItem value="overtime">残業申請</SelectItem>
+								<SelectItem value="business_trip">出張申請</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+
+					{/* ステータス選択 */}
+					<div className="w-full md:w-48">
+						<Select value={status} onValueChange={(value) => setStatus(value)}>
+							<SelectTrigger className="h-10 rounded-lg">
+								<SelectValue placeholder="ステータス" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="all">すべてのステータス</SelectItem>
+								<SelectItem value="pending">承認待ち</SelectItem>
+								<SelectItem value="approved">承認済み</SelectItem>
+								<SelectItem value="rejected">却下</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+
+					{/* 日付選択 */}
+					<div className="w-full md:w-48">
+						<Popover>
+							<PopoverTrigger asChild>
+								<Button
+									variant="outline"
+									className={`w-full h-10 rounded-lg justify-start text-left font-normal ${
+										!date ? "text-muted-foreground" : ""
+									}`}
+								>
+									<Calendar className="mr-2 h-4 w-4" />
+									{date
+										? format(date, "yyyy年MM月dd日", { locale: ja })
+										: "日付を選択"}
+								</Button>
+							</PopoverTrigger>
+							<PopoverContent className="w-auto p-0" align="start">
+								<CalendarComponent
+									mode="single"
+									selected={date}
+									onSelect={setDate}
+									initialFocus
+								/>
+							</PopoverContent>
+						</Popover>
+					</div>
+
+					{/* ボタン */}
+					<div className="flex gap-4 w-full md:w-auto">
+						<Button
+							onClick={handleFilterChange}
+							type="button"
+							className="flex-1 md:flex-none md:w-32 bg-black text-white h-10 rounded-lg"
+						>
+							検索
+						</Button>
+						<Button
+							onClick={handleClear}
+							variant="outline"
+							type="button"
+							className="flex-1 md:flex-none md:w-32 border-gray-300 h-10 rounded-lg"
+						>
+							クリア
+						</Button>
+					</div>
 				</div>
 			</div>
 		</div>

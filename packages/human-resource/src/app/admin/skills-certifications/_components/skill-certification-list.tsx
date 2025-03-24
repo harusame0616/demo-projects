@@ -2,13 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -37,8 +31,8 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import {
-	type SkillCertification,
-	type SkillCertificationType,
+	SkillCertification,
+	SkillCertificationType,
 } from "../_data/skills-certifications-data";
 import { Pagination } from "@/components/ui/pagination";
 import {
@@ -137,60 +131,74 @@ export function SkillCertificationList({
 
 	return (
 		<div className="space-y-4 w-full">
-			<div className="flex flex-col gap-4 md:flex-row md:items-center w-full">
-				<div className="relative flex-1">
-					<SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-					<Input
-						placeholder="名称または説明で検索..."
-						className="pl-8"
-						defaultValue={query}
-						onChange={(e) => {
-							if (e.target.value === "") {
-								handleSearch("");
-							}
-						}}
-						onKeyDown={(e) => {
-							if (e.key === "Enter") {
-								handleSearch(e.currentTarget.value);
-							}
-						}}
-						ref={searchInputRef}
-					/>
+			<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
+				<div className="space-y-6">
+					{/* 検索フィールド行 */}
+					<div className="flex flex-col md:flex-row gap-4 items-center">
+						{/* 検索入力フィールド */}
+						<div className="relative flex-1 w-full">
+							<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+							<Input
+								placeholder="名称または説明で検索..."
+								className="pl-10 w-full h-10 rounded-lg"
+								defaultValue={query}
+								onChange={(e) => {
+									if (e.target.value === "") {
+										handleSearch("");
+									}
+								}}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										handleSearch(e.currentTarget.value);
+									}
+								}}
+								ref={searchInputRef}
+							/>
+						</div>
+
+						{/* 種類選択 */}
+						<div className="w-full md:w-48">
+							<Select defaultValue={type} onValueChange={handleTypeChange}>
+								<SelectTrigger className="h-10 rounded-lg">
+									<SelectValue placeholder="種類でフィルター" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="all">すべて</SelectItem>
+									<SelectItem value="skill">スキル</SelectItem>
+									<SelectItem value="certification">資格</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
+
+						{/* ボタン */}
+						<div className="flex gap-4 w-full md:w-auto">
+							<Button
+								onClick={() => {
+									if (searchInputRef.current) {
+										handleSearch(searchInputRef.current.value);
+									}
+								}}
+								type="button"
+								className="flex-1 md:flex-none md:w-32 bg-black text-white h-10 rounded-lg"
+							>
+								検索
+							</Button>
+							<Button
+								onClick={() => {
+									if (searchInputRef.current) {
+										searchInputRef.current.value = "";
+										handleSearch("");
+									}
+								}}
+								variant="outline"
+								type="button"
+								className="flex-1 md:flex-none md:w-32 border-gray-300 h-10 rounded-lg"
+							>
+								クリア
+							</Button>
+						</div>
+					</div>
 				</div>
-				<div className="flex gap-2">
-					<Button
-						onClick={() => {
-							if (searchInputRef.current) {
-								handleSearch(searchInputRef.current.value);
-							}
-						}}
-						type="button"
-					>
-						検索
-					</Button>
-					<Button
-						onClick={() => {
-							if (searchInputRef.current) {
-								searchInputRef.current.value = "";
-								handleSearch("");
-							}
-						}}
-						variant="outline"
-						type="button"
-					>
-						クリア
-					</Button>
-				</div>
-				<Select defaultValue={type} onValueChange={handleTypeChange}>
-					<SelectTrigger className="w-[180px]">
-						<SelectValue placeholder="種類でフィルター" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">すべて</SelectItem>
-						<SelectItem value="skill">スキル</SelectItem>
-						<SelectItem value="certification">資格</SelectItem>
-					</SelectContent>
-				</Select>
 			</div>
 
 			<div className="w-full overflow-auto rounded-md border">

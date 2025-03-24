@@ -24,6 +24,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { Grade } from "../_data/grades-data";
 import type { GradeSearchParams } from "../_actions/grade-actions";
+import { Card, CardContent } from "@/components/ui/card";
+import { SearchIcon } from "lucide-react";
 
 // 日付をフォーマットする関数
 function formatDate(dateString: string): string {
@@ -103,33 +105,55 @@ export function GradeListContainer({
 
 	return (
 		<div className="space-y-4 w-full">
-			<div className="w-full flex gap-2">
-				<Input
-					placeholder="グレードを検索..."
-					value={searchTerm}
-					onChange={(e) => {
-						setSearchTerm(e.target.value);
-						if (e.target.value === "") {
-							const updatedParams = new URLSearchParams(params.toString());
-							updatedParams.delete("query");
-							updatedParams.delete("page"); // ページもリセット
-							router.push(`${pathname}?${updatedParams.toString()}`);
-						}
-					}}
-					onKeyDown={(e) => {
-						if (e.key === "Enter") {
-							handleSearch();
-						}
-					}}
-					className="max-w-md"
-				/>
-				<div className="flex gap-2">
-					<Button onClick={handleSearch} type="button">
-						検索
-					</Button>
-					<Button onClick={handleClear} variant="outline" type="button">
-						クリア
-					</Button>
+			<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
+				<div className="space-y-6">
+					{/* 検索フィールド行 */}
+					<div className="flex flex-col md:flex-row gap-4 items-center">
+						{/* 検索入力フィールド */}
+						<div className="relative flex-1 w-full">
+							<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+							<Input
+								placeholder="グレードを検索..."
+								value={searchTerm}
+								onChange={(e) => {
+									setSearchTerm(e.target.value);
+									if (e.target.value === "") {
+										const updatedParams = new URLSearchParams(
+											params.toString(),
+										);
+										updatedParams.delete("query");
+										updatedParams.delete("page"); // ページもリセット
+										router.push(`${pathname}?${updatedParams.toString()}`);
+									}
+								}}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										handleSearch();
+									}
+								}}
+								className="pl-10 w-full h-10 rounded-lg"
+							/>
+						</div>
+
+						{/* ボタン */}
+						<div className="flex gap-4 w-full md:w-auto">
+							<Button
+								onClick={handleSearch}
+								type="button"
+								className="flex-1 md:flex-none md:w-32 bg-black text-white h-10 rounded-lg"
+							>
+								検索
+							</Button>
+							<Button
+								onClick={handleClear}
+								variant="outline"
+								type="button"
+								className="flex-1 md:flex-none md:w-32 border-gray-300 h-10 rounded-lg"
+							>
+								クリア
+							</Button>
+						</div>
+					</div>
 				</div>
 			</div>
 
