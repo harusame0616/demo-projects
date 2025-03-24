@@ -55,39 +55,39 @@ export function EmployeeTable({
 	};
 
 	return (
-		<div className="rounded-md border">
+		<div className="rounded-md border w-full">
 			<Table>
 				<TableHeader>
 					<TableRow>
 						<TableHead
-							className="cursor-pointer hover:bg-gray-50"
+							className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
 							onClick={() => onSort("id")}
 						>
 							社員ID {getSortIcon("id")}
 						</TableHead>
 						<TableHead
-							className="cursor-pointer hover:bg-gray-50"
+							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"
 							onClick={() => onSort("name")}
 						>
 							氏名 {getSortIcon("name")}
 						</TableHead>
 						<TableHead
-							className="cursor-pointer hover:bg-gray-50"
+							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"
 							onClick={() => onSort("department")}
 						>
 							部署 {getSortIcon("department")}
 						</TableHead>
 						<TableHead
-							className="cursor-pointer hover:bg-gray-50"
+							className="cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
 							onClick={() => onSort("position")}
 						>
 							役職 {getSortIcon("position")}
 						</TableHead>
-						<TableHead className="hidden md:table-cell">
+						<TableHead className="hidden md:table-cell min-w-[200px] whitespace-nowrap">
 							メールアドレス
 						</TableHead>
 						<TableHead
-							className="hidden md:table-cell cursor-pointer hover:bg-gray-50"
+							className="hidden md:table-cell cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
 							onClick={() => onSort("joinDate")}
 						>
 							入社日 {getSortIcon("joinDate")}
@@ -105,17 +105,25 @@ export function EmployeeTable({
 					) : (
 						employees.map((employee) => (
 							<TableRow key={employee.id}>
-								<TableCell className="font-medium">{employee.id}</TableCell>
-								<TableCell>{employee.name}</TableCell>
-								<TableCell>{employee.department}</TableCell>
-								<TableCell>{employee.position}</TableCell>
-								<TableCell className="hidden md:table-cell">
+								<TableCell className="font-medium whitespace-nowrap">
+									{employee.id}
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
+									{employee.name}
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
+									{employee.department}
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
+									{employee.position}
+								</TableCell>
+								<TableCell className="hidden md:table-cell whitespace-nowrap truncate max-w-[300px]">
 									{employee.email}
 								</TableCell>
-								<TableCell className="hidden md:table-cell">
+								<TableCell className="hidden md:table-cell whitespace-nowrap">
 									{formatDate(employee.joinDate)}
 								</TableCell>
-								<TableCell>
+								<TableCell className="whitespace-nowrap">
 									<DropdownMenu>
 										<DropdownMenuTrigger asChild>
 											<Button variant="ghost" size="icon">

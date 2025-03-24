@@ -19,11 +19,11 @@ export const metadata: Metadata = {
 // ローディング状態を表示するスケルトンコンポーネント
 function DepartmentListSkeleton() {
 	return (
-		<div className="space-y-4">
-			<div className="flex flex-col gap-4 md:flex-row md:items-center mb-6">
+		<div className="space-y-4 w-full">
+			<div className="flex flex-col gap-4 md:flex-row md:items-center mb-6 w-full">
 				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
 			</div>
-			<div className="rounded-md border">
+			<div className="rounded-md border w-full">
 				<div className="h-[400px] bg-gray-100 animate-pulse rounded-md" />
 			</div>
 			<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md mt-4" />
@@ -48,7 +48,7 @@ export default async function DepartmentsPage({
 	});
 
 	return (
-		<>
+		<div className="w-full flex-1">
 			<div className="flex items-center justify-between mb-6">
 				<h2 className="text-3xl font-bold tracking-tight">部署一覧</h2>
 				<Button asChild>
@@ -59,7 +59,7 @@ export default async function DepartmentsPage({
 				</Button>
 			</div>
 
-			<Card>
+			<Card className="w-full">
 				<CardHeader>
 					<CardTitle>部署一覧</CardTitle>
 				</CardHeader>
@@ -73,6 +73,6 @@ export default async function DepartmentsPage({
 					</Suspense>
 				</CardContent>
 			</Card>
-		</>
+		</div>
 	);
 }

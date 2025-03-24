@@ -24,11 +24,11 @@ export const metadata: Metadata = {
 // ローディング状態のスケルトン
 function SkillCertificationListSkeleton() {
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 w-full">
 			<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
 			<div className="h-96 w-full bg-gray-200 animate-pulse rounded-md" />
 			{/* ページネーションスケルトン */}
-			<div className="flex justify-center mt-4">
+			<div className="flex justify-center mt-4 w-full">
 				<div className="h-10 w-40 bg-gray-200 animate-pulse rounded-md" />
 			</div>
 		</div>
@@ -50,7 +50,7 @@ export default async function SkillCertificationsPage({
 	});
 
 	return (
-		<>
+		<div className="w-full flex-1">
 			<div className="flex justify-between items-center mb-6">
 				<h2 className="text-3xl font-bold tracking-tight">スキル・資格一覧</h2>
 				<Button asChild>
@@ -61,7 +61,7 @@ export default async function SkillCertificationsPage({
 				</Button>
 			</div>
 
-			<Card>
+			<Card className="w-full">
 				<CardHeader>
 					<CardTitle>スキル・資格一覧</CardTitle>
 					<CardDescription>
@@ -78,6 +78,6 @@ export default async function SkillCertificationsPage({
 					</Suspense>
 				</CardContent>
 			</Card>
-		</>
+		</div>
 	);
 }

@@ -8,12 +8,14 @@ export default function PrivateLayout({
 }) {
 	return (
 		<SidebarProvider>
-			<div className="flex flex-col min-h-screen">
-				<div className="flex-1 flex">
+			<div className="flex flex-col min-h-screen w-full">
+				<div className="flex-1 flex overflow-hidden w-full">
 					<AppSidebar />
-					<main className="flex-1 py-6 px-6 md:container">{children}</main>
+					<main className="flex-1 p-6 overflow-auto w-full max-w-full">
+						{children}
+					</main>
 				</div>
-				<footer className="border-t bg-background">
+				<footer className="border-t bg-background w-full">
 					<div className="container flex h-16 items-center justify-center py-4">
 						<p className="text-sm text-muted-foreground">
 							© 2024 人材管理システム All rights reserved.

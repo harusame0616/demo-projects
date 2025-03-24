@@ -214,67 +214,75 @@ export function ApplicationTable({
 	};
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 w-full">
 			{/* 申請リスト */}
-			<div className="rounded-md border">
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead>申請ID</TableHead>
-							<TableHead>申請種類</TableHead>
-							<TableHead>ステータス</TableHead>
-							<TableHead>社員</TableHead>
-							<TableHead>申請日</TableHead>
-							<TableHead>対象日</TableHead>
-							<TableHead>内容</TableHead>
-							<TableHead className="text-right">アクション</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{applications.length === 0 ? (
+			<div className="w-full overflow-auto">
+				<div className="min-w-full rounded-md border">
+					<Table>
+						<TableHeader>
 							<TableRow>
-								<TableCell colSpan={8} className="h-24 text-center">
-									該当する申請はありません
-								</TableCell>
+								<TableHead className="w-[100px]">申請ID</TableHead>
+								<TableHead className="w-[120px]">申請種類</TableHead>
+								<TableHead className="w-[100px]">ステータス</TableHead>
+								<TableHead className="w-[150px]">社員</TableHead>
+								<TableHead className="w-[120px]">申請日</TableHead>
+								<TableHead className="w-[120px]">対象日</TableHead>
+								<TableHead className="min-w-[150px]">内容</TableHead>
+								<TableHead className="w-[80px] text-right">
+									アクション
+								</TableHead>
 							</TableRow>
-						) : (
-							applications.map((application) => (
-								<TableRow key={application.id}>
-									<TableCell className="font-medium">
-										{application.id}
-									</TableCell>
-									<TableCell>
-										{getApplicationTypeBadge(application.type)}
-									</TableCell>
-									<TableCell>{getStatusBadge(application.status)}</TableCell>
-									<TableCell>
-										{application.employeeName}
-										<br />
-										<span className="text-xs text-gray-500">
-											ID: {application.employeeId}
-										</span>
-									</TableCell>
-									<TableCell>{application.submittedDate}</TableCell>
-									<TableCell>{application.targetDate}</TableCell>
-									<TableCell>
-										<div className="max-w-[200px] truncate">
-											{application.content}
-										</div>
-									</TableCell>
-									<TableCell className="text-right">
-										<Button
-											variant="ghost"
-											size="icon"
-											onClick={() => openDetails(application)}
-										>
-											<FileTextIcon className="h-4 w-4" />
-										</Button>
+						</TableHeader>
+						<TableBody>
+							{applications.length === 0 ? (
+								<TableRow>
+									<TableCell colSpan={8} className="h-24 text-center">
+										該当する申請はありません
 									</TableCell>
 								</TableRow>
-							))
-						)}
-					</TableBody>
-				</Table>
+							) : (
+								applications.map((application) => (
+									<TableRow key={application.id}>
+										<TableCell className="font-medium whitespace-nowrap">
+											{application.id}
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											{getApplicationTypeBadge(application.type)}
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											{getStatusBadge(application.status)}
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											{application.employeeName}
+											<br />
+											<span className="text-xs text-gray-500">
+												ID: {application.employeeId}
+											</span>
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											{application.submittedDate}
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											{application.targetDate}
+										</TableCell>
+										<TableCell className="max-w-[300px]">
+											<div className="truncate">{application.content}</div>
+										</TableCell>
+										<TableCell className="text-right whitespace-nowrap">
+											<Button
+												variant="ghost"
+												size="icon"
+												onClick={() => openDetails(application)}
+											>
+												<FileTextIcon className="h-4 w-4" />
+											</Button>
+										</TableCell>
+									</TableRow>
+								))
+							)}
+						</TableBody>
+					</Table>
+				</div>
 			</div>
 
 			{/* ページネーション */}

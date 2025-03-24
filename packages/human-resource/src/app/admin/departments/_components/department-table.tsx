@@ -86,21 +86,23 @@ export function DepartmentTable({
 	};
 
 	return (
-		<div className="rounded-md border">
+		<div className="rounded-md border w-full">
 			<Table>
 				<TableHeader>
 					<TableRow>
 						<TableHead
-							className="cursor-pointer"
+							className="cursor-pointer w-[200px] whitespace-nowrap"
 							onClick={() => handleSort("name")}
 						>
 							<div className="flex items-center">
 								部署名 {getSortIcon("name")}
 							</div>
 						</TableHead>
-						<TableHead>上位部署</TableHead>
+						<TableHead className="w-[200px] whitespace-nowrap">
+							上位部署
+						</TableHead>
 						<TableHead
-							className="cursor-pointer"
+							className="cursor-pointer w-[100px] whitespace-nowrap"
 							onClick={() => handleSort("memberCount")}
 						>
 							<div className="flex items-center">
@@ -108,7 +110,7 @@ export function DepartmentTable({
 							</div>
 						</TableHead>
 						<TableHead
-							className="cursor-pointer"
+							className="cursor-pointer w-[120px] whitespace-nowrap"
 							onClick={() => handleSort("createdAt")}
 						>
 							<div className="flex items-center">
@@ -128,7 +130,7 @@ export function DepartmentTable({
 					) : (
 						departments.map((department) => (
 							<TableRow key={department.id}>
-								<TableCell className="font-medium">
+								<TableCell className="font-medium whitespace-nowrap">
 									<Link
 										href={`/admin/departments/${department.id}`}
 										className="hover:underline flex items-center"
@@ -137,15 +139,19 @@ export function DepartmentTable({
 										{department.name}
 									</Link>
 								</TableCell>
-								<TableCell>{getParentName(department.parentId)}</TableCell>
-								<TableCell>
+								<TableCell className="whitespace-nowrap">
+									{getParentName(department.parentId)}
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
 									<div className="flex items-center">
 										<UsersIcon className="h-4 w-4 mr-1" />
 										{department.memberCount}人
 									</div>
 								</TableCell>
-								<TableCell>{formatDate(department.createdAt)}</TableCell>
-								<TableCell>
+								<TableCell className="whitespace-nowrap">
+									{formatDate(department.createdAt)}
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
 									<DropdownMenu>
 										<DropdownMenuTrigger asChild>
 											<Button variant="ghost" size="icon">

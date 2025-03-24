@@ -54,18 +54,18 @@ export function PositionTable({
 	};
 
 	return (
-		<div className="rounded-md border">
+		<div className="rounded-md border w-full">
 			<Table>
 				<TableHeader>
 					<TableRow>
 						<TableHead
-							className="w-[100px] cursor-pointer"
+							className="w-[100px] cursor-pointer whitespace-nowrap"
 							onClick={() => onSort("id")}
 						>
 							<div className="flex items-center">ID {getSortIcon("id")}</div>
 						</TableHead>
 						<TableHead
-							className="cursor-pointer"
+							className="cursor-pointer w-[150px] whitespace-nowrap"
 							onClick={() => onSort("name")}
 						>
 							<div className="flex items-center">
@@ -73,16 +73,18 @@ export function PositionTable({
 							</div>
 						</TableHead>
 						<TableHead
-							className="cursor-pointer"
+							className="cursor-pointer w-[100px] whitespace-nowrap"
 							onClick={() => onSort("level")}
 						>
 							<div className="flex items-center">
 								レベル {getSortIcon("level")}
 							</div>
 						</TableHead>
-						<TableHead className="hidden md:table-cell">説明</TableHead>
+						<TableHead className="hidden md:table-cell w-[300px]">
+							説明
+						</TableHead>
 						<TableHead
-							className="hidden md:table-cell cursor-pointer"
+							className="hidden md:table-cell cursor-pointer w-[100px] whitespace-nowrap"
 							onClick={() => onSort("memberCount")}
 						>
 							<div className="flex items-center">
@@ -90,14 +92,16 @@ export function PositionTable({
 							</div>
 						</TableHead>
 						<TableHead
-							className="hidden md:table-cell cursor-pointer"
+							className="hidden md:table-cell cursor-pointer w-[120px] whitespace-nowrap"
 							onClick={() => onSort("createdAt")}
 						>
 							<div className="flex items-center">
 								作成日 {getSortIcon("createdAt")}
 							</div>
 						</TableHead>
-						<TableHead className="text-right">操作</TableHead>
+						<TableHead className="text-right w-[100px] whitespace-nowrap">
+							操作
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -110,8 +114,10 @@ export function PositionTable({
 					) : (
 						positions.map((position) => (
 							<TableRow key={position.id}>
-								<TableCell className="font-medium">{position.id}</TableCell>
-								<TableCell>
+								<TableCell className="font-medium whitespace-nowrap">
+									{position.id}
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
 									<Link
 										href={`/admin/positions/${position.id}`}
 										className="hover:underline text-blue-600"
@@ -119,7 +125,9 @@ export function PositionTable({
 										{position.name}
 									</Link>
 								</TableCell>
-								<TableCell>{position.level}</TableCell>
+								<TableCell className="whitespace-nowrap">
+									{position.level}
+								</TableCell>
 								<TableCell className="hidden md:table-cell max-w-[300px] truncate">
 									<TooltipProvider>
 										<Tooltip>
@@ -132,13 +140,13 @@ export function PositionTable({
 										</Tooltip>
 									</TooltipProvider>
 								</TableCell>
-								<TableCell className="hidden md:table-cell">
+								<TableCell className="hidden md:table-cell whitespace-nowrap">
 									{position.memberCount}名
 								</TableCell>
-								<TableCell className="hidden md:table-cell">
+								<TableCell className="hidden md:table-cell whitespace-nowrap">
 									{formatDate(position.createdAt)}
 								</TableCell>
-								<TableCell className="text-right">
+								<TableCell className="text-right whitespace-nowrap">
 									<div className="flex justify-end gap-2">
 										<Button
 											variant="outline"

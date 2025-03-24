@@ -91,34 +91,36 @@ export function GradeListContainer({
 	};
 
 	return (
-		<div className="space-y-4">
-			<Input
-				placeholder="グレードを検索..."
-				value={searchTerm}
-				onChange={(e) => {
-					setSearchTerm(e.target.value);
-					if (e.target.value === "") {
-						const updatedParams = new URLSearchParams(params.toString());
-						updatedParams.delete("query");
-						updatedParams.delete("page"); // ページもリセット
-						router.push(`${pathname}?${updatedParams.toString()}`);
-					}
-				}}
-				onKeyDown={(e) => {
-					if (e.key === "Enter") {
-						handleSearch();
-					}
-				}}
-				onBlur={handleSearch}
-				className="max-w-md"
-			/>
+		<div className="space-y-4 w-full">
+			<div className="w-full">
+				<Input
+					placeholder="グレードを検索..."
+					value={searchTerm}
+					onChange={(e) => {
+						setSearchTerm(e.target.value);
+						if (e.target.value === "") {
+							const updatedParams = new URLSearchParams(params.toString());
+							updatedParams.delete("query");
+							updatedParams.delete("page"); // ページもリセット
+							router.push(`${pathname}?${updatedParams.toString()}`);
+						}
+					}}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							handleSearch();
+						}
+					}}
+					onBlur={handleSearch}
+					className="max-w-md"
+				/>
+			</div>
 
-			<div className="border rounded-md">
+			<div className="border rounded-md w-full overflow-auto">
 				<Table>
 					<TableHeader>
 						<TableRow>
 							<TableHead
-								className="w-[180px] cursor-pointer"
+								className="w-[180px] cursor-pointer whitespace-nowrap"
 								onClick={() => handleSort("name")}
 							>
 								<div className="flex items-center">
@@ -127,7 +129,7 @@ export function GradeListContainer({
 								</div>
 							</TableHead>
 							<TableHead
-								className="w-[80px] cursor-pointer"
+								className="w-[100px] cursor-pointer whitespace-nowrap"
 								onClick={() => handleSort("level")}
 							>
 								<div className="flex items-center">
@@ -135,9 +137,9 @@ export function GradeListContainer({
 									{getSortIcon("level")}
 								</div>
 							</TableHead>
-							<TableHead>説明</TableHead>
+							<TableHead className="w-[300px]">説明</TableHead>
 							<TableHead
-								className="cursor-pointer"
+								className="cursor-pointer w-[200px] whitespace-nowrap"
 								onClick={() => handleSort("salaryMin")}
 							>
 								<div className="flex items-center">
@@ -146,7 +148,7 @@ export function GradeListContainer({
 								</div>
 							</TableHead>
 							<TableHead
-								className="cursor-pointer"
+								className="cursor-pointer w-[100px] whitespace-nowrap"
 								onClick={() => handleSort("employeeCount")}
 							>
 								<div className="flex items-center">
@@ -155,7 +157,7 @@ export function GradeListContainer({
 								</div>
 							</TableHead>
 							<TableHead
-								className="cursor-pointer"
+								className="cursor-pointer w-[150px] whitespace-nowrap"
 								onClick={() => handleSort("createdAt")}
 							>
 								<div className="flex items-center">
@@ -175,7 +177,7 @@ export function GradeListContainer({
 						) : (
 							grades.map((grade) => (
 								<TableRow key={grade.id}>
-									<TableCell>
+									<TableCell className="whitespace-nowrap">
 										<Link
 											href={`/admin/grades/${grade.id}`}
 											className="font-medium text-blue-600 hover:underline"
@@ -183,7 +185,7 @@ export function GradeListContainer({
 											{grade.name}
 										</Link>
 									</TableCell>
-									<TableCell>
+									<TableCell className="whitespace-nowrap">
 										<Badge
 											variant={
 												grade.level >= 4
@@ -199,19 +201,19 @@ export function GradeListContainer({
 									<TableCell className="max-w-xs truncate">
 										{grade.description}
 									</TableCell>
-									<TableCell>
+									<TableCell className="whitespace-nowrap">
 										{formatSalaryRange(
 											grade.salaryRange.min,
 											grade.salaryRange.max,
 										)}
 									</TableCell>
-									<TableCell>
+									<TableCell className="whitespace-nowrap">
 										<div className="flex items-center">
 											<UsersIcon className="h-4 w-4 mr-1 text-gray-500" />
 											{grade.employeeCount}人
 										</div>
 									</TableCell>
-									<TableCell className="text-gray-500">
+									<TableCell className="text-gray-500 whitespace-nowrap">
 										{formatDate(grade.createdAt)}
 									</TableCell>
 								</TableRow>
@@ -222,7 +224,7 @@ export function GradeListContainer({
 			</div>
 
 			{pagination.totalPages > 1 && (
-				<div className="flex justify-center mt-6">
+				<div className="flex justify-center mt-6 w-full">
 					<Pagination
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}

@@ -123,8 +123,8 @@ export function SkillCertificationList({
 	};
 
 	return (
-		<div className="space-y-4">
-			<div className="flex flex-col gap-4 md:flex-row md:items-center">
+		<div className="space-y-4 w-full">
+			<div className="flex flex-col gap-4 md:flex-row md:items-center w-full">
 				<div className="relative flex-1">
 					<SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
 					<Input
@@ -155,83 +155,94 @@ export function SkillCertificationList({
 				</Select>
 			</div>
 
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead
-							className="cursor-pointer"
-							onClick={() => handleSort("name")}
-						>
-							名称 {getSortIcon("name")}
-						</TableHead>
-						<TableHead
-							className="cursor-pointer"
-							onClick={() => handleSort("type")}
-						>
-							種類 {getSortIcon("type")}
-						</TableHead>
-						<TableHead
-							className="cursor-pointer"
-							onClick={() => handleSort("levelOrAuthority")}
-						>
-							レベル/認定機関 {getSortIcon("levelOrAuthority")}
-						</TableHead>
-						<TableHead
-							className="text-center cursor-pointer"
-							onClick={() => handleSort("holdersCount")}
-						>
-							取得者数 {getSortIcon("holdersCount")}
-						</TableHead>
-						<TableHead
-							className="cursor-pointer"
-							onClick={() => handleSort("createdAt")}
-						>
-							登録日 {getSortIcon("createdAt")}
-						</TableHead>
-						<TableHead className="text-right">操作</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{skillCertifications.map((item) => (
-						<TableRow key={item.id}>
-							<TableCell className="font-medium">
-								<Link
-									href={`/admin/skills-certifications/${item.id}`}
-									className="hover:underline text-blue-600"
-								>
-									{item.name}
-								</Link>
-							</TableCell>
-							<TableCell>
-								<Badge
-									variant={item.type === "skill" ? "default" : "secondary"}
-								>
-									{TYPE_LABELS[item.type]}
-								</Badge>
-							</TableCell>
-							<TableCell>{item.levelOrAuthority}</TableCell>
-							<TableCell className="text-center">
-								{item.holdersCount}名
-							</TableCell>
-							<TableCell>
-								{format(new Date(item.createdAt), "yyyy年MM月dd日", {
-									locale: ja,
-								})}
-							</TableCell>
-							<TableCell className="text-right">
-								<Button variant="outline" size="sm" asChild className="ml-auto">
-									<Link href={`/admin/skills-certifications/${item.id}/edit`}>
-										編集
-									</Link>
-								</Button>
-							</TableCell>
+			<div className="w-full overflow-auto">
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead
+								className="cursor-pointer w-[200px] whitespace-nowrap"
+								onClick={() => handleSort("name")}
+							>
+								名称 {getSortIcon("name")}
+							</TableHead>
+							<TableHead
+								className="cursor-pointer w-[100px] whitespace-nowrap"
+								onClick={() => handleSort("type")}
+							>
+								種類 {getSortIcon("type")}
+							</TableHead>
+							<TableHead
+								className="cursor-pointer w-[200px] whitespace-nowrap"
+								onClick={() => handleSort("levelOrAuthority")}
+							>
+								レベル/認定機関 {getSortIcon("levelOrAuthority")}
+							</TableHead>
+							<TableHead
+								className="text-center cursor-pointer w-[100px] whitespace-nowrap"
+								onClick={() => handleSort("holdersCount")}
+							>
+								取得者数 {getSortIcon("holdersCount")}
+							</TableHead>
+							<TableHead
+								className="cursor-pointer w-[120px] whitespace-nowrap"
+								onClick={() => handleSort("createdAt")}
+							>
+								登録日 {getSortIcon("createdAt")}
+							</TableHead>
+							<TableHead className="text-right w-[80px] whitespace-nowrap">
+								操作
+							</TableHead>
 						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+					</TableHeader>
+					<TableBody>
+						{skillCertifications.map((item) => (
+							<TableRow key={item.id}>
+								<TableCell className="font-medium whitespace-nowrap">
+									<Link
+										href={`/admin/skills-certifications/${item.id}`}
+										className="hover:underline text-blue-600"
+									>
+										{item.name}
+									</Link>
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
+									<Badge
+										variant={item.type === "skill" ? "default" : "secondary"}
+									>
+										{TYPE_LABELS[item.type]}
+									</Badge>
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
+									{item.levelOrAuthority}
+								</TableCell>
+								<TableCell className="text-center whitespace-nowrap">
+									{item.holdersCount}名
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
+									{format(new Date(item.createdAt), "yyyy年MM月dd日", {
+										locale: ja,
+									})}
+								</TableCell>
+								<TableCell className="text-right whitespace-nowrap">
+									<Button
+										variant="outline"
+										size="sm"
+										asChild
+										className="ml-auto"
+									>
+										<Link href={`/admin/skills-certifications/${item.id}/edit`}>
+											編集
+										</Link>
+									</Button>
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</div>
 
 			{pagination.totalPages > 1 && (
-				<div className="flex justify-center mt-6">
+				<div className="flex justify-center mt-6 w-full">
 					<Pagination
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}

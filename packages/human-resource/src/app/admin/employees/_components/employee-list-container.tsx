@@ -117,7 +117,7 @@ export function EmployeeListContainer({
 	};
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-6 w-full">
 			<EmployeeFilter
 				departmentOptions={departmentOptions}
 				positionOptions={positionOptions}
@@ -126,14 +126,16 @@ export function EmployeeListContainer({
 				currentPosition={searchParams.position || "all"}
 				onFilter={handleFilter}
 			/>
-			<EmployeeTable
-				employees={employees}
-				searchParams={searchParams}
-				onSort={handleSort}
-			/>
+			<div className="w-full overflow-auto">
+				<EmployeeTable
+					employees={employees}
+					searchParams={searchParams}
+					onSort={handleSort}
+				/>
+			</div>
 
 			{pagination.totalPages > 1 && (
-				<div className="mt-4">
+				<div className="mt-4 w-full">
 					<Pagination
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}

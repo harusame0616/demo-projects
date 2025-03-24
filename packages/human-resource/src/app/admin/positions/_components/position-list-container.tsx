@@ -72,19 +72,23 @@ export function PositionListContainer({
 
 	return (
 		<>
-			<PositionFilter
-				searchQuery={searchParams.query || ""}
-				currentLevel={searchParams.level || "all"}
-				levelOptions={levelOptions}
-				onFilter={handleFilter}
-			/>
-			<PositionTable
-				positions={positions}
-				searchParams={searchParams}
-				onSort={handleSort}
-			/>
+			<div className="w-full">
+				<PositionFilter
+					searchQuery={searchParams.query || ""}
+					currentLevel={searchParams.level || "all"}
+					levelOptions={levelOptions}
+					onFilter={handleFilter}
+				/>
+			</div>
+			<div className="w-full overflow-auto">
+				<PositionTable
+					positions={positions}
+					searchParams={searchParams}
+					onSort={handleSort}
+				/>
+			</div>
 			{pagination.totalPages > 1 && (
-				<div className="flex justify-center mt-4">
+				<div className="flex justify-center mt-4 w-full">
 					<Pagination
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}

@@ -34,18 +34,20 @@ export default async function ApplicationsPage({
 	});
 
 	return (
-		<>
+		<div className="w-full flex-1">
 			<h2 className="text-3xl font-bold tracking-tight mb-6">申請管理</h2>
 
-			<Card>
+			<Card className="w-full">
 				<CardHeader>
 					<CardTitle>申請一覧</CardTitle>
 					<CardDescription>
 						従業員からの各種申請とその処理状況を表示します
 					</CardDescription>
 				</CardHeader>
-				<CardContent>
-					<ApplicationFilter searchParams={searchParams} />
+				<CardContent className="p-0 sm:p-6">
+					<div className="px-4 sm:px-0">
+						<ApplicationFilter searchParams={searchParams} />
+					</div>
 					<ApplicationTable
 						applications={applicationsData.items}
 						pagination={applicationsData.pagination}
@@ -53,6 +55,6 @@ export default async function ApplicationsPage({
 					/>
 				</CardContent>
 			</Card>
-		</>
+		</div>
 	);
 }

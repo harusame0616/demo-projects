@@ -87,7 +87,7 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 	};
 
 	return (
-		<div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 mb-6">
+		<div className="w-full flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 mb-6">
 			<div className="flex-1">
 				<div className="relative">
 					<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
@@ -101,17 +101,17 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 							}, 500);
 							return () => clearTimeout(timeoutId);
 						}}
-						className="pl-10"
+						className="pl-10 w-full"
 					/>
 				</div>
 			</div>
 
-			<div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+			<div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
 				<Select
 					defaultValue={searchParams.type || "all"}
 					onValueChange={(value) => handleFilterChange("type", value)}
 				>
-					<SelectTrigger className="w-[180px]">
+					<SelectTrigger className="w-full sm:w-[180px]">
 						<SelectValue placeholder="申請タイプ" />
 					</SelectTrigger>
 					<SelectContent>
@@ -128,7 +128,7 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 					defaultValue={searchParams.status || "all"}
 					onValueChange={(value) => handleFilterChange("status", value)}
 				>
-					<SelectTrigger className="w-[180px]">
+					<SelectTrigger className="w-full sm:w-[180px]">
 						<SelectValue placeholder="ステータス" />
 					</SelectTrigger>
 					<SelectContent>
@@ -143,7 +143,7 @@ export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
 					<PopoverTrigger asChild>
 						<Button
 							variant="outline"
-							className={`w-[180px] justify-start text-left font-normal ${
+							className={`w-full sm:w-[180px] justify-start text-left font-normal ${
 								!date ? "text-muted-foreground" : ""
 							}`}
 						>

@@ -52,15 +52,22 @@ export function DepartmentListContainer({
 	};
 
 	return (
-		<div className="space-y-6">
-			<DepartmentFilter
-				searchQuery={searchParams.query || ""}
-				onSearch={handleSearch}
-			/>
-			<DepartmentTable departments={departments} searchParams={searchParams} />
+		<div className="space-y-6 w-full">
+			<div className="w-full">
+				<DepartmentFilter
+					searchQuery={searchParams.query || ""}
+					onSearch={handleSearch}
+				/>
+			</div>
+			<div className="w-full overflow-auto">
+				<DepartmentTable
+					departments={departments}
+					searchParams={searchParams}
+				/>
+			</div>
 
 			{pagination.totalPages > 1 && (
-				<div className="mt-4">
+				<div className="mt-4 w-full flex justify-center">
 					<Pagination
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
