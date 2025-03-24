@@ -28,11 +28,6 @@ function formatDate(dateString: string): string {
 	}).format(date);
 }
 
-// 給与範囲をフォーマットする関数
-function formatSalaryRange(min: number, max: number): string {
-	return `${min.toLocaleString()}円 〜 ${max.toLocaleString()}円`;
-}
-
 interface GradeListContainerProps {
 	grades: Grade[];
 	searchParams: GradeSearchParams;
@@ -65,7 +60,7 @@ export function GradeListContainer({
 	};
 
 	// ソートハンドラー
-	const handleSort = (key: keyof Grade | "salaryMin" | "salaryMax") => {
+	const handleSort = (key: keyof Grade) => {
 		const newOrder = sort === key && order === "asc" ? "desc" : "asc";
 		const updatedParams = new URLSearchParams(params.toString());
 		updatedParams.set("sort", key);
@@ -81,7 +76,7 @@ export function GradeListContainer({
 	};
 
 	// ソートアイコンの表示
-	const getSortIcon = (key: keyof Grade | "salaryMin" | "salaryMax") => {
+	const getSortIcon = (key: keyof Grade) => {
 		if (sort !== key) return null;
 		return order === "asc" ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
@@ -139,15 +134,6 @@ export function GradeListContainer({
 							</TableHead>
 							<TableHead className="w-[300px]">説明</TableHead>
 							<TableHead
-								className="cursor-pointer w-[200px] whitespace-nowrap"
-								onClick={() => handleSort("salaryMin")}
-							>
-								<div className="flex items-center">
-									給与範囲
-									{getSortIcon("salaryMin")}
-								</div>
-							</TableHead>
-							<TableHead
 								className="cursor-pointer w-[150px] whitespace-nowrap"
 								onClick={() => handleSort("createdAt")}
 							>
@@ -161,7 +147,7 @@ export function GradeListContainer({
 					<TableBody>
 						{grades.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={5} className="text-center py-6">
+								<TableCell colSpan={4} className="text-center py-6">
 									該当するグレードがありません
 								</TableCell>
 							</TableRow>
@@ -191,12 +177,6 @@ export function GradeListContainer({
 									</TableCell>
 									<TableCell className="max-w-xs truncate">
 										{grade.description}
-									</TableCell>
-									<TableCell className="whitespace-nowrap">
-										{formatSalaryRange(
-											grade.salaryRange.min,
-											grade.salaryRange.max,
-										)}
 									</TableCell>
 									<TableCell className="text-gray-500 whitespace-nowrap">
 										{formatDate(grade.createdAt)}

@@ -83,9 +83,6 @@ export function EmployeeTable({
 						>
 							役職 {getSortIcon("position")}
 						</TableHead>
-						<TableHead className="hidden md:table-cell min-w-[200px] whitespace-nowrap">
-							メールアドレス
-						</TableHead>
 						<TableHead
 							className="hidden md:table-cell cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
 							onClick={() => onSort("joinDate")}
@@ -98,7 +95,7 @@ export function EmployeeTable({
 				<TableBody>
 					{employees.length === 0 ? (
 						<TableRow>
-							<TableCell colSpan={7} className="h-24 text-center">
+							<TableCell colSpan={6} className="h-24 text-center">
 								該当する従業員が見つかりませんでした
 							</TableCell>
 						</TableRow>
@@ -116,9 +113,6 @@ export function EmployeeTable({
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{employee.position}
-								</TableCell>
-								<TableCell className="hidden md:table-cell whitespace-nowrap truncate max-w-[300px]">
-									{employee.email}
 								</TableCell>
 								<TableCell className="hidden md:table-cell whitespace-nowrap">
 									{formatDate(employee.joinDate)}
