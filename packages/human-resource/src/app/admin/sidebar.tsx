@@ -131,15 +131,15 @@ export function AppSidebar() {
 						</Link>
 					</SidebarMenuItem>
 					<SidebarMenuItem>
-						<Link href="/admin/approvals">
+						<Link href="/admin/applications">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/admin/approvals"}
-								tooltip="承認管理"
+								isActive={pathname === "/admin/applications"}
+								tooltip="申請管理"
 							>
 								<div>
 									<ClipboardCheck className="h-5 w-5" />
-									<span>承認管理</span>
+									<span>申請管理</span>
 								</div>
 							</SidebarMenuButton>
 						</Link>

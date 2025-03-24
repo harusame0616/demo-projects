@@ -28,8 +28,7 @@ export interface Application {
 }
 
 // 検索パラメータの型定義
-export interface ApprovalSearchParams {
-	tab?: string;
+export interface ApplicationSearchParams {
 	query?: string;
 	type?: string;
 	status?: string;
@@ -553,69 +552,9 @@ const approvedApplications: Application[] = [
 // すべての申請を取得する（内部用）
 let allApplications = [...pendingApplications, ...approvedApplications];
 
-// 未承認の申請を取得
-export async function getPendingApplications(params: {
-	searchQuery?: string;
-	type?: string;
-	page?: string;
-}) {
-	let applications = allApplications.filter((app) => app.status === "pending");
-
-	// タイプでフィルタリング
-	if (params.type && params.type !== "all") {
-		applications = applications.filter(
-			(app) => app.type === (params.type as ApplicationType),
-		);
-	}
-
-	// 検索クエリでフィルタリング
-	if (params.searchQuery) {
-		const query = params.searchQuery.toLowerCase();
-		applications = applications.filter(
-			(app) =>
-				app.employeeName.toLowerCase().includes(query) ||
-				app.employeeId.toLowerCase().includes(query) ||
-				app.content.toLowerCase().includes(query),
-		);
-	}
-
-	// ページネーション
-	const page = params.page ? Number.parseInt(params.page, 10) : 1;
-	const limit = 10; // 1ページあたりの表示数
-	const total = applications.length;
-	const totalPages = Math.ceil(total / limit);
-	const start = (page - 1) * limit;
-	const end = start + limit;
-	const paginatedData = applications.slice(start, end);
-
-	return {
-		items: paginatedData,
-		pagination: {
-			total,
-			page,
-			limit,
-			totalPages,
-		},
-	};
-}
-
-// 承認履歴を取得
-export async function getApprovalHistory(params: {
-	searchQuery?: string;
-	type?: string;
-	status?: string;
-	date?: string;
-	page?: string;
-}) {
-	// pending以外のすべての申請を取得
-	let applications = allApplications.filter((app) => app.status !== "pending");
-
-	// タイプでフィルタリング
-	if (params.type && params.type !== "all") {
-		applications = applications.filter(
-			(app) => app.type === (params.type as ApplicationType),
-		);
-	}
+// 申請一覧を取得（未承認申請と承認履歴を統合）
+export async function getApplicationList(params: ApplicationSearchParams) {
+	let applications = allApplications;
 
 	// ステータスでフィルタリング
 	if (params.status && params.status !== "all") {
@@ -624,17 +563,29 @@ export async function getApprovalHistory(params: {
 		);
 	}
 
-	// 日付でフィルタリング
-	if (params.date) {
-		const date = params.date;
-		applications = applications.filter((app) =>
-			app.approvedDate ? app.approvedDate.startsWith(date) : false,
+	// タイプでフィルタリング
+	if (params.type && params.type !== "all") {
+		applications = applications.filter(
+			(app) => app.type === (params.type as ApplicationType),
 		);
 	}
 
+	// 日付でフィルタリング
+	if (params.date) {
+		const date = params.date;
+		applications = applications.filter((app) => {
+			// 未承認申請の場合は提出日でフィルタリング
+			if (app.status === "pending") {
+				return app.submittedDate.startsWith(date);
+			}
+			// 承認済み/却下済みの場合は承認日でフィルタリング
+			return app.approvedDate ? app.approvedDate.startsWith(date) : false;
+		});
+	}
+
 	// 検索クエリでフィルタリング
-	if (params.searchQuery) {
-		const query = params.searchQuery.toLowerCase();
+	if (params.query) {
+		const query = params.query.toLowerCase();
 		applications = applications.filter(
 			(app) =>
 				app.employeeName.toLowerCase().includes(query) ||
@@ -662,6 +613,37 @@ export async function getApprovalHistory(params: {
 			totalPages,
 		},
 	};
+}
+
+// 未承認の申請を取得
+export async function getPendingApplications(params: {
+	searchQuery?: string;
+	type?: string;
+	page?: string;
+}) {
+	return getApplicationList({
+		query: params.searchQuery,
+		type: params.type,
+		status: "pending",
+		page: params.page,
+	});
+}
+
+// 承認履歴を取得
+export async function getApprovalHistory(params: {
+	searchQuery?: string;
+	type?: string;
+	status?: string;
+	date?: string;
+	page?: string;
+}) {
+	return getApplicationList({
+		query: params.searchQuery,
+		type: params.type,
+		status: params.status === "all" ? undefined : params.status,
+		date: params.date,
+		page: params.page,
+	});
 }
 
 // 申請を承認する
