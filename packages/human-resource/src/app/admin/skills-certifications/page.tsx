@@ -27,6 +27,10 @@ function SkillCertificationListSkeleton() {
 		<div className="space-y-4">
 			<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
 			<div className="h-96 w-full bg-gray-200 animate-pulse rounded-md" />
+			{/* ページネーションスケルトン */}
+			<div className="flex justify-center mt-4">
+				<div className="h-10 w-40 bg-gray-200 animate-pulse rounded-md" />
+			</div>
 		</div>
 	);
 }
@@ -36,8 +40,14 @@ export default async function SkillCertificationsPage({
 }: {
 	searchParams: SkillCertificationSearchParams;
 }) {
+	// ページ番号の取得（デフォルトは1ページ目）
+	const currentPage = searchParams.page || "1";
+
 	// サーバーアクションを使用してデータを取得
-	const filteredData = await getSkillCertifications(searchParams);
+	const skillCertificationsData = await getSkillCertifications({
+		...searchParams,
+		page: currentPage,
+	});
 
 	return (
 		<>
@@ -61,7 +71,8 @@ export default async function SkillCertificationsPage({
 				<CardContent>
 					<Suspense fallback={<SkillCertificationListSkeleton />}>
 						<SkillCertificationList
-							skillCertifications={filteredData}
+							skillCertifications={skillCertificationsData.items}
+							pagination={skillCertificationsData.pagination}
 							searchParams={searchParams}
 						/>
 					</Suspense>

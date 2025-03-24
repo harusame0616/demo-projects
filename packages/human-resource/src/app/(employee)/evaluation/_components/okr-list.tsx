@@ -253,9 +253,9 @@ export function OkrList({ onGoalSelect }: OkrListProps) {
 					...obj.keyResults,
 					{
 						id: Math.max(...obj.keyResults.map((kr) => kr.id), 0) + 1,
-						description: newKeyResult.description!,
+						description: newKeyResult.description,
 						progress: 0,
-						status: "not_started",
+						status: "not_started" as const,
 					},
 				];
 
@@ -271,7 +271,7 @@ export function OkrList({ onGoalSelect }: OkrListProps) {
 			return obj;
 		});
 
-		setObjectives(updatedObjectives);
+		setObjectives(updatedObjectives as Objective[]);
 		setIsKeyResultDialogOpen(false);
 		setNewKeyResult({
 			description: "",

@@ -11,6 +11,7 @@ import { ApprovalList } from "./_components/approval-list";
 import {
 	getPendingApplications,
 	getApprovalHistory,
+	type ApprovalSearchParams,
 } from "./_actions/approval-actions";
 
 import type { Metadata } from "next";
@@ -20,34 +21,30 @@ export const metadata: Metadata = {
 	description: "勤怠修正・休暇申請の承認管理",
 };
 
-interface ApprovalsPageProps {
-	searchParams: {
-		tab?: string;
-		query?: string;
-		type?: string;
-		status?: string;
-		date?: string;
-	};
-}
-
 export default async function ApprovalsPage({
 	searchParams,
-}: ApprovalsPageProps) {
+}: {
+	searchParams: ApprovalSearchParams;
+}) {
 	// クエリパラメータから取得したタブ（デフォルトはpending）
 	const activeTab = searchParams.tab || "pending";
+	// ページ番号の取得（デフォルトは1ページ目）
+	const currentPage = searchParams.page || "1";
 
 	// 未承認申請を取得
-	const pendingApplications = await getPendingApplications({
+	const pendingApplicationsData = await getPendingApplications({
 		searchQuery: searchParams.query,
 		type: searchParams.type,
+		page: currentPage,
 	});
 
 	// 承認履歴を取得
-	const historyApplications = await getApprovalHistory({
+	const historyApplicationsData = await getApprovalHistory({
 		searchQuery: searchParams.query,
 		type: searchParams.type,
 		status: searchParams.status,
 		date: searchParams.date,
+		page: currentPage,
 	});
 
 	return (
@@ -70,7 +67,8 @@ export default async function ApprovalsPage({
 						</CardHeader>
 						<CardContent>
 							<ApprovalList
-								applications={pendingApplications}
+								applications={pendingApplicationsData.items}
+								pagination={pendingApplicationsData.pagination}
 								searchParams={searchParams}
 							/>
 						</CardContent>
@@ -87,7 +85,8 @@ export default async function ApprovalsPage({
 						</CardHeader>
 						<CardContent>
 							<ApprovalHistory
-								applications={historyApplications}
+								applications={historyApplicationsData.items}
+								pagination={historyApplicationsData.pagination}
 								searchParams={searchParams}
 							/>
 						</CardContent>

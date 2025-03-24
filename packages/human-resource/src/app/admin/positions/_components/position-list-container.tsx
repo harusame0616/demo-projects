@@ -5,15 +5,23 @@ import { PositionFilter } from "./position-filter";
 import { PositionTable } from "./position-table";
 import type { Position } from "../_data/positions-data";
 import type { PositionSearchParams } from "../_actions/position-actions";
+import { Pagination } from "@/components/ui/pagination";
 
 interface PositionListContainerProps {
 	positions: Position[];
+	pagination: {
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
+	};
 	levelOptions: string[];
 	searchParams: PositionSearchParams;
 }
 
 export function PositionListContainer({
 	positions,
+	pagination,
 	levelOptions,
 	searchParams,
 }: PositionListContainerProps) {
@@ -36,6 +44,9 @@ export function PositionListContainer({
 			updatedParams.delete("level");
 		}
 
+		// ページをリセット
+		updatedParams.delete("page");
+
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
@@ -52,6 +63,13 @@ export function PositionListContainer({
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
+	// ページ切り替え処理
+	const handlePageChange = (page: number) => {
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("page", page.toString());
+		router.push(`${pathname}?${updatedParams.toString()}`);
+	};
+
 	return (
 		<>
 			<PositionFilter
@@ -65,6 +83,15 @@ export function PositionListContainer({
 				searchParams={searchParams}
 				onSort={handleSort}
 			/>
+			{pagination.totalPages > 1 && (
+				<div className="flex justify-center mt-4">
+					<Pagination
+						currentPage={pagination.page}
+						totalPages={pagination.totalPages}
+						onPageChange={handlePageChange}
+					/>
+				</div>
+			)}
 		</>
 	);
 }

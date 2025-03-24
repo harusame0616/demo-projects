@@ -23,6 +23,10 @@ function GradeListSkeleton() {
 			<div className="rounded-md border">
 				<div className="h-[400px] bg-gray-100 animate-pulse rounded-md" />
 			</div>
+			{/* ページネーションスケルトン */}
+			<div className="flex justify-center mt-4">
+				<div className="h-10 w-40 bg-gray-200 animate-pulse rounded-md" />
+			</div>
 		</div>
 	);
 }
@@ -32,8 +36,14 @@ export default async function GradesPage({
 }: {
 	searchParams: GradeSearchParams;
 }) {
+	// ページ番号の取得（デフォルトは1ページ目）
+	const currentPage = searchParams.page || "1";
+
 	// サーバーアクションでデータを取得
-	const filteredData = await getGrades(searchParams);
+	const gradesData = await getGrades({
+		...searchParams,
+		page: currentPage,
+	});
 
 	return (
 		<>
@@ -54,7 +64,8 @@ export default async function GradesPage({
 				<CardContent>
 					<Suspense fallback={<GradeListSkeleton />}>
 						<GradeListContainer
-							grades={filteredData}
+							grades={gradesData.items}
+							pagination={gradesData.pagination}
 							searchParams={searchParams}
 						/>
 					</Suspense>

@@ -68,11 +68,16 @@ export function SkillCertificationListContainer({
 
 	// ソート処理
 	const sortedItems = [...filteredItems].sort((a, b) => {
-		if (a[sortConfig.key] < b[sortConfig.key]) {
-			return sortConfig.direction === "asc" ? -1 : 1;
-		}
-		if (a[sortConfig.key] > b[sortConfig.key]) {
-			return sortConfig.direction === "asc" ? 1 : -1;
+		const aValue = a[sortConfig.key];
+		const bValue = b[sortConfig.key];
+
+		if (aValue !== undefined && bValue !== undefined) {
+			if (String(aValue) < String(bValue)) {
+				return sortConfig.direction === "asc" ? -1 : 1;
+			}
+			if (String(aValue) > String(bValue)) {
+				return sortConfig.direction === "asc" ? 1 : -1;
+			}
 		}
 		return 0;
 	});
@@ -167,11 +172,11 @@ export function SkillCertificationListContainer({
 							</TableHead>
 							<TableHead
 								className="cursor-pointer"
-								onClick={() => requestSort("holderCount")}
+								onClick={() => requestSort("holdersCount")}
 							>
 								<div className="flex items-center">
 									保有者数
-									{getSortIcon("holderCount")}
+									{getSortIcon("holdersCount")}
 								</div>
 							</TableHead>
 							<TableHead
@@ -225,7 +230,7 @@ export function SkillCertificationListContainer({
 									<TableCell>
 										<div className="flex items-center">
 											<UsersIcon className="h-4 w-4 mr-1 text-gray-500" />
-											{item.holderCount}人
+											{item.holdersCount}人
 										</div>
 									</TableCell>
 									<TableCell className="text-gray-500">

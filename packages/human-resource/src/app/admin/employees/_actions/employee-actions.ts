@@ -331,6 +331,166 @@ const mockEmployees: Employee[] = [
 		email: "ichikawa.haruka@example.com",
 		joinDate: "2022-04-01",
 	},
+	{
+		id: "041",
+		name: "近藤 雄介",
+		department: "営業部",
+		position: "担当",
+		email: "kondo.yusuke@example.com",
+		joinDate: "2023-04-01",
+	},
+	{
+		id: "042",
+		name: "宮崎 絵美",
+		department: "人事部",
+		position: "主任",
+		email: "miyazaki.emi@example.com",
+		joinDate: "2019-04-01",
+	},
+	{
+		id: "043",
+		name: "横山 裕太",
+		department: "開発部",
+		position: "部長",
+		email: "yokoyama.yuta@example.com",
+		joinDate: "2012-04-01",
+	},
+	{
+		id: "044",
+		name: "桜井 美香",
+		department: "マーケティング部",
+		position: "担当",
+		email: "sakurai.mika@example.com",
+		joinDate: "2022-04-01",
+	},
+	{
+		id: "045",
+		name: "内田 健司",
+		department: "財務部",
+		position: "課長",
+		email: "uchida.kenji@example.com",
+		joinDate: "2015-04-01",
+	},
+	{
+		id: "046",
+		name: "高木 裕美",
+		department: "開発部",
+		position: "主任",
+		email: "takagi.hiromi@example.com",
+		joinDate: "2018-04-01",
+	},
+	{
+		id: "047",
+		name: "森 和也",
+		department: "営業部",
+		position: "リーダー",
+		email: "mori.kazuya@example.com",
+		joinDate: "2016-04-01",
+	},
+	{
+		id: "048",
+		name: "上田 真理子",
+		department: "マーケティング部",
+		position: "担当",
+		email: "ueda.mariko@example.com",
+		joinDate: "2021-04-01",
+	},
+	{
+		id: "049",
+		name: "河野 智也",
+		department: "人事部",
+		position: "リーダー",
+		email: "kawano.tomoya@example.com",
+		joinDate: "2017-04-01",
+	},
+	{
+		id: "050",
+		name: "谷口 恵",
+		department: "財務部",
+		position: "担当",
+		email: "taniguchi.megumi@example.com",
+		joinDate: "2022-04-01",
+	},
+	{
+		id: "051",
+		name: "平田 修",
+		department: "開発部",
+		position: "課長",
+		email: "hirata.osamu@example.com",
+		joinDate: "2014-04-01",
+	},
+	{
+		id: "052",
+		name: "服部 由美子",
+		department: "営業部",
+		position: "担当",
+		email: "hattori.yumiko@example.com",
+		joinDate: "2023-04-01",
+	},
+	{
+		id: "053",
+		name: "吉川 拓真",
+		department: "マーケティング部",
+		position: "主任",
+		email: "yoshikawa.takuma@example.com",
+		joinDate: "2020-04-01",
+	},
+	{
+		id: "054",
+		name: "久保 千春",
+		department: "人事部",
+		position: "部長",
+		email: "kubo.chiharu@example.com",
+		joinDate: "2013-04-01",
+	},
+	{
+		id: "055",
+		name: "西田 康弘",
+		department: "財務部",
+		position: "リーダー",
+		email: "nishida.yasuhiro@example.com",
+		joinDate: "2018-04-01",
+	},
+	{
+		id: "056",
+		name: "荒井 美樹",
+		department: "開発部",
+		position: "担当",
+		email: "arai.miki@example.com",
+		joinDate: "2021-04-01",
+	},
+	{
+		id: "057",
+		name: "飯田 健太郎",
+		department: "営業部",
+		position: "主任",
+		email: "iida.kentaro@example.com",
+		joinDate: "2019-04-01",
+	},
+	{
+		id: "058",
+		name: "篠原 彩",
+		department: "マーケティング部",
+		position: "リーダー",
+		email: "shinohara.aya@example.com",
+		joinDate: "2016-04-01",
+	},
+	{
+		id: "059",
+		name: "石田 誠",
+		department: "財務部",
+		position: "担当",
+		email: "ishida.makoto@example.com",
+		joinDate: "2022-04-01",
+	},
+	{
+		id: "060",
+		name: "榎本 真由美",
+		department: "人事部",
+		position: "課長",
+		email: "enomoto.mayumi@example.com",
+		joinDate: "2017-04-01",
+	},
 ];
 
 // 部署一覧を取得
@@ -364,6 +524,8 @@ export async function getEmployees(params: {
 	position?: string;
 	sortBy?: string;
 	sortOrder?: "asc" | "desc";
+	page?: number;
+	limit?: number;
 }) {
 	let filteredEmployees = [...mockEmployees];
 
@@ -404,7 +566,28 @@ export async function getEmployees(params: {
 		});
 	}
 
-	return filteredEmployees;
+	// ページネーションのために合計件数を取得
+	const totalItems = filteredEmployees.length;
+
+	// ページネーションの適用
+	const page = params.page || 1;
+	const limit = params.limit || 20;
+	const startIndex = (page - 1) * limit;
+	const endIndex = page * limit;
+
+	// ページに表示するデータを抽出
+	const paginatedEmployees = filteredEmployees.slice(startIndex, endIndex);
+
+	// ページネーション情報を含めて返す
+	return {
+		items: paginatedEmployees,
+		pagination: {
+			total: totalItems,
+			page,
+			limit,
+			totalPages: Math.ceil(totalItems / limit),
+		},
+	};
 }
 
 // 従業員を一件取得

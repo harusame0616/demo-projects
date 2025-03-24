@@ -26,6 +26,7 @@ function DepartmentListSkeleton() {
 			<div className="rounded-md border">
 				<div className="h-[400px] bg-gray-100 animate-pulse rounded-md" />
 			</div>
+			<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md mt-4" />
 		</div>
 	);
 }
@@ -35,8 +36,16 @@ export default async function DepartmentsPage({
 }: {
 	searchParams: DepartmentSearchParams;
 }) {
+	// ページ番号のパラメータを処理（デフォルトは1ページ目）
+	const currentPage = searchParams.page
+		? Number.parseInt(searchParams.page, 10)
+		: 1;
+
 	// サーバーアクションでデータを取得
-	const filteredData = await getDepartments(searchParams);
+	const departmentsData = await getDepartments({
+		...searchParams,
+		page: currentPage.toString(),
+	});
 
 	return (
 		<>
@@ -57,8 +66,9 @@ export default async function DepartmentsPage({
 				<CardContent>
 					<Suspense fallback={<DepartmentListSkeleton />}>
 						<DepartmentListContainer
-							departments={filteredData}
+							departments={departmentsData.items}
 							searchParams={searchParams}
+							pagination={departmentsData.pagination}
 						/>
 					</Suspense>
 				</CardContent>

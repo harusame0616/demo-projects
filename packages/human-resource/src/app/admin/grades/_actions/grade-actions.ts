@@ -2,11 +2,12 @@
 
 import { gradeData, type Grade } from "../_data/grades-data";
 
-export type GradeSearchParams = {
+export interface GradeSearchParams {
 	query?: string;
 	sort?: keyof Grade | "salaryMin" | "salaryMax";
 	order?: "asc" | "desc";
-};
+	page?: string;
+}
 
 /**
  * グレードデータを検索・ソートするサーバーアクション
@@ -55,7 +56,24 @@ export async function getGrades(searchParams: GradeSearchParams = {}) {
 		return 0;
 	});
 
-	return filteredData;
+	// ページネーション
+	const page = searchParams.page ? Number.parseInt(searchParams.page, 10) : 1;
+	const limit = 20; // 1ページあたりの表示数
+	const total = filteredData.length;
+	const totalPages = Math.ceil(total / limit);
+	const start = (page - 1) * limit;
+	const end = start + limit;
+	const paginatedData = filteredData.slice(start, end);
+
+	return {
+		items: paginatedData,
+		pagination: {
+			total,
+			page,
+			limit,
+			totalPages,
+		},
+	};
 }
 
 /**

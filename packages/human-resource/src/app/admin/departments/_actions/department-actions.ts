@@ -6,6 +6,7 @@ export type DepartmentSearchParams = {
 	query?: string;
 	sort?: keyof Department;
 	order?: "asc" | "desc";
+	page?: string;
 };
 
 /**
@@ -59,7 +60,28 @@ export async function getDepartments(
 		return 0;
 	});
 
-	return filteredData;
+	// ページネーションのために合計件数を取得
+	const totalItems = filteredData.length;
+
+	// ページネーションの適用
+	const page = searchParams.page ? Number.parseInt(searchParams.page, 10) : 1;
+	const limit = 20; // 1ページあたり20件
+	const startIndex = (page - 1) * limit;
+	const endIndex = page * limit;
+
+	// ページに表示するデータを抽出
+	const paginatedData = filteredData.slice(startIndex, endIndex);
+
+	// ページネーション情報を含めて返す
+	return {
+		items: paginatedData,
+		pagination: {
+			total: totalItems,
+			page,
+			limit,
+			totalPages: Math.ceil(totalItems / limit),
+		},
+	};
 }
 
 /**

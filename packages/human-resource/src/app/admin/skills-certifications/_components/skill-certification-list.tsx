@@ -35,6 +35,7 @@ import {
 	type SkillCertification,
 	type SkillCertificationType,
 } from "../_data/skills-certifications-data";
+import { Pagination } from "@/components/ui/pagination";
 
 const TYPE_LABELS = {
 	skill: "スキル",
@@ -43,16 +44,24 @@ const TYPE_LABELS = {
 
 type SkillCertificationListProps = {
 	skillCertifications: SkillCertification[];
+	pagination: {
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
+	};
 	searchParams?: {
 		query?: string;
 		type?: SkillCertificationType | "all";
 		sort?: string;
 		order?: "asc" | "desc";
+		page?: string;
 	};
 };
 
 export function SkillCertificationList({
 	skillCertifications,
+	pagination,
 	searchParams = {},
 }: SkillCertificationListProps) {
 	const {
@@ -77,11 +86,19 @@ export function SkillCertificationList({
 
 	// フィルターとソートを適用する
 	const handleSearch = (searchQuery: string) => {
-		router.push(`${pathname}?${createQueryString("query", searchQuery)}`);
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("query", searchQuery);
+		// 検索時はページをリセット
+		updatedParams.delete("page");
+		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	const handleTypeChange = (value: string) => {
-		router.push(`${pathname}?${createQueryString("type", value)}`);
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("type", value);
+		// フィルター変更時はページをリセット
+		updatedParams.delete("page");
+		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	const handleSort = (column: keyof SkillCertification) => {
@@ -90,6 +107,13 @@ export function SkillCertificationList({
 		queryStr.set("sort", column);
 		queryStr.set("order", newOrder);
 		router.push(`${pathname}?${queryStr.toString()}`);
+	};
+
+	// ページ切り替え処理
+	const handlePageChange = (page: number) => {
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("page", page.toString());
+		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	// ソートアイコンの表示
@@ -205,6 +229,16 @@ export function SkillCertificationList({
 					))}
 				</TableBody>
 			</Table>
+
+			{pagination.totalPages > 1 && (
+				<div className="flex justify-center mt-6">
+					<Pagination
+						currentPage={pagination.page}
+						totalPages={pagination.totalPages}
+						onPageChange={handlePageChange}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

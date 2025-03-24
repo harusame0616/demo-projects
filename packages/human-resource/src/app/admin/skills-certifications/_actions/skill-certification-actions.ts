@@ -6,12 +6,13 @@ import {
 	type SkillCertificationType,
 } from "../_data/skills-certifications-data";
 
-export type SkillCertificationSearchParams = {
+export interface SkillCertificationSearchParams {
 	query?: string;
 	type?: SkillCertificationType | "all";
 	sort?: keyof SkillCertification;
 	order?: "asc" | "desc";
-};
+	page?: string;
+}
 
 /**
  * スキル・資格データの検索、フィルタリング、ソートを行うサーバーアクション
@@ -63,7 +64,24 @@ export async function getSkillCertifications(
 		return 0;
 	});
 
-	return filteredData;
+	// ページネーション
+	const page = searchParams.page ? Number.parseInt(searchParams.page, 10) : 1;
+	const limit = 20; // 1ページあたりの表示数
+	const total = filteredData.length;
+	const totalPages = Math.ceil(total / limit);
+	const start = (page - 1) * limit;
+	const end = start + limit;
+	const paginatedData = filteredData.slice(start, end);
+
+	return {
+		items: paginatedData,
+		pagination: {
+			total,
+			page,
+			limit,
+			totalPages,
+		},
+	};
 }
 
 /**

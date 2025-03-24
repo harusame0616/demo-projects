@@ -3,6 +3,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import { EmployeeFilter } from "./employee-filter";
 import { EmployeeTable } from "./employee-table";
+import { Pagination } from "@/components/ui/pagination";
 import type { Employee } from "../_actions/employee-actions";
 
 interface EmployeeListContainerProps {
@@ -15,6 +16,13 @@ interface EmployeeListContainerProps {
 		position?: string;
 		sortBy?: string;
 		sortOrder?: string;
+		page?: string;
+	};
+	pagination: {
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
 	};
 }
 
@@ -23,6 +31,7 @@ export function EmployeeListContainer({
 	departmentOptions,
 	positionOptions,
 	searchParams,
+	pagination,
 }: EmployeeListContainerProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -45,6 +54,9 @@ export function EmployeeListContainer({
 		if (searchParams.sortBy) params.set("sortBy", searchParams.sortBy);
 		if (searchParams.sortOrder) params.set("sortOrder", searchParams.sortOrder);
 
+		// ページは1に戻す（フィルタリング時はページをリセット）
+		params.set("page", "1");
+
 		// URLをアップデート
 		const queryString = params.toString();
 		const url = queryString ? `${pathname}?${queryString}` : pathname;
@@ -60,6 +72,9 @@ export function EmployeeListContainer({
 		if (searchParams.department)
 			params.set("department", searchParams.department);
 		if (searchParams.position) params.set("position", searchParams.position);
+
+		// 現在のページを維持
+		if (searchParams.page) params.set("page", searchParams.page);
 
 		// ソート条件を更新
 		const currentSortBy = searchParams.sortBy;
@@ -80,8 +95,29 @@ export function EmployeeListContainer({
 		router.push(url);
 	};
 
+	const handlePageChange = (page: number) => {
+		// 現在のURLパラメータを取得
+		const params = new URLSearchParams();
+
+		// 既存のパラメータを維持
+		if (searchParams.query) params.set("query", searchParams.query);
+		if (searchParams.department)
+			params.set("department", searchParams.department);
+		if (searchParams.position) params.set("position", searchParams.position);
+		if (searchParams.sortBy) params.set("sortBy", searchParams.sortBy);
+		if (searchParams.sortOrder) params.set("sortOrder", searchParams.sortOrder);
+
+		// ページを更新
+		params.set("page", page.toString());
+
+		// URLをアップデート
+		const queryString = params.toString();
+		const url = queryString ? `${pathname}?${queryString}` : pathname;
+		router.push(url);
+	};
+
 	return (
-		<>
+		<div className="space-y-6">
 			<EmployeeFilter
 				departmentOptions={departmentOptions}
 				positionOptions={positionOptions}
@@ -95,6 +131,16 @@ export function EmployeeListContainer({
 				searchParams={searchParams}
 				onSort={handleSort}
 			/>
-		</>
+
+			{pagination.totalPages > 1 && (
+				<div className="mt-4">
+					<Pagination
+						currentPage={pagination.page}
+						totalPages={pagination.totalPages}
+						onPageChange={handlePageChange}
+					/>
+				</div>
+			)}
+		</div>
 	);
 }

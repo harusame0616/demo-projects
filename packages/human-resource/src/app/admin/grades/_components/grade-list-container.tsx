@@ -16,6 +16,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { Grade } from "../_data/grades-data";
 import type { GradeSearchParams } from "../_actions/grade-actions";
+import { Pagination } from "@/components/ui/pagination";
 
 // 日付をフォーマットする関数
 function formatDate(dateString: string): string {
@@ -35,11 +36,18 @@ function formatSalaryRange(min: number, max: number): string {
 interface GradeListContainerProps {
 	grades: Grade[];
 	searchParams: GradeSearchParams;
+	pagination: {
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
+	};
 }
 
 export function GradeListContainer({
 	grades,
 	searchParams,
+	pagination,
 }: GradeListContainerProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -51,6 +59,8 @@ export function GradeListContainer({
 	const handleSearch = () => {
 		const updatedParams = new URLSearchParams(params.toString());
 		updatedParams.set("query", searchTerm);
+		// 検索時はページをリセット
+		updatedParams.delete("page");
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
@@ -60,6 +70,13 @@ export function GradeListContainer({
 		const updatedParams = new URLSearchParams(params.toString());
 		updatedParams.set("sort", key);
 		updatedParams.set("order", newOrder);
+		router.push(`${pathname}?${updatedParams.toString()}`);
+	};
+
+	// ページ切り替え処理
+	const handlePageChange = (page: number) => {
+		const updatedParams = new URLSearchParams(params.toString());
+		updatedParams.set("page", page.toString());
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
@@ -83,6 +100,7 @@ export function GradeListContainer({
 					if (e.target.value === "") {
 						const updatedParams = new URLSearchParams(params.toString());
 						updatedParams.delete("query");
+						updatedParams.delete("page"); // ページもリセット
 						router.push(`${pathname}?${updatedParams.toString()}`);
 					}
 				}}
@@ -202,6 +220,16 @@ export function GradeListContainer({
 					</TableBody>
 				</Table>
 			</div>
+
+			{pagination.totalPages > 1 && (
+				<div className="flex justify-center mt-6">
+					<Pagination
+						currentPage={pagination.page}
+						totalPages={pagination.totalPages}
+						onPageChange={handlePageChange}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

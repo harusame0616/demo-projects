@@ -1,64 +1,76 @@
 "use server";
 
 import { positionData, type Position } from "../_data/positions-data";
+import { revalidatePath } from "next/cache";
 
-export type PositionSearchParams = {
+export interface PositionSearchParams {
 	query?: string;
 	level?: string;
 	sort?: keyof Position;
 	order?: "asc" | "desc";
-};
+	page?: string;
+}
 
 /**
  * 役職データを検索・ソートするサーバーアクション
  */
-export async function getPositions(searchParams: PositionSearchParams = {}) {
-	const {
-		query = "",
-		level = "all",
-		sort = "level",
-		order = "desc",
-	} = searchParams;
-
-	// フィルター処理
+export async function getPositions(params: PositionSearchParams = {}) {
+	// 検索とフィルタリング
 	let filteredData = [...positionData];
-
-	// 検索クエリでフィルタリング
-	if (query) {
+	if (params.query) {
+		const query = params.query.toLowerCase();
 		filteredData = filteredData.filter(
-			(item) =>
-				item.name.toLowerCase().includes(query.toLowerCase()) ||
-				item.description.toLowerCase().includes(query.toLowerCase()),
+			(position) =>
+				position.name.toLowerCase().includes(query) ||
+				position.description.toLowerCase().includes(query),
 		);
 	}
 
-	// レベルでフィルタリング
-	if (level && level !== "all") {
+	if (params.level) {
 		filteredData = filteredData.filter(
-			(item) => item.level.toString() === level,
+			(position) => position.level.toString() === params.level,
 		);
 	}
 
-	// ソート処理
+	// ソート
+	const sortField = params.sort || "level";
+	const sortOrder = params.order || "desc";
+
 	filteredData.sort((a, b) => {
-		const aValue = a[sort as keyof Position];
-		const bValue = b[sort as keyof Position];
+		const aValue = a[sortField];
+		const bValue = b[sortField];
 
-		if (
-			(typeof aValue === "number" && typeof bValue === "number") ||
-			(typeof aValue === "string" && typeof bValue === "string")
-		) {
-			if (aValue < bValue) {
-				return order === "asc" ? -1 : 1;
-			}
-			if (aValue > bValue) {
-				return order === "asc" ? 1 : -1;
-			}
+		if (typeof aValue === "string" && typeof bValue === "string") {
+			return sortOrder === "asc"
+				? aValue.localeCompare(bValue)
+				: bValue.localeCompare(aValue);
 		}
+
+		if (typeof aValue === "number" && typeof bValue === "number") {
+			return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+		}
+
 		return 0;
 	});
 
-	return filteredData;
+	// ページネーション
+	const page = params.page ? Number.parseInt(params.page, 10) : 1;
+	const limit = 20; // 1ページあたりの表示数
+	const total = filteredData.length;
+	const totalPages = Math.ceil(total / limit);
+	const start = (page - 1) * limit;
+	const end = start + limit;
+	const paginatedData = filteredData.slice(start, end);
+
+	return {
+		items: paginatedData,
+		pagination: {
+			total,
+			page,
+			limit,
+			totalPages,
+		},
+	};
 }
 
 /**

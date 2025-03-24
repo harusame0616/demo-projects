@@ -31,6 +31,7 @@ function EmployeeListSkeleton() {
 			<div className="rounded-md border">
 				<div className="h-[400px] bg-gray-100 animate-pulse rounded-md" />
 			</div>
+			<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md mt-4" />
 		</div>
 	);
 }
@@ -42,19 +43,27 @@ interface EmployeesPageProps {
 		position?: string;
 		sortBy?: string;
 		sortOrder?: string;
+		page?: string;
 	};
 }
 
 export default async function EmployeesPage({
 	searchParams,
 }: EmployeesPageProps) {
+	// ページ番号のパラメータを処理（デフォルトは1ページ目）
+	const currentPage = searchParams.page
+		? Number.parseInt(searchParams.page, 10)
+		: 1;
+
 	// サーバーサイドでデータを取得
-	const employees = await getEmployees({
+	const employeesData = await getEmployees({
 		searchQuery: searchParams.query,
 		department: searchParams.department,
 		position: searchParams.position,
 		sortBy: searchParams.sortBy,
 		sortOrder: searchParams.sortOrder as "asc" | "desc",
+		page: currentPage,
+		limit: 20, // 1ページあたり20件
 	});
 
 	// 部署と役職のオプションを取得
@@ -80,10 +89,11 @@ export default async function EmployeesPage({
 				<CardContent>
 					<Suspense fallback={<EmployeeListSkeleton />}>
 						<EmployeeListContainer
-							employees={employees}
+							employees={employeesData.items}
 							departmentOptions={departmentOptions}
 							positionOptions={positionOptions}
 							searchParams={searchParams}
+							pagination={employeesData.pagination}
 						/>
 					</Suspense>
 				</CardContent>

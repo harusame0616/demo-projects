@@ -36,7 +36,9 @@ import {
 	rejectApplication,
 	type Application,
 	type ApplicationType,
+	type ApprovalSearchParams,
 } from "../_actions/approval-actions";
+import { Pagination } from "@/components/ui/pagination";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {
@@ -78,14 +80,18 @@ const getApplicationTypeBadge = (type: ApplicationType) => {
 
 interface ApprovalListProps {
 	applications: Application[];
-	searchParams: {
-		query?: string;
-		type?: string;
+	pagination: {
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
 	};
+	searchParams: ApprovalSearchParams;
 }
 
 export function ApprovalList({
 	applications,
+	pagination,
 	searchParams,
 }: ApprovalListProps) {
 	const router = useRouter();
@@ -147,6 +153,9 @@ export function ApprovalList({
 			params.set("type", value);
 		}
 
+		// フィルター変更時はページをリセット
+		params.delete("page");
+
 		const newPath = `${pathname}?${params.toString()}`;
 		router.push(newPath);
 	};
@@ -161,6 +170,17 @@ export function ApprovalList({
 			params.delete("query");
 		}
 
+		// 検索時はページをリセット
+		params.delete("page");
+
+		const newPath = `${pathname}?${params.toString()}`;
+		router.push(newPath);
+	};
+
+	// ページ切り替え処理
+	const handlePageChange = (page: number) => {
+		const params = new URLSearchParams(searchParams as Record<string, string>);
+		params.set("page", page.toString());
 		const newPath = `${pathname}?${params.toString()}`;
 		router.push(newPath);
 	};
@@ -259,6 +279,17 @@ export function ApprovalList({
 					</TableBody>
 				</Table>
 			</div>
+
+			{/* ページネーション */}
+			{pagination.totalPages > 1 && (
+				<div className="flex justify-center mt-6">
+					<Pagination
+						currentPage={pagination.page}
+						totalPages={pagination.totalPages}
+						onPageChange={handlePageChange}
+					/>
+				</div>
+			)}
 
 			{/* 申請詳細ダイアログ */}
 			{selectedApplication && (

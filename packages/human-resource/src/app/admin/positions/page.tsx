@@ -27,6 +27,10 @@ function PositionListSkeleton() {
 			<div className="rounded-md border">
 				<div className="h-[400px] bg-gray-100 animate-pulse rounded-md" />
 			</div>
+			{/* ページネーションスケルトン */}
+			<div className="flex justify-center mt-4">
+				<div className="h-10 w-40 bg-gray-200 animate-pulse rounded-md" />
+			</div>
 		</div>
 	);
 }
@@ -36,8 +40,14 @@ export default async function PositionsPage({
 }: {
 	searchParams: PositionSearchParams;
 }) {
+	// ページ番号の取得（デフォルトは1ページ目）
+	const currentPage = searchParams.page ? Number(searchParams.page) : 1;
+
 	// サーバーアクションでデータを取得
-	const filteredData = await getPositions(searchParams);
+	const positionsData = await getPositions({
+		...searchParams,
+		page: searchParams.page || "1",
+	});
 	const levelOptions = await getPositionLevels();
 
 	return (
@@ -59,7 +69,8 @@ export default async function PositionsPage({
 				<CardContent>
 					<Suspense fallback={<PositionListSkeleton />}>
 						<PositionListContainer
-							positions={filteredData}
+							positions={positionsData.items}
+							pagination={positionsData.pagination}
 							levelOptions={levelOptions}
 							searchParams={searchParams}
 						/>
