@@ -8,6 +8,7 @@ import {
 	Building2,
 	ClipboardCheck,
 	LayoutDashboard,
+	LogOut,
 	MenuIcon,
 	PanelLeftIcon,
 	PanelRightIcon,
@@ -21,6 +22,7 @@ import { Separator } from "@/components/ui/separator";
 import {
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
@@ -144,6 +146,20 @@ export function AppSidebar() {
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarContent>
+			<SidebarFooter className="mt-auto">
+				<SidebarMenu>
+					<SidebarMenuItem>
+						<Link href="/login">
+							<SidebarMenuButton asChild tooltip="ログアウト">
+								<div>
+									<LogOut className="h-5 w-5" />
+									<span>ログアウト</span>
+								</div>
+							</SidebarMenuButton>
+						</Link>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarFooter>
 		</Sidebar>
 	);
 }
