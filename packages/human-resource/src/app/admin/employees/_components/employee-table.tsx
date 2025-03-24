@@ -89,7 +89,7 @@ export function EmployeeTable({
 						>
 							入社日 {getSortIcon("joinDate")}
 						</TableHead>
-						<TableHead className="w-[80px]" />
+						<TableHead className="w-[80px]">操作</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

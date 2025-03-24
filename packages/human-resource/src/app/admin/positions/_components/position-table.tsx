@@ -1,6 +1,13 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
 	Table,
 	TableBody,
@@ -15,7 +22,13 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ArrowDownIcon, ArrowUpIcon, Edit2Icon, TrashIcon } from "lucide-react";
+import {
+	ArrowDownIcon,
+	ArrowUpIcon,
+	MoreHorizontalIcon,
+	BuildingIcon,
+	InfoIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { type Position } from "../_data/positions-data";
 import type { PositionSearchParams } from "../_actions/position-actions";
@@ -136,27 +149,26 @@ export function PositionTable({
 									{formatDate(position.createdAt)}
 								</TableCell>
 								<TableCell className="text-right whitespace-nowrap">
-									<div className="flex justify-end gap-2">
-										<Button
-											variant="outline"
-											size="icon"
-											asChild
-											className="h-8 w-8"
-										>
-											<Link href={`/admin/positions/${position.id}/edit`}>
-												<Edit2Icon className="h-4 w-4" />
-												<span className="sr-only">編集</span>
-											</Link>
-										</Button>
-										<Button
-											variant="outline"
-											size="icon"
-											className="h-8 w-8 text-red-500 hover:text-red-600"
-										>
-											<TrashIcon className="h-4 w-4" />
-											<span className="sr-only">削除</span>
-										</Button>
-									</div>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button variant="ghost" size="icon">
+												<MoreHorizontalIcon className="h-4 w-4" />
+												<span className="sr-only">メニューを開く</span>
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent align="end">
+											<DropdownMenuItem asChild>
+												<Link href={`/admin/positions/${position.id}`}>
+													詳細
+												</Link>
+											</DropdownMenuItem>
+											<DropdownMenuItem asChild>
+												<Link href={`/admin/positions/${position.id}/edit`}>
+													編集
+												</Link>
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
 								</TableCell>
 							</TableRow>
 						))

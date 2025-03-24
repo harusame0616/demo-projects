@@ -27,7 +27,12 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { SearchIcon } from "lucide-react";
+import {
+	SearchIcon,
+	ArrowDownIcon,
+	ArrowUpIcon,
+	MoreHorizontalIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
@@ -36,6 +41,12 @@ import {
 	type SkillCertificationType,
 } from "../_data/skills-certifications-data";
 import { Pagination } from "@/components/ui/pagination";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const TYPE_LABELS = {
 	skill: "スキル",
@@ -215,16 +226,28 @@ export function SkillCertificationList({
 									})}
 								</TableCell>
 								<TableCell className="text-right whitespace-nowrap">
-									<Button
-										variant="outline"
-										size="sm"
-										asChild
-										className="ml-auto"
-									>
-										<Link href={`/admin/skills-certifications/${item.id}/edit`}>
-											編集
-										</Link>
-									</Button>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button variant="ghost" size="icon">
+												<MoreHorizontalIcon className="h-4 w-4" />
+												<span className="sr-only">メニューを開く</span>
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent align="end">
+											<DropdownMenuItem asChild>
+												<Link href={`/admin/skills-certifications/${item.id}`}>
+													詳細を表示
+												</Link>
+											</DropdownMenuItem>
+											<DropdownMenuItem asChild>
+												<Link
+													href={`/admin/skills-certifications/${item.id}/edit`}
+												>
+													編集
+												</Link>
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
 								</TableCell>
 							</TableRow>
 						))}

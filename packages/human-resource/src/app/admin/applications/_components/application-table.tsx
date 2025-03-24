@@ -10,6 +10,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,7 +27,12 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckIcon, FileTextIcon, XIcon } from "lucide-react";
+import {
+	CheckIcon,
+	FileTextIcon,
+	MoreHorizontalIcon,
+	XIcon,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
@@ -228,9 +239,7 @@ export function ApplicationTable({
 								<TableHead className="w-[120px]">申請日</TableHead>
 								<TableHead className="w-[120px]">対象日</TableHead>
 								<TableHead className="min-w-[150px]">内容</TableHead>
-								<TableHead className="w-[80px] text-right">
-									アクション
-								</TableHead>
+								<TableHead className="w-[80px] text-right">操作</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -269,13 +278,22 @@ export function ApplicationTable({
 											<div className="truncate">{application.content}</div>
 										</TableCell>
 										<TableCell className="text-right whitespace-nowrap">
-											<Button
-												variant="ghost"
-												size="icon"
-												onClick={() => openDetails(application)}
-											>
-												<FileTextIcon className="h-4 w-4" />
-											</Button>
+											<DropdownMenu>
+												<DropdownMenuTrigger asChild>
+													<Button variant="ghost" size="icon">
+														<MoreHorizontalIcon className="h-4 w-4" />
+														<span className="sr-only">メニューを開く</span>
+													</Button>
+												</DropdownMenuTrigger>
+												<DropdownMenuContent align="end">
+													<DropdownMenuItem
+														onClick={() => openDetails(application)}
+													>
+														<FileTextIcon className="h-4 w-4 mr-2" />
+														詳細
+													</DropdownMenuItem>
+												</DropdownMenuContent>
+											</DropdownMenu>
 										</TableCell>
 									</TableRow>
 								))

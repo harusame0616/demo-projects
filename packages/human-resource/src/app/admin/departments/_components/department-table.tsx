@@ -109,7 +109,7 @@ export function DepartmentTable({
 								作成日 {getSortIcon("createdAt")}
 							</div>
 						</TableHead>
-						<TableHead className="w-[80px]" />
+						<TableHead className="w-[80px]">操作</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

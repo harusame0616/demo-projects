@@ -1,6 +1,13 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
 	Table,
@@ -10,7 +17,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { ArrowDownIcon, ArrowUpIcon, UsersIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -142,12 +149,13 @@ export function GradeListContainer({
 									{getSortIcon("createdAt")}
 								</div>
 							</TableHead>
+							<TableHead className="w-[80px]">操作</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{grades.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={4} className="text-center py-6">
+								<TableCell colSpan={5} className="text-center py-6">
 									該当するグレードがありません
 								</TableCell>
 							</TableRow>
@@ -180,6 +188,28 @@ export function GradeListContainer({
 									</TableCell>
 									<TableCell className="text-gray-500 whitespace-nowrap">
 										{formatDate(grade.createdAt)}
+									</TableCell>
+									<TableCell className="whitespace-nowrap">
+										<DropdownMenu>
+											<DropdownMenuTrigger asChild>
+												<Button variant="ghost" size="icon">
+													<MoreHorizontalIcon className="h-4 w-4" />
+													<span className="sr-only">メニューを開く</span>
+												</Button>
+											</DropdownMenuTrigger>
+											<DropdownMenuContent align="end">
+												<DropdownMenuItem asChild>
+													<Link href={`/admin/grades/${grade.id}`}>
+														詳細を表示
+													</Link>
+												</DropdownMenuItem>
+												<DropdownMenuItem asChild>
+													<Link href={`/admin/grades/${grade.id}/edit`}>
+														編集
+													</Link>
+												</DropdownMenuItem>
+											</DropdownMenuContent>
+										</DropdownMenu>
 									</TableCell>
 								</TableRow>
 							))
