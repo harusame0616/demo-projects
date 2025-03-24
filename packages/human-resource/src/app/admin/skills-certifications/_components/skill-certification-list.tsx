@@ -155,36 +155,36 @@ export function SkillCertificationList({
 				</Select>
 			</div>
 
-			<div className="w-full overflow-auto">
+			<div className="w-full overflow-auto rounded-md border">
 				<Table>
 					<TableHeader>
 						<TableRow>
 							<TableHead
-								className="cursor-pointer w-[200px] whitespace-nowrap"
+								className="cursor-pointer hover:bg-gray-50 w-[200px] whitespace-nowrap"
 								onClick={() => handleSort("name")}
 							>
 								名称 {getSortIcon("name")}
 							</TableHead>
 							<TableHead
-								className="cursor-pointer w-[100px] whitespace-nowrap"
+								className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
 								onClick={() => handleSort("type")}
 							>
 								種類 {getSortIcon("type")}
 							</TableHead>
 							<TableHead
-								className="cursor-pointer w-[200px] whitespace-nowrap"
+								className="cursor-pointer hover:bg-gray-50 w-[200px] whitespace-nowrap"
 								onClick={() => handleSort("levelOrAuthority")}
 							>
 								レベル/認定機関 {getSortIcon("levelOrAuthority")}
 							</TableHead>
 							<TableHead
-								className="text-center cursor-pointer w-[100px] whitespace-nowrap"
+								className="text-center cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
 								onClick={() => handleSort("holdersCount")}
 							>
 								取得者数 {getSortIcon("holdersCount")}
 							</TableHead>
 							<TableHead
-								className="cursor-pointer w-[120px] whitespace-nowrap"
+								className="cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
 								onClick={() => handleSort("createdAt")}
 							>
 								登録日 {getSortIcon("createdAt")}
