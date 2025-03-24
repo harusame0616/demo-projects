@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/app/(private)/sidebar";
+import { AppSidebar } from "@/app/admin/sidebar";
 import { Button } from "@/components/ui/button";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Link from "next/link";
