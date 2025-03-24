@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { TimeRecorder } from "./components/time-recorder";
-import { TimeHistory } from "./components/time-history";
-import { LeaveRequest } from "./components/leave-request";
 import { ApplicationList } from "./components/application-list";
+import { LeaveRequest } from "./components/leave-request";
+import { TimeHistory } from "./components/time-history";
+import { TimeRecorder } from "./components/time-recorder";
 
 export default function TimeRecorderPage() {
 	const [activeTab, setActiveTab] = useState("record");

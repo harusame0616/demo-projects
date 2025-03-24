@@ -1,6 +1,12 @@
-import Link from "next/link";
-import { format } from "date-fns";
-import { ja } from "date-fns/locale";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Table,
 	TableBody,
@@ -9,18 +15,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { format } from "date-fns";
+import { ja } from "date-fns/locale";
+import Link from "next/link";
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-	skillCertificationData,
 	type SkillCertification,
+	skillCertificationData,
 } from "../_data/skills-certifications-data";
 
 const TYPE_LABELS = {

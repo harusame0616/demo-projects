@@ -1,24 +1,24 @@
-import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-	ArrowLeftIcon,
-	PencilIcon,
-	Badge as BadgeIcon,
-	UsersIcon,
-	CalendarIcon,
-	BookIcon,
-	Award,
-	Star,
-	FileText,
-} from "lucide-react";
-import {
-	skillCertificationData,
-	type SkillCertification,
-} from "../_data/skills-certifications-data";
-import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
+import {
+	ArrowLeftIcon,
+	Award,
+	Badge as BadgeIcon,
+	BookIcon,
+	CalendarIcon,
+	FileText,
+	PencilIcon,
+	Star,
+	UsersIcon,
+} from "lucide-react";
+import Link from "next/link";
+import {
+	type SkillCertification,
+	skillCertificationData,
+} from "../_data/skills-certifications-data";
 
 import type { Metadata } from "next";
 

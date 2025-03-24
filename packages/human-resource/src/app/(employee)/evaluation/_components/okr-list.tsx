@@ -1,24 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardDescription,
-	CardContent,
-	CardFooter,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import {
-	PlusCircle,
-	ChevronDown,
-	ChevronUp,
-	FileEdit,
-	Trash2,
-} from "lucide-react";
 import {
 	Dialog,
 	DialogContent,
@@ -28,15 +25,18 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion";
+	ChevronDown,
+	ChevronUp,
+	FileEdit,
+	PlusCircle,
+	Trash2,
+} from "lucide-react";
+import { useState } from "react";
 
 // Key Result (KR) の型定義
 interface KeyResult {

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -10,6 +9,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { SearchIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 // 部署一覧
 const departments = [

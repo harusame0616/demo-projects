@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
-import { gradeData, type Grade } from "../../_data/grades-data";
+import { type Grade, gradeData } from "../../_data/grades-data";
 import { GradeForm } from "./_components/grade-form";
 
 import type { Metadata } from "next";

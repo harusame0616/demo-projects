@@ -6,8 +6,8 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ApprovalList } from "./_components/approval-list";
 import { ApprovalHistory } from "./_components/approval-history";
+import { ApprovalList } from "./_components/approval-list";
 
 import type { Metadata } from "next";
 

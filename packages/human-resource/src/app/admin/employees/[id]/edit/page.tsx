@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
-import { Metadata } from "next";
-import { PageHeader, EmployeeForm } from "./_components";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { EmployeeForm, PageHeader } from "./_components";
 
 export const metadata: Metadata = {
 	title: "従業員編集 | 人材管理システム",

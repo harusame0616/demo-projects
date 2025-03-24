@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -19,9 +17,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
-	departmentData,
 	type Department,
+	departmentData,
 } from "../../../_data/departments-data";
 
 interface DepartmentFormProps {

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 type Department = {
 	id: string;

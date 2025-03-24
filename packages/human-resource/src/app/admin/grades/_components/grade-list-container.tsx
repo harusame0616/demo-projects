@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
 	Table,
 	TableBody,
@@ -8,12 +10,10 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { ArrowDownIcon, ArrowUpIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { ArrowUpIcon, ArrowDownIcon, UsersIcon } from "lucide-react";
-import { type Grade } from "../_data/grades-data";
+import { useState } from "react";
+import type { Grade } from "../_data/grades-data";
 
 // 日付をフォーマットする関数
 function formatDate(dateString: string): string {

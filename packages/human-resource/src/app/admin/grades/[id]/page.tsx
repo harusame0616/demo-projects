@@ -1,16 +1,16 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	ArrowLeftIcon,
-	PencilIcon,
 	BadgeIcon,
-	UsersIcon,
 	CalendarIcon,
 	DollarSignIcon,
+	PencilIcon,
 	StarIcon,
+	UsersIcon,
 } from "lucide-react";
-import { gradeData, type Grade } from "../_data/grades-data";
+import Link from "next/link";
+import { type Grade, gradeData } from "../_data/grades-data";
 
 import type { Metadata } from "next";
 

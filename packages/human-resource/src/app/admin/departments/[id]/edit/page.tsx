@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
-import { departmentData, type Department } from "../../_data/departments-data";
+import { type Department, departmentData } from "../../_data/departments-data";
 import { DepartmentForm } from "./_components/department-form";
 
 import type { Metadata } from "next";

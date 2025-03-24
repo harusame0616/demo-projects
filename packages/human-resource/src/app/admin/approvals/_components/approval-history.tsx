@@ -1,16 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import {
 	Dialog,
 	DialogContent,
@@ -21,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SearchIcon, FileTextIcon, Calendar } from "lucide-react";
 import {
 	Popover,
 	PopoverContent,
@@ -34,9 +25,18 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
+import { Calendar, FileTextIcon, SearchIcon } from "lucide-react";
+import { useState } from "react";
 
 // 申請タイプの定義
 type ApplicationType = "attendance_correction" | "leave_request";
@@ -242,7 +242,7 @@ export function ApprovalHistory() {
 				app.employeeName.toLowerCase().includes(query) ||
 				app.employeeId.toLowerCase().includes(query) ||
 				app.content.toLowerCase().includes(query) ||
-				(app.comment && app.comment.toLowerCase().includes(query))
+				app.comment?.toLowerCase().includes(query)
 			);
 		}
 

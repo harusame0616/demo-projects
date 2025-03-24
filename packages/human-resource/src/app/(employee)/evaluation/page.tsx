@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
 	Card,
 	CardContent,
@@ -9,9 +8,10 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
+import { GoalDetails } from "./_components/goal-details";
 import { MboList } from "./_components/mbo-list";
 import { OkrList } from "./_components/okr-list";
-import { GoalDetails } from "./_components/goal-details";
 
 export default function EvaluationPage() {
 	const [activeTab, setActiveTab] = useState("mbo");

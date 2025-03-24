@@ -1,8 +1,8 @@
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
 import { SkillCertificationList } from "./_components/skill-certification-list";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { PlusIcon } from "lucide-react";
 
 import type { Metadata } from "next";
 

@@ -1,33 +1,33 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import {
-	Building2,
-	Briefcase,
-	Users,
 	Award,
 	BookOpenCheck,
+	Briefcase,
+	Building2,
+	ClipboardCheck,
 	LayoutDashboard,
+	MenuIcon,
 	PanelLeftIcon,
 	PanelRightIcon,
-	MenuIcon,
-	ClipboardCheck,
+	Users,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
 	Sidebar,
-	SidebarHeader,
 	SidebarContent,
+	SidebarHeader,
 	SidebarMenu,
-	SidebarMenuItem,
 	SidebarMenuButton,
+	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 
 export function AppSidebar() {
 	const pathname = usePathname();

@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
 import {
-	skillCertificationData,
 	type SkillCertification,
+	skillCertificationData,
 } from "../../_data/skills-certifications-data";
 import { SkillCertificationForm } from "./_components/skill-certification-form";
 
