@@ -32,7 +32,7 @@ export default function EvaluationPage() {
 
 	return (
 		<div className="container mx-auto py-8">
-			<h1 className="text-3xl font-bold mb-8">目標管理システム</h1>
+			<h1 className="text-3xl font-bold mb-8">目標管理</h1>
 
 			{selectedGoalId && selectedGoalType ? (
 				<div className="mb-4">

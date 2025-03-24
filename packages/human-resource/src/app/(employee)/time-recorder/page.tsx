@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -20,7 +19,7 @@ export default function TimeRecorderPage() {
 
 	return (
 		<div className="container mx-auto py-8">
-			<h1 className="text-3xl font-bold mb-8">勤怠管理システム</h1>
+			<h1 className="text-3xl font-bold mb-8">勤怠管理</h1>
 
 			<Tabs
 				defaultValue="record"
