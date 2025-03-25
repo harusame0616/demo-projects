@@ -109,7 +109,12 @@ export function EmployeeTable({
 						employees.map((employee) => (
 							<TableRow key={employee.id}>
 								<TableCell className="font-medium whitespace-nowrap">
-									{employee.id}
+									<Link
+										href={`/admin/employees/${employee.id}`}
+										className="text-primary hover:underline cursor-pointer"
+									>
+										{employee.id}
+									</Link>
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{employee.name}
