@@ -594,3 +594,22 @@ export async function getEmployees(params: {
 export async function getEmployeeById(id: string) {
 	return mockEmployees.find((employee) => employee.id === id) || null;
 }
+
+// 従業員を追加
+export async function createEmployee(employeeData: Omit<Employee, "id">) {
+	// 本番環境では実際のAPIエンドポイントを呼び出してデータを永続化
+	// このデモでは新しいIDを生成して配列に追加するだけ
+	const newId = String(
+		Math.max(...mockEmployees.map((e) => Number.parseInt(e.id))) + 1,
+	).padStart(3, "0");
+
+	const newEmployee: Employee = {
+		id: newId,
+		...employeeData,
+	};
+
+	// 実際のAPIでは、ここでデータを保存
+	// mockEmployees.push(newEmployee);
+
+	return newEmployee;
+}

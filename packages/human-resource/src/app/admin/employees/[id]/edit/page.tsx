@@ -2,7 +2,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EmployeeForm, PageHeader } from "./_components";
+import { PageHeader } from "./_components";
+import { getDepartments, getPositions } from "../../_actions/employee-actions";
+import { EmployeeFormWrapper } from "./_components/employee-form-wrapper";
 
 export const metadata: Metadata = {
 	title: "従業員編集 | 人材管理システム",
@@ -41,17 +43,19 @@ const employees = {
 	},
 };
 
-export default function EmployeeEditPage({
+export default async function EmployeeEditPage({
 	params,
 }: { params: { id: string } }) {
 	const employee = employees[params.id as keyof typeof employees];
+	const departmentOptions = await getDepartments();
+	const positionOptions = await getPositions();
 
 	if (!employee) {
 		return (
 			<div className="flex flex-col items-center justify-center h-96">
 				<h2 className="text-2xl font-bold mb-4">従業員が見つかりません</h2>
 				<Button asChild>
-					<Link href="/employees">
+					<Link href="/admin/employees">
 						<ArrowLeftIcon className="mr-2 h-4 w-4" />
 						従業員一覧に戻る
 					</Link>
@@ -63,7 +67,11 @@ export default function EmployeeEditPage({
 	return (
 		<>
 			<PageHeader employeeId={employee.id} />
-			<EmployeeForm employee={employee} />
+			<EmployeeFormWrapper
+				employee={employee}
+				departmentOptions={departmentOptions}
+				positionOptions={positionOptions}
+			/>
 		</>
 	);
 }
