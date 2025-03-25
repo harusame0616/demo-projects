@@ -26,7 +26,7 @@ export default async function SkillsCertificationsPage({
 			<div className="flex justify-between items-center">
 				<h1 className="text-2xl font-bold tracking-tight">スキル・資格管理</h1>
 				<div className="flex space-x-2">
-					<Button asChild>
+					<Button asChild variant="outline">
 						<Link href="/admin/skills-certifications/new?type=skill">
 							スキル追加
 						</Link>

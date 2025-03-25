@@ -76,11 +76,8 @@ export default async function EmployeesPage({
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
 				<h1 className="text-2xl font-bold tracking-tight">従業員一覧</h1>
-				<Button asChild>
-					<Link href="/admin/employees/new">
-						<PlusIcon className="mr-2 h-4 w-4" />
-						従業員を追加
-					</Link>
+				<Button asChild variant="outline">
+					<Link href="/admin/employees/new">従業員を追加</Link>
 				</Button>
 			</div>
 
