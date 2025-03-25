@@ -31,19 +31,19 @@ const positionFilterSchema = v.object({
 
 type PositionFilterFormValues = v.InferType<typeof positionFilterSchema>;
 
-interface PositionFilterProps {
+interface SearchFormProps {
 	searchQuery: string;
 	currentLevel: string;
 	levelOptions: string[];
 	onFilter?: (query: string, level: string) => void; // オプショナルに変更
 }
 
-export function PositionFilter({
+export function SearchForm({
 	searchQuery,
 	currentLevel,
 	levelOptions,
 	onFilter,
-}: PositionFilterProps) {
+}: SearchFormProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();

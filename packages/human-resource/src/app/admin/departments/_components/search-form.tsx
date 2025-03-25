@@ -17,41 +17,48 @@ import * as v from "valibot";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 
 // フォームのスキーマを定義
-const gradeSearchSchema = v.object({
+const departmentFilterSchema = v.object({
 	query: v.string(),
 });
 
-type GradeSearchFormValues = v.InferType<typeof gradeSearchSchema>;
+type DepartmentFilterFormValues = v.InferType<typeof departmentFilterSchema>;
 
-interface GradeSearchProps {
-	initialQuery?: string;
+interface SearchFormProps {
+	searchQuery: string;
+	onSearch?: (query: string) => void; // オプショナルに変更
 }
 
-export function GradeSearch({ initialQuery = "" }: GradeSearchProps) {
+export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
 
 	// フォームの初期値を設定
-	const defaultValues: GradeSearchFormValues = {
-		query: initialQuery,
+	const defaultValues: DepartmentFilterFormValues = {
+		query: searchQuery || "",
 	};
 
 	// フォームを初期化
-	const form = useForm<GradeSearchFormValues>({
-		resolver: valibotResolver(gradeSearchSchema),
+	const form = useForm<DepartmentFilterFormValues>({
+		resolver: valibotResolver(departmentFilterSchema),
 		defaultValues,
 	});
 
 	// 外部からのpropsが変更されたらフォームの値をリセット
 	useEffect(() => {
 		form.reset({
-			query: initialQuery,
+			query: searchQuery || "",
 		});
-	}, [initialQuery, form]);
+	}, [searchQuery, form]);
 
-	// 検索ハンドラー
-	const handleSearch = (values: GradeSearchFormValues) => {
+	// フィルター変更時にURLを更新
+	const handleSearch = (values: DepartmentFilterFormValues) => {
+		if (onSearch) {
+			onSearch(values.query);
+			return;
+		}
+
+		// onSearchが提供されていない場合は内部でナビゲーション
 		const updatedParams = new URLSearchParams(params.toString());
 		if (values.query) {
 			updatedParams.set("query", values.query);
@@ -63,12 +70,18 @@ export function GradeSearch({ initialQuery = "" }: GradeSearchProps) {
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
-	// クリアハンドラー
+	// フォームをクリア
 	const handleClear = () => {
 		form.reset({
 			query: "",
 		});
 
+		if (onSearch) {
+			onSearch("");
+			return;
+		}
+
+		// onSearchが提供されていない場合は内部でナビゲーション
 		const updatedParams = new URLSearchParams(params.toString());
 		updatedParams.delete("query");
 		updatedParams.delete("page"); // ページもリセット
@@ -86,16 +99,16 @@ export function GradeSearch({ initialQuery = "" }: GradeSearchProps) {
 							render={({ field }) => (
 								<FormItem className="flex-1 min-w-[200px]">
 									<FormLabel className="text-sm font-medium mb-1 block">
-										キーワード（グレード）
+										キーワード（部署名）
 									</FormLabel>
 									<FormControl>
 										<div className="relative w-full">
 											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 											<Input
-												placeholder="グレードを検索..."
+												placeholder="部署名で検索..."
 												className="pl-10 h-10 rounded-lg border-gray-200"
 												{...field}
-												aria-label="グレードを検索"
+												aria-label="部署名で検索"
 											/>
 										</div>
 									</FormControl>

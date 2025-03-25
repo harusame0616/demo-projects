@@ -1,29 +1,23 @@
 import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getSkillCertifications } from "./_actions/skill-certification-actions";
+import {
+	getSkillCertifications,
+	type SkillCertificationSearchParams,
+} from "./_actions/skill-certification-actions";
 import { SkillCertificationList } from "./_components/skill-certification-list";
-import { SkillSearch } from "./_components/skill-search";
-import type { SkillCertificationType } from "./_data/skills-certifications-data";
+import { SearchForm } from "./_components/search-form";
 
 export const metadata: Metadata = {
 	title: "スキル・資格管理 | 人材管理システム",
 	description: "社員のスキルと資格を管理します",
 };
 
-interface SkillsCertificationsPageProps {
-	searchParams: {
-		query?: string;
-		type?: SkillCertificationType | "all";
-		sort?: string;
-		order?: "asc" | "desc";
-		page?: string;
-	};
-}
-
 export default async function SkillsCertificationsPage({
 	searchParams,
-}: SkillsCertificationsPageProps) {
+}: {
+	searchParams: SkillCertificationSearchParams;
+}) {
 	// 検索条件を基にデータを取得
 	const { items, pagination } = await getSkillCertifications(searchParams);
 
@@ -48,12 +42,7 @@ export default async function SkillsCertificationsPage({
 				社員が持つスキルと資格の一覧を管理します。
 			</p>
 
-			<SkillSearch
-				initialQuery={searchParams.query || ""}
-				initialType={
-					(searchParams.type as SkillCertificationType | "all") || "all"
-				}
-			/>
+			<SearchForm searchParams={searchParams} />
 
 			<SkillCertificationList
 				skillCertifications={items}

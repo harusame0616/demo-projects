@@ -3,7 +3,7 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { EmployeeListContainer } from "./_components/employee-list-container";
-import { EmployeeFilter } from "./_components/employee-filter";
+import { SearchForm } from "./_components/search-form";
 import {
 	getEmployees,
 	getDepartments,
@@ -36,15 +36,17 @@ function EmployeeListSkeleton() {
 	);
 }
 
+interface EmployeeSearchParams {
+	query?: string;
+	department?: string;
+	position?: string;
+	sortBy?: string;
+	sortOrder?: string;
+	page?: string;
+}
+
 interface EmployeesPageProps {
-	searchParams: {
-		query?: string;
-		department?: string;
-		position?: string;
-		sortBy?: string;
-		sortOrder?: string;
-		page?: string;
-	};
+	searchParams: EmployeeSearchParams;
 }
 
 export default async function EmployeesPage({
@@ -82,12 +84,10 @@ export default async function EmployeesPage({
 				</Button>
 			</div>
 
-			<EmployeeFilter
+			<SearchForm
+				searchParams={searchParams}
 				departmentOptions={departmentOptions}
 				positionOptions={positionOptions}
-				searchQuery={searchParams.query}
-				currentDepartment={searchParams.department}
-				currentPosition={searchParams.position}
 			/>
 
 			<div className="w-full">

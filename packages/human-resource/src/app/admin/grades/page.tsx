@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { GradeListContainer } from "./_components/grade-list-container";
 import { getGrades, type GradeSearchParams } from "./_actions/grade-actions";
-import { GradeSearch } from "./_components/grade-search";
+import { SearchForm } from "./_components/search-form";
 
 import type { Metadata } from "next";
 
@@ -31,16 +31,11 @@ function GradeListSkeleton() {
 	);
 }
 
-interface GradePageProps {
-	searchParams: {
-		query?: string;
-		sort?: string;
-		order?: "asc" | "desc";
-		page?: string;
-	};
-}
-
-export default async function GradePage({ searchParams }: GradePageProps) {
+export default async function GradePage({
+	searchParams,
+}: {
+	searchParams: GradeSearchParams;
+}) {
 	// 検索条件を基にデータを取得
 	const { items, pagination } = await getGrades(searchParams);
 
@@ -56,7 +51,7 @@ export default async function GradePage({ searchParams }: GradePageProps) {
 				社員のスキルレベルや経験に基づくグレードを管理します。
 			</p>
 
-			<GradeSearch initialQuery={searchParams.query || ""} />
+			<SearchForm searchParams={searchParams} />
 
 			<GradeListContainer
 				grades={items}

@@ -47,11 +47,11 @@ type ApplicationFilterFormValues = {
 	date?: Date;
 };
 
-interface ApplicationFilterProps {
+interface SearchFormProps {
 	searchParams: ApplicationSearchParams;
 }
 
-export function ApplicationFilter({ searchParams }: ApplicationFilterProps) {
+export function SearchForm({ searchParams }: SearchFormProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 

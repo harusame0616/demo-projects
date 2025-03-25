@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { DepartmentListContainer } from "./_components/department-list-container";
-import { DepartmentFilter } from "./_components/department-filter";
+import { SearchForm } from "./_components/search-form";
 import {
 	getDepartments,
 	type DepartmentSearchParams,
@@ -34,7 +34,7 @@ export default async function DepartmentsPage({
 			</div>
 			<p className="text-gray-500">会社の組織構造を部署単位で管理します。</p>
 
-			<DepartmentFilter searchQuery={searchParams.query || ""} />
+			<SearchForm searchParams={searchParams} />
 
 			<DepartmentListContainer
 				departments={departments}

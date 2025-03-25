@@ -32,7 +32,7 @@ const employeeFilterSchema = v.object({
 
 type EmployeeFilterFormValues = v.InferType<typeof employeeFilterSchema>;
 
-interface EmployeeFilterProps {
+interface SearchFormProps {
 	departmentOptions: { value: string; label: string }[];
 	positionOptions: { value: string; label: string }[];
 	searchQuery?: string;
@@ -40,13 +40,13 @@ interface EmployeeFilterProps {
 	currentPosition?: string;
 }
 
-export function EmployeeFilter({
+export function SearchForm({
 	departmentOptions,
 	positionOptions,
 	searchQuery = "",
 	currentDepartment = "all",
 	currentPosition = "all",
-}: EmployeeFilterProps) {
+}: SearchFormProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 

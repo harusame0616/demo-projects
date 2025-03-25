@@ -3,7 +3,7 @@ import {
 	type ApplicationSearchParams,
 } from "./_actions/application-actions";
 import { ApplicationTable } from "./_components/application-table";
-import { ApplicationFilter } from "./_components/application-filter";
+import { SearchForm } from "./_components/search-form";
 
 import type { Metadata } from "next";
 
@@ -32,7 +32,7 @@ export default async function ApplicationsPage({
 
 			<div className="w-full">
 				<div className="mb-6">
-					<ApplicationFilter searchParams={searchParams} />
+					<SearchForm searchParams={searchParams} />
 				</div>
 				<ApplicationTable
 					applications={applicationsData.items}

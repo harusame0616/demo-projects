@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PositionListContainer } from "./_components/position-list-container";
-import { PositionFilter } from "./_components/position-filter";
+import { SearchForm } from "./_components/search-form";
 import {
 	getPositions,
 	getPositionLevels,
@@ -36,11 +36,7 @@ export default async function PositionsPage({
 			</div>
 			<p className="text-gray-500">会社内の役職と職位レベルを管理します。</p>
 
-			<PositionFilter
-				searchQuery={searchParams.query || ""}
-				currentLevel={searchParams.level || "all"}
-				levelOptions={levelOptions}
-			/>
+			<SearchForm searchParams={searchParams} levelOptions={levelOptions} />
 
 			<PositionListContainer
 				positions={positions}
