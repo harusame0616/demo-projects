@@ -97,7 +97,7 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="flex-1 min-w-[200px]">
+								<FormItem className="w-full">
 									<FormLabel className="text-sm font-medium mb-1 block">
 										キーワード（部署名）
 									</FormLabel>
@@ -116,7 +116,7 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 							)}
 						/>
 
-						<div className="flex gap-4 justify-end">
+						<div className="flex gap-4">
 							<Button
 								type="submit"
 								className="bg-black text-white h-10 rounded-lg w-24"

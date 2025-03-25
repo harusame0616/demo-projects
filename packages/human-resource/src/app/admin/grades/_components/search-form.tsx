@@ -80,9 +80,9 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSearch)} className="space-y-6">
 					{/* 検索フィールド行 */}
-					<div className="flex flex-col md:flex-row gap-4 items-end">
+					<div className="flex flex-col gap-4">
 						{/* 検索入力フィールド */}
-						<div className="flex-1">
+						<div className="w-full">
 							<FormField
 								control={form.control}
 								name="query"

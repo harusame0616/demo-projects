@@ -122,7 +122,7 @@ export function SearchForm({
 								control={form.control}
 								name="query"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="w-full">
 										<FormLabel className="text-sm font-medium mb-1 block">
 											キーワード（役職名、説明）
 										</FormLabel>
@@ -145,7 +145,7 @@ export function SearchForm({
 								control={form.control}
 								name="level"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="w-full">
 										<FormLabel className="text-sm font-medium mb-1 block">
 											レベル
 										</FormLabel>
@@ -175,7 +175,7 @@ export function SearchForm({
 							/>
 						</div>
 
-						<div className="flex gap-4 justify-end">
+						<div className="flex gap-4">
 							<Button
 								type="submit"
 								className="bg-black text-white h-10 rounded-lg w-24"

@@ -256,7 +256,7 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 						/>
 
 						{/* ボタン */}
-						<div className="flex gap-4 w-full col-span-1 md:col-span-2 lg:col-span-4 justify-end">
+						<div className="flex gap-4 w-full col-span-1 md:col-span-2 lg:col-span-4 justify-start">
 							<Button
 								type="submit"
 								className="bg-black text-white h-10 rounded-lg w-32"

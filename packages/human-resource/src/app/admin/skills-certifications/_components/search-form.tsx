@@ -96,64 +96,67 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSearch)} className="space-y-6">
 					{/* 検索フィールド行 */}
-					<div className="flex flex-col md:flex-row gap-4 items-end">
-						{/* 検索入力フィールド */}
-						<div className="flex-1 min-w-[200px]">
-							<FormField
-								control={form.control}
-								name="query"
-								render={({ field }) => (
-									<FormItem className="w-full">
-										<FormLabel className="text-sm font-medium mb-1 block">
-											キーワード（名称、説明）
-										</FormLabel>
-										<FormControl>
-											<div className="relative w-full">
-												<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-												<Input
-													placeholder="スキル・資格を検索..."
-													className="pl-10 w-full h-10 rounded-lg"
-													{...field}
-													aria-label="スキル・資格を検索"
-												/>
-											</div>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
+					<div className="flex flex-col gap-4">
+						{/* 検索入力エリア */}
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							{/* 検索入力フィールド */}
+							<div className="w-full">
+								<FormField
+									control={form.control}
+									name="query"
+									render={({ field }) => (
+										<FormItem className="w-full">
+											<FormLabel className="text-sm font-medium mb-1 block">
+												キーワード（名称、説明）
+											</FormLabel>
+											<FormControl>
+												<div className="relative w-full">
+													<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+													<Input
+														placeholder="スキル・資格を検索..."
+														className="pl-10 w-full h-10 rounded-lg"
+														{...field}
+														aria-label="スキル・資格を検索"
+													/>
+												</div>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+							</div>
 
-						{/* タイプ選択 */}
-						<div className="min-w-[180px]">
-							<FormField
-								control={form.control}
-								name="type"
-								render={({ field }) => (
-									<FormItem className="w-full">
-										<FormLabel className="text-sm font-medium mb-1 block">
-											種別
-										</FormLabel>
-										<FormControl>
-											<Select
-												value={field.value}
-												onValueChange={field.onChange}
-											>
-												<SelectTrigger
-													className="h-10 rounded-lg"
-													aria-label="種別"
+							{/* タイプ選択 */}
+							<div className="w-full">
+								<FormField
+									control={form.control}
+									name="type"
+									render={({ field }) => (
+										<FormItem className="w-full">
+											<FormLabel className="text-sm font-medium mb-1 block">
+												種別
+											</FormLabel>
+											<FormControl>
+												<Select
+													value={field.value}
+													onValueChange={field.onChange}
 												>
-													<SelectValue placeholder="種別" />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectItem value="all">すべて</SelectItem>
-													<SelectItem value="skill">スキル</SelectItem>
-													<SelectItem value="certification">資格</SelectItem>
-												</SelectContent>
-											</Select>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
+													<SelectTrigger
+														className="h-10 rounded-lg"
+														aria-label="種別"
+													>
+														<SelectValue placeholder="種別" />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="all">すべて</SelectItem>
+														<SelectItem value="skill">スキル</SelectItem>
+														<SelectItem value="certification">資格</SelectItem>
+													</SelectContent>
+												</Select>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+							</div>
 						</div>
 
 						{/* ボタン */}

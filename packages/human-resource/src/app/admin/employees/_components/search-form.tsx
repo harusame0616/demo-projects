@@ -201,7 +201,7 @@ export function SearchForm({
 						/>
 
 						{/* ボタン */}
-						<div className="flex gap-4 col-span-1 md:col-span-3 justify-end mt-2">
+						<div className="flex gap-4 col-span-1 md:col-span-3 justify-start mt-2">
 							<Button
 								type="submit"
 								className="bg-black text-white h-10 rounded-lg w-32"
