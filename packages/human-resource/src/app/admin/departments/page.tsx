@@ -32,9 +32,8 @@ export default async function DepartmentsPage({
 					<Link href="/admin/departments/new">新規部署作成</Link>
 				</Button>
 			</div>
-			<p className="text-gray-500">会社の組織構造を部署単位で管理します。</p>
 
-			<SearchForm searchParams={searchParams} />
+			<SearchForm searchQuery={searchParams.query || ""} />
 
 			<DepartmentListContainer
 				departments={departments}

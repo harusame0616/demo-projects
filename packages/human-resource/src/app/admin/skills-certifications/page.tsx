@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -38,9 +38,6 @@ export default async function SkillsCertificationsPage({
 					</Button>
 				</div>
 			</div>
-			<p className="text-gray-500">
-				社員が持つスキルと資格の一覧を管理します。
-			</p>
 
 			<SearchForm searchParams={searchParams} />
 

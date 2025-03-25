@@ -73,9 +73,9 @@ export default async function EmployeesPage({
 	const positionOptions = await getPositions();
 
 	return (
-		<div className="w-full flex-1">
-			<div className="flex items-center justify-between mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">従業員一覧</h2>
+		<div className="space-y-4">
+			<div className="flex justify-between items-center">
+				<h1 className="text-2xl font-bold tracking-tight">従業員一覧</h1>
 				<Button asChild>
 					<Link href="/admin/employees/new">
 						<PlusIcon className="mr-2 h-4 w-4" />
@@ -85,9 +85,11 @@ export default async function EmployeesPage({
 			</div>
 
 			<SearchForm
-				searchParams={searchParams}
 				departmentOptions={departmentOptions}
 				positionOptions={positionOptions}
+				searchQuery={searchParams.query}
+				currentDepartment={searchParams.department}
+				currentPosition={searchParams.position}
 			/>
 
 			<div className="w-full">

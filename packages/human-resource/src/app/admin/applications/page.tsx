@@ -4,6 +4,8 @@ import {
 } from "./_actions/application-actions";
 import { ApplicationTable } from "./_components/application-table";
 import { SearchForm } from "./_components/search-form";
+import { Button } from "@/components/ui/button";
+import { FileDownIcon } from "lucide-react";
 
 import type { Metadata } from "next";
 
@@ -27,19 +29,22 @@ export default async function ApplicationsPage({
 	});
 
 	return (
-		<div className="w-full flex-1">
-			<h2 className="text-3xl font-bold tracking-tight mb-6">申請管理</h2>
-
-			<div className="w-full">
-				<div className="mb-6">
-					<SearchForm searchParams={searchParams} />
-				</div>
-				<ApplicationTable
-					applications={applicationsData.items}
-					pagination={applicationsData.pagination}
-					searchParams={searchParams}
-				/>
+		<div className="space-y-4">
+			<div className="flex justify-between items-center">
+				<h1 className="text-2xl font-bold tracking-tight">申請管理</h1>
+				<Button variant="outline">
+					<FileDownIcon className="mr-2 h-4 w-4" />
+					エクスポート
+				</Button>
 			</div>
+
+			<SearchForm searchParams={searchParams} />
+
+			<ApplicationTable
+				applications={applicationsData.items}
+				pagination={applicationsData.pagination}
+				searchParams={searchParams}
+			/>
 		</div>
 	);
 }

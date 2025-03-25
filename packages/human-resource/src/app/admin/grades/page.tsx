@@ -47,9 +47,6 @@ export default async function GradePage({
 					<Link href="/admin/grades/new">新規グレード作成</Link>
 				</Button>
 			</div>
-			<p className="text-gray-500">
-				社員のスキルレベルや経験に基づくグレードを管理します。
-			</p>
 
 			<SearchForm searchParams={searchParams} />
 

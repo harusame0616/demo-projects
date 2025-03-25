@@ -34,9 +34,12 @@ export default async function PositionsPage({
 					<Link href="/admin/positions/new">新規役職作成</Link>
 				</Button>
 			</div>
-			<p className="text-gray-500">会社内の役職と職位レベルを管理します。</p>
 
-			<SearchForm searchParams={searchParams} levelOptions={levelOptions} />
+			<SearchForm
+				searchQuery={searchParams.query || ""}
+				currentLevel={searchParams.level || "all"}
+				levelOptions={levelOptions}
+			/>
 
 			<PositionListContainer
 				positions={positions}
