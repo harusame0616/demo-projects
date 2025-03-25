@@ -27,7 +27,7 @@ export default async function DepartmentsPage({
 	return (
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
-				<h1 className="text-2xl font-bold tracking-tight">部署管理</h1>
+				<h1 className="text-2xl font-bold tracking-tight">部署一覧</h1>
 				<Button asChild variant="outline">
 					<Link href="/admin/departments/new">新規部署作成</Link>
 				</Button>

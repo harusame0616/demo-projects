@@ -29,7 +29,7 @@ export default async function PositionsPage({
 	return (
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
-				<h1 className="text-2xl font-bold tracking-tight">役職管理</h1>
+				<h1 className="text-2xl font-bold tracking-tight">役職一覧</h1>
 				<Button asChild variant="outline">
 					<Link href="/admin/positions/new">新規役職作成</Link>
 				</Button>
