@@ -14,6 +14,7 @@ import {
 	PanelRightIcon,
 	Users,
 	BadgeCheck,
+	Clock,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -71,6 +72,20 @@ export function AppSidebar() {
 								<div>
 									<Users className="h-5 w-5" />
 									<span>従業員管理</span>
+								</div>
+							</SidebarMenuButton>
+						</Link>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<Link href="/admin/attendances">
+							<SidebarMenuButton
+								asChild
+								isActive={pathname === "/admin/attendances"}
+								tooltip="勤怠情報"
+							>
+								<div>
+									<Clock className="h-5 w-5" />
+									<span>勤怠情報</span>
 								</div>
 							</SidebarMenuButton>
 						</Link>

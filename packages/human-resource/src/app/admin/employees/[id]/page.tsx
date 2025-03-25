@@ -1,22 +1,53 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, User, CalendarDays } from "lucide-react";
 import Link from "next/link";
 import {
 	ContactInfoCard,
 	EvaluationHistoryCard,
 	GoalsCard,
-	PageHeader,
-	ProfileHeader,
 	SkillsAndCertificationsCard,
 } from "./_components";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Suspense } from "react";
+import { getEmployeeAttendanceSummary } from "./attendances/_actions/employee-attendance-actions";
+import { EmployeeAttendanceSummary } from "./attendances/_components/employee-attendance-summary";
 
 export const metadata = {
 	title: "従業員詳細 | 人材管理システム",
 	description: "従業員の詳細情報",
 };
 
+// 従業員の型定義
+type Employee = {
+	id: string;
+	name: string;
+	nameKana: string;
+	department: string;
+	position: string;
+	grade?: string;
+	email: string;
+	phone: string;
+	address: string;
+	birthDate: string;
+	joinDate: string;
+	skills?: string[];
+	certifications?: string[];
+	evaluations?: Array<{
+		period: string;
+		overallRating: string;
+		date: string;
+	}>;
+	goals?: Array<{
+		id: string;
+		title: string;
+		description: string;
+		progress: number;
+		dueDate: string;
+	}>;
+};
+
 // モックデータ（実際にはIDに基づいてデータを取得する）
-const employees = {
+const employees: Record<string, Employee> = {
 	"001": {
 		id: "001",
 		name: "山田 太郎",
@@ -102,31 +133,10 @@ const employees = {
 	},
 };
 
-export default function EmployeeDetailPage({
-	params,
-}: { params: { id: string } }) {
-	const employee = employees[params.id as keyof typeof employees];
-
-	if (!employee) {
-		return (
-			<div className="flex flex-col items-center justify-center h-96">
-				<h2 className="text-2xl font-bold mb-4">従業員が見つかりません</h2>
-				<Button asChild>
-					<Link href="/admin/employees">
-						<ArrowLeftIcon className="mr-2 h-4 w-4" />
-						従業員一覧に戻る
-					</Link>
-				</Button>
-			</div>
-		);
-	}
-
+// 従業員情報タブの内容を表示するコンポーネント
+function EmployeeInfoTab({ employee }: { employee: Employee }) {
 	return (
-		<>
-			<PageHeader employeeId={employee.id} />
-
-			<ProfileHeader employee={employee} />
-
+		<div className="space-y-6">
 			<div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
 				<ContactInfoCard
 					contactInfo={{
@@ -137,7 +147,7 @@ export default function EmployeeDetailPage({
 					}}
 				/>
 
-				{"skills" in employee && "certifications" in employee && (
+				{employee.skills && employee.certifications && (
 					<SkillsAndCertificationsCard
 						skills={employee.skills}
 						certifications={employee.certifications}
@@ -146,20 +156,73 @@ export default function EmployeeDetailPage({
 			</div>
 
 			<div className="space-y-6">
-				{"evaluations" in employee && employee.evaluations?.length > 0 && (
+				{employee.evaluations && employee.evaluations.length > 0 && (
 					<EvaluationHistoryCard evaluations={employee.evaluations} />
 				)}
 
-				{"goals" in employee && employee.goals?.length > 0 && (
+				{employee.goals && employee.goals.length > 0 && (
 					<GoalsCard goals={employee.goals} />
 				)}
-
-				<div className="mt-8 flex justify-end space-x-2">
-					<Button variant="outline" asChild>
-						<Link href="/admin/employees">従業員一覧へ戻る</Link>
-					</Button>
-				</div>
 			</div>
-		</>
+		</div>
+	);
+}
+
+// 勤怠情報タブの内容を表示するコンポーネント
+async function AttendanceInfoTab({ employee }: { employee: Employee }) {
+	// 勤怠データを取得
+	const attendanceSummary = await getEmployeeAttendanceSummary(employee.id);
+
+	return (
+		<div className="space-y-6">
+			<Suspense fallback={<div>読み込み中...</div>}>
+				<EmployeeAttendanceSummary
+					data={attendanceSummary}
+					employee={employee}
+				/>
+			</Suspense>
+		</div>
+	);
+}
+
+export default function EmployeeInfoPage({
+	params,
+}: { params: { id: string } }) {
+	const employee = employees[params.id as keyof typeof employees];
+
+	if (!employee) {
+		return null; // レイアウトで処理するので、ここではnullを返す
+	}
+
+	return (
+		<div className="space-y-6">
+			<div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+				<ContactInfoCard
+					contactInfo={{
+						email: employee.email,
+						phone: employee.phone,
+						address: employee.address,
+						birthDate: employee.birthDate,
+					}}
+				/>
+
+				{employee.skills && employee.certifications && (
+					<SkillsAndCertificationsCard
+						skills={employee.skills}
+						certifications={employee.certifications}
+					/>
+				)}
+			</div>
+
+			<div className="space-y-6">
+				{employee.evaluations && employee.evaluations.length > 0 && (
+					<EvaluationHistoryCard evaluations={employee.evaluations} />
+				)}
+
+				{employee.goals && employee.goals.length > 0 && (
+					<GoalsCard goals={employee.goals} />
+				)}
+			</div>
+		</div>
 	);
 }

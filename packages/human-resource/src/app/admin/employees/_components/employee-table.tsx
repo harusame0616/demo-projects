@@ -15,7 +15,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
+import {
+	ArrowDownIcon,
+	ArrowUpIcon,
+	MoreHorizontalIcon,
+	ClockIcon,
+} from "lucide-react";
 import Link from "next/link";
 import type { Employee } from "../_actions/employee-actions";
 
@@ -136,6 +141,15 @@ export function EmployeeTable({
 											<DropdownMenuItem asChild>
 												<Link href={`/admin/employees/${employee.id}/edit`}>
 													編集
+												</Link>
+											</DropdownMenuItem>
+											<DropdownMenuItem asChild>
+												<Link
+													href={`/admin/employees/${employee.id}/attendances`}
+													className="flex items-center"
+												>
+													<ClockIcon className="mr-2 h-4 w-4" />
+													勤怠情報
 												</Link>
 											</DropdownMenuItem>
 										</DropdownMenuContent>
