@@ -8,6 +8,7 @@ import {
 import { SkillList } from "./_components/skill-list";
 import { SkillSearchForm } from "./_components/skill-search-form";
 import type { SkillCertificationType } from "../skills-certifications/_data/skills-certifications-data";
+import { PlusIcon } from "lucide-react";
 
 export const metadata: Metadata = {
 	title: "スキル管理 | 人材管理システム",
@@ -40,11 +41,12 @@ export default async function SkillsPage({
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
 				<h1 className="text-2xl font-bold tracking-tight">スキル一覧</h1>
-				<div className="flex space-x-2">
-					<Button asChild variant="outline">
-						<Link href="/admin/skills/new">スキル追加</Link>
-					</Button>
-				</div>
+				<Button asChild>
+					<Link href="/admin/skills/new">
+						<PlusIcon className="h-4 w-4 mr-2" />
+						スキル追加
+					</Link>
+				</Button>
 			</div>
 
 			<SkillSearchForm searchParams={safeSearchParams} />

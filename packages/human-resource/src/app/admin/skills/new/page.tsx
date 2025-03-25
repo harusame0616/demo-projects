@@ -5,28 +5,12 @@ import { Button } from "@/components/ui/button";
 import { SkillForm } from "../_components/skill-form";
 import { ArrowLeftIcon } from "lucide-react";
 import { Suspense } from "react";
+import { SkillFormSkeleton } from "../_components/skill-form-skeleton";
 
 export const metadata: Metadata = {
 	title: "スキル登録 | 人材管理システム",
 	description: "新しいスキルを登録します。",
 };
-
-// ローディング状態を表示するスケルトンコンポーネント
-function SkillFormSkeleton() {
-	return (
-		<div className="space-y-6">
-			<div className="space-y-4">
-				<div className="h-8 w-1/3 bg-gray-200 animate-pulse rounded-md" />
-				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			</div>
-			<div className="space-y-4">
-				<div className="h-8 w-1/3 bg-gray-200 animate-pulse rounded-md" />
-				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			</div>
-			<div className="h-10 w-48 bg-gray-200 animate-pulse rounded-md" />
-		</div>
-	);
-}
 
 export default function NewSkillPage() {
 	return (
@@ -47,7 +31,7 @@ export default function NewSkillPage() {
 				</CardHeader>
 				<CardContent>
 					<Suspense fallback={<SkillFormSkeleton />}>
-						<SkillForm />
+						<SkillForm isNew={true} />
 					</Suspense>
 				</CardContent>
 			</Card>
