@@ -13,6 +13,7 @@ import {
 	PanelLeftIcon,
 	PanelRightIcon,
 	Users,
+	BadgeCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -117,15 +118,29 @@ export function AppSidebar() {
 						</Link>
 					</SidebarMenuItem>
 					<SidebarMenuItem>
-						<Link href="/admin/skills-certifications">
+						<Link href="/admin/skills">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/admin/skills-certifications"}
-								tooltip="スキル・資格管理"
+								isActive={pathname === "/admin/skills"}
+								tooltip="スキル管理"
 							>
 								<div>
 									<BookOpenCheck className="h-5 w-5" />
-									<span>スキル・資格管理</span>
+									<span>スキル管理</span>
+								</div>
+							</SidebarMenuButton>
+						</Link>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<Link href="/admin/certifications">
+							<SidebarMenuButton
+								asChild
+								isActive={pathname === "/admin/certifications"}
+								tooltip="資格管理"
+							>
+								<div>
+									<BadgeCheck className="h-5 w-5" />
+									<span>資格管理</span>
 								</div>
 							</SidebarMenuButton>
 						</Link>

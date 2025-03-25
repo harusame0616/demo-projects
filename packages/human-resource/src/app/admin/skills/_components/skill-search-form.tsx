@@ -1,13 +1,6 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -22,31 +15,29 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import type { SkillCertificationSearchParams } from "../_actions/skill-certification-actions";
+import type { SkillCertificationSearchParams } from "../../skills-certifications/_actions/skill-certification-actions";
 import { Card, CardContent } from "@/components/ui/card";
+
 // フォームのスキーマを定義
 const skillSearchSchema = v.object({
 	query: v.string(),
-	type: v.string(),
 });
 
 type SkillSearchFormValues = {
 	query: string;
-	type: string;
 };
 
-interface SearchFormProps {
+interface SkillSearchFormProps {
 	searchParams: SkillCertificationSearchParams;
 }
 
-export function SearchForm({ searchParams }: SearchFormProps) {
+export function SkillSearchForm({ searchParams }: SkillSearchFormProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 
 	// フォームの初期値を設定
 	const defaultValues: SkillSearchFormValues = {
 		query: searchParams.query || "",
-		type: searchParams.type || "all",
 	};
 
 	// フォームを初期化
@@ -59,7 +50,6 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 	useEffect(() => {
 		form.reset({
 			query: searchParams.query || "",
-			type: searchParams.type || "all",
 		});
 	}, [searchParams, form]);
 
@@ -69,10 +59,6 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 
 		if (values.query) {
 			params.set("query", values.query);
-		}
-
-		if (values.type !== "all") {
-			params.set("type", values.type);
 		}
 
 		// 検索時はページをリセット
@@ -86,7 +72,6 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 	const handleClear = () => {
 		form.reset({
 			query: "",
-			type: "all",
 		});
 		router.push(pathname);
 	};
@@ -111,7 +96,8 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 											<Input
 												className="pl-10 w-full h-10 rounded-lg"
 												{...field}
-												aria-label="スキル・資格を検索"
+												aria-label="スキルを検索"
+												placeholder="スキル名や説明を入力"
 											/>
 										</div>
 									</FormControl>
@@ -119,35 +105,8 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 							)}
 						/>
 
-						{/* タイプ選択 */}
-
-						<FormField
-							control={form.control}
-							name="type"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>種別</FormLabel>
-									<FormControl>
-										<Select value={field.value} onValueChange={field.onChange}>
-											<SelectTrigger
-												className="min-h-10 w-full min-w-0"
-												aria-label="種別"
-											>
-												<SelectValue placeholder="種別" />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value="all">すべて</SelectItem>
-												<SelectItem value="skill">スキル</SelectItem>
-												<SelectItem value="certification">資格</SelectItem>
-											</SelectContent>
-										</Select>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-
 						{/* ボタン */}
-						<div className="col-span-4 flex gap-4">
+						<div className="col-span-2 flex gap-4">
 							<Button type="submit" className="h-10 w-32">
 								検索
 							</Button>

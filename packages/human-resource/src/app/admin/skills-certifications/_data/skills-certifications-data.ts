@@ -2,6 +2,7 @@ export type SkillCertificationType = "skill" | "certification";
 
 export interface SkillCertification {
 	id: string;
+	code: string;
 	name: string;
 	type: SkillCertificationType;
 	description: string;
@@ -15,6 +16,7 @@ export interface SkillCertification {
 export const skillCertificationData: SkillCertification[] = [
 	{
 		id: "skill-1",
+		code: "S001",
 		name: "TypeScript",
 		type: "skill",
 		description: "Microsoft社が開発した静的型付けプログラミング言語",
@@ -25,6 +27,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-2",
+		code: "S002",
 		name: "React",
 		type: "skill",
 		description: "Facebook社が開発したUIライブラリ",
@@ -35,6 +38,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-1",
+		code: "C001",
 		name: "AWS認定ソリューションアーキテクト - アソシエイト",
 		type: "certification",
 		description: "AWSのサービスに関する設計と導入の知識を証明する資格",
@@ -45,6 +49,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-2",
+		code: "C002",
 		name: "情報セキュリティマネジメント試験",
 		type: "certification",
 		description:
@@ -55,6 +60,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-3",
+		code: "S003",
 		name: "Docker",
 		type: "skill",
 		description: "コンテナ型の仮想化技術",
@@ -65,6 +71,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-3",
+		code: "C003",
 		name: "TOEIC 800点以上",
 		type: "certification",
 		description: "ビジネスで活用できる英語力の証明",
@@ -76,6 +83,7 @@ export const skillCertificationData: SkillCertification[] = [
 	// 追加データ
 	{
 		id: "skill-4",
+		code: "S004",
 		name: "Node.js",
 		type: "skill",
 		description: "サーバーサイドJavaScriptの実行環境",
@@ -86,6 +94,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-5",
+		code: "S005",
 		name: "Python",
 		type: "skill",
 		description: "汎用プログラミング言語、データ分析やAI開発にも広く使用",
@@ -96,6 +105,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-6",
+		code: "S006",
 		name: "GraphQL",
 		type: "skill",
 		description: "APIのためのクエリ言語およびランタイム",
@@ -106,6 +116,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-4",
+		code: "C004",
 		name: "基本情報技術者試験",
 		type: "certification",
 		description: "ITに関する基礎知識を証明する国家試験",
@@ -115,6 +126,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-5",
+		code: "C005",
 		name: "応用情報技術者試験",
 		type: "certification",
 		description:
@@ -125,6 +137,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-7",
+		code: "S007",
 		name: "Vue.js",
 		type: "skill",
 		description: "プログレッシブなJavaScriptフレームワーク",
@@ -135,6 +148,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-8",
+		code: "S008",
 		name: "Kubernetes",
 		type: "skill",
 		description: "コンテナオーケストレーションプラットフォーム",
@@ -145,6 +159,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-6",
+		code: "C006",
 		name: "Google Cloud Professional Cloud Architect",
 		type: "certification",
 		description: "Google Cloud上での設計、開発、管理の専門知識を証明する資格",
@@ -155,6 +170,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-9",
+		code: "S009",
 		name: "AWS",
 		type: "skill",
 		description: "Amazon Web Servicesクラウドプラットフォーム",
@@ -165,6 +181,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-10",
+		code: "S010",
 		name: "TensorFlow",
 		type: "skill",
 		description: "Googleが開発したオープンソースの機械学習ライブラリ",
@@ -175,6 +192,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-7",
+		code: "C007",
 		name: "Oracle Certified Professional, Java SE Programmer",
 		type: "certification",
 		description: "Javaプログラミング言語とプラットフォームの専門知識を証明",
@@ -184,6 +202,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-11",
+		code: "S011",
 		name: "Swift",
 		type: "skill",
 		description: "Apple社が開発したiOSアプリ開発用プログラミング言語",
@@ -194,6 +213,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-12",
+		code: "S012",
 		name: "Flutter",
 		type: "skill",
 		description: "Googleが開発したクロスプラットフォームUIフレームワーク",
@@ -204,6 +224,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-8",
+		code: "C008",
 		name: "Certified ScrumMaster",
 		type: "certification",
 		description: "Scrumの原則とプラクティスに関する知識と実践力を証明",
@@ -213,6 +234,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-13",
+		code: "S013",
 		name: "Next.js",
 		type: "skill",
 		description: "Reactベースのフルスタックウェブフレームワーク",
@@ -223,6 +245,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-9",
+		code: "C009",
 		name: "CCNA (Cisco Certified Network Associate)",
 		type: "certification",
 		description: "ネットワークの基礎知識と構築スキルを証明する資格",
@@ -232,6 +255,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-14",
+		code: "S014",
 		name: "Golang",
 		type: "skill",
 		description: "Googleが開発した静的型付け、コンパイル型プログラミング言語",
@@ -242,6 +266,7 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "skill-15",
+		code: "S015",
 		name: "PostgreSQL",
 		type: "skill",
 		description: "オープンソースのリレーショナルデータベース管理システム",
@@ -252,39 +277,44 @@ export const skillCertificationData: SkillCertification[] = [
 	},
 	{
 		id: "cert-10",
-		name: "Microsoft Azure Fundamentals (AZ-900)",
+		code: "C010",
+		name: "臨床心理士",
 		type: "certification",
-		description: "Microsoft Azureの基礎的な知識を証明する資格",
-		levelOrAuthority: "Microsoft",
-		holdersCount: 8,
+		description: "心理学の専門家としての知識と技能を認定する資格",
+		levelOrAuthority: "日本臨床心理士資格認定協会",
+		holdersCount: 2,
 		createdAt: "2022-04-10T00:00:00.000Z",
 	},
 	{
 		id: "skill-16",
+		code: "S016",
 		name: "Rust",
 		type: "skill",
-		description: "メモリ安全性とパフォーマンスに優れたプログラミング言語",
+		description:
+			"高速で信頼性の高いソフトウェアを書くためのシステムプログラミング言語",
 		levelOrAuthority: "中級",
-		requirements: "システムプログラミング経験、所有権モデルの深い理解",
-		holdersCount: 4,
+		requirements: "コンカレントプログラミングの実装経験、メモリ安全性の理解",
+		holdersCount: 3,
 		createdAt: "2022-04-25T00:00:00.000Z",
 	},
 	{
 		id: "cert-11",
-		name: "CompTIA Security+",
+		code: "C011",
+		name: "公認会計士",
 		type: "certification",
-		description: "ITセキュリティの基礎知識を証明するグローバル認定資格",
-		levelOrAuthority: "CompTIA",
-		holdersCount: 5,
+		description: "会計に関する高度な専門知識を持つ職業的専門家の国家資格",
+		levelOrAuthority: "金融庁",
+		holdersCount: 1,
 		createdAt: "2022-05-10T00:00:00.000Z",
 	},
 	{
 		id: "skill-17",
+		code: "S017",
 		name: "UX/UIデザイン",
 		type: "skill",
 		description: "ユーザー体験とインターフェースの設計スキル",
 		levelOrAuthority: "上級",
-		requirements: "複数のプロダクト設計経験、ユーザーリサーチの実施経験",
+		requirements: "複数のプロジェクトでの実績、ユーザーリサーチ経験",
 		holdersCount: 9,
 		createdAt: "2022-05-25T00:00:00.000Z",
 	},
@@ -352,14 +382,31 @@ export const employeeSkillCertificationData: EmployeeWithSkillCertification[] =
 
 // スキル・資格を作成する関数
 export function createSkillCertification(
-	data: Omit<SkillCertification, "id" | "createdAt" | "holdersCount">,
+	data: Omit<SkillCertification, "id" | "createdAt" | "holdersCount" | "code">,
 ): SkillCertification {
 	const id = `${data.type === "skill" ? "skill" : "cert"}-${Math.floor(
 		Math.random() * 1000,
 	).toString()}`;
 
+	// 新しいコードを生成（スキルはS、資格はC で始まる）
+	const prefix = data.type === "skill" ? "S" : "C";
+	const latestItems = skillCertificationData
+		.filter((item) => item.type === data.type)
+		.sort(
+			(a, b) =>
+				Number.parseInt(a.code.substring(1)) -
+				Number.parseInt(b.code.substring(1)),
+		);
+	const latestCode =
+		latestItems.length > 0
+			? latestItems[latestItems.length - 1].code
+			: `${prefix}000`;
+	const latestNumber = Number.parseInt(latestCode.substring(1));
+	const newCode = `${prefix}${(latestNumber + 1).toString().padStart(3, "0")}`;
+
 	return {
 		id,
+		code: newCode,
 		...data,
 		holdersCount: 0,
 		createdAt: new Date().toISOString(),
