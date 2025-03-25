@@ -125,13 +125,13 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 					className="space-y-6"
 				>
 					{/* 検索フィールド行 */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+					<div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4">
 						{/* 検索入力フィールド */}
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="w-full">
+								<FormItem className="col-span-2">
 									<FormLabel className="text-sm font-medium mb-1 block">
 										キーワード（社員名、内容、コメント）
 									</FormLabel>
@@ -139,7 +139,6 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 										<div className="relative w-full">
 											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 											<Input
-												placeholder="社員名や内容、コメントで検索..."
 												className="pl-10 w-full h-10 rounded-lg"
 												{...field}
 												aria-label="社員名や内容、コメントで検索"
@@ -162,7 +161,7 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="h-10 rounded-lg"
+												className="h-10 rounded-lg w-full min-w-0"
 												aria-label="申請タイプ"
 											>
 												<SelectValue placeholder="申請タイプ" />
@@ -197,10 +196,10 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="h-10 rounded-lg"
+												className="h-10 rounded-lg w-full min-w-0"
 												aria-label="ステータス"
 											>
-												<SelectValue placeholder="ステータス" />
+												<SelectValue placeholder="すべてのステータス" />
 											</SelectTrigger>
 											<SelectContent>
 												<SelectItem value="all">すべてのステータス</SelectItem>
@@ -256,7 +255,7 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 						/>
 
 						{/* ボタン */}
-						<div className="flex gap-4 w-full col-span-1 md:col-span-2 lg:col-span-4 justify-start">
+						<div className="flex gap-4 col-span-4 justify-start">
 							<Button
 								type="submit"
 								className="bg-black text-white h-10 rounded-lg w-32"

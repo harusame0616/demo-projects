@@ -80,35 +80,33 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSearch)} className="space-y-6">
 					{/* 検索フィールド行 */}
-					<div className="flex flex-col gap-4">
+					<div className=" flex-col gap-4 grid grid-cols-1 md:grid-cols-4">
 						{/* 検索入力フィールド */}
-						<div className="w-full">
-							<FormField
-								control={form.control}
-								name="query"
-								render={({ field }) => (
-									<FormItem className="w-full">
-										<FormLabel className="text-sm font-medium mb-1 block">
-											キーワード（グレード）
-										</FormLabel>
-										<FormControl>
-											<div className="relative w-full">
-												<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-												<Input
-													placeholder="グレード名で検索..."
-													className="pl-10 w-full h-10 rounded-lg"
-													{...field}
-													aria-label="グレード名で検索"
-												/>
-											</div>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
+
+						<FormField
+							control={form.control}
+							name="query"
+							render={({ field }) => (
+								<FormItem className="col-span-2">
+									<FormLabel className="text-sm font-medium mb-1 block">
+										キーワード（グレード）
+									</FormLabel>
+									<FormControl>
+										<div className="relative w-full">
+											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+											<Input
+												className="pl-10 w-full h-10 rounded-lg"
+												{...field}
+												aria-label="グレード名で検索"
+											/>
+										</div>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
 
 						{/* ボタン */}
-						<div className="flex gap-4">
+						<div className="flex gap-4 col-span-4">
 							<Button
 								type="submit"
 								className="bg-black text-white h-10 rounded-lg w-32"

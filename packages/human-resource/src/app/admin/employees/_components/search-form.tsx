@@ -109,13 +109,13 @@ export function SearchForm({
 		<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSearch)} className="space-y-6">
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 						{/* 検索入力フィールド */}
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="w-full">
+								<FormItem className="col-span-2">
 									<FormLabel className="text-sm font-medium mb-1 block">
 										キーワード（名前、メール、ID）
 									</FormLabel>
@@ -123,7 +123,6 @@ export function SearchForm({
 										<div className="relative w-full">
 											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 											<Input
-												placeholder="名前、メール、IDで検索..."
 												className="pl-10 w-full h-10 rounded-lg"
 												{...field}
 												aria-label="名前、メール、IDで検索"
@@ -139,14 +138,14 @@ export function SearchForm({
 							control={form.control}
 							name="department"
 							render={({ field }) => (
-								<FormItem className="w-full">
+								<FormItem>
 									<FormLabel className="text-sm font-medium mb-1 block">
 										部署
 									</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="h-10 rounded-lg"
+												className="h-10 rounded-lg w-full min-w-0"
 												aria-label="部署でフィルター"
 											>
 												<SelectValue placeholder="すべての部署" />
@@ -179,7 +178,7 @@ export function SearchForm({
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="h-10 rounded-lg"
+												className="h-10 rounded-lg w-full min-w-0"
 												aria-label="役職でフィルター"
 											>
 												<SelectValue placeholder="すべての役職" />

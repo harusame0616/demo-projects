@@ -98,14 +98,14 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 					{/* 検索フィールド行 */}
 					<div className="flex flex-col gap-4">
 						{/* 検索入力エリア */}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 							{/* 検索入力フィールド */}
-							<div className="w-full">
+							<div className="col-span-2">
 								<FormField
 									control={form.control}
 									name="query"
 									render={({ field }) => (
-										<FormItem className="w-full">
+										<FormItem>
 											<FormLabel className="text-sm font-medium mb-1 block">
 												キーワード（名称、説明）
 											</FormLabel>
@@ -113,7 +113,6 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 												<div className="relative w-full">
 													<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 													<Input
-														placeholder="スキル・資格を検索..."
 														className="pl-10 w-full h-10 rounded-lg"
 														{...field}
 														aria-label="スキル・資格を検索"
@@ -141,7 +140,7 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 													onValueChange={field.onChange}
 												>
 													<SelectTrigger
-														className="h-10 rounded-lg"
+														className="h-10 rounded-lg w-full min-w-0"
 														aria-label="種別"
 													>
 														<SelectValue placeholder="種別" />

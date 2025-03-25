@@ -92,12 +92,12 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 		<div className="w-full mb-4 bg-white rounded-3xl shadow-sm p-4">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSearch)} className="w-full">
-					<div className="flex flex-col space-y-4">
+					<div className="flex-col space-y-4 grid grid-cols-1 md:grid-cols-4 gap-4">
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="w-full">
+								<FormItem className="col-span-2">
 									<FormLabel className="text-sm font-medium mb-1 block">
 										キーワード（部署名）
 									</FormLabel>
@@ -105,7 +105,6 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 										<div className="relative w-full">
 											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
 											<Input
-												placeholder="部署名で検索..."
 												className="pl-10 h-10 rounded-lg border-gray-200"
 												{...field}
 												aria-label="部署名で検索"
@@ -116,7 +115,7 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 							)}
 						/>
 
-						<div className="flex gap-4">
+						<div className="flex gap-4 col-span-4">
 							<Button
 								type="submit"
 								className="bg-black text-white h-10 rounded-lg w-24"
