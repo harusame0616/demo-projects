@@ -10,15 +10,16 @@ import {
 import { ArrowLeftIcon, Edit2Icon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { use } from "react";
 import { positionData } from "../_data/positions-data";
 
 interface PositionDetailPageProps {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
-export function generateMetadata({ params }: PositionDetailPageProps) {
+export function generateMetadata({ params }: { params: { id: string } }) {
 	const position = positionData.find((p) => p.id === params.id);
 
 	if (!position) {
@@ -36,7 +37,8 @@ export function generateMetadata({ params }: PositionDetailPageProps) {
 export default function PositionDetailPage({
 	params,
 }: PositionDetailPageProps) {
-	const position = positionData.find((p) => p.id === params.id);
+	const { id } = use(params);
+	const position = positionData.find((p) => p.id === id);
 
 	if (!position) {
 		notFound();

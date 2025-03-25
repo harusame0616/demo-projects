@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 import { type Department, departmentData } from "../../_data/departments-data";
 import { DepartmentForm } from "../../_components/department-form";
 import { DepartmentFormSkeleton } from "../../_components/department-form-skeleton";
@@ -9,15 +9,17 @@ import { DepartmentFormSkeleton } from "../../_components/department-form-skelet
 import type { Metadata } from "next";
 
 interface DepartmentEditPageProps {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
 // メタデータを動的に生成
 export async function generateMetadata({
 	params,
-}: DepartmentEditPageProps): Promise<Metadata> {
+}: {
+	params: { id: string };
+}): Promise<Metadata> {
 	const departmentId = params.id;
 	const department = departmentData.find(
 		(dept: Department) => dept.id === departmentId,
@@ -39,7 +41,9 @@ export async function generateMetadata({
 export default function DepartmentEditPage({
 	params,
 }: DepartmentEditPageProps) {
-	const departmentId = params.id;
+	// paramsをReact.use()でアンラップする
+	const { id: departmentId } = use(params);
+
 	const department = departmentData.find(
 		(dept: Department) => dept.id === departmentId,
 	);

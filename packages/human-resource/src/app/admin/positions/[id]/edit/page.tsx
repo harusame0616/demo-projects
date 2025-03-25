@@ -4,18 +4,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
+import { use } from "react";
 import { PositionForm } from "../../_components/position-form";
 import { positionData } from "../../_data/positions-data";
 
 interface PositionEditPageProps {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
 export default function PositionEditPage({ params }: PositionEditPageProps) {
 	const router = useRouter();
-	const position = positionData.find((p) => p.id === params.id);
+	const { id } = use(params);
+	const position = positionData.find((p) => p.id === id);
 
 	if (!position) {
 		notFound();
@@ -35,7 +37,7 @@ export default function PositionEditPage({ params }: PositionEditPageProps) {
 		});
 
 		// 詳細ページにリダイレクト
-		router.push(`/admin/positions/${params.id}`);
+		router.push(`/admin/positions/${id}`);
 	};
 
 	return (
