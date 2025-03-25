@@ -232,7 +232,7 @@ export function ApplicationTable({
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="w-[100px]">申請ID</TableHead>
+								<TableHead className="w-[100px]">申請コード</TableHead>
 								<TableHead className="w-[120px]">申請種類</TableHead>
 								<TableHead className="w-[100px]">ステータス</TableHead>
 								<TableHead className="w-[150px]">社員</TableHead>
@@ -253,7 +253,13 @@ export function ApplicationTable({
 								applications.map((application) => (
 									<TableRow key={application.id}>
 										<TableCell className="font-medium whitespace-nowrap">
-											{application.id}
+											<Button
+												variant="link"
+												className="p-0 h-auto font-medium text-blue-600"
+												onClick={() => openDetails(application)}
+											>
+												{application.id}
+											</Button>
 										</TableCell>
 										<TableCell className="whitespace-nowrap">
 											{getApplicationTypeBadge(application.type)}
@@ -327,7 +333,7 @@ export function ApplicationTable({
 
 						<div className="grid grid-cols-2 gap-4 py-4">
 							<div className="space-y-2">
-								<Label>申請ID</Label>
+								<Label>申請コード</Label>
 								<div>{selectedApplication.id}</div>
 							</div>
 

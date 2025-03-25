@@ -18,6 +18,11 @@ import { useRouter } from "next/navigation";
 
 // フォームのバリデーションスキーマ
 const formSchema = v.object({
+	code: v.pipe(
+		v.string(),
+		v.minLength(1, "コードは必須です"),
+		v.maxLength(10, "コードは10文字以内で入力してください"),
+	),
 	name: v.pipe(
 		v.string(),
 		v.minLength(1, "資格名は必須です"),
@@ -40,6 +45,7 @@ const formSchema = v.object({
 });
 
 interface CertificationFormValues {
+	code: string;
 	name: string;
 	description: string;
 	levelOrAuthority: string;
@@ -61,6 +67,7 @@ export function CertificationForm({
 
 	// フォームの初期値設定
 	const defaultValues: CertificationFormValues = {
+		code: certification?.code || "",
 		name: certification?.name || "",
 		description: certification?.description || "",
 		levelOrAuthority: certification?.levelOrAuthority || "",
@@ -81,6 +88,20 @@ export function CertificationForm({
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+				<FormField
+					control={form.control}
+					name="code"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>資格コード *</FormLabel>
+							<FormControl>
+								<Input placeholder="C001" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
 				<FormField
 					control={form.control}
 					name="name"

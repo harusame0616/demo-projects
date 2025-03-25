@@ -31,6 +31,7 @@ interface DepartmentFormProps {
 export function DepartmentForm({ department }: DepartmentFormProps) {
 	const router = useRouter();
 	const [formData, setFormData] = useState({
+		id: department.id,
 		name: department.name,
 		parentId: department.parentId || "",
 	});
@@ -99,6 +100,19 @@ export function DepartmentForm({ department }: DepartmentFormProps) {
 					<CardTitle>部署情報</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-6">
+					<div className="space-y-2">
+						<Label htmlFor="id">部署コード</Label>
+						<Input
+							id="id"
+							name="id"
+							value={formData.id}
+							onChange={handleChange}
+							placeholder="部署コードを入力"
+							required
+							className="max-w-[200px]"
+						/>
+					</div>
+
 					<div className="space-y-2">
 						<Label htmlFor="name">部署名</Label>
 						<Input

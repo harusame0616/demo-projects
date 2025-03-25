@@ -90,6 +90,12 @@ export function CertificationList({
 					<TableHeader>
 						<TableRow>
 							<TableHead
+								className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
+								onClick={() => handleSort("code")}
+							>
+								資格コード {getSortIcon("code")}
+							</TableHead>
+							<TableHead
 								className="cursor-pointer hover:bg-gray-50 w-[200px] whitespace-nowrap"
 								onClick={() => handleSort("name")}
 							>
@@ -116,6 +122,14 @@ export function CertificationList({
 						{certifications.map((certification) => (
 							<TableRow key={certification.id}>
 								<TableCell className="font-medium whitespace-nowrap">
+									<Link
+										href={`/admin/certifications/${certification.id}`}
+										className="hover:underline text-blue-600"
+									>
+										{certification.code}
+									</Link>
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
 									<Link
 										href={`/admin/certifications/${certification.id}`}
 										className="hover:underline text-blue-600"

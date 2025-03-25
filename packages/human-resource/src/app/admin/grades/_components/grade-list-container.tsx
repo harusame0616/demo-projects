@@ -87,6 +87,15 @@ export function GradeListContainer({
 					<TableHeader>
 						<TableRow>
 							<TableHead
+								className="w-[100px] cursor-pointer whitespace-nowrap"
+								onClick={() => handleSort("id")}
+							>
+								<div className="flex items-center">
+									グレードコード
+									{getSortIcon("id")}
+								</div>
+							</TableHead>
+							<TableHead
 								className="w-[180px] cursor-pointer whitespace-nowrap"
 								onClick={() => handleSort("name")}
 							>
@@ -120,13 +129,21 @@ export function GradeListContainer({
 					<TableBody>
 						{grades.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={5} className="text-center py-6">
+								<TableCell colSpan={6} className="text-center py-6">
 									該当するグレードがありません
 								</TableCell>
 							</TableRow>
 						) : (
 							grades.map((grade) => (
 								<TableRow key={grade.id}>
+									<TableCell className="whitespace-nowrap">
+										<Link
+											href={`/admin/grades/${grade.id}`}
+											className="font-medium text-blue-600 hover:underline"
+										>
+											{grade.id}
+										</Link>
+									</TableCell>
 									<TableCell className="whitespace-nowrap">
 										<Link
 											href={`/admin/grades/${grade.id}`}

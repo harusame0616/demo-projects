@@ -75,7 +75,9 @@ export function PositionTable({
 							className="w-[100px] cursor-pointer whitespace-nowrap"
 							onClick={() => onSort("id")}
 						>
-							<div className="flex items-center">ID {getSortIcon("id")}</div>
+							<div className="flex items-center">
+								役職コード {getSortIcon("id")}
+							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer w-[150px] whitespace-nowrap"
@@ -120,7 +122,12 @@ export function PositionTable({
 						positions.map((position) => (
 							<TableRow key={position.id}>
 								<TableCell className="font-medium whitespace-nowrap">
-									{position.id}
+									<Link
+										href={`/admin/positions/${position.id}`}
+										className="hover:underline text-blue-600"
+									>
+										{position.id}
+									</Link>
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									<Link

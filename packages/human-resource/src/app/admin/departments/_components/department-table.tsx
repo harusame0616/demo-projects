@@ -91,6 +91,14 @@ export function DepartmentTable({
 				<TableHeader>
 					<TableRow>
 						<TableHead
+							className="cursor-pointer w-[100px] whitespace-nowrap"
+							onClick={() => handleSort("id")}
+						>
+							<div className="flex items-center">
+								部署コード {getSortIcon("id")}
+							</div>
+						</TableHead>
+						<TableHead
 							className="cursor-pointer w-[200px] whitespace-nowrap"
 							onClick={() => handleSort("name")}
 						>
@@ -115,13 +123,21 @@ export function DepartmentTable({
 				<TableBody>
 					{departments.length === 0 ? (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-8">
+							<TableCell colSpan={5} className="text-center py-8">
 								部署が登録されていません
 							</TableCell>
 						</TableRow>
 					) : (
 						departments.map((department) => (
 							<TableRow key={department.id}>
+								<TableCell className="font-medium whitespace-nowrap">
+									<Link
+										href={`/admin/departments/${department.id}`}
+										className="hover:underline flex items-center"
+									>
+										{department.id}
+									</Link>
+								</TableCell>
 								<TableCell className="font-medium whitespace-nowrap">
 									<Link
 										href={`/admin/departments/${department.id}`}

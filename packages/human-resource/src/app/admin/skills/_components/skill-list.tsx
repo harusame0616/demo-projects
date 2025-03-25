@@ -90,6 +90,12 @@ export function SkillList({
 					<TableHeader>
 						<TableRow>
 							<TableHead
+								className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
+								onClick={() => handleSort("code")}
+							>
+								スキルコード {getSortIcon("code")}
+							</TableHead>
+							<TableHead
 								className="cursor-pointer hover:bg-gray-50 w-[200px] whitespace-nowrap"
 								onClick={() => handleSort("name")}
 							>
@@ -116,6 +122,14 @@ export function SkillList({
 						{skills.map((skill) => (
 							<TableRow key={skill.id}>
 								<TableCell className="font-medium whitespace-nowrap">
+									<Link
+										href={`/admin/skills/${skill.id}`}
+										className="hover:underline text-blue-600"
+									>
+										{skill.code}
+									</Link>
+								</TableCell>
+								<TableCell className="whitespace-nowrap">
 									<Link
 										href={`/admin/skills/${skill.id}`}
 										className="hover:underline text-blue-600"

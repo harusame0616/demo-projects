@@ -22,6 +22,10 @@ import type { Position } from "../_data/positions-data";
 
 // フォームのバリデーションスキーマ
 const formSchema = z.object({
+	id: z
+		.string()
+		.min(1, { message: "役職コードは必須です" })
+		.max(10, { message: "役職コードは10文字以内で入力してください" }),
 	name: z
 		.string()
 		.min(1, { message: "役職名は必須です" })
@@ -49,11 +53,13 @@ export function PositionForm({ position, onSubmit }: PositionFormProps) {
 	// フォームの初期値設定
 	const defaultValues = isEditing
 		? {
+				id: position.id,
 				name: position.name,
 				level: position.level,
 				description: position.description,
 			}
 		: {
+				id: "",
 				name: "",
 				level: 1,
 				description: "",
@@ -81,6 +87,28 @@ export function PositionForm({ position, onSubmit }: PositionFormProps) {
 				className="space-y-8"
 				noValidate
 			>
+				<FormField
+					control={form.control}
+					name="id"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>役職コード</FormLabel>
+							<FormControl>
+								<Input
+									placeholder="例: P001"
+									{...field}
+									className="max-w-[200px]"
+									disabled={isEditing} // 編集時は変更不可
+								/>
+							</FormControl>
+							<FormDescription>
+								役職を識別するコードを入力してください
+							</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
 				<FormField
 					control={form.control}
 					name="name"
@@ -112,7 +140,7 @@ export function PositionForm({ position, onSubmit }: PositionFormProps) {
 									placeholder="1-10"
 									{...field}
 									onChange={(e) =>
-										field.onChange(parseInt(e.target.value) || "")
+										field.onChange(Number.parseInt(e.target.value) || "")
 									}
 								/>
 							</FormControl>

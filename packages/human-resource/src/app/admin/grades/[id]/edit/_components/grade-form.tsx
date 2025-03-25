@@ -29,6 +29,7 @@ interface GradeFormProps {
 export function GradeForm({ grade }: GradeFormProps) {
 	const router = useRouter();
 	const [formData, setFormData] = useState({
+		id: grade.id,
 		name: grade.name,
 		level: grade.level.toString(),
 		description: grade.description,
@@ -80,6 +81,20 @@ export function GradeForm({ grade }: GradeFormProps) {
 					<CardTitle>グレード情報</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-6">
+					<div className="space-y-2">
+						<Label htmlFor="id">グレードコード</Label>
+						<Input
+							id="id"
+							name="id"
+							value={formData.id}
+							onChange={handleChange}
+							placeholder="グレードコードを入力"
+							required
+							className="max-w-[200px]"
+							disabled
+						/>
+					</div>
+
 					<div className="space-y-2">
 						<Label htmlFor="name">グレード名</Label>
 						<Input

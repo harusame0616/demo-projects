@@ -259,7 +259,7 @@ export function EmployeeForm({
 								name="id"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>社員コード</FormLabel>
+										<FormLabel>従業員コード</FormLabel>
 										<FormControl>
 											<Input
 												className="max-w-[240px]"
