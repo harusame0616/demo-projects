@@ -15,6 +15,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "@/components/ui/use-toast";
+import {
+	createSkillCertification,
+	updateSkillCertification,
+} from "../../skills-certifications/_actions/skill-certification-actions";
+import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
 
 // フォームのバリデーションスキーマ
 const formSchema = v.object({
@@ -53,17 +60,17 @@ interface CertificationFormValues {
 }
 
 interface CertificationFormProps {
-	certification?: Partial<CertificationFormValues>;
-	onSubmit?: (values: CertificationFormValues) => void;
+	certification?: SkillCertification;
+	isNew?: boolean;
 }
 
 export function CertificationForm({
 	certification,
-	onSubmit = () => {
-		// デフォルトは何もしない
-	},
+	isNew = true,
 }: CertificationFormProps) {
 	const router = useRouter();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 	// フォームの初期値設定
 	const defaultValues: CertificationFormValues = {
@@ -80,14 +87,66 @@ export function CertificationForm({
 		defaultValues,
 	});
 
+	// フォーム送信ハンドラ
+	const onSubmit = async (values: CertificationFormValues) => {
+		setIsSubmitting(true);
+		setError(null);
+
+		try {
+			if (isNew) {
+				// 新規作成の場合
+				const newCertification = await createSkillCertification({
+					...values,
+					type: "certification",
+				});
+
+				toast({
+					title: "資格を登録しました",
+					description: `「${newCertification.name}」が正常に登録されました。`,
+				});
+
+				router.push(`/admin/certifications/${newCertification.id}`);
+			} else if (certification) {
+				// 更新の場合
+				const updatedCertification = await updateSkillCertification(
+					certification.id,
+					{
+						...values,
+						type: "certification",
+					},
+				);
+
+				toast({
+					title: "資格を更新しました",
+					description: `「${updatedCertification?.name}」の情報が更新されました。`,
+				});
+
+				router.push(`/admin/certifications/${certification.id}`);
+			}
+
+			router.refresh();
+		} catch (err) {
+			console.error("エラー:", err);
+			setError(err instanceof Error ? err.message : "エラーが発生しました");
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
 	// キャンセルボタンのハンドラ
 	const handleCancel = () => {
-		router.push("/admin/certifications");
+		router.back();
 	};
 
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+				{error && (
+					<div className="bg-red-50 p-4 rounded-md text-red-600 mb-4">
+						{error}
+					</div>
+				)}
+
 				<FormField
 					control={form.control}
 					name="code"
@@ -95,7 +154,7 @@ export function CertificationForm({
 						<FormItem>
 							<FormLabel>資格コード *</FormLabel>
 							<FormControl>
-								<Input placeholder="C001" {...field} />
+								<Input placeholder="C001" {...field} disabled={!isNew} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -168,10 +227,23 @@ export function CertificationForm({
 				/>
 
 				<div className="flex justify-between">
-					<Button type="button" variant="outline" onClick={handleCancel}>
+					<Button
+						type="button"
+						variant="outline"
+						onClick={handleCancel}
+						disabled={isSubmitting}
+					>
 						キャンセル
 					</Button>
-					<Button type="submit">保存</Button>
+					<Button type="submit" disabled={isSubmitting}>
+						{isSubmitting
+							? isNew
+								? "登録中..."
+								: "更新中..."
+							: isNew
+								? "登録"
+								: "更新"}
+					</Button>
 				</div>
 			</form>
 		</Form>

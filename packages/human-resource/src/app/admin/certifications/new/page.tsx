@@ -5,28 +5,12 @@ import { Button } from "@/components/ui/button";
 import { CertificationForm } from "../_components/certification-form";
 import { ArrowLeftIcon } from "lucide-react";
 import { Suspense } from "react";
+import { CertificationFormSkeleton } from "../_components/certification-form-skeleton";
 
 export const metadata: Metadata = {
 	title: "資格登録 | 人材管理システム",
 	description: "新しい資格を登録します。",
 };
-
-// ローディング状態を表示するスケルトンコンポーネント
-function CertificationFormSkeleton() {
-	return (
-		<div className="space-y-6">
-			<div className="space-y-4">
-				<div className="h-8 w-1/3 bg-gray-200 animate-pulse rounded-md" />
-				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			</div>
-			<div className="space-y-4">
-				<div className="h-8 w-1/3 bg-gray-200 animate-pulse rounded-md" />
-				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			</div>
-			<div className="h-10 w-48 bg-gray-200 animate-pulse rounded-md" />
-		</div>
-	);
-}
 
 export default function NewCertificationPage() {
 	return (
@@ -47,7 +31,7 @@ export default function NewCertificationPage() {
 				</CardHeader>
 				<CardContent>
 					<Suspense fallback={<CertificationFormSkeleton />}>
-						<CertificationForm />
+						<CertificationForm isNew={true} />
 					</Suspense>
 				</CardContent>
 			</Card>
