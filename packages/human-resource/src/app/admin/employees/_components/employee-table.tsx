@@ -68,7 +68,7 @@ export function EmployeeTable({
 								onClick={() => onSort("id")}
 								className="flex items-center whitespace-nowrap text-xs font-medium"
 							>
-								社員コード {getSortIcon("id")}
+								従業員コード {getSortIcon("id")}
 							</Button>
 						</TableHead>
 						<TableHead
