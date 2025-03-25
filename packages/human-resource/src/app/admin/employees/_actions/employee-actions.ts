@@ -596,16 +596,20 @@ export async function getEmployeeById(id: string) {
 }
 
 // 従業員を追加
-export async function createEmployee(employeeData: Omit<Employee, "id">) {
+export async function createEmployee(
+	employeeData: Partial<Pick<Employee, "id">> & Omit<Employee, "id">,
+) {
 	// 本番環境では実際のAPIエンドポイントを呼び出してデータを永続化
 	// このデモでは新しいIDを生成して配列に追加するだけ
-	const newId = String(
-		Math.max(...mockEmployees.map((e) => Number.parseInt(e.id))) + 1,
-	).padStart(3, "0");
+	const newId =
+		employeeData.id ||
+		String(
+			Math.max(...mockEmployees.map((e) => Number.parseInt(e.id))) + 1,
+		).padStart(3, "0");
 
 	const newEmployee: Employee = {
-		id: newId,
 		...employeeData,
+		id: newId,
 	};
 
 	// 実際のAPIでは、ここでデータを保存

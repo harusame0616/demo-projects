@@ -63,7 +63,13 @@ export function EmployeeTable({
 							className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
 							onClick={() => onSort("id")}
 						>
-							社員ID {getSortIcon("id")}
+							<Button
+								variant="ghost"
+								onClick={() => onSort("id")}
+								className="flex items-center whitespace-nowrap text-xs font-medium"
+							>
+								社員コード {getSortIcon("id")}
+							</Button>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"

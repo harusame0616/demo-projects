@@ -54,7 +54,7 @@ export function ProfileHeader({ employee }: ProfileHeaderProps) {
 							<div>
 								<p className="text-sm font-medium text-muted-foreground mb-1 flex items-center md:justify-end gap-1.5">
 									<UserIcon className="h-3.5 w-3.5" />
-									社員ID
+									社員コード
 								</p>
 								<p className="text-2xl font-semibold">{employee.id}</p>
 							</div>

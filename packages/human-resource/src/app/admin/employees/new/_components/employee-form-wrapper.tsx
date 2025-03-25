@@ -17,6 +17,7 @@ export function EmployeeFormWrapper({
 	const router = useRouter();
 
 	const handleSubmit = async (values: {
+		id?: string;
 		name: string;
 		nameKana: string;
 		email: string;
@@ -33,6 +34,7 @@ export function EmployeeFormWrapper({
 		try {
 			// APIは一部のフィールドのみ対応しているため、必要なフィールドだけ渡す
 			await createEmployee({
+				id: values.id,
 				name: values.name,
 				email: values.email,
 				department: values.department,

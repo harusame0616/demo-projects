@@ -254,26 +254,24 @@ export function EmployeeForm({
 					</CardHeader>
 					<CardContent className="pt-4">
 						<div className="grid grid-cols-1 gap-6">
-							{isEditing && (
-								<FormField
-									control={form.control}
-									name="id"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>社員ID</FormLabel>
-											<FormControl>
-												<Input
-													className="max-w-[240px]"
-													disabled
-													{...field}
-													value={field.value || ""}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							)}
+							<FormField
+								control={form.control}
+								name="id"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>社員コード</FormLabel>
+										<FormControl>
+											<Input
+												className="max-w-[240px]"
+												placeholder="例: E001"
+												{...field}
+												value={field.value || ""}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
 							<FormField
 								control={form.control}
