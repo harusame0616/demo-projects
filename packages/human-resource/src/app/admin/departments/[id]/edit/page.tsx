@@ -3,7 +3,8 @@ import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { type Department, departmentData } from "../../_data/departments-data";
-import { DepartmentForm } from "./_components/department-form";
+import { DepartmentForm } from "../../_components/department-form";
+import { DepartmentFormSkeleton } from "../../_components/department-form-skeleton";
 
 import type { Metadata } from "next";
 
@@ -35,23 +36,6 @@ export async function generateMetadata({
 	};
 }
 
-// ローディング状態を表示するスケルトンコンポーネント
-function DepartmentFormSkeleton() {
-	return (
-		<div className="space-y-6">
-			<div className="space-y-4">
-				<div className="h-8 w-1/3 bg-gray-200 animate-pulse rounded-md" />
-				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			</div>
-			<div className="space-y-4">
-				<div className="h-8 w-1/3 bg-gray-200 animate-pulse rounded-md" />
-				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			</div>
-			<div className="h-10 w-48 bg-gray-200 animate-pulse rounded-md" />
-		</div>
-	);
-}
-
 export default function DepartmentEditPage({
 	params,
 }: DepartmentEditPageProps) {
@@ -68,7 +52,7 @@ export default function DepartmentEditPage({
 					指定された部署ID: {departmentId} の部署は存在しません。
 				</p>
 				<Button asChild>
-					<Link href="/departments">
+					<Link href="/admin/departments">
 						<ArrowLeftIcon className="mr-2 h-4 w-4" />
 						部署一覧に戻る
 					</Link>
@@ -81,7 +65,7 @@ export default function DepartmentEditPage({
 		<>
 			<div className="flex items-center gap-4 mb-6">
 				<Button variant="outline" size="sm" asChild>
-					<Link href={`/departments/${departmentId}`}>
+					<Link href={`/admin/departments/${departmentId}`}>
 						<ArrowLeftIcon className="mr-2 h-4 w-4" />
 						戻る
 					</Link>
@@ -92,7 +76,7 @@ export default function DepartmentEditPage({
 			</div>
 
 			<Suspense fallback={<DepartmentFormSkeleton />}>
-				<DepartmentForm department={department} />
+				<DepartmentForm department={department} isNew={false} />
 			</Suspense>
 		</>
 	);
