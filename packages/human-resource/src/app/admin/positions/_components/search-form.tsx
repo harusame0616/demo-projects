@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 import * as v from "valibot";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Card, CardContent } from "@/components/ui/card";
 
 // フォームのスキーマを定義
 const positionFilterSchema = v.object({
@@ -29,7 +30,7 @@ const positionFilterSchema = v.object({
 	level: v.string(),
 });
 
-type PositionFilterFormValues = v.InferType<typeof positionFilterSchema>;
+type PositionFilterFormValues = v.InferInput<typeof positionFilterSchema>;
 
 interface SearchFormProps {
 	searchQuery: string;
@@ -113,69 +114,63 @@ export function SearchForm({
 	};
 
 	return (
-		<div className="w-full mb-4 bg-white rounded-3xl shadow-sm p-4">
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(handleSearch)} className="w-full">
-					<div className="flex flex-col space-y-4">
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<FormField
-								control={form.control}
-								name="query"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-sm font-medium mb-1 block">
-											キーワード（役職名、説明）
-										</FormLabel>
-										<FormControl>
-											<div className="relative w-full">
-												<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-												<Input
-													placeholder="役職名や説明で検索..."
-													className="pl-10 h-10 rounded-lg border-gray-200"
-													{...field}
-													aria-label="役職名や説明で検索"
-												/>
-											</div>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
+		<Card>
+			<CardContent>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(handleSearch)}
+						className="grid grid-cols-1 md:grid-cols-4 gap-4"
+					>
+						<FormField
+							control={form.control}
+							name="query"
+							render={({ field }) => (
+								<FormItem className="col-span-2">
+									<FormLabel>キーワード（役職名、説明）</FormLabel>
+									<FormControl>
+										<div className="relative w-full">
+											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+											<Input
+												placeholder="役職名や説明で検索..."
+												className="pl-10 h-10 rounded-lg border-gray-200"
+												{...field}
+												aria-label="役職名や説明で検索"
+											/>
+										</div>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
 
-							<FormField
-								control={form.control}
-								name="level"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-sm font-medium mb-1 block">
-											レベル
-										</FormLabel>
-										<FormControl>
-											<Select
-												value={field.value}
-												onValueChange={field.onChange}
+						<FormField
+							control={form.control}
+							name="level"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>レベル</FormLabel>
+									<FormControl>
+										<Select value={field.value} onValueChange={field.onChange}>
+											<SelectTrigger
+												className="min-h-10 w-full border-gray-200"
+												aria-label="レベルでフィルター"
 											>
-												<SelectTrigger
-													className="h-10 rounded-lg border-gray-200"
-													aria-label="レベルでフィルター"
-												>
-													<SelectValue placeholder="レベルでフィルター" />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectItem value="all">すべて</SelectItem>
-													{levelOptions.map((level) => (
-														<SelectItem key={level} value={level}>
-															レベル {level}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
+												<SelectValue placeholder="レベルでフィルター" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="all">すべて</SelectItem>
+												{levelOptions.map((level) => (
+													<SelectItem key={level} value={level}>
+														レベル {level}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
 
-						<div className="flex gap-4 justify-end">
+						<div className="col-span-4 flex gap-4">
 							<Button
 								type="submit"
 								className="bg-black text-white h-10 rounded-lg w-24"
@@ -191,9 +186,9 @@ export function SearchForm({
 								クリア
 							</Button>
 						</div>
-					</div>
-				</form>
-			</Form>
-		</div>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 }

@@ -16,6 +16,7 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import type { GradeSearchParams } from "../_actions/grade-actions";
+import { Card, CardContent } from "@/components/ui/card";
 
 // フォームのスキーマを定義
 const gradeSearchSchema = v.object({
@@ -76,13 +77,13 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 	};
 
 	return (
-		<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(handleSearch)} className="space-y-6">
-					{/* 検索フィールド行 */}
-					<div className=" flex-col gap-4 grid grid-cols-1 md:grid-cols-4">
-						{/* 検索入力フィールド */}
-
+		<Card>
+			<CardContent>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(handleSearch)}
+						className="gap-4 grid grid-cols-1 md:grid-cols-4"
+					>
 						<FormField
 							control={form.control}
 							name="query"
@@ -106,25 +107,22 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 						/>
 
 						{/* ボタン */}
-						<div className="flex gap-4 col-span-4">
-							<Button
-								type="submit"
-								className="bg-black text-white h-10 rounded-lg w-32"
-							>
+						<div className="col-span-4 flex gap-2">
+							<Button type="submit" className="h-10 w-32">
 								検索
 							</Button>
 							<Button
 								onClick={handleClear}
 								variant="outline"
 								type="button"
-								className="border-gray-300 h-10 rounded-lg w-32"
+								className="h-10 w-32"
 							>
 								クリア
 							</Button>
 						</div>
-					</div>
-				</form>
-			</Form>
-		</div>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 }

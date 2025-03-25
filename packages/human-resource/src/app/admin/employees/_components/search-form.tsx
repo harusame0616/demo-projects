@@ -22,7 +22,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-
+import { Card, CardContent } from "@/components/ui/card";
 // フォームのスキーマを定義
 const employeeFilterSchema = v.object({
 	query: v.string(),
@@ -30,7 +30,7 @@ const employeeFilterSchema = v.object({
 	position: v.string(),
 });
 
-type EmployeeFilterFormValues = v.InferType<typeof employeeFilterSchema>;
+type EmployeeFilterFormValues = v.InferInput<typeof employeeFilterSchema>;
 
 interface SearchFormProps {
 	departmentOptions: { value: string; label: string }[];
@@ -106,19 +106,19 @@ export function SearchForm({
 	};
 
 	return (
-		<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(handleSearch)} className="space-y-6">
-					<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-						{/* 検索入力フィールド */}
+		<Card>
+			<CardContent>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(handleSearch)}
+						className="grid grid-cols-1 md:grid-cols-4 gap-4"
+					>
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
 								<FormItem className="col-span-2">
-									<FormLabel className="text-sm font-medium mb-1 block">
-										キーワード（名前、メール、ID）
-									</FormLabel>
+									<FormLabel>キーワード（名前、メール、ID）</FormLabel>
 									<FormControl>
 										<div className="relative w-full">
 											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
@@ -139,13 +139,11 @@ export function SearchForm({
 							name="department"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-sm font-medium mb-1 block">
-										部署
-									</FormLabel>
+									<FormLabel>部署</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="h-10 rounded-lg w-full min-w-0"
+												className="min-h-10 w-full min-w-0"
 												aria-label="部署でフィルター"
 											>
 												<SelectValue placeholder="すべての部署" />
@@ -166,20 +164,17 @@ export function SearchForm({
 							)}
 						/>
 
-						{/* 役職選択 */}
 						<FormField
 							control={form.control}
 							name="position"
 							render={({ field }) => (
-								<FormItem className="w-full">
-									<FormLabel className="text-sm font-medium mb-1 block">
-										役職
-									</FormLabel>
+								<FormItem>
+									<FormLabel>役職</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="h-10 rounded-lg w-full min-w-0"
 												aria-label="役職でフィルター"
+												className="min-h-10 min-w-0 w-full"
 											>
 												<SelectValue placeholder="すべての役職" />
 											</SelectTrigger>
@@ -199,26 +194,22 @@ export function SearchForm({
 							)}
 						/>
 
-						{/* ボタン */}
-						<div className="flex gap-4 col-span-1 md:col-span-3 justify-start mt-2">
-							<Button
-								type="submit"
-								className="bg-black text-white h-10 rounded-lg w-32"
-							>
+						<div className="col-span-4 flex gap-2">
+							<Button type="submit" className="h-10 w-32">
 								検索
 							</Button>
 							<Button
 								onClick={handleClear}
 								type="button"
 								variant="outline"
-								className="border-gray-300 h-10 rounded-lg w-32"
+								className="h-10 w-32"
 							>
 								クリア
 							</Button>
 						</div>
-					</div>
-				</form>
-			</Form>
-		</div>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -118,23 +119,19 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 	};
 
 	return (
-		<div className="w-full mb-6 bg-white rounded-xl border p-6 shadow-sm">
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(handleFilterChange)}
-					className="space-y-6"
-				>
-					{/* 検索フィールド行 */}
-					<div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4">
-						{/* 検索入力フィールド */}
+		<Card>
+			<CardContent>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(handleFilterChange)}
+						className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4"
+					>
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
 								<FormItem className="col-span-2">
-									<FormLabel className="text-sm font-medium mb-1 block">
-										キーワード（社員名、内容、コメント）
-									</FormLabel>
+									<FormLabel>キーワード（社員名、内容、コメント）</FormLabel>
 									<FormControl>
 										<div className="relative w-full">
 											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
@@ -149,19 +146,16 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 							)}
 						/>
 
-						{/* 申請タイプ選択 */}
 						<FormField
 							control={form.control}
 							name="type"
 							render={({ field }) => (
 								<FormItem className="w-full">
-									<FormLabel className="text-sm font-medium mb-1 block">
-										申請タイプ
-									</FormLabel>
+									<FormLabel>申請タイプ</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="h-10 rounded-lg w-full min-w-0"
+												className="min-h-10 w-full min-w-0"
 												aria-label="申請タイプ"
 											>
 												<SelectValue placeholder="申請タイプ" />
@@ -184,7 +178,6 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 							)}
 						/>
 
-						{/* ステータス選択 */}
 						<FormField
 							control={form.control}
 							name="status"
@@ -196,7 +189,7 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="h-10 rounded-lg w-full min-w-0"
+												className="min-h-10 w-full min-w-0"
 												aria-label="ステータス"
 											>
 												<SelectValue placeholder="すべてのステータス" />
@@ -218,16 +211,14 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 							control={form.control}
 							name="date"
 							render={({ field }) => (
-								<FormItem className="w-full">
-									<FormLabel className="text-sm font-medium mb-1 block">
-										日付
-									</FormLabel>
+								<FormItem>
+									<FormLabel>日付</FormLabel>
 									<FormControl>
 										<Popover>
 											<PopoverTrigger asChild>
 												<Button
 													variant="outline"
-													className={`w-full h-10 rounded-lg justify-start text-left font-normal ${
+													className={`min-h-10 w-full rounded-lg justify-start text-left font-normal ${
 														!field.value ? "text-muted-foreground" : ""
 													}`}
 													aria-label="日付選択"
@@ -255,25 +246,22 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 						/>
 
 						{/* ボタン */}
-						<div className="flex gap-4 col-span-4 justify-start">
-							<Button
-								type="submit"
-								className="bg-black text-white h-10 rounded-lg w-32"
-							>
+						<div className="col-span-4 flex gap-2">
+							<Button type="submit" className="h-10 w-32">
 								検索
 							</Button>
 							<Button
 								onClick={handleClear}
 								variant="outline"
 								type="button"
-								className="border-gray-300 h-10 rounded-lg w-32"
+								className="h-10 w-32"
 							>
 								クリア
 							</Button>
 						</div>
-					</div>
-				</form>
-			</Form>
-		</div>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 }
