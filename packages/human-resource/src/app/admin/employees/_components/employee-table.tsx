@@ -89,19 +89,13 @@ export function EmployeeTable({
 						>
 							役職 {getSortIcon("position")}
 						</TableHead>
-						<TableHead
-							className="hidden md:table-cell cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
-							onClick={() => onSort("joinDate")}
-						>
-							入社日 {getSortIcon("joinDate")}
-						</TableHead>
 						<TableHead className="w-[80px]">操作</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
 					{employees.length === 0 ? (
 						<TableRow>
-							<TableCell colSpan={6} className="h-24 text-center">
+							<TableCell colSpan={5} className="h-24 text-center">
 								該当する従業員が見つかりませんでした
 							</TableCell>
 						</TableRow>
@@ -124,9 +118,6 @@ export function EmployeeTable({
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{employee.position}
-								</TableCell>
-								<TableCell className="hidden md:table-cell whitespace-nowrap">
-									{formatDate(employee.joinDate)}
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									<DropdownMenu>

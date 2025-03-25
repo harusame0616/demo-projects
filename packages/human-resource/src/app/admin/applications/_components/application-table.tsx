@@ -237,7 +237,6 @@ export function ApplicationTable({
 								<TableHead className="w-[100px]">ステータス</TableHead>
 								<TableHead className="w-[150px]">社員</TableHead>
 								<TableHead className="w-[120px]">申請日</TableHead>
-								<TableHead className="w-[120px]">対象日</TableHead>
 								<TableHead className="min-w-[150px]">内容</TableHead>
 								<TableHead className="w-[80px] text-right">操作</TableHead>
 							</TableRow>
@@ -245,7 +244,7 @@ export function ApplicationTable({
 						<TableBody>
 							{applications.length === 0 ? (
 								<TableRow>
-									<TableCell colSpan={8} className="h-24 text-center">
+									<TableCell colSpan={7} className="h-24 text-center">
 										該当する申請はありません
 									</TableCell>
 								</TableRow>
@@ -276,9 +275,6 @@ export function ApplicationTable({
 										</TableCell>
 										<TableCell className="whitespace-nowrap">
 											{application.submittedDate}
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{application.targetDate}
 										</TableCell>
 										<TableCell className="max-w-[300px]">
 											<div className="truncate">{application.content}</div>
@@ -366,11 +362,6 @@ export function ApplicationTable({
 							<div className="space-y-2">
 								<Label>申請日</Label>
 								<div>{selectedApplication.submittedDate}</div>
-							</div>
-
-							<div className="space-y-2">
-								<Label>対象日</Label>
-								<div>{selectedApplication.targetDate}</div>
 							</div>
 
 							<div className="space-y-2 col-span-2">

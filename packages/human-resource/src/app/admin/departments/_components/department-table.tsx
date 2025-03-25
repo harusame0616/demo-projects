@@ -109,21 +109,13 @@ export function DepartmentTable({
 						<TableHead className="w-[200px] whitespace-nowrap">
 							上位部署
 						</TableHead>
-						<TableHead
-							className="cursor-pointer w-[120px] whitespace-nowrap"
-							onClick={() => handleSort("createdAt")}
-						>
-							<div className="flex items-center">
-								作成日 {getSortIcon("createdAt")}
-							</div>
-						</TableHead>
 						<TableHead className="w-[80px]">操作</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
 					{departments.length === 0 ? (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-8">
+							<TableCell colSpan={4} className="text-center py-8">
 								部署が登録されていません
 							</TableCell>
 						</TableRow>
@@ -149,9 +141,6 @@ export function DepartmentTable({
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{getParentName(department.parentId)}
-								</TableCell>
-								<TableCell className="whitespace-nowrap">
-									{formatDate(department.createdAt)}
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									<DropdownMenu>

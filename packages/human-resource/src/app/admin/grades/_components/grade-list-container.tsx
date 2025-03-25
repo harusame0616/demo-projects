@@ -113,22 +113,13 @@ export function GradeListContainer({
 									{getSortIcon("level")}
 								</div>
 							</TableHead>
-							<TableHead
-								className="cursor-pointer w-[150px] whitespace-nowrap"
-								onClick={() => handleSort("createdAt")}
-							>
-								<div className="flex items-center">
-									作成日
-									{getSortIcon("createdAt")}
-								</div>
-							</TableHead>
 							<TableHead className="w-[80px]">操作</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{grades.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={5} className="text-center py-6">
+								<TableCell colSpan={4} className="text-center py-6">
 									該当するグレードがありません
 								</TableCell>
 							</TableRow>
@@ -163,9 +154,6 @@ export function GradeListContainer({
 										>
 											レベル {grade.level}
 										</Badge>
-									</TableCell>
-									<TableCell className="text-gray-500 whitespace-nowrap">
-										{formatDate(grade.createdAt)}
 									</TableCell>
 									<TableCell className="whitespace-nowrap">
 										<DropdownMenu>

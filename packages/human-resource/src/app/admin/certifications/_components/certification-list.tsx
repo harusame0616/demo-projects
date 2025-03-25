@@ -107,12 +107,6 @@ export function CertificationList({
 							>
 								認定機関 {getSortIcon("levelOrAuthority")}
 							</TableHead>
-							<TableHead
-								className="cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
-								onClick={() => handleSort("createdAt")}
-							>
-								登録日 {getSortIcon("createdAt")}
-							</TableHead>
 							<TableHead className="text-right w-[80px] whitespace-nowrap">
 								操作
 							</TableHead>
@@ -139,11 +133,6 @@ export function CertificationList({
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{certification.levelOrAuthority}
-								</TableCell>
-								<TableCell className="whitespace-nowrap">
-									{format(new Date(certification.createdAt), "yyyy年MM月dd日", {
-										locale: ja,
-									})}
 								</TableCell>
 								<TableCell className="text-right whitespace-nowrap">
 									<DropdownMenu>
