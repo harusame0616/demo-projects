@@ -23,7 +23,7 @@ export async function getSkillCertifications(
 	const {
 		query = "",
 		type = "all",
-		sort = "name",
+		sort = "code",
 		order = "asc",
 	} = searchParams;
 

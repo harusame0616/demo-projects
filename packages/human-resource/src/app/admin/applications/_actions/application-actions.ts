@@ -595,6 +595,9 @@ export async function getApplicationList(params: ApplicationSearchParams) {
 		);
 	}
 
+	// デフォルトで申請コード(id)によるソート
+	applications = applications.sort((a, b) => a.id.localeCompare(b.id));
+
 	// ページネーション
 	const page = params.page ? Number.parseInt(params.page, 10) : 1;
 	const limit = 10; // 1ページあたりの表示数

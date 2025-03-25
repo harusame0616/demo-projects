@@ -47,7 +47,7 @@ export function DepartmentTable({
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
-	const { sort = "name", order = "asc" } = searchParams;
+	const { sort = "id", order = "asc" } = searchParams;
 
 	// 親部署名を取得する関数
 	const getParentName = (parentId: string | null): string => {

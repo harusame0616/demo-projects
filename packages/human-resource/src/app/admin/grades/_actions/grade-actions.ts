@@ -13,7 +13,7 @@ export interface GradeSearchParams {
  * グレードデータを検索・ソートするサーバーアクション
  */
 export async function getGrades(searchParams: GradeSearchParams = {}) {
-	const { query = "", sort = "level", order = "desc" } = searchParams;
+	const { query = "", sort = "id", order = "asc" } = searchParams;
 
 	// フィルター処理
 	let filteredData = [...gradeData];

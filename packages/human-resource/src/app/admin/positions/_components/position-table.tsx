@@ -44,7 +44,7 @@ export function PositionTable({
 	searchParams,
 	onSort,
 }: PositionTableProps) {
-	const { sort = "level", order = "desc" } = searchParams;
+	const { sort = "id", order = "asc" } = searchParams;
 
 	// ソートアイコンを表示
 	const getSortIcon = (column: keyof Position) => {

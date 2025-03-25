@@ -52,7 +52,7 @@ export function GradeListContainer({
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
-	const { sort = "level", order = "desc" } = searchParams;
+	const { sort = "id", order = "asc" } = searchParams;
 
 	// ソートハンドラー
 	const handleSort = (key: keyof Grade) => {

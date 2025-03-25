@@ -47,7 +47,7 @@ export function SkillList({
 	pagination,
 	searchParams = {},
 }: SkillListProps) {
-	const { sort = "name", order = "asc" } = searchParams;
+	const { sort = "code", order = "asc" } = searchParams;
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
