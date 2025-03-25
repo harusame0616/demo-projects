@@ -1,22 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 import { type Grade, gradeData } from "../../_data/grades-data";
-import { GradeForm } from "./_components/grade-form";
+import { GradeForm } from "../../_components/grade-form";
+import { GradeFormSkeleton } from "../../_components/grade-form-skeleton";
 
 import type { Metadata } from "next";
 
 interface GradeEditPageProps {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
 // メタデータを動的に生成
 export async function generateMetadata({
 	params,
-}: GradeEditPageProps): Promise<Metadata> {
+}: {
+	params: { id: string };
+}): Promise<Metadata> {
 	const gradeId = params.id;
 	const grade = gradeData.find((grade: Grade) => grade.id === gradeId);
 
@@ -33,25 +36,9 @@ export async function generateMetadata({
 	};
 }
 
-// ローディング状態を表示するスケルトンコンポーネント
-function GradeFormSkeleton() {
-	return (
-		<div className="space-y-6">
-			<div className="space-y-4">
-				<div className="h-8 w-1/3 bg-gray-200 animate-pulse rounded-md" />
-				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			</div>
-			<div className="space-y-4">
-				<div className="h-8 w-1/3 bg-gray-200 animate-pulse rounded-md" />
-				<div className="h-10 w-full bg-gray-200 animate-pulse rounded-md" />
-			</div>
-			<div className="h-10 w-48 bg-gray-200 animate-pulse rounded-md" />
-		</div>
-	);
-}
-
 export default function GradeEditPage({ params }: GradeEditPageProps) {
-	const gradeId = params.id;
+	// paramsをReact.use()でアンラップする
+	const { id: gradeId } = use(params);
 	const grade = gradeData.find((grade: Grade) => grade.id === gradeId);
 
 	if (!grade) {
@@ -62,7 +49,7 @@ export default function GradeEditPage({ params }: GradeEditPageProps) {
 					指定されたグレードID: {gradeId} のグレードは存在しません。
 				</p>
 				<Button asChild>
-					<Link href="/grades">
+					<Link href="/admin/grades">
 						<ArrowLeftIcon className="mr-2 h-4 w-4" />
 						グレード一覧に戻る
 					</Link>
@@ -75,7 +62,7 @@ export default function GradeEditPage({ params }: GradeEditPageProps) {
 		<>
 			<div className="flex items-center gap-4 mb-6">
 				<Button variant="outline" size="sm" asChild>
-					<Link href={`/grades/${gradeId}`}>
+					<Link href={`/admin/grades/${gradeId}`}>
 						<ArrowLeftIcon className="mr-2 h-4 w-4" />
 						戻る
 					</Link>
@@ -86,7 +73,7 @@ export default function GradeEditPage({ params }: GradeEditPageProps) {
 			</div>
 
 			<Suspense fallback={<GradeFormSkeleton />}>
-				<GradeForm grade={grade} />
+				<GradeForm grade={grade} isNew={false} />
 			</Suspense>
 		</>
 	);

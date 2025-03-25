@@ -10,20 +10,23 @@ import {
 	UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { use } from "react";
 import { type Grade, gradeData } from "../_data/grades-data";
 
 import type { Metadata } from "next";
 
 interface GradeDetailPageProps {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
 // メタデータを動的に生成
 export async function generateMetadata({
 	params,
-}: GradeDetailPageProps): Promise<Metadata> {
+}: {
+	params: { id: string };
+}): Promise<Metadata> {
 	const gradeId = params.id;
 	const grade = gradeData.find((grade: Grade) => grade.id === gradeId);
 
@@ -56,8 +59,8 @@ function formatSalaryRange(min: number, max: number): string {
 }
 
 export default function GradeDetailPage({ params }: GradeDetailPageProps) {
-	// グレードID
-	const gradeId = params.id;
+	// paramsをReact.use()でアンラップする
+	const { id: gradeId } = use(params);
 
 	// グレードデータを取得
 	const grade = gradeData.find((grade: Grade) => grade.id === gradeId);
@@ -70,7 +73,7 @@ export default function GradeDetailPage({ params }: GradeDetailPageProps) {
 					指定されたグレードID: {gradeId} のグレードは存在しません。
 				</p>
 				<Button asChild>
-					<Link href="/grades">
+					<Link href="/admin/grades">
 						<ArrowLeftIcon className="mr-2 h-4 w-4" />
 						グレード一覧に戻る
 					</Link>
@@ -84,7 +87,7 @@ export default function GradeDetailPage({ params }: GradeDetailPageProps) {
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-2">
 					<Button variant="outline" size="sm" asChild>
-						<Link href="/grades">
+						<Link href="/admin/grades">
 							<ArrowLeftIcon className="mr-2 h-4 w-4" />
 							戻る
 						</Link>
@@ -92,7 +95,7 @@ export default function GradeDetailPage({ params }: GradeDetailPageProps) {
 					<h2 className="text-3xl font-bold tracking-tight">{grade.name}</h2>
 				</div>
 				<Button asChild>
-					<Link href={`/grades/${gradeId}/edit`}>
+					<Link href={`/admin/grades/${gradeId}/edit`}>
 						<PencilIcon className="mr-2 h-4 w-4" />
 						編集
 					</Link>
