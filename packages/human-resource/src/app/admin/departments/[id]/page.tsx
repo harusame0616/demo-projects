@@ -136,7 +136,7 @@ export default function DepartmentDetailPage({
 											{parentDepartment ? (
 												<Link
 													href={`/admin/departments/${parentDepartment.id}`}
-													className="text-blue-600 hover:underline flex items-center"
+													className=" hover:underline flex items-center"
 												>
 													<BuildingIcon className="h-4 w-4 mr-1" />
 													{parentDepartment.name}

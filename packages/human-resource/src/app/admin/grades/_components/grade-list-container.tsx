@@ -162,18 +162,13 @@ export function GradeListContainer({
 									<TableCell className="whitespace-nowrap">
 										<Link
 											href={`/admin/grades/${grade.id}`}
-											className="font-medium text-blue-600 hover:underline"
+											className="font-medium  underline "
 										>
 											{grade.id}
 										</Link>
 									</TableCell>
 									<TableCell className="whitespace-nowrap">
-										<Link
-											href={`/admin/grades/${grade.id}`}
-											className="font-medium text-blue-600 hover:underline"
-										>
-											{grade.name}
-										</Link>
+										{grade.name}
 									</TableCell>
 									<TableCell className="whitespace-nowrap">
 										<Badge
@@ -198,12 +193,18 @@ export function GradeListContainer({
 											</DropdownMenuTrigger>
 											<DropdownMenuContent align="end">
 												<DropdownMenuItem asChild>
-													<Link href={`/admin/grades/${grade.id}`}>
+													<Link
+														href={`/admin/grades/${grade.id}`}
+														className="underline "
+													>
 														詳細を表示
 													</Link>
 												</DropdownMenuItem>
 												<DropdownMenuItem asChild>
-													<Link href={`/admin/grades/${grade.id}/edit`}>
+													<Link
+														href={`/admin/grades/${grade.id}/edit`}
+														className="underline "
+													>
 														編集
 													</Link>
 												</DropdownMenuItem>

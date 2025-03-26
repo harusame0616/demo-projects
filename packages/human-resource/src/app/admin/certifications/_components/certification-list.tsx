@@ -151,18 +151,13 @@ export function CertificationList({
 								<TableCell className="font-medium whitespace-nowrap">
 									<Link
 										href={`/admin/certifications/${certification.id}`}
-										className="hover:underline text-blue-600"
+										className="underline  "
 									>
 										{certification.code}
 									</Link>
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
-									<Link
-										href={`/admin/certifications/${certification.id}`}
-										className="hover:underline text-blue-600"
-									>
-										{certification.name}
-									</Link>
+									{certification.name}
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{certification.levelOrAuthority}
@@ -179,6 +174,7 @@ export function CertificationList({
 											<DropdownMenuItem asChild>
 												<Link
 													href={`/admin/certifications/${certification.id}`}
+													className="underline "
 												>
 													詳細を表示
 												</Link>
@@ -186,6 +182,7 @@ export function CertificationList({
 											<DropdownMenuItem asChild>
 												<Link
 													href={`/admin/certifications/${certification.id}/edit`}
+													className="underline "
 												>
 													編集
 												</Link>

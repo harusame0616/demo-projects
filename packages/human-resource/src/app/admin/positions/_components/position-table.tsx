@@ -116,18 +116,13 @@ export function PositionTable({
 								<TableCell className="font-medium whitespace-nowrap">
 									<Link
 										href={`/admin/positions/${position.id}`}
-										className="hover:underline text-blue-600"
+										className="underline  "
 									>
 										{position.id}
 									</Link>
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
-									<Link
-										href={`/admin/positions/${position.id}`}
-										className="hover:underline text-blue-600"
-									>
-										{position.name}
-									</Link>
+									{position.name}
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{position.level}
@@ -154,12 +149,18 @@ export function PositionTable({
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
 											<DropdownMenuItem asChild>
-												<Link href={`/admin/positions/${position.id}`}>
+												<Link
+													href={`/admin/positions/${position.id}`}
+													className="underline "
+												>
 													詳細
 												</Link>
 											</DropdownMenuItem>
 											<DropdownMenuItem asChild>
-												<Link href={`/admin/positions/${position.id}/edit`}>
+												<Link
+													href={`/admin/positions/${position.id}/edit`}
+													className="underline "
+												>
 													編集
 												</Link>
 											</DropdownMenuItem>

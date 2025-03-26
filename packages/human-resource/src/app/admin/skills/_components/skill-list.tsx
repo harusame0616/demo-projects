@@ -151,18 +151,13 @@ export function SkillList({
 								<TableCell className="font-medium whitespace-nowrap">
 									<Link
 										href={`/admin/skills/${skill.id}`}
-										className="hover:underline text-blue-600"
+										className="underline  "
 									>
 										{skill.code}
 									</Link>
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
-									<Link
-										href={`/admin/skills/${skill.id}`}
-										className="hover:underline text-blue-600"
-									>
-										{skill.name}
-									</Link>
+									{skill.name}
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{skill.levelOrAuthority}
@@ -177,12 +172,18 @@ export function SkillList({
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
 											<DropdownMenuItem asChild>
-												<Link href={`/admin/skills/${skill.id}`}>
+												<Link
+													href={`/admin/skills/${skill.id}`}
+													className="underline "
+												>
 													詳細を表示
 												</Link>
 											</DropdownMenuItem>
 											<DropdownMenuItem asChild>
-												<Link href={`/admin/skills/${skill.id}/edit`}>
+												<Link
+													href={`/admin/skills/${skill.id}/edit`}
+													className="underline "
+												>
 													編集
 												</Link>
 											</DropdownMenuItem>

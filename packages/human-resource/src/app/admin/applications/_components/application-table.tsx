@@ -254,7 +254,7 @@ export function ApplicationTable({
 										<TableCell className="font-medium whitespace-nowrap">
 											<Button
 												variant="link"
-												className="p-0 h-auto font-medium text-blue-600"
+												className="p-0 h-auto font-medium "
 												onClick={() => openDetails(application)}
 											>
 												{application.id}

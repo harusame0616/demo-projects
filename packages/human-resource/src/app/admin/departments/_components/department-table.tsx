@@ -139,19 +139,13 @@ export function DepartmentTable({
 								<TableCell className="font-medium whitespace-nowrap">
 									<Link
 										href={`/admin/departments/${department.id}`}
-										className="hover:underline flex items-center"
+										className="underline  flex items-center"
 									>
 										{department.id}
 									</Link>
 								</TableCell>
 								<TableCell className="font-medium whitespace-nowrap">
-									<Link
-										href={`/admin/departments/${department.id}`}
-										className="hover:underline flex items-center"
-									>
-										<BuildingIcon className="h-4 w-4 mr-2" />
-										{department.name}
-									</Link>
+									{department.name}
 								</TableCell>
 								<TableCell className="whitespace-nowrap">
 									{getParentName(department.parentId)}
@@ -166,12 +160,18 @@ export function DepartmentTable({
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
 											<DropdownMenuItem asChild>
-												<Link href={`/admin/departments/${department.id}`}>
+												<Link
+													href={`/admin/departments/${department.id}`}
+													className="underline "
+												>
 													詳細
 												</Link>
 											</DropdownMenuItem>
 											<DropdownMenuItem asChild>
-												<Link href={`/admin/departments/${department.id}/edit`}>
+												<Link
+													href={`/admin/departments/${department.id}/edit`}
+													className="underline "
+												>
 													編集
 												</Link>
 											</DropdownMenuItem>

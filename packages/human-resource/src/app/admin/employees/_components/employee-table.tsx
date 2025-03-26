@@ -117,7 +117,7 @@ export function EmployeeTable({
 								<TableCell className="font-medium whitespace-nowrap">
 									<Link
 										href={`/admin/employees/${employee.id}`}
-										className="text-primary hover:underline cursor-pointer"
+										className="text-primary underline  cursor-pointer"
 									>
 										{employee.id}
 									</Link>
@@ -141,19 +141,25 @@ export function EmployeeTable({
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
 											<DropdownMenuItem asChild>
-												<Link href={`/admin/employees/${employee.id}`}>
+												<Link
+													href={`/admin/employees/${employee.id}`}
+													className="underline "
+												>
 													詳細を表示
 												</Link>
 											</DropdownMenuItem>
 											<DropdownMenuItem asChild>
-												<Link href={`/admin/employees/${employee.id}/edit`}>
+												<Link
+													href={`/admin/employees/${employee.id}/edit`}
+													className="underline "
+												>
 													編集
 												</Link>
 											</DropdownMenuItem>
 											<DropdownMenuItem asChild>
 												<Link
 													href={`/admin/employees/${employee.id}/attendances`}
-													className="flex items-center"
+													className="flex items-center underline "
 												>
 													<ClockIcon className="mr-2 h-4 w-4" />
 													勤怠情報
