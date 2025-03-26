@@ -1,4 +1,4 @@
-import { ContactInfoCard } from "./_components";
+import { EvaluationHistoryCard } from "../_components";
 import {
 	mockEmployees,
 	getEmployeeWithDefaults,
@@ -6,11 +6,11 @@ import {
 } from "@/app/_mocks/employees";
 
 export const metadata = {
-	title: "従業員詳細 | 人材管理システム",
-	description: "従業員の基本情報",
+	title: "従業員評価履歴 | 人材管理システム",
+	description: "従業員の評価履歴情報",
 };
 
-export default function EmployeeInfoPage({
+export default function EmployeeEvaluationsPage({
 	params,
 }: { params: { id: string } }) {
 	// モックデータから従業員基本情報を取得
@@ -24,14 +24,15 @@ export default function EmployeeInfoPage({
 	const employeeWithDefaults = getEmployeeWithDefaults(employee);
 
 	return (
-		<ContactInfoCard
-			employeeId={employee.id}
-			contactInfo={{
-				email: employeeWithDefaults.email,
-				phone: employeeWithDefaults.phone || "",
-				address: employeeWithDefaults.address || "",
-				birthDate: employeeWithDefaults.birthDate || "",
-			}}
-		/>
+		<>
+			{employeeWithDefaults.evaluations &&
+			employeeWithDefaults.evaluations.length > 0 ? (
+				<EvaluationHistoryCard evaluations={employeeWithDefaults.evaluations} />
+			) : (
+				<div className="text-center p-8 border rounded-md">
+					<p>評価データがありません</p>
+				</div>
+			)}
+		</>
 	);
 }

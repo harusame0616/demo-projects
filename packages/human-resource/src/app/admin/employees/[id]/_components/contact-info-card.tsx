@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserIcon } from "lucide-react";
+import { UserIcon, PencilIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type ContactInfo = {
 	email: string;
@@ -10,16 +12,28 @@ type ContactInfo = {
 
 type ContactInfoCardProps = {
 	contactInfo: ContactInfo;
+	employeeId?: string;
 };
 
-export function ContactInfoCard({ contactInfo }: ContactInfoCardProps) {
+export function ContactInfoCard({
+	contactInfo,
+	employeeId,
+}: ContactInfoCardProps) {
 	return (
-		<Card className="shadow-sm hover:shadow transition-shadow">
-			<CardHeader className="border-b bg-muted/20 pb-3">
+		<Card className="shadow-sm">
+			<CardHeader className="border-b bg-muted/20 pb-3 flex flex-row items-center justify-between">
 				<CardTitle className="flex items-center gap-2 text-lg">
 					<UserIcon className="h-5 w-5 text-primary" />
 					基本情報
 				</CardTitle>
+				{employeeId && (
+					<Button variant="outline" size="sm" asChild>
+						<Link href={`/admin/employees/${employeeId}/edit`}>
+							<PencilIcon className="h-4 w-4 mr-1" />
+							編集
+						</Link>
+					</Button>
+				)}
 			</CardHeader>
 			<CardContent className="pt-4">
 				<div className="divide-y">

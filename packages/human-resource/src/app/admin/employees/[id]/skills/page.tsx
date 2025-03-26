@@ -1,4 +1,4 @@
-import { ContactInfoCard } from "./_components";
+import { SkillsAndCertificationsCard } from "../_components";
 import {
 	mockEmployees,
 	getEmployeeWithDefaults,
@@ -6,11 +6,11 @@ import {
 } from "@/app/_mocks/employees";
 
 export const metadata = {
-	title: "従業員詳細 | 人材管理システム",
-	description: "従業員の基本情報",
+	title: "従業員スキル・資格 | 人材管理システム",
+	description: "従業員のスキルと資格情報",
 };
 
-export default function EmployeeInfoPage({
+export default function EmployeeSkillsPage({
 	params,
 }: { params: { id: string } }) {
 	// モックデータから従業員基本情報を取得
@@ -24,14 +24,10 @@ export default function EmployeeInfoPage({
 	const employeeWithDefaults = getEmployeeWithDefaults(employee);
 
 	return (
-		<ContactInfoCard
+		<SkillsAndCertificationsCard
 			employeeId={employee.id}
-			contactInfo={{
-				email: employeeWithDefaults.email,
-				phone: employeeWithDefaults.phone || "",
-				address: employeeWithDefaults.address || "",
-				birthDate: employeeWithDefaults.birthDate || "",
-			}}
+			skills={employeeWithDefaults.skills || []}
+			certifications={employeeWithDefaults.certifications || []}
 		/>
 	);
 }

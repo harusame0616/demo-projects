@@ -17,20 +17,6 @@ export function PageHeader({ employeeId }: PageHeaderProps) {
 				</Button>
 				<h2 className="text-3xl font-bold tracking-tight">従業員詳細</h2>
 			</div>
-			<div className="flex gap-2">
-				<Button variant="outline" asChild>
-					<Link href={`/admin/employees/${employeeId}/attendances`}>
-						<ClockIcon className="mr-2 h-4 w-4" />
-						勤怠情報
-					</Link>
-				</Button>
-				<Button asChild>
-					<Link href={`/admin/employees/${employeeId}/edit`}>
-						<PencilIcon className="mr-2 h-4 w-4" />
-						編集
-					</Link>
-				</Button>
-			</div>
 		</div>
 	);
 }

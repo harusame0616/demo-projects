@@ -1,22 +1,34 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GraduationCapIcon } from "lucide-react";
+import { GraduationCapIcon, PencilIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type SkillsAndCertificationsProps = {
+	employeeId?: string;
 	skills: string[];
 	certifications: string[];
 };
 
 export function SkillsAndCertificationsCard({
+	employeeId,
 	skills,
 	certifications,
 }: SkillsAndCertificationsProps) {
 	return (
-		<Card className="shadow-sm hover:shadow transition-shadow">
-			<CardHeader className="border-b bg-muted/20 pb-3">
+		<Card className="shadow-sm">
+			<CardHeader className="border-b bg-muted/20 pb-3 flex flex-row items-center justify-between">
 				<CardTitle className="flex items-center gap-2 text-lg">
 					<GraduationCapIcon className="h-5 w-5 text-primary" />
 					スキル・資格
 				</CardTitle>
+				{employeeId && (
+					<Button variant="outline" size="sm" asChild>
+						<Link href={`/admin/employees/${employeeId}/skills/edit`}>
+							<PencilIcon className="h-4 w-4 mr-1" />
+							編集
+						</Link>
+					</Button>
+				)}
 			</CardHeader>
 			<CardContent className="pt-4">
 				<div className="space-y-4">

@@ -26,7 +26,9 @@ import {
 	ChevronsUpDown,
 	PlusIcon,
 	SaveIcon,
+	UserIcon,
 	XIcon,
+	MailIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -92,79 +94,13 @@ const formSchema = v.object({
 });
 
 interface EmployeeFormProps {
-	employee?: Partial<EmployeeFormValues> & {
-		skills?: string[];
-		certifications?: string[];
-	}; // 編集時に使用する既存データ
+	employee?: Partial<EmployeeFormValues>; // 編集時に使用する既存データ（スキル・資格を削除）
 	departmentOptions: { value: string; label: string }[];
 	positionOptions: { value: string; label: string }[];
-	onSubmit: (
-		values: EmployeeFormValues & { skills: string[]; certifications: string[] },
-	) => void;
+	onSubmit: (values: EmployeeFormValues) => void; // スキル・資格を削除
 }
 
-// スキルと資格の選択肢
-const SKILL_OPTIONS = [
-	"HTML/CSS",
-	"JavaScript",
-	"TypeScript",
-	"React",
-	"Next.js",
-	"Node.js",
-	"Express",
-	"SQL",
-	"Python",
-	"Java",
-	"C#",
-	"PHP",
-	"Laravel",
-	"Docker",
-	"AWS",
-	"Azure",
-	"GCP",
-	"Excel",
-	"PowerPoint",
-	"Word",
-	"UI/UXデザイン",
-	"Figma",
-	"Adobe XD",
-	"Photoshop",
-	"Illustrator",
-	"動画編集",
-	"営業",
-	"マーケティング",
-	"企画",
-	"プロジェクト管理",
-];
-
-const CERTIFICATION_OPTIONS = [
-	"TOEIC 600点",
-	"TOEIC 730点",
-	"TOEIC 800点",
-	"TOEIC 900点",
-	"英検2級",
-	"英検準1級",
-	"英検1級",
-	"日商簿記3級",
-	"日商簿記2級",
-	"日商簿記1級",
-	"基本情報技術者",
-	"応用情報技術者",
-	"ネットワークスペシャリスト",
-	"データベーススペシャリスト",
-	"情報セキュリティスペシャリスト",
-	"プロジェクトマネージャ",
-	"AWS認定ソリューションアーキテクト",
-	"Google Cloud認定プロフェッショナル",
-	"Microsoft認定ソリューションアーキテクト",
-	"PMP",
-	"ITIL",
-	"Oracle認定Java資格",
-	"Cisco認定資格",
-	"営業士2級",
-	"マーケティング検定",
-	"簿記検定",
-];
+// スキルと資格の選択肢の定義は削除可能ですが、他で参照されている可能性があるため残しておきます
 
 export function EmployeeForm({
 	employee,
@@ -174,14 +110,6 @@ export function EmployeeForm({
 }: EmployeeFormProps) {
 	const router = useRouter();
 	const isEditing = !!employee?.id;
-
-	// スキル・資格の状態管理
-	const [skills, setSkills] = useState<string[]>(employee?.skills || []);
-	const [certifications, setCertifications] = useState<string[]>(
-		employee?.certifications || [],
-	);
-	const [newSkill, setNewSkill] = useState("");
-	const [newCertification, setNewCertification] = useState("");
 
 	// フォームの初期値設定
 	const defaultValues: EmployeeFormValues = {
@@ -204,32 +132,6 @@ export function EmployeeForm({
 		defaultValues,
 	});
 
-	// スキルの追加
-	const handleAddSkill = () => {
-		if (newSkill && !skills.includes(newSkill)) {
-			setSkills([...skills, newSkill]);
-			setNewSkill("");
-		}
-	};
-
-	// スキルの削除
-	const handleRemoveSkill = (skillToRemove: string) => {
-		setSkills(skills.filter((skill) => skill !== skillToRemove));
-	};
-
-	// 資格の追加
-	const handleAddCertification = () => {
-		if (newCertification && !certifications.includes(newCertification)) {
-			setCertifications([...certifications, newCertification]);
-			setNewCertification("");
-		}
-	};
-
-	// 資格の削除
-	const handleRemoveCertification = (certToRemove: string) => {
-		setCertifications(certifications.filter((cert) => cert !== certToRemove));
-	};
-
 	// キャンセルボタンのハンドラ
 	const handleCancel = () => {
 		router.push("/admin/employees");
@@ -237,7 +139,7 @@ export function EmployeeForm({
 
 	// フォーム送信ハンドラ
 	const handleSubmit = (values: EmployeeFormValues) => {
-		onSubmit({ ...values, skills, certifications });
+		onSubmit(values); // スキル・資格を削除
 	};
 
 	return (
@@ -250,7 +152,10 @@ export function EmployeeForm({
 				{/* 基本情報フォーム */}
 				<Card className="shadow-sm">
 					<CardHeader className="border-b bg-muted/20 pb-3">
-						<CardTitle className="text-lg">基本情報</CardTitle>
+						<CardTitle className="flex items-center gap-2 text-lg">
+							<UserIcon className="h-5 w-5 text-primary" />
+							基本情報の編集
+						</CardTitle>
 					</CardHeader>
 					<CardContent className="pt-4">
 						<div className="grid grid-cols-1 gap-6">
@@ -437,7 +342,10 @@ export function EmployeeForm({
 				{/* 連絡先情報フォーム */}
 				<Card className="shadow-sm">
 					<CardHeader className="border-b bg-muted/20 pb-3">
-						<CardTitle className="text-lg">連絡先情報</CardTitle>
+						<CardTitle className="flex items-center gap-2 text-lg">
+							<MailIcon className="h-5 w-5 text-primary" />
+							連絡先情報
+						</CardTitle>
 					</CardHeader>
 					<CardContent className="pt-4">
 						<div className="grid grid-cols-1 gap-6">
@@ -500,170 +408,21 @@ export function EmployeeForm({
 					</CardContent>
 				</Card>
 
-				{/* スキル・資格情報 */}
-				<Card className="shadow-sm">
-					<CardHeader className="border-b bg-muted/20 pb-3">
-						<CardTitle className="text-lg">スキル・資格</CardTitle>
-					</CardHeader>
-					<CardContent className="pt-4">
-						<div className="grid grid-cols-1 gap-6">
-							{/* スキル入力 */}
-							<div className="space-y-2">
-								<FormLabel>スキル</FormLabel>
-								<div className="flex gap-2">
-									<Popover>
-										<PopoverTrigger asChild>
-											<Button
-												variant="outline"
-												aria-expanded={true}
-												className="w-full max-w-md justify-between"
-											>
-												{newSkill
-													? SKILL_OPTIONS.find((skill) => skill === newSkill)
-													: "スキルを選択"}
-												<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-											</Button>
-										</PopoverTrigger>
-										<PopoverContent className="w-full max-w-md p-0">
-											<Command>
-												<CommandInput placeholder="スキルを検索..." />
-												<CommandEmpty>見つかりませんでした</CommandEmpty>
-												<CommandList>
-													<CommandGroup>
-														{SKILL_OPTIONS.filter(
-															(skill) => !skills.includes(skill),
-														).map((skill) => (
-															<CommandItem
-																key={skill}
-																value={skill}
-																onSelect={() => {
-																	if (!skills.includes(skill)) {
-																		setSkills([...skills, skill]);
-																	}
-																	setNewSkill("");
-																}}
-															>
-																<Check
-																	className={cn(
-																		"mr-2 h-4 w-4",
-																		newSkill === skill
-																			? "opacity-100"
-																			: "opacity-0",
-																	)}
-																/>
-																{skill}
-															</CommandItem>
-														))}
-													</CommandGroup>
-												</CommandList>
-											</Command>
-										</PopoverContent>
-									</Popover>
-								</div>
-								<div className="flex flex-wrap gap-2 mt-2">
-									{skills.map((skill) => (
-										<Badge key={skill} variant="secondary" className="pl-2">
-											{skill}
-											<Button
-												type="button"
-												size="sm"
-												variant="ghost"
-												className="h-5 w-5 p-0 ml-1"
-												onClick={() => handleRemoveSkill(skill)}
-											>
-												<XIcon className="h-3 w-3" />
-											</Button>
-										</Badge>
-									))}
-								</div>
-							</div>
-
-							{/* 資格入力 */}
-							<div className="space-y-2">
-								<FormLabel>資格</FormLabel>
-								<div className="flex gap-2">
-									<Popover>
-										<PopoverTrigger asChild>
-											<Button
-												variant="outline"
-												aria-expanded={true}
-												className="w-full max-w-md justify-between"
-											>
-												{newCertification
-													? CERTIFICATION_OPTIONS.find(
-															(cert) => cert === newCertification,
-														)
-													: "資格を選択"}
-												<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-											</Button>
-										</PopoverTrigger>
-										<PopoverContent className="w-full max-w-md p-0">
-											<Command>
-												<CommandInput placeholder="資格を検索..." />
-												<CommandEmpty>見つかりませんでした</CommandEmpty>
-												<CommandList>
-													<CommandGroup>
-														{CERTIFICATION_OPTIONS.filter(
-															(cert) => !certifications.includes(cert),
-														).map((cert) => (
-															<CommandItem
-																key={cert}
-																value={cert}
-																onSelect={() => {
-																	if (!certifications.includes(cert)) {
-																		setCertifications([
-																			...certifications,
-																			cert,
-																		]);
-																	}
-																	setNewCertification("");
-																}}
-															>
-																<Check
-																	className={cn(
-																		"mr-2 h-4 w-4",
-																		newCertification === cert
-																			? "opacity-100"
-																			: "opacity-0",
-																	)}
-																/>
-																{cert}
-															</CommandItem>
-														))}
-													</CommandGroup>
-												</CommandList>
-											</Command>
-										</PopoverContent>
-									</Popover>
-								</div>
-								<div className="flex flex-wrap gap-2 mt-2">
-									{certifications.map((cert) => (
-										<Badge key={cert} variant="secondary" className="pl-2">
-											{cert}
-											<Button
-												type="button"
-												size="sm"
-												variant="ghost"
-												className="h-5 w-5 p-0 ml-1"
-												onClick={() => handleRemoveCertification(cert)}
-											>
-												<XIcon className="h-3 w-3" />
-											</Button>
-										</Badge>
-									))}
-								</div>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
-
 				<div className="flex justify-start pt-4 gap-2">
 					<Button type="submit">
 						<SaveIcon className="h-4 w-4 mr-2" />
 						{isEditing ? "更新" : "登録"}
 					</Button>
-					<Button type="button" variant="outline" onClick={handleCancel}>
-						キャンセル
+					<Button variant="outline" asChild>
+						<Link
+							href={
+								employee?.id
+									? `/admin/employees/${employee?.id}`
+									: "/admin/employees"
+							}
+						>
+							キャンセル
+						</Link>
 					</Button>
 				</div>
 			</form>

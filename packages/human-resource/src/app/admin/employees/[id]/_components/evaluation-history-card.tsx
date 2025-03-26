@@ -15,7 +15,7 @@ export function EvaluationHistoryCard({
 	evaluations,
 }: EvaluationHistoryCardProps) {
 	return (
-		<Card className="shadow-sm hover:shadow transition-shadow">
+		<Card className="shadow-sm">
 			<CardHeader className="border-b bg-muted/20 pb-3">
 				<CardTitle className="flex items-center gap-2 text-lg">
 					<AwardIcon className="h-5 w-5 text-primary" />
