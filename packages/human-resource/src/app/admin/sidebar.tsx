@@ -49,10 +49,10 @@ export function AppSidebar() {
 			<SidebarContent>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<Link href="/admin/dashboard">
+						<Link href="/admin">
 							<SidebarMenuButton
 								asChild
-								isActive={pathname === "/admin/dashboard"}
+								isActive={pathname === "/admin"}
 								tooltip="ダッシュボード"
 							>
 								<div>
@@ -81,11 +81,11 @@ export function AppSidebar() {
 							<SidebarMenuButton
 								asChild
 								isActive={pathname === "/admin/attendances"}
-								tooltip="勤怠情報"
+								tooltip="勤怠集計"
 							>
 								<div>
 									<Clock className="h-5 w-5" />
-									<span>勤怠情報</span>
+									<span>勤怠集計</span>
 								</div>
 							</SidebarMenuButton>
 						</Link>
