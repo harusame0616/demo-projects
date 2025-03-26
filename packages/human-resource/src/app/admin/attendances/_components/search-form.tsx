@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
 	Form,
 	FormControl,
@@ -11,62 +10,82 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { format, parse, isValid, startOfMonth, endOfMonth } from "date-fns";
+import { format, parse, startOfMonth, endOfMonth } from "date-fns";
 import { ja } from "date-fns/locale";
 import * as z from "zod";
-import { cn } from "@/lib/utils";
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const formSchema = z.object({
 	query: z.string().optional(),
-	employeeId: z.string().optional(),
-	yearMonth: z.date().optional(),
+	departmentId: z.string().optional(),
+	startYearMonth: z.string().optional(),
+	endYearMonth: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
+interface Department {
+	id: string;
+	name: string;
+}
+
 interface SearchFormProps {
 	onSearch: (values: FormValues) => void;
 	defaultValues?: Partial<FormValues>;
+	departments: Department[];
 }
 
-export function SearchForm({ onSearch, defaultValues = {} }: SearchFormProps) {
+export function SearchForm({
+	onSearch,
+	defaultValues = {},
+	departments,
+}: SearchFormProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const [selectedYearMonth, setSelectedYearMonth] = useState<Date | undefined>(
-		defaultValues.yearMonth,
-	);
+
+	// 日付文字列をYYYY-MM形式に変換するヘルパー関数
+	const formatDateToYearMonth = (dateStr?: string) => {
+		if (!dateStr) return "";
+		const date = new Date(dateStr);
+		return format(date, "yyyy-MM");
+	};
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			query: defaultValues.query || "",
-			employeeId: defaultValues.employeeId || "",
+			departmentId: defaultValues.departmentId || "all",
+			startYearMonth: defaultValues.startYearMonth || "",
+			endYearMonth: defaultValues.endYearMonth || "",
 		},
 	});
 
 	const handleSubmit = (values: FormValues) => {
-		// 年月のみを使用するように変更
-		const updatedValues = { ...values };
-
-		if (values.yearMonth) {
-			// 選択された年月の初日と末日を計算
-			const firstDayOfMonth = startOfMonth(values.yearMonth);
-			const lastDayOfMonth = endOfMonth(values.yearMonth);
-
-			// 実際に検索に使用される値を設定する際に、startDate と endDate を追加
-			(updatedValues as any).startDate = format(firstDayOfMonth, "yyyy-MM-dd");
-			(updatedValues as any).endDate = format(lastDayOfMonth, "yyyy-MM-dd");
-		}
+		const updatedValues = {
+			...values,
+			departmentId:
+				values.departmentId === "all" ? undefined : values.departmentId,
+			startDate: values.startYearMonth
+				? `${values.startYearMonth}-01`
+				: undefined,
+			endDate: values.endYearMonth
+				? (() => {
+						const [year, month] = values.endYearMonth.split("-").map(Number);
+						const lastDay = new Date(year, month, 0).getDate();
+						return `${values.endYearMonth}-${lastDay}`;
+					})()
+				: undefined,
+		};
 
 		onSearch(updatedValues);
 	};
@@ -74,9 +93,10 @@ export function SearchForm({ onSearch, defaultValues = {} }: SearchFormProps) {
 	const handleReset = () => {
 		form.reset({
 			query: "",
-			employeeId: "",
+			departmentId: "all",
+			startYearMonth: "",
+			endYearMonth: "",
 		});
-		setSelectedYearMonth(undefined);
 
 		const params = new URLSearchParams();
 		params.set("page", "1");
@@ -84,115 +104,115 @@ export function SearchForm({ onSearch, defaultValues = {} }: SearchFormProps) {
 	};
 
 	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(handleSubmit)}
-				className="space-y-4 border rounded-md p-4 bg-white"
-			>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{/* 検索クエリ（従業員名またはID） */}
-					<FormField
-						control={form.control}
-						name="query"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>従業員名/ID</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="従業員名または従業員IDで検索"
-										{...field}
-									/>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-
-					{/* 従業員ID (完全一致) */}
-					<FormField
-						control={form.control}
-						name="employeeId"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>従業員ID (完全一致)</FormLabel>
-								<FormControl>
-									<Input placeholder="例: E001" {...field} />
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-
-					{/* 年月選択 */}
-					<FormField
-						control={form.control}
-						name="yearMonth"
-						render={({ field }) => (
-							<FormItem className="flex flex-col">
-								<FormLabel>年月</FormLabel>
-								<Popover>
-									<PopoverTrigger asChild>
-										<FormControl>
-											<Button
-												variant={"outline"}
-												className={cn(
-													"w-full pl-3 text-left font-normal",
-													!field.value && "text-muted-foreground",
-												)}
-											>
-												{field.value ? (
-													format(field.value, "yyyy年MM月", {
-														locale: ja,
-													})
-												) : (
-													<span>年月を選択</span>
-												)}
-												<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-											</Button>
-										</FormControl>
-									</PopoverTrigger>
-									<PopoverContent className="w-auto p-0" align="start">
-										<Calendar
-											mode="single"
-											selected={selectedYearMonth}
-											onSelect={(date) => {
-												if (date) {
-													// 日付を月の1日に設定して保存
-													const firstDay = new Date(
-														date.getFullYear(),
-														date.getMonth(),
-														1,
-													);
-													setSelectedYearMonth(firstDay);
-													field.onChange(firstDay);
-												} else {
-													setSelectedYearMonth(undefined);
-													field.onChange(undefined);
-												}
-											}}
-											locale={ja}
-											initialFocus
-										/>
-									</PopoverContent>
-								</Popover>
-							</FormItem>
-						)}
-					/>
-				</div>
-
-				<div className="flex items-center justify-end space-x-2">
-					<Button
-						type="button"
-						variant="outline"
-						onClick={handleReset}
-						className="flex items-center gap-1"
+		<Card>
+			<CardContent>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(handleSubmit)}
+						className="gap-4 grid grid-cols-1 md:grid-cols-4"
 					>
-						リセット
-					</Button>
-					<Button type="submit" className="flex items-center gap-1">
-						<SearchIcon className="w-4 h-4" />
-						検索
-					</Button>
-				</div>
-			</form>
-		</Form>
+						{/* 検索クエリ（従業員名またはID） */}
+						<FormField
+							control={form.control}
+							name="query"
+							render={({ field }) => (
+								<FormItem className="col-span-2">
+									<FormLabel>キーワード（名前、ID）</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="従業員名または従業員IDで検索"
+											{...field}
+										/>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="departmentId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>部署</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="部署を選択" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="all">すべて</SelectItem>
+											{departments.map((department) => (
+												<SelectItem key={department.id} value={department.id}>
+													{department.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</FormItem>
+							)}
+						/>
+
+						{/* 年月範囲選択 */}
+						<div className="col-span-2">
+							<FormLabel>年月範囲</FormLabel>
+							<div className="flex items-center gap-2">
+								<FormField
+									control={form.control}
+									name="startYearMonth"
+									render={({ field }) => (
+										<FormItem className="flex-1">
+											<FormControl>
+												<Input
+													type="month"
+													placeholder="開始年月"
+													className="w-full h-10"
+													{...field}
+												/>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+								<span>～</span>
+								<FormField
+									control={form.control}
+									name="endYearMonth"
+									render={({ field }) => (
+										<FormItem className="flex-1">
+											<FormControl>
+												<Input
+													type="month"
+													placeholder="終了年月"
+													className="w-full h-10"
+													{...field}
+												/>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+							</div>
+						</div>
+
+						<div className="col-span-4 flex gap-2">
+							<Button type="submit" className="flex items-center gap-1">
+								<SearchIcon className="w-4 h-4" />
+								検索
+							</Button>
+							<Button
+								type="button"
+								variant="outline"
+								onClick={handleReset}
+								className="flex items-center gap-1"
+							>
+								リセット
+							</Button>
+						</div>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 }

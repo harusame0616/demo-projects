@@ -1,10 +1,11 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AttendanceListContainer } from "./_components/attendance-list-container";
 import {
 	getAttendances,
 	type AttendanceSearchParams,
 } from "./_actions/attendance-actions";
+import { getDepartments } from "./_actions/department-actions";
 
 export const metadata: Metadata = {
 	title: "勤怠情報（月次集計） | 人材管理システム",
@@ -22,17 +23,18 @@ function AttendancePageSkeleton() {
 }
 
 export default async function AttendancePage({
-	searchParams,
+	searchParams: searchParamsPromise,
 }: {
-	searchParams: { [key: string]: string | string[] | undefined };
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+	const searchParams = await searchParamsPromise;
 	// 検索パラメータを整形
 	const params: AttendanceSearchParams = {
 		query:
 			typeof searchParams.query === "string" ? searchParams.query : undefined,
-		employeeId:
-			typeof searchParams.employeeId === "string"
-				? searchParams.employeeId
+		departmentId:
+			typeof searchParams.departmentId === "string"
+				? searchParams.departmentId
 				: undefined,
 		startDate:
 			typeof searchParams.startDate === "string"
@@ -52,15 +54,20 @@ export default async function AttendancePage({
 				? (searchParams.order as "asc" | "desc")
 				: "desc",
 		page:
-			typeof searchParams.page === "string" ? parseInt(searchParams.page) : 1,
+			typeof searchParams.page === "string"
+				? Number.parseInt(searchParams.page)
+				: 1,
 		limit:
 			typeof searchParams.limit === "string"
-				? parseInt(searchParams.limit)
-				: 10,
+				? Number.parseInt(searchParams.limit)
+				: 50,
 	};
 
-	// 勤怠情報を取得
-	const { attendances, pagination } = await getAttendances(params);
+	// 勤怠情報と部署データを取得
+	const [{ attendances, pagination }, departments] = await Promise.all([
+		getAttendances(params),
+		getDepartments(),
+	]);
 
 	return (
 		<div className="space-y-6">
@@ -73,6 +80,7 @@ export default async function AttendancePage({
 					attendances={attendances}
 					pagination={pagination}
 					searchParams={params}
+					departments={departments}
 				/>
 			</Suspense>
 		</div>

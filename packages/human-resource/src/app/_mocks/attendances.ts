@@ -43,6 +43,10 @@ export type Attendance = {
 	employeeId: string;
 	/** 従業員名 */
 	employeeName: string;
+	/** 部署ID */
+	departmentId: string;
+	/** 部署名 */
+	departmentName: string;
 	/** 日付 (YYYY-MM-DD) */
 	date: string;
 	/** 出勤時刻 (HH:MM) */

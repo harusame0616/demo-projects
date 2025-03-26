@@ -25,19 +25,24 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { FileTextIcon, MoreHorizontalIcon } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, useMemo } from "react";
-import { PaginationNav } from "@/components/common/pagination-nav";
 import {
-	type Attendance,
-	type AttendanceStatus,
-} from "../_data/attendances-data";
+	FileTextIcon,
+	MoreHorizontalIcon,
+	ArrowUpIcon,
+	ArrowDownIcon,
+} from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { PaginationNav } from "@/components/common/pagination-nav";
+import type { AttendanceStatus } from "../_data/attendances-data";
 import {
 	getAttendanceStatusName,
 	minutesToHoursMinutes,
 	type AttendanceSearchParams,
+	type MonthlyAttendanceSummary as MonthlyAttendanceSummaryType,
+	type SortField,
 } from "../_actions/attendance-actions";
+import Link from "next/link";
 
 // 勤怠ステータスに対応するバッジを返す
 const getStatusBadge = (status: AttendanceStatus) => {
@@ -122,7 +127,7 @@ const formatYearMonth = (dateString: string) => {
 };
 
 interface AttendanceTableProps {
-	attendances: Attendance[];
+	attendances: MonthlyAttendanceSummaryType[];
 	pagination: {
 		total: number;
 		page: number;
@@ -130,21 +135,6 @@ interface AttendanceTableProps {
 		totalPages: number;
 	};
 	searchParams: AttendanceSearchParams;
-}
-
-// 月次集計データの型定義
-interface MonthlyAttendanceSummary {
-	employeeId: string;
-	employeeName: string;
-	yearMonth: string; // YYYY-MM
-	yearMonthDisplay: string; // 表示用の年月
-	workdays: number; // 出勤日数
-	totalWorkingHours: number; // 合計勤務時間（分）
-	totalOvertimeHours: number; // 合計残業時間（分）
-	absences: number; // 欠勤回数
-	lateCount: number; // 遅刻回数
-	earlyDepartureCount: number; // 早退回数
-	paidLeaveCount: number; // 有給休暇回数
 }
 
 export function AttendanceTable({
@@ -157,92 +147,9 @@ export function AttendanceTable({
 	const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
-	// 月次集計データを生成
-	const monthlySummaries = useMemo(() => {
-		// 月ごとに従業員ごとにデータをグループ化
-		type GroupedDataType = {
-			employeeId: string;
-			employeeName: string;
-			yearMonth: string;
-			attendances: Attendance[];
-		};
-
-		const groupedData: Record<string, GroupedDataType> = {};
-
-		// 勤怠データを月ごと、従業員ごとにグループ化
-		for (const attendance of attendances) {
-			// YYYY-MM-DD から YYYY-MM を抽出
-			const yearMonth = attendance.date.substring(0, 7);
-			const key = `${attendance.employeeId}_${yearMonth}`;
-
-			if (!groupedData[key]) {
-				groupedData[key] = {
-					employeeId: attendance.employeeId,
-					employeeName: attendance.employeeName,
-					yearMonth: yearMonth,
-					attendances: [],
-				};
-			}
-
-			groupedData[key].attendances.push(attendance);
-		}
-
-		// グループ化されたデータから月次集計を計算
-		return Object.values(groupedData)
-			.map((group) => {
-				const yearMonth = group.yearMonth;
-				const employeeId = group.employeeId;
-				const employeeName = group.employeeName;
-				const attendanceList = group.attendances;
-
-				let workdays = 0;
-				let totalWorkingHours = 0;
-				let totalOvertimeHours = 0;
-				let absences = 0;
-				let lateCount = 0;
-				let earlyDepartureCount = 0;
-				let paidLeaveCount = 0;
-
-				// 各勤怠データを集計
-				for (const attendance of attendanceList) {
-					// 休日以外の場合にカウント
-					if (attendance.status !== "holiday") {
-						if (attendance.status === "normal") {
-							workdays++;
-						} else if (attendance.status === "late") {
-							workdays++;
-							lateCount++;
-						} else if (attendance.status === "early_departure") {
-							workdays++;
-							earlyDepartureCount++;
-						} else if (attendance.status === "absent") {
-							absences++;
-						} else if (attendance.status === "paid_leave") {
-							paidLeaveCount++;
-						}
-
-						totalWorkingHours += attendance.workingHours;
-						totalOvertimeHours += attendance.overtimeHours;
-					}
-				}
-
-				// 月次集計データを返す
-				return {
-					employeeId,
-					employeeName,
-					yearMonth,
-					yearMonthDisplay: formatYearMonth(`${yearMonth}-01`),
-					workdays,
-					totalWorkingHours,
-					totalOvertimeHours,
-					absences,
-					lateCount,
-					earlyDepartureCount,
-					paidLeaveCount,
-				};
-			})
-			.sort((a, b) => b.yearMonth.localeCompare(a.yearMonth)); // 新しい月順にソート
-	}, [attendances]);
+	// 現在のソート状態
+	const currentSort = (searchParams.sort as SortField) || "yearMonth";
+	const currentOrder = searchParams.order || "desc";
 
 	// ページ切り替え
 	const handlePageChange = (page: number) => {
@@ -259,123 +166,225 @@ export function AttendanceTable({
 		router.push(`/admin/employees/${employeeId}`);
 	};
 
+	// ソート処理
+	const handleSort = (column: SortField) => {
+		const params = new URLSearchParams(
+			searchParams as unknown as Record<string, string>,
+		);
+
+		// 同じカラムをクリックした場合は、昇順・降順を切り替え
+		if (currentSort === column) {
+			params.set("order", currentOrder === "asc" ? "desc" : "asc");
+		} else {
+			// 異なるカラムの場合は、そのカラムの昇順でソート
+			params.set("sort", column);
+			params.set("order", "asc");
+		}
+
+		// ページを1に戻す
+		params.set("page", "1");
+
+		const newPath = `${pathname}?${params.toString()}`;
+		router.push(newPath);
+	};
+
+	// ソートアイコンを取得
+	const getSortIcon = (column: SortField) => {
+		if (currentSort !== column) return null;
+
+		return currentOrder === "asc" ? (
+			<ArrowUpIcon className="ml-1 h-4 w-4" />
+		) : (
+			<ArrowDownIcon className="ml-1 h-4 w-4" />
+		);
+	};
+
 	return (
-		<div className="space-y-4 w-full">
-			{/* 月次集計情報リスト */}
-			<div className="w-full overflow-auto">
-				<div className="min-w-full rounded-md border">
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead className="w-[100px]">年月</TableHead>
-								<TableHead className="w-[150px]">従業員</TableHead>
-								<TableHead className="w-[80px]">出勤日数</TableHead>
-								<TableHead className="w-[100px]">総勤務時間</TableHead>
-								<TableHead className="w-[80px]">総残業時間</TableHead>
-								<TableHead className="w-[60px]">欠勤</TableHead>
-								<TableHead className="w-[60px]">遅刻</TableHead>
-								<TableHead className="w-[60px]">早退</TableHead>
-								<TableHead className="w-[80px]">有給休暇</TableHead>
-								<TableHead className="w-[80px] text-right">操作</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{monthlySummaries.length === 0 ? (
-								<TableRow>
-									<TableCell colSpan={10} className="h-24 text-center">
-										該当する月次勤怠情報はありません
+		<div className="space-y-4">
+			<div className="rounded-md border">
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap"
+								onClick={() => handleSort("employeeId")}
+							>
+								<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+									従業員コード {getSortIcon("employeeId")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap"
+								onClick={() => handleSort("employeeName")}
+							>
+								<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+									名前 {getSortIcon("employeeName")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap"
+								onClick={() => handleSort("departmentName")}
+							>
+								<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+									部署 {getSortIcon("departmentName")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap"
+								onClick={() => handleSort("yearMonth")}
+							>
+								<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+									年月 {getSortIcon("yearMonth")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap text-right"
+								onClick={() => handleSort("workdays")}
+							>
+								<div className="flex items-center justify-end whitespace-nowrap text-xs font-medium gap-1">
+									出勤日数 {getSortIcon("workdays")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap text-right"
+								onClick={() => handleSort("totalWorkingHours")}
+							>
+								<div className="flex items-center justify-end whitespace-nowrap text-xs font-medium gap-1">
+									合計勤務時間 {getSortIcon("totalWorkingHours")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap text-right"
+								onClick={() => handleSort("totalOvertimeHours")}
+							>
+								<div className="flex items-center justify-end whitespace-nowrap text-xs font-medium gap-1">
+									合計残業時間 {getSortIcon("totalOvertimeHours")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap text-right"
+								onClick={() => handleSort("absences")}
+							>
+								<div className="flex items-center justify-end whitespace-nowrap text-xs font-medium gap-1">
+									欠勤 {getSortIcon("absences")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap text-right"
+								onClick={() => handleSort("lateCount")}
+							>
+								<div className="flex items-center justify-end whitespace-nowrap text-xs font-medium gap-1">
+									遅刻 {getSortIcon("lateCount")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap text-right"
+								onClick={() => handleSort("earlyDepartureCount")}
+							>
+								<div className="flex items-center justify-end whitespace-nowrap text-xs font-medium gap-1">
+									早退 {getSortIcon("earlyDepartureCount")}
+								</div>
+							</TableHead>
+							<TableHead
+								className="cursor-pointer hover:bg-gray-50 whitespace-nowrap text-right"
+								onClick={() => handleSort("paidLeaveCount")}
+							>
+								<div className="flex items-center justify-end whitespace-nowrap text-xs font-medium gap-1">
+									有給 {getSortIcon("paidLeaveCount")}
+								</div>
+							</TableHead>
+							<TableHead className="text-center whitespace-nowrap">
+								<div className="flex items-center justify-center whitespace-nowrap text-xs font-medium">
+									アクション
+								</div>
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{attendances.length > 0 ? (
+							attendances.map((summary) => (
+								<TableRow key={`${summary.employeeId}_${summary.yearMonth}`}>
+									<TableCell>
+										<Link
+											href={`/admin/employees/${summary.employeeId}/attendances`}
+											className="underline"
+										>
+											{summary.employeeId}
+										</Link>
+									</TableCell>
+									<TableCell>{summary.employeeName}</TableCell>
+									<TableCell>{summary.departmentName}</TableCell>
+									<TableCell>{summary.yearMonthDisplay}</TableCell>
+									<TableCell className="text-right">
+										{summary.workdays}日
+									</TableCell>
+									<TableCell className="text-right">
+										{minutesToHoursMinutes(summary.totalWorkingHours)}
+									</TableCell>
+									<TableCell className="text-right">
+										{minutesToHoursMinutes(summary.totalOvertimeHours)}
+									</TableCell>
+									<TableCell className="text-right">
+										{summary.absences}回
+									</TableCell>
+									<TableCell className="text-right">
+										{summary.lateCount}回
+									</TableCell>
+									<TableCell className="text-right">
+										{summary.earlyDepartureCount}回
+									</TableCell>
+									<TableCell className="text-right">
+										{summary.paidLeaveCount}回
+									</TableCell>
+									<TableCell className="text-center">
+										<DropdownMenu>
+											<DropdownMenuTrigger asChild>
+												<Button
+													variant="ghost"
+													className="h-8 w-8 p-0"
+													aria-label="操作メニュー"
+												>
+													<MoreHorizontalIcon className="h-4 w-4" />
+												</Button>
+											</DropdownMenuTrigger>
+											<DropdownMenuContent align="end">
+												<DropdownMenuItem
+													onClick={() => {
+														setSelectedEmployee(
+															`${summary.employeeId}-${summary.yearMonth}`,
+														);
+														setIsDetailsOpen(true);
+													}}
+												>
+													<FileTextIcon className="mr-2 h-4 w-4" />
+													詳細を表示
+												</DropdownMenuItem>
+												<DropdownMenuItem
+													onClick={() =>
+														navigateToEmployeeDetail(summary.employeeId)
+													}
+												>
+													従業員情報を表示
+												</DropdownMenuItem>
+											</DropdownMenuContent>
+										</DropdownMenu>
 									</TableCell>
 								</TableRow>
-							) : (
-								monthlySummaries.map((summary, index) => (
-									<TableRow key={`${summary.employeeId}_${summary.yearMonth}`}>
-										<TableCell className="font-medium whitespace-nowrap">
-											{summary.yearMonthDisplay}
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{summary.employeeName}
-											<br />
-											<span className="text-xs text-gray-500">
-												ID: {summary.employeeId}
-											</span>
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{summary.workdays}日
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{minutesToHoursMinutes(summary.totalWorkingHours)}
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{minutesToHoursMinutes(summary.totalOvertimeHours)}
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{summary.absences > 0 ? (
-												<Badge variant="destructive">
-													{summary.absences}回
-												</Badge>
-											) : (
-												"0回"
-											)}
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{summary.lateCount > 0 ? (
-												<Badge
-													variant="outline"
-													className="bg-yellow-50 text-yellow-700 border-yellow-200"
-												>
-													{summary.lateCount}回
-												</Badge>
-											) : (
-												"0回"
-											)}
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{summary.earlyDepartureCount > 0 ? (
-												<Badge
-													variant="outline"
-													className="bg-orange-50 text-orange-700 border-orange-200"
-												>
-													{summary.earlyDepartureCount}回
-												</Badge>
-											) : (
-												"0回"
-											)}
-										</TableCell>
-										<TableCell className="whitespace-nowrap">
-											{summary.paidLeaveCount > 0 ? (
-												<Badge
-													variant="outline"
-													className="bg-purple-50 text-purple-700 border-purple-200"
-												>
-													{summary.paidLeaveCount}回
-												</Badge>
-											) : (
-												"0回"
-											)}
-										</TableCell>
-										<TableCell className="text-right whitespace-nowrap">
-											<Button
-												variant="ghost"
-												size="icon"
-												onClick={() =>
-													navigateToEmployeeDetail(summary.employeeId)
-												}
-											>
-												<FileTextIcon className="h-4 w-4" />
-												<span className="sr-only">従業員詳細</span>
-											</Button>
-										</TableCell>
-									</TableRow>
-								))
-							)}
-						</TableBody>
-					</Table>
-				</div>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={12} className="text-center py-4">
+									該当するデータがありません
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
 			</div>
 
 			{/* ページネーション */}
-			{monthlySummaries.length > 0 && pagination.totalPages > 1 && (
-				<div className="flex justify-center mt-6">
+			{pagination.totalPages > 1 && (
+				<div className="flex justify-center mt-4">
 					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
@@ -383,6 +392,146 @@ export function AttendanceTable({
 					/>
 				</div>
 			)}
+
+			{/* 詳細ダイアログ */}
+			<Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+				<DialogContent className="sm:max-w-md">
+					<DialogHeader>
+						<DialogTitle>勤怠詳細</DialogTitle>
+						<DialogDescription>勤怠情報の詳細データです。</DialogDescription>
+					</DialogHeader>
+					{selectedEmployee && (
+						<div className="grid grid-cols-2 gap-4">
+							<div>
+								<Label>従業員ID</Label>
+								<p className="text-sm">{selectedEmployee.split("-")[0]}</p>
+							</div>
+							<div>
+								<Label>従業員名</Label>
+								<p className="text-sm">
+									{
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.employeeName
+									}
+								</p>
+							</div>
+							<div>
+								<Label>部署</Label>
+								<p className="text-sm">
+									{
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.departmentName
+									}
+								</p>
+							</div>
+							<div>
+								<Label>出勤日数</Label>
+								<p className="text-sm">
+									{
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.workdays
+									}
+									日
+								</p>
+							</div>
+							<div>
+								<Label>合計勤務時間</Label>
+								<p className="text-sm">
+									{minutesToHoursMinutes(
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.totalWorkingHours || 0,
+									)}
+								</p>
+							</div>
+							<div>
+								<Label>合計残業時間</Label>
+								<p className="text-sm">
+									{minutesToHoursMinutes(
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.totalOvertimeHours || 0,
+									)}
+								</p>
+							</div>
+							<div>
+								<Label>欠勤回数</Label>
+								<p className="text-sm">
+									{
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.absences
+									}
+									回
+								</p>
+							</div>
+							<div>
+								<Label>遅刻回数</Label>
+								<p className="text-sm">
+									{
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.lateCount
+									}
+									回
+								</p>
+							</div>
+							<div>
+								<Label>早退回数</Label>
+								<p className="text-sm">
+									{
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.earlyDepartureCount
+									}
+									回
+								</p>
+							</div>
+							<div>
+								<Label>有給休暇取得回数</Label>
+								<p className="text-sm">
+									{
+										attendances.find(
+											(summary) =>
+												`${summary.employeeId}-${summary.yearMonth}` ===
+												selectedEmployee,
+										)?.paidLeaveCount
+									}
+									回
+								</p>
+							</div>
+						</div>
+					)}
+					<DialogFooter className="sm:justify-end">
+						<Button
+							type="button"
+							variant="secondary"
+							onClick={() => setIsDetailsOpen(false)}
+						>
+							閉じる
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
 }

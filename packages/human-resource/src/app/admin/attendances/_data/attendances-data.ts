@@ -287,7 +287,29 @@ function generateTimeInfo(
 	}
 }
 
-// 特定の従業員の特定の年月の勤怠データを生成する関数
+// 部署名から部署IDを取得するヘルパー関数
+function getDepartmentId(departmentName: string): string {
+	switch (departmentName) {
+		case "営業部":
+			return "1";
+		case "開発部":
+			return "2";
+		case "人事部":
+			return "3";
+		case "総務部":
+			return "4";
+		case "経理部":
+			return "5";
+		case "マーケティング部":
+			return "6";
+		case "財務部":
+			return "7";
+		default:
+			return "99"; // 不明な部署の場合
+	}
+}
+
+// 月間勤怠データを生成する関数
 function generateMonthlyAttendance(
 	employee: Employee,
 	year: number,
@@ -352,6 +374,8 @@ function generateMonthlyAttendance(
 			id,
 			employeeId: employee.id,
 			employeeName: employee.name,
+			departmentId: getDepartmentId(employee.department), // 部署名から部署IDを取得
+			departmentName: employee.department, // 従業員情報から部署名を取得
 			date: dateStr,
 			clockIn: timeInfo.clockIn,
 			clockOut: timeInfo.clockOut,
