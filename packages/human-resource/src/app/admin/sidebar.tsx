@@ -15,6 +15,7 @@ import {
 	Users,
 	BadgeCheck,
 	Clock,
+	UserCog,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -72,6 +73,20 @@ export function AppSidebar() {
 								<div>
 									<Users className="h-5 w-5" />
 									<span>従業員管理</span>
+								</div>
+							</SidebarMenuButton>
+						</Link>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<Link href="/admin/users">
+							<SidebarMenuButton
+								asChild
+								isActive={pathname === "/admin/users"}
+								tooltip="ユーザー管理"
+							>
+								<div>
+									<UserCog className="h-5 w-5" />
+									<span>ユーザー管理</span>
 								</div>
 							</SidebarMenuButton>
 						</Link>
