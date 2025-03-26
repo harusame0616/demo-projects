@@ -34,10 +34,24 @@ function GradeListSkeleton() {
 export default async function GradePage({
 	searchParams,
 }: {
-	searchParams: GradeSearchParams;
+	searchParams: Promise<GradeSearchParams>;
 }) {
+	// searchParamsをawaitして取得
+	const resolvedParams = await searchParams;
+
+	// 検索パラメータを安全に取得
+	const query = resolvedParams.query;
+	const sort = resolvedParams.sort;
+	const order = resolvedParams.order;
+	const page = resolvedParams.page;
+
 	// 検索条件を基にデータを取得
-	const { items, pagination } = await getGrades(searchParams);
+	const { items, pagination } = await getGrades({
+		query,
+		sort,
+		order,
+		page,
+	});
 
 	return (
 		<div className="space-y-4">
@@ -51,11 +65,23 @@ export default async function GradePage({
 				</Button>
 			</div>
 
-			<SearchForm searchParams={searchParams} />
+			<SearchForm
+				searchParams={{
+					query,
+					sort,
+					order,
+					page,
+				}}
+			/>
 
 			<GradeListContainer
 				grades={items}
-				searchParams={searchParams}
+				searchParams={{
+					query,
+					sort,
+					order,
+					page,
+				}}
 				pagination={pagination}
 			/>
 		</div>

@@ -36,15 +36,51 @@ export function PositionListContainer({
 		const newOrder =
 			currentSort === column && currentOrder === "asc" ? "desc" : "asc";
 		const updatedParams = new URLSearchParams(params.toString());
+
+		// 既存のパラメータを維持
+		if (searchParams.query) {
+			updatedParams.set("query", searchParams.query);
+		}
+		if (searchParams.level) {
+			updatedParams.set("level", searchParams.level);
+		}
+		if (searchParams.page) {
+			updatedParams.set("page", searchParams.page.toString());
+		}
+
+		// ソート条件を更新
 		updatedParams.set("sort", column);
 		updatedParams.set("order", newOrder);
+
+		// デバッグ用ログ
+		console.log(
+			`Sorting: ${column}, Order: ${newOrder}, Params: ${updatedParams.toString()}`,
+		);
+
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	// ページ切り替え処理
 	const handlePageChange = (page: number) => {
 		const updatedParams = new URLSearchParams(params.toString());
+
+		// 既存のパラメータを維持
+		if (searchParams.query) {
+			updatedParams.set("query", searchParams.query);
+		}
+		if (searchParams.level) {
+			updatedParams.set("level", searchParams.level);
+		}
+		if (searchParams.sort) {
+			updatedParams.set("sort", searchParams.sort);
+		}
+		if (searchParams.order) {
+			updatedParams.set("order", searchParams.order);
+		}
+
+		// ページを更新
 		updatedParams.set("page", page.toString());
+
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 

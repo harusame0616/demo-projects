@@ -22,13 +22,13 @@ import {
 	ClockIcon,
 } from "lucide-react";
 import Link from "next/link";
-import type { Employee } from "../_actions/employee-actions";
+import type { Employee } from "@/app/_mocks/employees";
 
 interface EmployeeTableProps {
 	employees: Employee[];
 	searchParams: {
 		sortBy?: string;
-		sortOrder?: string;
+		sortOrder?: "asc" | "desc";
 	};
 	onSort: (column: string) => void;
 }
@@ -40,12 +40,17 @@ export function EmployeeTable({
 }: EmployeeTableProps) {
 	// ソート状態に応じたアイコンを表示
 	const getSortIcon = (column: string) => {
+		// デバッグ用ログ
+		console.log(
+			`Column: ${column}, SortBy: ${searchParams.sortBy}, SortOrder: ${searchParams.sortOrder}`,
+		);
+
 		if (searchParams.sortBy !== column) return null;
 
 		return searchParams.sortOrder === "asc" ? (
-			<ArrowUpIcon className="ml-1 h-4 w-4 inline" />
+			<ArrowUpIcon className="ml-1 h-4 w-4" />
 		) : (
-			<ArrowDownIcon className="ml-1 h-4 w-4 inline" />
+			<ArrowDownIcon className="ml-1 h-4 w-4" />
 		);
 	};
 
@@ -68,31 +73,33 @@ export function EmployeeTable({
 							className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
 							onClick={() => onSort("id")}
 						>
-							<Button
-								variant="ghost"
-								onClick={() => onSort("id")}
-								className="flex items-center whitespace-nowrap text-xs font-medium"
-							>
+							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
 								従業員コード {getSortIcon("id")}
-							</Button>
+							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"
 							onClick={() => onSort("name")}
 						>
-							氏名 {getSortIcon("name")}
+							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+								氏名 {getSortIcon("name")}
+							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"
 							onClick={() => onSort("department")}
 						>
-							部署 {getSortIcon("department")}
+							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+								部署 {getSortIcon("department")}
+							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
 							onClick={() => onSort("position")}
 						>
-							役職 {getSortIcon("position")}
+							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+								役職 {getSortIcon("position")}
+							</div>
 						</TableHead>
 						<TableHead className="w-[80px]">操作</TableHead>
 					</TableRow>

@@ -1,6 +1,7 @@
 "use server";
 
-import { mockEmployees, type Employee } from "@/app/_mocks/employees";
+import { mockEmployees } from "@/app/_mocks/employees";
+import type { Employee } from "@/app/_mocks/employees";
 import { mockDepartments, mockPositions } from "@/app/_mocks/employees";
 
 // ページネーション用の型定義
@@ -159,4 +160,20 @@ export async function getDepartments() {
 // 役職一覧を取得する関数
 export async function getPositions() {
 	return mockPositions;
+}
+
+// 従業員を作成する関数
+export async function createEmployee(
+	employee: Omit<Employee, "id">,
+): Promise<Employee> {
+	// モックデータなので、IDは適当に生成
+	const newEmployee: Employee = {
+		...employee,
+		id: `EMP${String(mockEmployees.length + 1).padStart(3, "0")}`,
+	};
+
+	// モックデータに追加
+	mockEmployees.push(newEmployee);
+
+	return newEmployee;
 }

@@ -15,14 +15,28 @@ export const metadata: Metadata = {
 };
 
 interface DepartmentsPageProps {
-	searchParams: DepartmentSearchParams;
+	searchParams: Promise<DepartmentSearchParams>;
 }
 
 export default async function DepartmentsPage({
 	searchParams,
 }: DepartmentsPageProps) {
+	// searchParamsをawaitして取得
+	const resolvedParams = await searchParams;
+
+	// 検索パラメータを安全に取得
+	const query = resolvedParams.query;
+	const sort = resolvedParams.sort;
+	const order = resolvedParams.order;
+	const page = resolvedParams.page;
+
 	// サーバーアクションでデータを取得
-	const { items: departments, pagination } = await getDepartments(searchParams);
+	const { items: departments, pagination } = await getDepartments({
+		query,
+		sort,
+		order,
+		page,
+	});
 
 	return (
 		<div className="space-y-4">
@@ -33,11 +47,16 @@ export default async function DepartmentsPage({
 				</Button>
 			</div>
 
-			<SearchForm searchQuery={searchParams.query || ""} />
+			<SearchForm searchQuery={query || ""} />
 
 			<DepartmentListContainer
 				departments={departments}
-				searchParams={searchParams}
+				searchParams={{
+					query,
+					sort,
+					order,
+					page,
+				}}
 				pagination={pagination}
 			/>
 		</div>

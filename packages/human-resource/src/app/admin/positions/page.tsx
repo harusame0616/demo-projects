@@ -16,14 +16,30 @@ export const metadata: Metadata = {
 };
 
 interface PositionsPageProps {
-	searchParams: PositionSearchParams;
+	searchParams: Promise<PositionSearchParams>;
 }
 
 export default async function PositionsPage({
 	searchParams,
 }: PositionsPageProps) {
+	// searchParamsをawaitして取得
+	const resolvedParams = await searchParams;
+
+	// 検索パラメータを安全に取得
+	const query = resolvedParams.query;
+	const level = resolvedParams.level;
+	const sort = resolvedParams.sort;
+	const order = resolvedParams.order;
+	const page = resolvedParams.page;
+
 	// サーバーアクションでデータを取得
-	const { items: positions, pagination } = await getPositions(searchParams);
+	const { items: positions, pagination } = await getPositions({
+		query,
+		level,
+		sort,
+		order,
+		page,
+	});
 	const levelOptions = await getPositionLevels();
 
 	return (
@@ -36,8 +52,8 @@ export default async function PositionsPage({
 			</div>
 
 			<SearchForm
-				searchQuery={searchParams.query || ""}
-				currentLevel={searchParams.level || "all"}
+				searchQuery={query || ""}
+				currentLevel={level || "all"}
 				levelOptions={levelOptions}
 			/>
 
@@ -45,7 +61,13 @@ export default async function PositionsPage({
 				positions={positions}
 				pagination={pagination}
 				levelOptions={levelOptions}
-				searchParams={searchParams}
+				searchParams={{
+					query,
+					level,
+					sort,
+					order,
+					page,
+				}}
 			/>
 		</div>
 	);

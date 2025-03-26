@@ -65,20 +65,53 @@ export function CertificationList({
 	const handleSort = (column: keyof Certification) => {
 		const newOrder = sort === column && order === "asc" ? "desc" : "asc";
 		const queryStr = new URLSearchParams(params.toString());
+
+		// 既存のパラメータを維持
+		if (searchParams.query) {
+			queryStr.set("query", searchParams.query);
+		}
+		if (searchParams.page) {
+			queryStr.set("page", searchParams.page);
+		}
+
+		// ソート条件を更新
 		queryStr.set("sort", column);
 		queryStr.set("order", newOrder);
+
+		// デバッグ用ログ
+		console.log(
+			`Sorting: ${column}, Order: ${newOrder}, Params: ${queryStr.toString()}`,
+		);
+
 		router.push(`${pathname}?${queryStr.toString()}`);
 	};
 
 	// ページ切り替え処理
 	const handlePageChange = (page: number) => {
 		const updatedParams = new URLSearchParams(params.toString());
+
+		// 既存のパラメータを維持
+		if (searchParams.query) {
+			updatedParams.set("query", searchParams.query);
+		}
+		if (searchParams.sort) {
+			updatedParams.set("sort", searchParams.sort);
+		}
+		if (searchParams.order) {
+			updatedParams.set("order", searchParams.order);
+		}
+
+		// ページを更新
 		updatedParams.set("page", page.toString());
+
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	// ソートアイコンの表示
 	const getSortIcon = (column: string) => {
+		// デバッグ用ログ
+		console.log(`Column: ${column}, Sort: ${sort}, Order: ${order}`);
+
 		if (sort !== column) return null;
 		return order === "asc" ? "↑" : "↓";
 	};

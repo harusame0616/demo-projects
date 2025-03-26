@@ -41,29 +41,39 @@ interface EmployeeSearchParams {
 	department?: string;
 	position?: string;
 	sortBy?: string;
-	sortOrder?: string;
+	sortOrder?: "asc" | "desc";
 	page?: string;
 }
 
 interface EmployeesPageProps {
-	searchParams: EmployeeSearchParams;
+	searchParams: Promise<EmployeeSearchParams>;
 }
 
 export default async function EmployeesPage({
 	searchParams,
 }: EmployeesPageProps) {
+	// searchParamsをawaitして取得
+	const resolvedParams = await searchParams;
+
 	// ページ番号のパラメータを処理（デフォルトは1ページ目）
-	const currentPage = searchParams.page
-		? Number.parseInt(searchParams.page, 10)
+	const currentPage = resolvedParams.page
+		? Number.parseInt(resolvedParams.page, 10)
 		: 1;
+
+	// 検索とソートパラメータの安全な取得
+	const query = resolvedParams.query;
+	const department = resolvedParams.department;
+	const position = resolvedParams.position;
+	const sortBy = resolvedParams.sortBy;
+	const sortOrder = resolvedParams.sortOrder;
 
 	// サーバーサイドでデータを取得
 	const employeesData = await getEmployees({
-		searchQuery: searchParams.query,
-		department: searchParams.department,
-		position: searchParams.position,
-		sortBy: searchParams.sortBy,
-		sortOrder: searchParams.sortOrder as "asc" | "desc",
+		searchQuery: query,
+		department,
+		position,
+		sortBy,
+		sortOrder: sortOrder as "asc" | "desc",
 		page: currentPage,
 		limit: 20, // 1ページあたり20件
 	});
@@ -84,16 +94,23 @@ export default async function EmployeesPage({
 			<SearchForm
 				departmentOptions={departmentOptions}
 				positionOptions={positionOptions}
-				searchQuery={searchParams.query}
-				currentDepartment={searchParams.department}
-				currentPosition={searchParams.position}
+				searchQuery={query}
+				currentDepartment={department}
+				currentPosition={position}
 			/>
 
 			<div className="w-full">
 				<Suspense fallback={<EmployeeListSkeleton />}>
 					<EmployeeListContainer
 						employees={employeesData.items}
-						searchParams={searchParams}
+						searchParams={{
+							query,
+							department,
+							position,
+							sortBy,
+							sortOrder,
+							page: resolvedParams.page,
+						}}
 						pagination={employeesData.pagination}
 					/>
 				</Suspense>

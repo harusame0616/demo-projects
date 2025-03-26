@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { EmployeeTable } from "./employee-table";
 import { PaginationNav } from "@/components/common/pagination-nav";
-import type { Employee } from "../_actions/employee-actions";
+import type { Employee } from "../types";
 
 interface EmployeeListContainerProps {
 	employees: Employee[];
@@ -12,7 +12,7 @@ interface EmployeeListContainerProps {
 		department?: string;
 		position?: string;
 		sortBy?: string;
-		sortOrder?: string;
+		sortOrder?: "asc" | "desc";
 		page?: string;
 	};
 	pagination: {
@@ -30,19 +30,20 @@ export function EmployeeListContainer({
 }: EmployeeListContainerProps) {
 	const router = useRouter();
 	const pathname = usePathname();
+	const params = useSearchParams();
 
 	const handleSort = (column: string) => {
 		// 現在のURLパラメータを取得
-		const params = new URLSearchParams();
+		const newParams = new URLSearchParams(params.toString());
 
 		// 検索クエリがあれば維持
-		if (searchParams.query) params.set("query", searchParams.query);
+		if (searchParams.query) newParams.set("query", searchParams.query);
 		if (searchParams.department)
-			params.set("department", searchParams.department);
-		if (searchParams.position) params.set("position", searchParams.position);
+			newParams.set("department", searchParams.department);
+		if (searchParams.position) newParams.set("position", searchParams.position);
 
 		// 現在のページを維持
-		if (searchParams.page) params.set("page", searchParams.page);
+		if (searchParams.page) newParams.set("page", searchParams.page);
 
 		// ソート条件を更新
 		const currentSortBy = searchParams.sortBy;
@@ -50,36 +51,39 @@ export function EmployeeListContainer({
 
 		if (currentSortBy === column) {
 			// 同じカラムの場合、ソート順を切り替え
-			params.set("sortOrder", currentSortOrder === "asc" ? "desc" : "asc");
+			const newOrder = currentSortOrder === "asc" ? "desc" : "asc";
+			newParams.set("sortBy", column);
+			newParams.set("sortOrder", newOrder);
 		} else {
 			// 異なるカラムの場合、新しいカラムでソート（デフォルト昇順）
-			params.set("sortOrder", "asc");
+			newParams.set("sortBy", column);
+			newParams.set("sortOrder", "asc");
 		}
-		params.set("sortBy", column);
 
 		// URLをアップデート
-		const queryString = params.toString();
+		const queryString = newParams.toString();
 		const url = queryString ? `${pathname}?${queryString}` : pathname;
 		router.push(url);
 	};
 
 	const handlePageChange = (page: number) => {
 		// 現在のURLパラメータを取得
-		const params = new URLSearchParams();
+		const newParams = new URLSearchParams(params.toString());
 
 		// 既存のパラメータを維持
-		if (searchParams.query) params.set("query", searchParams.query);
+		if (searchParams.query) newParams.set("query", searchParams.query);
 		if (searchParams.department)
-			params.set("department", searchParams.department);
-		if (searchParams.position) params.set("position", searchParams.position);
-		if (searchParams.sortBy) params.set("sortBy", searchParams.sortBy);
-		if (searchParams.sortOrder) params.set("sortOrder", searchParams.sortOrder);
+			newParams.set("department", searchParams.department);
+		if (searchParams.position) newParams.set("position", searchParams.position);
+		if (searchParams.sortBy) newParams.set("sortBy", searchParams.sortBy);
+		if (searchParams.sortOrder)
+			newParams.set("sortOrder", searchParams.sortOrder);
 
 		// ページを更新
-		params.set("page", page.toString());
+		newParams.set("page", page.toString());
 
 		// URLをアップデート
-		const queryString = params.toString();
+		const queryString = newParams.toString();
 		const url = queryString ? `${pathname}?${queryString}` : pathname;
 		router.push(url);
 	};
@@ -89,7 +93,10 @@ export function EmployeeListContainer({
 			<div className="w-full overflow-auto">
 				<EmployeeTable
 					employees={employees}
-					searchParams={searchParams}
+					searchParams={{
+						sortBy: searchParams.sortBy,
+						sortOrder: searchParams.sortOrder as "asc" | "desc" | undefined,
+					}}
 					onSort={handleSort}
 				/>
 			</div>

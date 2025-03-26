@@ -70,13 +70,27 @@ export function DepartmentTable({
 	const handleSort = (column: keyof Department) => {
 		const newOrder = sort === column && order === "asc" ? "desc" : "asc";
 		const updatedParams = new URLSearchParams(params.toString());
+
+		// 既存のパラメータを維持
+		if (searchParams.query) {
+			updatedParams.set("query", searchParams.query);
+		}
+		if (searchParams.page) {
+			updatedParams.set("page", searchParams.page.toString());
+		}
+
+		// ソート条件を更新
 		updatedParams.set("sort", column);
 		updatedParams.set("order", newOrder);
+
 		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	// ソートアイコンの表示
 	const getSortIcon = (column: string) => {
+		// デバッグ用ログ
+		console.log(`Column: ${column}, Sort: ${sort}, Order: ${order}`);
+
 		if (sort !== column) return null;
 		return order === "asc" ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />

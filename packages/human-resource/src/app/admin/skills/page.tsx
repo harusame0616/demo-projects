@@ -18,11 +18,23 @@ export const metadata: Metadata = {
 export default async function SkillsPage({
 	searchParams,
 }: {
-	searchParams: SkillCertificationSearchParams;
+	searchParams: Promise<SkillCertificationSearchParams>;
 }) {
+	// searchParamsをawaitして取得
+	const resolvedParams = await searchParams;
+
+	// 検索パラメータを安全に取得
+	const query = resolvedParams.query;
+	const sort = resolvedParams.sort;
+	const order = resolvedParams.order as "asc" | "desc" | undefined;
+	const page = resolvedParams.page;
+
 	// 検索条件を基にデータを取得（常にスキルのみ）
 	const paramsForFetch: SkillCertificationSearchParams = {
-		...searchParams,
+		query,
+		sort,
+		order,
+		page,
 		type: "skill" as SkillCertificationType,
 	};
 	const { items: skills, pagination } =
@@ -30,11 +42,11 @@ export default async function SkillsPage({
 
 	// クライアントコンポーネントに渡すための安全なオブジェクト
 	const safeSearchParams: SkillCertificationSearchParams = {
-		query: searchParams.query || undefined,
+		query: query || undefined,
 		type: "skill" as SkillCertificationType,
-		sort: searchParams.sort || undefined,
-		order: searchParams.order as "asc" | "desc" | undefined,
-		page: searchParams.page || undefined,
+		sort: sort || undefined,
+		order,
+		page: page || undefined,
 	};
 
 	return (
