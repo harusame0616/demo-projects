@@ -1,8 +1,5 @@
-import {
-	SAMPLE_ATTENDANCES,
-	type Attendance,
-	type AttendanceStatus,
-} from "../../../../attendances/_data/attendances-data";
+import type { Attendance, AttendanceStatus } from "@/app/_mocks/attendances";
+import { SAMPLE_ATTENDANCES } from "../../../../attendances/_data/attendances-data";
 import { minutesToHoursMinutes } from "../../../../attendances/_actions/attendance-actions";
 
 // 月次の勤怠集計データ

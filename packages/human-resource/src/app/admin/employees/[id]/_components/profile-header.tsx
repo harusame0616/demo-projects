@@ -5,19 +5,16 @@ import {
 	UserIcon,
 	UserRoundIcon,
 } from "lucide-react";
+import type { Employee } from "@/app/_mocks/employees";
 
-type Employee = {
-	id: string;
-	name: string;
-	nameKana: string;
-	department: string;
-	position: string;
+// 拡張された従業員情報の型
+type ExtendedEmployee = Employee & {
+	nameKana?: string;
 	grade?: string;
-	joinDate: string;
 };
 
 type ProfileHeaderProps = {
-	employee: Employee;
+	employee: ExtendedEmployee;
 };
 
 export function ProfileHeader({ employee }: ProfileHeaderProps) {
@@ -27,9 +24,11 @@ export function ProfileHeader({ employee }: ProfileHeaderProps) {
 				<div className="mx-auto max-w-4xl">
 					<div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-center">
 						<div>
-							<p className="text-lg text-muted-foreground mb-0.5">
-								{employee.nameKana}
-							</p>
+							{employee.nameKana && (
+								<p className="text-lg text-muted-foreground mb-0.5">
+									{employee.nameKana}
+								</p>
+							)}
 							<h1 className="text-4xl font-bold mb-3">{employee.name}</h1>
 
 							<div className="flex flex-wrap gap-2 mb-4">

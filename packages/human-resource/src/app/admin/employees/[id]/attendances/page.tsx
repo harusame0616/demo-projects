@@ -3,21 +3,11 @@ import type { Metadata } from "next";
 import { getEmployeeAttendanceSummary } from "./_actions/employee-attendance-actions";
 import { EmployeeAttendanceSummary } from "./_components/employee-attendance-summary";
 import { notFound } from "next/navigation";
-import { getEmployeeById } from "../../_actions/employee-actions";
+import { mockEmployees, type Employee } from "@/app/_mocks/employees";
 
 export const metadata: Metadata = {
 	title: "従業員勤怠情報",
 	description: "従業員の勤怠情報を表示します",
-};
-
-// 勤怠情報で必要な従業員の型
-type Employee = {
-	id: string;
-	name: string;
-	department: string;
-	position: string;
-	email?: string;
-	joinDate?: string;
 };
 
 interface EmployeeAttendancePageProps {
@@ -31,7 +21,7 @@ export default async function EmployeeAttendancePage({
 }: EmployeeAttendancePageProps) {
 	// 従業員情報を取得
 	const employeeId = params.id;
-	const employee = await getEmployeeById(employeeId);
+	const employee = mockEmployees.find((emp) => emp.id === employeeId);
 
 	if (!employee) {
 		notFound();

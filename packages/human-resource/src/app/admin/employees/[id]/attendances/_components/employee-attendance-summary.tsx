@@ -23,7 +23,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import type { AttendanceStatus } from "../../../../attendances/_data/attendances-data";
+import type { AttendanceStatus } from "@/app/_mocks/attendances";
 import {
 	formatWorkingHours,
 	type EmployeeAttendanceSummary as EmployeeAttendanceSummaryType,
@@ -31,16 +31,7 @@ import {
 } from "../_actions/employee-attendance-actions";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-// Employeeインターフェースをローカルで定義
-interface Employee {
-	id: string;
-	name: string;
-	department: string;
-	position: string;
-	email?: string;
-	joinDate?: string;
-}
+import type { Employee } from "@/app/_mocks/employees";
 
 // 月名を取得する関数
 function getMonthName(month: number): string {
@@ -112,7 +103,7 @@ const getStatusBadge = (status: AttendanceStatus) => {
 };
 
 interface EmployeeAttendanceSummaryProps {
-	data: EmployeeAttendanceSummaryType;
+	data: EmployeeAttendanceSummaryType | null;
 	employee: Employee;
 }
 
@@ -121,6 +112,16 @@ export function EmployeeAttendanceSummary({
 	employee,
 }: EmployeeAttendanceSummaryProps) {
 	const router = useRouter();
+
+	// データがnullの場合はメッセージを表示
+	if (!data) {
+		return (
+			<div className="text-center p-8">
+				<p>勤怠データが見つかりません</p>
+			</div>
+		);
+	}
+
 	const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
 
 	if (data.monthlyData.length === 0) {
