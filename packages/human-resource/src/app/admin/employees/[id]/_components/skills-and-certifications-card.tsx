@@ -25,14 +25,18 @@ export function SkillsAndCertificationsCard({
 							保有スキル
 						</h4>
 						<div className="flex flex-wrap gap-2">
-							{skills.map((skill) => (
-								<span
-									key={`skill-${skill}`}
-									className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium"
-								>
-									{skill}
-								</span>
-							))}
+							{skills && skills.length > 0 ? (
+								skills.map((skill) => (
+									<span
+										key={`skill-${skill}`}
+										className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium"
+									>
+										{skill}
+									</span>
+								))
+							) : (
+								<span className="text-sm text-muted-foreground">なし</span>
+							)}
 						</div>
 					</div>
 					<div className="pt-2 border-t">
@@ -40,14 +44,18 @@ export function SkillsAndCertificationsCard({
 							保有資格
 						</h4>
 						<div className="flex flex-wrap gap-2">
-							{certifications.map((cert) => (
-								<span
-									key={`cert-${cert}`}
-									className="bg-secondary/20 text-secondary-foreground px-3 py-1 rounded-full text-sm font-medium"
-								>
-									{cert}
-								</span>
-							))}
+							{certifications && certifications.length > 0 ? (
+								certifications.map((cert) => (
+									<span
+										key={`cert-${cert}`}
+										className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium"
+									>
+										{cert}
+									</span>
+								))
+							) : (
+								<span className="text-sm text-muted-foreground">なし</span>
+							)}
 						</div>
 					</div>
 				</div>
