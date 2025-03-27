@@ -20,8 +20,8 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 // フォームのスキーマを定義
 const positionFilterSchema = v.object({
@@ -31,27 +31,25 @@ const positionFilterSchema = v.object({
 
 type PositionFilterFormValues = v.InferInput<typeof positionFilterSchema>;
 
-interface SearchFormProps {
-	searchQuery: string;
-	currentLevel: string;
+interface SearchFormPresenterProps {
+	defaultQuery: string;
+	defaultLevel: string;
 	levelOptions: string[];
-	onFilter?: (query: string, level: string) => void; // オプショナルに変更
+	isLoading?: boolean;
 }
 
-export function SearchForm({
-	searchQuery,
-	currentLevel,
-	levelOptions,
-	onFilter,
-}: SearchFormProps) {
+export function SearchFormPresenter({
+	defaultQuery = "",
+	defaultLevel = "all",
+	levelOptions = [],
+	isLoading = false,
+}: SearchFormPresenterProps) {
 	const router = useRouter();
-	const pathname = usePathname();
-	const params = useSearchParams();
 
 	// フォームの初期値を設定
 	const defaultValues: PositionFilterFormValues = {
-		query: searchQuery || "",
-		level: currentLevel || "all",
+		query: defaultQuery,
+		level: defaultLevel,
 	};
 
 	// フォームを初期化
@@ -63,53 +61,32 @@ export function SearchForm({
 	// 外部からのpropsが変更されたらフォームの値をリセット
 	useEffect(() => {
 		form.reset({
-			query: searchQuery || "",
-			level: currentLevel || "all",
+			query: defaultQuery || "",
+			level: defaultLevel || "all",
 		});
-	}, [searchQuery, currentLevel, form]);
+	}, [defaultQuery, defaultLevel, form]);
 
-	const handleSearch = (values: PositionFilterFormValues) => {
-		if (onFilter) {
-			onFilter(values.query, values.level);
-			return;
-		}
+	// 検索処理
+	const handleSearch = async (values: PositionFilterFormValues) => {
+		const searchParams = new URLSearchParams();
 
-		// onFilterが提供されていない場合は内部でナビゲーション
-		const updatedParams = new URLSearchParams(params.toString());
 		if (values.query) {
-			updatedParams.set("query", values.query);
-		} else {
-			updatedParams.delete("query");
+			searchParams.set("query", values.query);
 		}
 
 		if (values.level && values.level !== "all") {
-			updatedParams.set("level", values.level);
-		} else {
-			updatedParams.delete("level");
+			searchParams.set("level", values.level);
 		}
 
-		// ページをリセット
-		updatedParams.delete("page");
-		router.push(`${pathname}?${updatedParams.toString()}`);
+		router.push(`/admin/positions?${searchParams}`);
 	};
 
-	const handleClear = () => {
+	// フォームをクリア
+	const handleClear = async () => {
 		form.reset({
 			query: "",
 			level: "all",
 		});
-
-		if (onFilter) {
-			onFilter("", "all");
-			return;
-		}
-
-		// onFilterが提供されていない場合は内部でナビゲーション
-		const updatedParams = new URLSearchParams(params.toString());
-		updatedParams.delete("query");
-		updatedParams.delete("level");
-		updatedParams.delete("page");
-		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	return (
@@ -131,6 +108,7 @@ export function SearchForm({
 											className="h-10 rounded-lg border-gray-200"
 											{...field}
 											aria-label="役職名や説明で検索"
+											disabled={isLoading}
 										/>
 									</FormControl>
 								</FormItem>
@@ -144,7 +122,11 @@ export function SearchForm({
 								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>レベル</FormLabel>
 									<FormControl>
-										<Select value={field.value} onValueChange={field.onChange}>
+										<Select
+											value={field.value}
+											onValueChange={field.onChange}
+											disabled={isLoading}
+										>
 											<SelectTrigger
 												className="min-h-10 w-full overflow-hidden"
 												aria-label="レベルでフィルター"
@@ -166,7 +148,11 @@ export function SearchForm({
 						/>
 
 						<div className="col-span-4 flex gap-2 flex-wrap">
-							<Button type="submit" className="h-10 sm:max-w-32 w-full">
+							<Button
+								type="submit"
+								className="h-10 sm:max-w-32 w-full"
+								disabled={isLoading}
+							>
 								検索
 							</Button>
 							<Button
@@ -174,6 +160,7 @@ export function SearchForm({
 								variant="outline"
 								type="button"
 								className="h-10 sm:max-w-32 w-full"
+								disabled={isLoading}
 							>
 								クリア
 							</Button>

@@ -1,0 +1,10 @@
+---
+description: component rule
+globs: page.tsx
+alwaysApply: false
+---
+- searchParams, params の型は Promise で定義する
+- searchParams は valibot でスキーマを定義しパースする
+- データフェッチは行わず RSC でデータの取得と Presenter へデータを受け渡す Container で行うこと
+- Container は　Suspense で囲みレイアウトシフトのないスケルトンを使うか、 Presenter で必要なデータに空にしてコントロールを disable にするなどで対応する
+  - 一覧ページは検索フォームとリストを配置する。検索フォームは Presenter に空のデータを渡しコントロールを制御し、リストはスケルトンを作成する
