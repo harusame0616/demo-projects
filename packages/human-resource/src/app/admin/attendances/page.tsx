@@ -1,88 +1,100 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
-import { AttendanceListContainer } from "./_components/attendance-list-container";
-import {
-	getAttendances,
-	type AttendanceSearchParams,
+import { Metadata } from "next";
+import { AttendancesContainer } from "./_components/attendances-container";
+import { SearchFormContainer } from "./_components/search-form-container";
+import { AttendancesSkeleton } from "./_components/attendances-skeleton";
+import { SearchFormPresenter } from "./_components/search-form-presenter";
+import type {
+	AttendanceSearchParams,
+	SortField,
 } from "./_actions/attendance-actions";
-import { getDepartments } from "./_actions/department-actions";
 
-export const metadata: Metadata = {
-	title: "勤怠情報（月次集計） | 人材管理システム",
-	description: "従業員の月次勤怠集計情報を管理します",
+export const metadata = {
+	title: "勤怠情報一覧 | 人事管理システム",
+	description: "従業員の勤怠情報を確認できます。",
 };
 
-// サーバーコンポーネント用のスケルトン
-function AttendancePageSkeleton() {
-	return (
-		<div className="space-y-4">
-			<div className="h-48 rounded-md border animate-pulse bg-gray-100" />
-			<div className="h-96 rounded-md border animate-pulse bg-gray-100" />
-		</div>
-	);
+interface PageProps {
+	searchParams: Promise<{
+		query?: string;
+		departmentId?: string;
+		startDate?: string;
+		endDate?: string;
+		page?: string;
+		sort?: string;
+		order?: string;
+	}>;
 }
 
-export default async function AttendancePage({
-	searchParams: searchParamsPromise,
-}: {
-	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-	const searchParams = await searchParamsPromise;
-	// 検索パラメータを整形
-	const params: AttendanceSearchParams = {
-		query:
-			typeof searchParams.query === "string" ? searchParams.query : undefined,
-		departmentId:
-			typeof searchParams.departmentId === "string"
-				? searchParams.departmentId
-				: undefined,
-		startDate:
-			typeof searchParams.startDate === "string"
-				? searchParams.startDate
-				: undefined,
-		endDate:
-			typeof searchParams.endDate === "string"
-				? searchParams.endDate
-				: undefined,
-		status:
-			typeof searchParams.status === "string" && searchParams.status !== "all"
-				? searchParams.status
-				: undefined,
-		sort: typeof searchParams.sort === "string" ? searchParams.sort : "date",
-		order:
-			typeof searchParams.order === "string"
-				? (searchParams.order as "asc" | "desc")
-				: "desc",
-		page:
-			typeof searchParams.page === "string"
-				? Number.parseInt(searchParams.page)
-				: 1,
-		limit:
-			typeof searchParams.limit === "string"
-				? Number.parseInt(searchParams.limit)
-				: 50,
+interface SearchFormValues {
+	query?: string;
+	departmentId?: string;
+	startDate?: string;
+	endDate?: string;
+	startYearMonth?: string;
+	endYearMonth?: string;
+	page?: string;
+}
+
+export default async function AttendancesPage({ searchParams }: PageProps) {
+	// searchParamsを解決
+	const resolvedSearchParams = await searchParams;
+
+	// 検索パラメータの処理
+	const attendanceSearchParams: AttendanceSearchParams = {
+		query: resolvedSearchParams.query,
+		departmentId: resolvedSearchParams.departmentId,
+		startDate: resolvedSearchParams.startDate,
+		endDate: resolvedSearchParams.endDate,
+		page: resolvedSearchParams.page
+			? Number.parseInt(resolvedSearchParams.page, 10)
+			: 1,
+		sort: resolvedSearchParams.sort as SortField,
+		order: (resolvedSearchParams.order as "asc" | "desc") || "desc",
 	};
 
-	// 勤怠情報と部署データを取得
-	const [{ attendances, pagination }, departments] = await Promise.all([
-		getAttendances(params),
-		getDepartments(),
-	]);
+	// Suspenseのキーとして使用するためのクエリパラメータのJSON文字列化
+	const searchParamsKey = JSON.stringify(resolvedSearchParams);
+
+	// 検索フォームの初期値を設定
+	const defaultSearchValues = {
+		query: resolvedSearchParams.query || "",
+		departmentId: resolvedSearchParams.departmentId || "all",
+		startYearMonth: resolvedSearchParams.startDate
+			? resolvedSearchParams.startDate.substring(0, 7)
+			: "",
+		endYearMonth: resolvedSearchParams.endDate
+			? resolvedSearchParams.endDate.substring(0, 7)
+			: "",
+	};
 
 	return (
-		<div className="space-y-4">
-			<div className="flex justify-between items-center h-9 ">
-				<h1 className="text-2xl font-bold">勤怠情報（月次集計）</h1>
-			</div>
+		<div className="space-y-6">
+			<header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+				<h1 className="text-3xl font-bold tracking-tight">勤怠情報</h1>
+			</header>
 
-			<Suspense fallback={<AttendancePageSkeleton />}>
-				<AttendanceListContainer
-					attendances={attendances}
-					pagination={pagination}
-					searchParams={params}
-					departments={departments}
-				/>
-			</Suspense>
+			<div className="flex flex-col space-y-6">
+				<Suspense
+					key={`search-form-${searchParamsKey}`}
+					fallback={
+						<SearchFormPresenter
+							departments={null}
+							defaultValues={defaultSearchValues}
+							isLoading={true}
+						/>
+					}
+				>
+					<SearchFormContainer searchParams={resolvedSearchParams} />
+				</Suspense>
+
+				<Suspense
+					key={`attendances-${searchParamsKey}`}
+					fallback={<AttendancesSkeleton />}
+				>
+					<AttendancesContainer searchParams={attendanceSearchParams} />
+				</Suspense>
+			</div>
 		</div>
 	);
 }

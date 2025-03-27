@@ -31,18 +31,26 @@ import {
 	ArrowUpIcon,
 	ArrowDownIcon,
 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { PaginationNav } from "@/components/common/pagination-nav";
-import type { AttendanceStatus } from "../_data/attendances-data";
+import type { MonthlyAttendanceSummary } from "../_actions/attendance-actions";
 import {
 	getAttendanceStatusName,
 	minutesToHoursMinutes,
 	type AttendanceSearchParams,
-	type MonthlyAttendanceSummary as MonthlyAttendanceSummaryType,
 	type SortField,
 } from "../_actions/attendance-actions";
 import Link from "next/link";
+
+// AttendanceStatusを型として定義
+type AttendanceStatus =
+	| "normal"
+	| "late"
+	| "early_departure"
+	| "absent"
+	| "paid_leave"
+	| "holiday";
 
 // 勤怠ステータスに対応するバッジを返す
 const getStatusBadge = (status: AttendanceStatus) => {
@@ -127,35 +135,35 @@ const formatYearMonth = (dateString: string) => {
 };
 
 interface AttendanceTableProps {
-	attendances: MonthlyAttendanceSummaryType[];
-	pagination: {
-		total: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
-	searchParams: AttendanceSearchParams;
+	attendances: MonthlyAttendanceSummary[];
+	totalItems: number;
+	totalPages: number;
+	page: number;
+	limit: number;
+	onPageChange: (page: number) => void;
 }
 
 export function AttendanceTable({
 	attendances,
-	pagination,
-	searchParams,
+	totalItems,
+	totalPages,
+	page,
+	limit,
+	onPageChange,
 }: AttendanceTableProps) {
 	const router = useRouter();
 	const pathname = usePathname();
+	const searchParams = useSearchParams();
 	const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
 	// 現在のソート状態
-	const currentSort = (searchParams.sort as SortField) || "yearMonth";
-	const currentOrder = searchParams.order || "desc";
+	const currentSort = (searchParams.get("sort") as SortField) || "yearMonth";
+	const currentOrder = searchParams.get("order") || "desc";
 
 	// ページ切り替え
 	const handlePageChange = (page: number) => {
-		const params = new URLSearchParams(
-			searchParams as unknown as Record<string, string>,
-		);
+		const params = new URLSearchParams(searchParams.toString());
 		params.set("page", page.toString());
 		const newPath = `${pathname}?${params.toString()}`;
 		router.push(newPath);
@@ -168,16 +176,14 @@ export function AttendanceTable({
 
 	// ソート処理
 	const handleSort = (column: SortField) => {
-		const params = new URLSearchParams(
-			searchParams as unknown as Record<string, string>,
-		);
+		const params = new URLSearchParams(searchParams.toString());
 
 		// 同じカラムをクリックした場合は、昇順・降順を切り替え
 		if (currentSort === column) {
 			params.set("order", currentOrder === "asc" ? "desc" : "asc");
 		} else {
 			// 異なるカラムの場合は、そのカラムの昇順でソート
-			params.set("sort", column);
+			params.set("sort", String(column));
 			params.set("order", "asc");
 		}
 
@@ -383,12 +389,12 @@ export function AttendanceTable({
 			</div>
 
 			{/* ページネーション */}
-			{pagination.totalPages > 1 && (
+			{totalPages > 1 && (
 				<div className="flex justify-center mt-4">
 					<PaginationNav
-						currentPage={pagination.page}
-						totalPages={pagination.totalPages}
-						onPageChange={handlePageChange}
+						currentPage={page}
+						totalPages={totalPages}
+						onPageChange={onPageChange}
 					/>
 				</div>
 			)}

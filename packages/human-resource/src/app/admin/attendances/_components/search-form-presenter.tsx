@@ -24,6 +24,7 @@ import { format, parse, startOfMonth, endOfMonth } from "date-fns";
 import { ja } from "date-fns/locale";
 import * as z from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 const formSchema = z.object({
 	query: z.string().optional(),
 	departmentId: z.string().optional(),
@@ -38,27 +39,19 @@ interface Department {
 	name: string;
 }
 
-interface SearchFormProps {
-	onSearch: (values: FormValues) => void;
+interface SearchFormPresenterProps {
 	defaultValues?: Partial<FormValues>;
-	departments: Department[];
+	departments: Department[] | null;
+	isLoading?: boolean;
 }
 
-export function SearchForm({
-	onSearch,
+export function SearchFormPresenter({
 	defaultValues = {},
-	departments,
-}: SearchFormProps) {
+	departments = [],
+	isLoading = false,
+}: SearchFormPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const searchParams = useSearchParams();
-
-	// 日付文字列をYYYY-MM形式に変換するヘルパー関数
-	const formatDateToYearMonth = (dateStr?: string) => {
-		if (!dateStr) return "";
-		const date = new Date(dateStr);
-		return format(date, "yyyy-MM");
-	};
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
@@ -87,7 +80,30 @@ export function SearchForm({
 				: undefined,
 		};
 
-		onSearch(updatedValues);
+		// 検索パラメータを構築
+		const params = new URLSearchParams();
+
+		if (updatedValues.query) {
+			params.set("query", updatedValues.query);
+		}
+
+		if (updatedValues.departmentId) {
+			params.set("departmentId", updatedValues.departmentId);
+		}
+
+		if (updatedValues.startDate) {
+			params.set("startDate", updatedValues.startDate);
+		}
+
+		if (updatedValues.endDate) {
+			params.set("endDate", updatedValues.endDate);
+		}
+
+		// ページをリセット
+		params.set("page", "1");
+
+		// URLを更新して画面遷移
+		router.push(`${pathname}?${params.toString()}`);
 	};
 
 	const handleReset = () => {
@@ -102,6 +118,9 @@ export function SearchForm({
 		params.set("page", "1");
 		router.push(`${pathname}?${params.toString()}`);
 	};
+
+	// データがロード中またはデータが利用できない場合
+	const isDisabled = isLoading || !departments || departments.length === 0;
 
 	return (
 		<Card>
@@ -122,6 +141,7 @@ export function SearchForm({
 										<Input
 											placeholder="従業員名または従業員IDで検索"
 											{...field}
+											disabled={isDisabled}
 										/>
 									</FormControl>
 								</FormItem>
@@ -137,6 +157,7 @@ export function SearchForm({
 									<Select
 										onValueChange={field.onChange}
 										defaultValue={field.value}
+										disabled={isDisabled}
 									>
 										<FormControl>
 											<SelectTrigger className="w-full overflow-hidden">
@@ -145,7 +166,7 @@ export function SearchForm({
 										</FormControl>
 										<SelectContent>
 											<SelectItem value="all">すべて</SelectItem>
-											{departments.map((department) => (
+											{departments?.map((department) => (
 												<SelectItem key={department.id} value={department.id}>
 													{department.name}
 												</SelectItem>
@@ -171,6 +192,7 @@ export function SearchForm({
 													placeholder="開始年月"
 													className="w-full h-10"
 													{...field}
+													disabled={isDisabled}
 												/>
 											</FormControl>
 										</FormItem>
@@ -188,6 +210,7 @@ export function SearchForm({
 													placeholder="終了年月"
 													className="w-full h-10"
 													{...field}
+													disabled={isDisabled}
 												/>
 											</FormControl>
 										</FormItem>
@@ -197,7 +220,11 @@ export function SearchForm({
 						</div>
 
 						<div className="col-span-4 flex gap-2 flex-wrap">
-							<Button type="submit" className="h-10 sm:max-w-32 w-full">
+							<Button
+								type="submit"
+								className="h-10 sm:max-w-32 w-full"
+								disabled={isDisabled}
+							>
 								検索
 							</Button>
 							<Button
@@ -205,6 +232,7 @@ export function SearchForm({
 								variant="outline"
 								onClick={handleReset}
 								className="h-10 sm:max-w-32 w-full"
+								disabled={isDisabled}
 							>
 								リセット
 							</Button>
