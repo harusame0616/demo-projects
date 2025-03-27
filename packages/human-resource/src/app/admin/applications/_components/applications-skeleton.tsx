@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
 	Table,
@@ -7,7 +8,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ApplicationsSkeleton() {
 	return (
@@ -24,6 +24,7 @@ export function ApplicationsSkeleton() {
 					<div className="space-y-4">
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{Array.from({ length: 4 }).map((_, i) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey:
 								<div key={i} className="space-y-2">
 									<Skeleton className="h-4 w-24" />
 									<Skeleton className="h-10 w-full" />
@@ -69,6 +70,7 @@ export function ApplicationsSkeleton() {
 						</TableHeader>
 						<TableBody>
 							{Array.from({ length: 8 }).map((_, i) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey:
 								<TableRow key={i}>
 									<TableCell>
 										<Skeleton className="h-4 w-16" />
@@ -102,6 +104,7 @@ export function ApplicationsSkeleton() {
 			<div className="mt-4 flex justify-center">
 				<div className="flex gap-1">
 					{Array.from({ length: 5 }).map((_, i) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey:
 						<Skeleton key={i} className="h-10 w-10" />
 					))}
 				</div>

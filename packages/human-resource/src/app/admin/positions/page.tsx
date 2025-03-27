@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { PositionsContainer } from "./_components/positions-container";
-import { SearchFormContainer } from "./_components/search-form-container";
-import { PositionsSkeleton } from "./_components/positions-skeleton";
 import type { PositionSearchParams } from "./_actions/position-actions";
-import type { Metadata } from "next";
+import { PositionsContainer } from "./_components/positions-container";
+import { PositionsSkeleton } from "./_components/positions-skeleton";
+import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 
 export const metadata: Metadata = {

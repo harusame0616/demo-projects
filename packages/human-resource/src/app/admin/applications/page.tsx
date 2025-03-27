@@ -1,10 +1,10 @@
-import { Metadata } from "next";
-import { Suspense } from "react";
 import { PageHeader } from "@/components/common/page-header";
-import { ApplicationsContainer } from "./_components/applications-container";
-import { SearchFormContainer } from "./_components/search-form-container";
-import { ApplicationsSkeleton } from "./_components/applications-skeleton";
+import type { Metadata } from "next";
+import { Suspense } from "react";
 import type { ApplicationSearchParams } from "./_actions/application-actions";
+import { ApplicationsContainer } from "./_components/applications-container";
+import { ApplicationsSkeleton } from "./_components/applications-skeleton";
+import { SearchFormContainer } from "./_components/search-form-container";
 
 // メタデータ
 export const metadata: Metadata = {

@@ -1,5 +1,5 @@
-import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
 	Table,
 	TableBody,
@@ -41,6 +41,7 @@ export function DepartmentsSkeleton() {
 							{Array(5)
 								.fill(0)
 								.map((_, index) => (
+									// biome-ignore lint/suspicious/noArrayIndexKey:
 									<TableRow key={`skeleton-row-${index}`}>
 										<TableCell>
 											<Skeleton className="h-5 w-32" />

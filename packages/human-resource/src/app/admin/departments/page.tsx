@@ -1,11 +1,11 @@
-import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import type { DepartmentSearchParams } from "./_actions/department-actions";
 import { DepartmentsContainer } from "./_components/departments-container";
 import { DepartmentsSkeleton } from "./_components/departments-skeleton";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
-import type { DepartmentSearchParams } from "./_actions/department-actions";
-import { redirect } from "next/navigation";
 
 import type { Metadata } from "next";
 

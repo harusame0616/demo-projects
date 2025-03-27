@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
 
 // 新しい構造への移行のための互換性コンポーネント

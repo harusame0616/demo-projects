@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getSkillCertificationById } from "../../../skills-certifications/_actions/skill-certification-actions";

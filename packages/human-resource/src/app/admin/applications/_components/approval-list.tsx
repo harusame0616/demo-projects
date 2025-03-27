@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Pagination } from "@/components/ui/pagination";
 import {
 	Select,
 	SelectContent,
@@ -32,13 +33,12 @@ import { CheckIcon, FileTextIcon, SearchIcon, XIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
-	approveApplication,
-	rejectApplication,
 	type Application,
 	type ApplicationType,
 	type ApprovalSearchParams,
+	approveApplication,
+	rejectApplication,
 } from "../_actions/approval-actions";
-import { Pagination } from "@/components/ui/pagination";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {

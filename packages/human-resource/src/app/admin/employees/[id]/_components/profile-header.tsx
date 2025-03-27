@@ -1,3 +1,4 @@
+import type { Employee } from "@/app/_mocks/employees";
 import {
 	BadgeIcon,
 	BuildingIcon,
@@ -5,7 +6,6 @@ import {
 	UserIcon,
 	UserRoundIcon,
 } from "lucide-react";
-import type { Employee } from "@/app/_mocks/employees";
 
 // 拡張された従業員情報の型
 type ExtendedEmployee = Employee & {

@@ -1,8 +1,8 @@
 "use client";
 
+import { PaginationNav } from "@/components/common/pagination-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PaginationNav } from "@/components/common/pagination-nav";
 import {
 	DropdownMenu,
 	DropdownMenuContent,

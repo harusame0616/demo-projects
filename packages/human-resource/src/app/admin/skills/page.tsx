@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { SkillsContainer } from "./_components/skills-container";
-import { SearchFormContainer } from "./_components/search-form-container";
-import { SkillsSkeleton } from "./_components/skills-skeleton";
 import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/skill-certification-actions";
+import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { SkillsContainer } from "./_components/skills-container";
+import { SkillsSkeleton } from "./_components/skills-skeleton";
 
 export const metadata: Metadata = {
 	title: "スキル管理 | 人材管理システム",

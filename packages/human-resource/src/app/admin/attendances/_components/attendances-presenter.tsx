@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import type { MonthlyAttendanceSummary } from "../_actions/attendance-actions";
 import { AttendanceTable } from "./attendance-table";
 import { SearchFormPresenter } from "./search-form-presenter";
-import type { MonthlyAttendanceSummary } from "../_actions/attendance-actions";
 
 interface Department {
 	id: string;

@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { CertificationsContainer } from "./_components/certifications-container";
-import { SearchFormContainer } from "./_components/search-form-container";
-import { CertificationsSkeleton } from "./_components/certifications-skeleton";
 import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/skill-certification-actions";
+import { CertificationsContainer } from "./_components/certifications-container";
+import { CertificationsSkeleton } from "./_components/certifications-skeleton";
+import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 
 export const metadata: Metadata = {
@@ -33,7 +33,7 @@ export default async function CertificationsPage({
 				</Button>
 			</div>
 
-			<SearchFormPresenter defaultQuery={query}  />
+			<SearchFormPresenter defaultQuery={query} />
 
 			<Suspense fallback={<CertificationsSkeleton />}>
 				<CertificationsContainer searchParams={resolvedParams} />

@@ -1,10 +1,10 @@
-import { SkillsForm } from "../_components/skills-form";
 import {
-	mockEmployees,
-	getEmployeeWithDefaults,
 	type Employee,
+	getEmployeeWithDefaults,
+	mockEmployees,
 } from "@/app/_mocks/employees";
 import { notFound } from "next/navigation";
+import { SkillsForm } from "../_components/skills-form";
 
 export const metadata = {
 	title: "スキル・資格編集 | 人材管理システム",

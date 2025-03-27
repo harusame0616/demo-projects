@@ -1,8 +1,8 @@
 "use client";
 
+import { PaginationNav } from "@/components/common/pagination-nav";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DepartmentTable } from "./department-table";
-import { PaginationNav } from "@/components/common/pagination-nav";
 
 type Department = {
 	id: string;

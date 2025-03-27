@@ -1,9 +1,9 @@
 "use server";
 
 import {
-	skillCertificationData,
 	type SkillCertification,
 	type SkillCertificationType,
+	skillCertificationData,
 } from "../_data/skills-certifications-data";
 
 export interface SkillCertificationSearchParams {

@@ -21,8 +21,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { Grade } from "../_data/grades-data";
 import { createGrade, updateGrade } from "../_actions/grade-actions";
+import type { Grade } from "../_data/grades-data";
 
 interface GradeFormProps {
 	grade?: Grade;

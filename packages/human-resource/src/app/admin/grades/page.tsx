@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
-import { GradesContainer } from "./_components/grades-container";
-import { SearchFormContainer } from "./_components/search-form-container";
-import { GradesSkeleton } from "./_components/grades-skeleton";
 import type { GradeSearchParams } from "./_actions/grade-actions";
+import { GradesContainer } from "./_components/grades-container";
+import { GradesSkeleton } from "./_components/grades-skeleton";
+import { SearchFormContainer } from "./_components/search-form-container";
 
 import type { Metadata } from "next";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
@@ -34,7 +34,7 @@ export default async function GradePage({
 				</Button>
 			</div>
 
-			<SearchFormPresenter defaultQuery={query}/>
+			<SearchFormPresenter defaultQuery={query} />
 
 			<Suspense fallback={<GradesSkeleton />}>
 				<GradesContainer searchParams={resolvedParams} />

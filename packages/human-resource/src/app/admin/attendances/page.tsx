@@ -1,13 +1,13 @@
-import { Suspense } from "react";
 import { Metadata } from "next";
-import { AttendancesContainer } from "./_components/attendances-container";
-import { SearchFormContainer } from "./_components/search-form-container";
-import { AttendancesSkeleton } from "./_components/attendances-skeleton";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { Suspense } from "react";
 import type {
 	AttendanceSearchParams,
 	SortField,
 } from "./_actions/attendance-actions";
+import { AttendancesContainer } from "./_components/attendances-container";
+import { AttendancesSkeleton } from "./_components/attendances-skeleton";
+import { SearchFormContainer } from "./_components/search-form-container";
+import { SearchFormPresenter } from "./_components/search-form-presenter";
 
 export const metadata = {
 	title: "勤怠情報一覧 | 人事管理システム",

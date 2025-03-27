@@ -1,6 +1,6 @@
 "use server";
 
-import { departmentData, type Department } from "../_data/departments-data";
+import { type Department, departmentData } from "../_data/departments-data";
 
 export type DepartmentSearchParams = {
 	query?: string;

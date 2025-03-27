@@ -1,6 +1,6 @@
 "use server";
 
-import { gradeData, type Grade } from "../_data/grades-data";
+import { type Grade, gradeData } from "../_data/grades-data";
 
 export interface GradeSearchParams {
 	query?: string;

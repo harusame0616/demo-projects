@@ -1,9 +1,9 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { PositionTable } from "./position-table";
 import { PaginationNav } from "@/components/common/pagination-nav";
-import { type Position } from "../_data/positions-data";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { Position } from "../_data/positions-data";
+import { PositionTable } from "./position-table";
 
 interface PositionsPresenterProps {
 	positions: Position[];

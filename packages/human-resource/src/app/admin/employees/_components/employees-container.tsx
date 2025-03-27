@@ -1,6 +1,6 @@
 import {
-	getEmployees,
 	getDepartments,
+	getEmployees,
 	getPositions,
 } from "../_actions/employee-actions";
 import { EmployeesPresenter } from "./employees-presenter";

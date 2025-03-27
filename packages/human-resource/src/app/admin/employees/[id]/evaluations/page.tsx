@@ -1,9 +1,9 @@
-import { EvaluationHistoryCard } from "../_components";
 import {
-	mockEmployees,
-	getEmployeeWithDefaults,
 	type Employee,
+	getEmployeeWithDefaults,
+	mockEmployees,
 } from "@/app/_mocks/employees";
+import { EvaluationHistoryCard } from "../_components";
 
 export const metadata = {
 	title: "従業員評価履歴 | 人材管理システム",

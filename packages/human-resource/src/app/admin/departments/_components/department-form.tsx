@@ -19,11 +19,11 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { type Department, departmentData } from "../_data/departments-data";
 import {
 	createDepartment,
 	updateDepartment,
 } from "../_actions/department-actions";
+import { type Department, departmentData } from "../_data/departments-data";
 
 interface DepartmentFormProps {
 	department?: Department; // 編集時は必須、新規作成時は不要

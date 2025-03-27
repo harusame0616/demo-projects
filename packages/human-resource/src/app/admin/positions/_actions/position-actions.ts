@@ -1,7 +1,7 @@
 "use server";
 
-import { positionData, type Position } from "../_data/positions-data";
 import { revalidatePath } from "next/cache";
+import { type Position, positionData } from "../_data/positions-data";
 
 export interface PositionSearchParams {
 	query?: string;

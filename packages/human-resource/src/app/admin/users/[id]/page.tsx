@@ -1,19 +1,19 @@
+import { mockEmployees } from "@/app/_mocks/employees";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	ArrowLeftIcon,
-	UserIcon,
-	MailIcon,
 	Calendar,
+	MailIcon,
 	PencilIcon,
-	UserCheck,
 	Shield,
+	UserCheck,
+	UserIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { getUserById } from "../_actions/user-actions";
-import { mockEmployees } from "@/app/_mocks/employees";
 import { notFound } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
+import { getUserById } from "../_actions/user-actions";
 
 import type { Metadata } from "next";
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { UserForm } from "../../../_components/user-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { updateUser } from "../../../_actions/user-actions";
+import { UserForm } from "../../../_components/user-form";
 
 interface UserFormWrapperProps {
 	user: {

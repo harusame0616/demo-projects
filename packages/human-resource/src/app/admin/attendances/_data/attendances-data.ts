@@ -1,9 +1,9 @@
-import { mockEmployees, type Employee } from "@/app/_mocks/employees";
 import {
 	type Attendance,
 	type AttendanceStatus,
 	STATUS_ARRAY,
 } from "@/app/_mocks/attendances";
+import { type Employee, mockEmployees } from "@/app/_mocks/employees";
 
 // 従業員データはmockEmployeesから取得（共通のソースを使用）
 const EMPLOYEE_DATA = mockEmployees;

@@ -1,6 +1,6 @@
 import { getDepartments } from "../_actions/department-actions";
-import { DepartmentsPresenter } from "./departments-presenter";
 import type { DepartmentSearchParams } from "../_actions/department-actions";
+import { DepartmentsPresenter } from "./departments-presenter";
 
 interface DepartmentsContainerProps {
 	searchParams: DepartmentSearchParams;

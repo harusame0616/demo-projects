@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Suspense } from "react";
-import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
 import { GradeForm } from "../_components/grade-form";
 import { GradeFormSkeleton } from "../_components/grade-form-skeleton";
 

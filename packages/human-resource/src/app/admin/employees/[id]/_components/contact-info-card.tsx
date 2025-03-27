@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserIcon, PencilIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PencilIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 
 type ContactInfo = {

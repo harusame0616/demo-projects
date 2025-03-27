@@ -1,15 +1,15 @@
+import {
+	type Employee,
+	getEmployeeWithDefaults,
+	mockEmployees,
+} from "@/app/_mocks/employees";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageHeader } from "./_components";
 import { getDepartments, getPositions } from "../../_actions/employee-actions";
+import { PageHeader } from "./_components";
 import { EmployeeFormWrapper } from "./_components/employee-form-wrapper";
-import {
-	mockEmployees,
-	getEmployeeWithDefaults,
-	type Employee,
-} from "@/app/_mocks/employees";
 
 export const metadata: Metadata = {
 	title: "従業員編集 | 人材管理システム",

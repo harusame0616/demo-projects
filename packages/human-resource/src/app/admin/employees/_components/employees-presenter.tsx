@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { EmployeeTable } from "./employee-table";
 import { PaginationNav } from "@/components/common/pagination-nav";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Employee } from "../types";
+import { EmployeeTable } from "./employee-table";
 
 interface EmployeesPresenterProps {
 	employees: Employee[];

@@ -1,6 +1,6 @@
 import { getGrades } from "../_actions/grade-actions";
-import { GradesPresenter } from "./grades-presenter";
 import type { GradeSearchParams } from "../_actions/grade-actions";
+import { GradesPresenter } from "./grades-presenter";
 
 interface GradesContainerProps {
 	searchParams: GradeSearchParams;

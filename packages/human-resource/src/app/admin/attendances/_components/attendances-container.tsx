@@ -1,10 +1,10 @@
 import { getAttendances } from "../_actions/attendance-actions";
-import { getDepartments } from "../_actions/department-actions";
-import { AttendancesPresenter } from "./attendances-presenter";
 import type {
 	AttendanceSearchParams,
 	MonthlyAttendanceSummary,
 } from "../_actions/attendance-actions";
+import { getDepartments } from "../_actions/department-actions";
+import { AttendancesPresenter } from "./attendances-presenter";
 
 interface AttendancesContainerProps {
 	searchParams: AttendanceSearchParams;

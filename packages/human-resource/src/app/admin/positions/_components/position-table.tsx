@@ -25,13 +25,13 @@ import {
 import {
 	ArrowDownIcon,
 	ArrowUpIcon,
-	MoreHorizontalIcon,
 	BuildingIcon,
 	InfoIcon,
+	MoreHorizontalIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { type Position } from "../_data/positions-data";
 import type { PositionSearchParams } from "../_actions/position-actions";
+import type { Position } from "../_data/positions-data";
 
 interface PositionTableProps {
 	positions: Position[];

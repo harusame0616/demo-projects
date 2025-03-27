@@ -1,10 +1,10 @@
+import { mockEmployees } from "@/app/_mocks/employees";
 import {
-	getUsers,
 	getUserRoles,
 	getUserStatuses,
+	getUsers,
 } from "../_actions/user-actions";
 import { UsersPresenter } from "./users-presenter";
-import { mockEmployees } from "@/app/_mocks/employees";
 
 interface UserSearchParams {
 	query?: string;

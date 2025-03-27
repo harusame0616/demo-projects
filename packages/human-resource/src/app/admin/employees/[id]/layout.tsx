@@ -1,14 +1,14 @@
+import { mockEmployees } from "@/app/_mocks/employees";
+import type { Employee } from "@/app/_mocks/employees";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import {
+	EmployeeInfoNavigation,
 	PageHeader,
 	ProfileHeader,
-	EmployeeInfoNavigation,
 } from "./_components";
-import type { ReactNode } from "react";
-import { mockEmployees } from "@/app/_mocks/employees";
-import type { Employee } from "@/app/_mocks/employees";
 
 export default async function EmployeeLayout({
 	children,

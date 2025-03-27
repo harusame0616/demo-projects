@@ -1,7 +1,7 @@
 import {
-	SAMPLE_ATTENDANCES,
 	type Attendance,
 	type AttendanceStatus,
+	SAMPLE_ATTENDANCES,
 } from "../_data/attendances-data";
 
 // 月次集計データの型定義

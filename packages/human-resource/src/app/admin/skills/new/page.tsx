@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SkillForm } from "../_components/skill-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeftIcon } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
+import { SkillForm } from "../_components/skill-form";
 import { SkillFormSkeleton } from "../_components/skill-form-skeleton";
 
 export const metadata: Metadata = {

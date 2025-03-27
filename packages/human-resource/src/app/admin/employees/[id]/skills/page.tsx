@@ -1,9 +1,9 @@
-import { SkillsAndCertificationsCard } from "../_components";
 import {
-	mockEmployees,
-	getEmployeeWithDefaults,
 	type Employee,
+	getEmployeeWithDefaults,
+	mockEmployees,
 } from "@/app/_mocks/employees";
+import { SkillsAndCertificationsCard } from "../_components";
 
 export const metadata = {
 	title: "従業員スキル・資格 | 人材管理システム",

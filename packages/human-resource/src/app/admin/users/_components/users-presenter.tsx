@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { PaginationNav } from "@/components/common/pagination-nav";
-import { UserTable } from "./user-table";
-import type { User } from "@/app/_mocks/users";
 import type { Employee } from "@/app/_mocks/employees";
+import type { User } from "@/app/_mocks/users";
+import { PaginationNav } from "@/components/common/pagination-nav";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { UserTable } from "./user-table";
 
 interface UsersPresenterProps {
 	users: User[];

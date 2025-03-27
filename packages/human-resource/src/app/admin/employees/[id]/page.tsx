@@ -1,9 +1,9 @@
-import { ContactInfoCard } from "./_components";
 import {
-	mockEmployees,
-	getEmployeeWithDefaults,
 	type Employee,
+	getEmployeeWithDefaults,
+	mockEmployees,
 } from "@/app/_mocks/employees";
+import { ContactInfoCard } from "./_components";
 
 export const metadata = {
 	title: "従業員詳細 | 人材管理システム",

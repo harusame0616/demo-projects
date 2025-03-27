@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Suspense } from "react";
-import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
 import { DepartmentForm } from "../_components/department-form";
 import { DepartmentFormSkeleton } from "../_components/department-form-skeleton";
 

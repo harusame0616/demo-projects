@@ -1,5 +1,6 @@
 "use client";
 
+import type { Employee } from "@/app/_mocks/employees";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -18,11 +19,10 @@ import {
 import {
 	ArrowDownIcon,
 	ArrowUpIcon,
-	MoreHorizontalIcon,
 	ClockIcon,
+	MoreHorizontalIcon,
 } from "lucide-react";
 import Link from "next/link";
-import type { Employee } from "@/app/_mocks/employees";
 
 interface EmployeeTableProps {
 	employees: Employee[];

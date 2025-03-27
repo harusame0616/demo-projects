@@ -1,6 +1,6 @@
 import { getPositions } from "../_actions/position-actions";
-import { PositionsPresenter } from "./positions-presenter";
 import type { PositionSearchParams } from "../_actions/position-actions";
+import { PositionsPresenter } from "./positions-presenter";
 
 interface PositionsContainerProps {
 	searchParams: PositionSearchParams;

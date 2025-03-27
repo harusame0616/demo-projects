@@ -1,13 +1,13 @@
-import { Suspense } from "react";
+import {
+	type Employee,
+	getEmployeeWithDefaults,
+	mockEmployees,
+} from "@/app/_mocks/employees";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { getEmployeeAttendanceSummary } from "./_actions/employee-attendance-actions";
 import { EmployeeAttendanceSummary } from "./_components/employee-attendance-summary";
-import { notFound } from "next/navigation";
-import {
-	mockEmployees,
-	getEmployeeWithDefaults,
-	type Employee,
-} from "@/app/_mocks/employees";
 
 export const metadata: Metadata = {
 	title: "従業員勤怠情報 | 人材管理システム",

@@ -1,7 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import type { Employee } from "@/app/_mocks/employees";
+import type { User, UserRole, UserStatus } from "@/app/_mocks/users";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -17,17 +19,15 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import {
-	ArrowUpIcon,
 	ArrowDownIcon,
+	ArrowUpIcon,
+	EyeIcon,
 	MoreHorizontalIcon,
 	PencilIcon,
 	TrashIcon,
-	EyeIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import type { User, UserRole, UserStatus } from "@/app/_mocks/users";
-import type { Employee } from "@/app/_mocks/employees";
 
 interface UserTableProps {
 	users: User[];

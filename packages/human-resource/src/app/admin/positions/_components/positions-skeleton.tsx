@@ -37,6 +37,7 @@ export function PositionsSkeleton() {
 							{Array(5)
 								.fill(0)
 								.map((_, i) => (
+									// biome-ignore lint/suspicious/noArrayIndexKey:
 									<TableRow key={`position-skeleton-row-${i}`}>
 										<TableCell>
 											<Skeleton className="h-5 w-20" />

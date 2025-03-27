@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Pagination } from "@/components/ui/pagination";
 import {
 	Popover,
 	PopoverContent,
@@ -40,11 +41,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import type {
 	Application,
-	ApplicationType,
 	ApplicationStatus,
+	ApplicationType,
 	ApprovalSearchParams,
 } from "../_actions/approval-actions";
-import { Pagination } from "@/components/ui/pagination";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {

@@ -1,7 +1,7 @@
 import { getSkillCertifications } from "../../skills-certifications/_actions/skill-certification-actions";
-import { SkillsPresenter } from "./skills-presenter";
 import type { SkillCertificationSearchParams } from "../../skills-certifications/_actions/skill-certification-actions";
 import type { SkillCertificationType } from "../../skills-certifications/_data/skills-certifications-data";
+import { SkillsPresenter } from "./skills-presenter";
 
 interface SkillsContainerProps {
 	searchParams: SkillCertificationSearchParams;

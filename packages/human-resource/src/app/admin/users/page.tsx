@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { UsersContainer } from "./_components/users-container";
 import { SearchFormContainer } from "./_components/search-form-container";
-import { SearchFormSkeleton } from "./_components/search-form-skeleton";
-import { UsersSkeleton } from "./_components/users-skeleton";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { SearchFormSkeleton } from "./_components/search-form-skeleton";
+import { UsersContainer } from "./_components/users-container";
+import { UsersSkeleton } from "./_components/users-skeleton";
 
 export const metadata: Metadata = {
 	title: "ユーザー一覧 | 人材管理システム",

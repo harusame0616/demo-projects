@@ -1,6 +1,6 @@
 import {
-	getApplicationList,
 	type ApplicationSearchParams,
+	getApplicationList,
 } from "../_actions/application-actions";
 import { ApplicationsPresenter } from "./applications-presenter";
 
