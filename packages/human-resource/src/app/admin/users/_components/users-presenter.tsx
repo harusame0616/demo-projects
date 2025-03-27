@@ -6,7 +6,7 @@ import { UserTable } from "./user-table";
 import type { User } from "@/app/_mocks/users";
 import type { Employee } from "@/app/_mocks/employees";
 
-interface UserListContainerProps {
+interface UsersPresenterProps {
 	users: User[];
 	employees: Employee[];
 	searchParams: {
@@ -25,12 +25,12 @@ interface UserListContainerProps {
 	};
 }
 
-export function UserListContainer({
+export function UsersPresenter({
 	users,
 	employees,
 	searchParams,
 	pagination,
-}: UserListContainerProps) {
+}: UsersPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();

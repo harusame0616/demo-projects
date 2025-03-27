@@ -43,7 +43,7 @@ interface StatusOption {
 	name: string;
 }
 
-interface SearchFormProps {
+interface SearchFormPresenterProps {
 	roleOptions: RoleOption[];
 	statusOptions: StatusOption[];
 	searchQuery?: string;
@@ -51,13 +51,13 @@ interface SearchFormProps {
 	currentStatus?: string;
 }
 
-export function SearchForm({
+export function SearchFormPresenter({
 	roleOptions,
 	statusOptions,
 	searchQuery = "",
 	currentRole = "all",
 	currentStatus = "all",
-}: SearchFormProps) {
+}: SearchFormPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 
@@ -144,7 +144,10 @@ export function SearchForm({
 										defaultValue={field.value}
 									>
 										<FormControl>
-											<SelectTrigger className="h-10 border-gray-200 w-full min-h-10 overflow-hidden">
+											<SelectTrigger
+												className="h-10 border-gray-200 w-full min-h-10 overflow-hidden"
+												disabled={roleOptions.length === 0}
+											>
 												<SelectValue placeholder="すべての権限" />
 											</SelectTrigger>
 										</FormControl>
@@ -172,7 +175,10 @@ export function SearchForm({
 										defaultValue={field.value}
 									>
 										<FormControl>
-											<SelectTrigger className="h-10 border-gray-200 w-full min-h-10 overflow-hidden">
+											<SelectTrigger
+												className="h-10 border-gray-200 w-full min-h-10 overflow-hidden"
+												disabled={roleOptions.length === 0}
+											>
 												<SelectValue placeholder="すべてのステータス" />
 											</SelectTrigger>
 										</FormControl>
@@ -190,7 +196,13 @@ export function SearchForm({
 						/>
 
 						<div className="col-span-4 flex gap-2 flex-wrap">
-							<Button type="submit" className="h-10 sm:max-w-32 w-full">
+							<Button
+								type="submit"
+								className="h-10 sm:max-w-32 w-full"
+								disabled={
+									roleOptions.length === 0 && statusOptions.length === 0
+								}
+							>
 								検索
 							</Button>
 							<Button
@@ -198,6 +210,9 @@ export function SearchForm({
 								variant="outline"
 								className="h-10 sm:max-w-32 w-full"
 								onClick={clearFilters}
+								disabled={
+									roleOptions.length === 0 && statusOptions.length === 0
+								}
 							>
 								クリア
 							</Button>
