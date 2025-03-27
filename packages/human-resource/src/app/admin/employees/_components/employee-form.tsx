@@ -24,11 +24,11 @@ import {
 	ArrowLeftIcon,
 	Check,
 	ChevronsUpDown,
+	PencilIcon,
 	PlusIcon,
 	SaveIcon,
 	UserIcon,
 	XIcon,
-	MailIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -151,11 +151,17 @@ export function EmployeeForm({
 			>
 				{/* 基本情報フォーム */}
 				<Card className="shadow-sm">
-					<CardHeader className="border-b bg-muted/20 pb-3">
-						<CardTitle className="flex items-center gap-2 text-lg">
+					<CardHeader className="border-b bg-muted/20 pb-3 flex flex-row items-center justify-between">
+						<CardTitle className="flex items-center gap-2 text-lg h-8">
 							<UserIcon className="h-5 w-5 text-primary" />
 							基本情報の編集
 						</CardTitle>
+						{/* <Button variant="outline" size="sm" asChild>
+							<Link href={`/admin/employees/${1}/edit`}>
+								<PencilIcon className="h-4 w-4 mr-1" />
+								編集
+							</Link>
+						</Button> */}
 					</CardHeader>
 					<CardContent className="pt-4">
 						<div className="grid grid-cols-1 gap-6">
@@ -342,10 +348,7 @@ export function EmployeeForm({
 				{/* 連絡先情報フォーム */}
 				<Card className="shadow-sm">
 					<CardHeader className="border-b bg-muted/20 pb-3">
-						<CardTitle className="flex items-center gap-2 text-lg">
-							<MailIcon className="h-5 w-5 text-primary" />
-							連絡先情報
-						</CardTitle>
+						<CardTitle className="text-lg">連絡先情報</CardTitle>
 					</CardHeader>
 					<CardContent className="pt-4">
 						<div className="grid grid-cols-1 gap-6">
