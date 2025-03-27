@@ -1,11 +1,11 @@
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DepartmentListContainer } from "./_components/department-list-container";
-import { SearchForm } from "./_components/search-form";
-import {
-	getDepartments,
-	type DepartmentSearchParams,
-} from "./_actions/department-actions";
+import { DepartmentsContainer } from "./_components/departments-container";
+import { DepartmentsSkeleton } from "./_components/departments-skeleton";
+import { SearchFormPresenter } from "./_components/search-form-presenter";
+import type { DepartmentSearchParams } from "./_actions/department-actions";
+import { redirect } from "next/navigation";
 
 import type { Metadata } from "next";
 
@@ -25,18 +25,18 @@ export default async function DepartmentsPage({
 	const resolvedParams = await searchParams;
 
 	// 検索パラメータを安全に取得
-	const query = resolvedParams.query;
-	const sort = resolvedParams.sort;
-	const order = resolvedParams.order;
-	const page = resolvedParams.page;
+	const searchParamsObj: DepartmentSearchParams = {
+		query: resolvedParams.query,
+		sort: resolvedParams.sort,
+		order: resolvedParams.order,
+		page: resolvedParams.page,
+	};
 
-	// サーバーアクションでデータを取得
-	const { items: departments, pagination } = await getDepartments({
-		query,
-		sort,
-		order,
-		page,
-	});
+	// Suspenseのキーとして使用するためのクエリパラメータのJSON文字列化
+	const searchParamsKey = JSON.stringify(resolvedParams);
+
+	// 検索フォームの初期値を設定
+	const searchQuery = resolvedParams.query || "";
 
 	return (
 		<div className="space-y-4">
@@ -47,18 +47,14 @@ export default async function DepartmentsPage({
 				</Button>
 			</div>
 
-			<SearchForm searchQuery={query || ""} />
+			<SearchFormPresenter defaultValue={searchQuery} isLoading={false} />
 
-			<DepartmentListContainer
-				departments={departments}
-				searchParams={{
-					query,
-					sort,
-					order,
-					page,
-				}}
-				pagination={pagination}
-			/>
+			<Suspense
+				key={`departments-${searchParamsKey}`}
+				fallback={<DepartmentsSkeleton />}
+			>
+				<DepartmentsContainer searchParams={searchParamsObj} />
+			</Suspense>
 		</div>
 	);
 }

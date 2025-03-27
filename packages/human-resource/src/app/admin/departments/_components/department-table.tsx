@@ -37,17 +37,19 @@ type Department = {
 
 interface DepartmentTableProps {
 	departments: Department[];
-	searchParams: DepartmentSearchParams;
+	currentSort: string;
+	currentOrder: string;
+	onSort: (column: string) => void;
 }
 
 export function DepartmentTable({
 	departments,
-	searchParams,
+	currentSort,
+	currentOrder,
+	onSort,
 }: DepartmentTableProps) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const params = useSearchParams();
-	const { sort = "id", order = "asc" } = searchParams;
 
 	// 親部署名を取得する関数
 	const getParentName = (parentId: string | null): string => {
@@ -66,33 +68,10 @@ export function DepartmentTable({
 		}).format(date);
 	};
 
-	// ソート処理
-	const handleSort = (column: keyof Department) => {
-		const newOrder = sort === column && order === "asc" ? "desc" : "asc";
-		const updatedParams = new URLSearchParams(params.toString());
-
-		// 既存のパラメータを維持
-		if (searchParams.query) {
-			updatedParams.set("query", searchParams.query);
-		}
-		if (searchParams.page) {
-			updatedParams.set("page", searchParams.page.toString());
-		}
-
-		// ソート条件を更新
-		updatedParams.set("sort", column);
-		updatedParams.set("order", newOrder);
-
-		router.push(`${pathname}?${updatedParams.toString()}`);
-	};
-
 	// ソートアイコンの表示
 	const getSortIcon = (column: string) => {
-		// デバッグ用ログ
-		console.log(`Column: ${column}, Sort: ${sort}, Order: ${order}`);
-
-		if (sort !== column) return null;
-		return order === "asc" ? (
+		if (currentSort !== column) return null;
+		return currentOrder === "asc" ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
 		) : (
 			<ArrowDownIcon className="h-4 w-4 ml-1" />
@@ -106,7 +85,7 @@ export function DepartmentTable({
 					<TableRow>
 						<TableHead
 							className="cursor-pointer w-[100px] whitespace-nowrap"
-							onClick={() => handleSort("id")}
+							onClick={() => onSort("id")}
 						>
 							<div className="flex items-center">
 								部署コード {getSortIcon("id")}
@@ -114,7 +93,7 @@ export function DepartmentTable({
 						</TableHead>
 						<TableHead
 							className="cursor-pointer w-[200px] whitespace-nowrap"
-							onClick={() => handleSort("name")}
+							onClick={() => onSort("name")}
 						>
 							<div className="flex items-center">
 								部署名 {getSortIcon("name")}

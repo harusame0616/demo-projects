@@ -10,12 +10,12 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { SearchIcon } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // フォームのスキーマを定義
 const departmentFilterSchema = v.object({
@@ -24,19 +24,20 @@ const departmentFilterSchema = v.object({
 
 type DepartmentFilterFormValues = v.InferInput<typeof departmentFilterSchema>;
 
-interface SearchFormProps {
-	searchQuery: string;
-	onSearch?: (query: string) => void; // オプショナルに変更
+interface SearchFormPresenterProps {
+	defaultValue: string;
+	isLoading?: boolean;
 }
 
-export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
+export function SearchFormPresenter({
+	defaultValue = "",
+	isLoading = false,
+}: SearchFormPresenterProps) {
 	const router = useRouter();
-	const pathname = usePathname();
-	const params = useSearchParams();
 
 	// フォームの初期値を設定
 	const defaultValues: DepartmentFilterFormValues = {
-		query: searchQuery || "",
+		query: defaultValue,
 	};
 
 	// フォームを初期化
@@ -48,45 +49,29 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 	// 外部からのpropsが変更されたらフォームの値をリセット
 	useEffect(() => {
 		form.reset({
-			query: searchQuery || "",
+			query: defaultValue || "",
 		});
-	}, [searchQuery, form]);
+	}, [defaultValue, form]);
 
-	// フィルター変更時にURLを更新
-	const handleSearch = (values: DepartmentFilterFormValues) => {
-		if (onSearch) {
-			onSearch(values.query);
-			return;
-		}
+	// 検索処理
+	const handleSearch = async (values: DepartmentFilterFormValues) => {
+		const searchParams = new URLSearchParams();
 
-		// onSearchが提供されていない場合は内部でナビゲーション
-		const updatedParams = new URLSearchParams(params.toString());
 		if (values.query) {
-			updatedParams.set("query", values.query);
-		} else {
-			updatedParams.delete("query");
+			searchParams.set("query", values.query);
 		}
-		// 検索時はページをリセット
-		updatedParams.delete("page");
-		router.push(`${pathname}?${updatedParams.toString()}`);
+
+		searchParams.toString();
+
+		// router.pushを使用して検索を実行
+		router.push(`/admin/departments?${searchParams}`);
 	};
 
 	// フォームをクリア
-	const handleClear = () => {
+	const handleClear = async () => {
 		form.reset({
 			query: "",
 		});
-
-		if (onSearch) {
-			onSearch("");
-			return;
-		}
-
-		// onSearchが提供されていない場合は内部でナビゲーション
-		const updatedParams = new URLSearchParams(params.toString());
-		updatedParams.delete("query");
-		updatedParams.delete("page"); // ページもリセット
-		router.push(`${pathname}?${updatedParams.toString()}`);
 	};
 
 	return (
@@ -106,6 +91,7 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 												className="h-10 rounded-lg border-gray-200"
 												{...field}
 												aria-label="部署名で検索"
+												disabled={isLoading}
 											/>
 										</FormControl>
 									</FormItem>
@@ -113,7 +99,11 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 							/>
 
 							<div className="col-span-4 flex gap-2 flex-wrap">
-								<Button type="submit" className="h-10 sm:max-w-32 w-full">
+								<Button
+									type="submit"
+									className="h-10 sm:max-w-32 w-full"
+									disabled={isLoading}
+								>
 									検索
 								</Button>
 								<Button
@@ -121,6 +111,7 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 									variant="outline"
 									type="button"
 									className="h-10 sm:max-w-32 w-full"
+									disabled={isLoading}
 								>
 									クリア
 								</Button>
