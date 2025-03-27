@@ -44,19 +44,9 @@ export default function PositionEditPage({ params }: PositionEditPageProps) {
 		<>
 			<div className="mb-6">
 				<h2 className="text-3xl font-bold tracking-tight">役職の編集</h2>
-				<p className="text-muted-foreground">
-					役職情報を更新します。必要な情報を入力してください。
-				</p>
 			</div>
 
-			<Card>
-				<CardHeader>
-					<CardTitle>{position.name} の編集</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<PositionForm position={position} onSubmit={handleSubmit} />
-				</CardContent>
-			</Card>
+			<PositionForm position={position} onSubmit={handleSubmit} />
 		</>
 	);
 }

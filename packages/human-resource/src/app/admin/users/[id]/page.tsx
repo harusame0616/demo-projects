@@ -64,49 +64,18 @@ export default async function UserDetailPage({
 			<div className="flex items-center justify-between">
 				<div>
 					<h1 className="text-2xl font-bold tracking-tight mb-1">
-						{user.email}
+						ユーザー詳細
 					</h1>
-					<div className="flex items-center gap-3">
-						<Badge
-							variant="outline"
-							className={
-								user.role === "admin"
-									? "bg-purple-50 text-purple-700 border-purple-200"
-									: "bg-gray-50 text-gray-700 border-gray-200"
-							}
-						>
-							{user.role === "admin" ? "管理者" : "一般ユーザー"}
-						</Badge>
-						<Badge
-							variant="outline"
-							className={
-								user.status === "active"
-									? "bg-green-50 text-green-700 border-green-200"
-									: "bg-red-50 text-red-700 border-red-200"
-							}
-						>
-							{user.status === "active" ? "有効" : "無効"}
-						</Badge>
-					</div>
 				</div>
 				<Button asChild variant="outline">
-					<Link href={`/admin/users/${user.id}/edit`}>
-						<PencilIcon className="mr-2 h-4 w-4" />
-						編集
-					</Link>
+					<Link href={`/admin/users/${user.id}/edit`}>編集</Link>
 				</Button>
 			</div>
 
 			<div className="grid grid-cols-1 gap-6">
 				{/* ユーザー基本情報 */}
 				<Card className="shadow-sm">
-					<CardHeader className="border-b bg-muted/20 pb-3">
-						<CardTitle className="flex items-center gap-2 text-lg">
-							<UserIcon className="h-5 w-5 text-primary" />
-							ユーザー情報
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="pt-4">
+					<CardContent>
 						<dl className="space-y-4">
 							<div className="grid grid-cols-3 gap-4">
 								<dt className="font-medium text-muted-foreground">

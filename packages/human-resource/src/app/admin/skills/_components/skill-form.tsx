@@ -22,6 +22,7 @@ import {
 	updateSkillCertification,
 } from "../../skills-certifications/_actions/skill-certification-actions";
 import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
+import { Card, CardContent } from "@/components/ui/card";
 
 // フォームのバリデーションスキーマ
 const formSchema = v.object({
@@ -134,99 +135,95 @@ export function SkillForm({ skill, isNew = true }: SkillFormProps) {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 				{error && (
 					<div className="bg-red-50 p-4 rounded-md text-red-600 mb-4">
 						{error}
 					</div>
 				)}
 
-				<FormField
-					control={form.control}
-					name="code"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>スキルコード *</FormLabel>
-							<FormControl>
-								<Input placeholder="S001" {...field} disabled={!isNew} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+				<Card>
+					<CardContent className="space-y-6">
+						<FormField
+							control={form.control}
+							name="code"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>スキルコード *</FormLabel>
+									<FormControl>
+										<Input placeholder="S001" {...field} disabled={!isNew} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>スキル名 *</FormLabel>
-							<FormControl>
-								<Input placeholder="TypeScript" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>スキル名 *</FormLabel>
+									<FormControl>
+										<Input placeholder="TypeScript" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-				<FormField
-					control={form.control}
-					name="description"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>説明 *</FormLabel>
-							<FormControl>
-								<Textarea
-									placeholder="Microsoft社が開発した静的型付けプログラミング言語"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+						<FormField
+							control={form.control}
+							name="description"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>説明 *</FormLabel>
+									<FormControl>
+										<Textarea
+											placeholder="Microsoft社が開発した静的型付けプログラミング言語"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-				<FormField
-					control={form.control}
-					name="levelOrAuthority"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>レベル *</FormLabel>
-							<FormControl>
-								<Input placeholder="上級" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+						<FormField
+							control={form.control}
+							name="levelOrAuthority"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>レベル *</FormLabel>
+									<FormControl>
+										<Input placeholder="上級" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-				<FormField
-					control={form.control}
-					name="requirements"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>要件</FormLabel>
-							<FormControl>
-								<Textarea
-									placeholder="3年以上の開発経験、大規模プロジェクトでの使用経験"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+						<FormField
+							control={form.control}
+							name="requirements"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>要件</FormLabel>
+									<FormControl>
+										<Textarea
+											placeholder="3年以上の開発経験、大規模プロジェクトでの使用経験"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</CardContent>
+				</Card>
 
-				<div className="flex justify-between">
-					<Button
-						type="button"
-						variant="outline"
-						onClick={handleCancel}
-						disabled={isSubmitting}
-					>
-						キャンセル
-					</Button>
-					<Button type="submit" disabled={isSubmitting}>
+				<div className="flex gap-2 flex-wrap">
+					<Button type="submit" className="h-10 sm:max-w-32 w-full">
 						{isSubmitting
 							? isNew
 								? "登録中..."
@@ -234,6 +231,15 @@ export function SkillForm({ skill, isNew = true }: SkillFormProps) {
 							: isNew
 								? "登録"
 								: "更新"}
+					</Button>
+					<Button
+						type="button"
+						variant="outline"
+						className="h-10 sm:max-w-32 w-full"
+						onClick={handleCancel}
+						disabled={isSubmitting}
+					>
+						キャンセル
 					</Button>
 				</div>
 			</form>

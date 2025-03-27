@@ -86,28 +86,16 @@ export default function GradeDetailPage({ params }: GradeDetailPageProps) {
 		<>
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-2">
-					<Button variant="outline" size="sm" asChild>
-						<Link href="/admin/grades">
-							<ArrowLeftIcon className="mr-2 h-4 w-4" />
-							戻る
-						</Link>
-					</Button>
-					<h2 className="text-3xl font-bold tracking-tight">{grade.name}</h2>
+					<h2 className="text-3xl font-bold tracking-tight">グレード詳細</h2>
 				</div>
-				<Button asChild>
-					<Link href={`/admin/grades/${gradeId}/edit`}>
-						<PencilIcon className="mr-2 h-4 w-4" />
-						編集
-					</Link>
+				<Button asChild variant="outline">
+					<Link href={`/admin/grades/${gradeId}/edit`}>編集</Link>
 				</Button>
 			</div>
 
 			<div className="space-y-6">
 				{/* グレード基本情報 */}
 				<Card>
-					<CardHeader>
-						<CardTitle>基本情報</CardTitle>
-					</CardHeader>
 					<CardContent>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 							<div>

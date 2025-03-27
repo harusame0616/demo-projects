@@ -64,7 +64,7 @@ export function LoginForm() {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 
 			// ダッシュボードにリダイレクト
-			router.push("/dashboard");
+			router.push("/admin");
 		} catch (error) {
 			console.error("ログインエラー:", error);
 			setError(

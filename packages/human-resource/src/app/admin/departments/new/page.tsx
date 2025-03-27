@@ -16,12 +16,6 @@ export default function DepartmentNewPage() {
 	return (
 		<>
 			<div className="flex items-center gap-4 mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<Link href="/admin/departments">
-						<ArrowLeftIcon className="mr-2 h-4 w-4" />
-						戻る
-					</Link>
-				</Button>
 				<h2 className="text-3xl font-bold tracking-tight">部署新規作成</h2>
 			</div>
 

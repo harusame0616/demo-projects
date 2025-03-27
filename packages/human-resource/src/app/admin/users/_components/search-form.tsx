@@ -123,15 +123,11 @@ export function SearchForm({
 										キーワード（名前、メールアドレス、従業員コード）
 									</FormLabel>
 									<FormControl>
-										<div className="relative w-full">
-											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-											<Input
-												placeholder="名前、メールアドレス、従業員コードで検索"
-												className="pl-10 h-10 rounded-lg border-gray-200"
-												{...field}
-												value={field.value || ""}
-											/>
-										</div>
+										<Input
+											className="h-10 rounded-lg border-gray-200"
+											{...field}
+											value={field.value || ""}
+										/>
 									</FormControl>
 								</FormItem>
 							)}

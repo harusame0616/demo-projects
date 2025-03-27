@@ -22,6 +22,7 @@ import {
 	updateSkillCertification,
 } from "../../skills-certifications/_actions/skill-certification-actions";
 import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
+import { Card, CardContent } from "@/components/ui/card";
 
 // フォームのバリデーションスキーマ
 const formSchema = v.object({
@@ -140,102 +141,101 @@ export function CertificationForm({
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 				{error && (
 					<div className="bg-red-50 p-4 rounded-md text-red-600 mb-4">
 						{error}
 					</div>
 				)}
+				<Card>
+					<CardContent className="space-y-6">
+						<FormField
+							control={form.control}
+							name="code"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>資格コード *</FormLabel>
+									<FormControl>
+										<Input placeholder="C001" {...field} disabled={!isNew} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-				<FormField
-					control={form.control}
-					name="code"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>資格コード *</FormLabel>
-							<FormControl>
-								<Input placeholder="C001" {...field} disabled={!isNew} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>資格名 *</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="AWS認定ソリューションアーキテクト - アソシエイト"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>資格名 *</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="AWS認定ソリューションアーキテクト - アソシエイト"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+						<FormField
+							control={form.control}
+							name="description"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>説明 *</FormLabel>
+									<FormControl>
+										<Textarea
+											placeholder="AWSのサービスに関する設計と導入の知識を証明する資格"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-				<FormField
-					control={form.control}
-					name="description"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>説明 *</FormLabel>
-							<FormControl>
-								<Textarea
-									placeholder="AWSのサービスに関する設計と導入の知識を証明する資格"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+						<FormField
+							control={form.control}
+							name="levelOrAuthority"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>認定機関 *</FormLabel>
+									<FormControl>
+										<Input placeholder="Amazon Web Services" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-				<FormField
-					control={form.control}
-					name="levelOrAuthority"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>認定機関 *</FormLabel>
-							<FormControl>
-								<Input placeholder="Amazon Web Services" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+						<FormField
+							control={form.control}
+							name="requirements"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>取得条件</FormLabel>
+									<FormControl>
+										<Textarea
+											placeholder="模擬試験で80%以上のスコア、1年以上の実務経験推奨"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</CardContent>
+				</Card>
 
-				<FormField
-					control={form.control}
-					name="requirements"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>取得条件</FormLabel>
-							<FormControl>
-								<Textarea
-									placeholder="模擬試験で80%以上のスコア、1年以上の実務経験推奨"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<div className="flex justify-between">
+				<div className="flex gap-2 flex-wrap">
 					<Button
-						type="button"
-						variant="outline"
-						onClick={handleCancel}
+						type="submit"
 						disabled={isSubmitting}
+						className="h-10 sm:max-w-32 w-full"
 					>
-						キャンセル
-					</Button>
-					<Button type="submit" disabled={isSubmitting}>
 						{isSubmitting
 							? isNew
 								? "登録中..."
@@ -243,6 +243,15 @@ export function CertificationForm({
 							: isNew
 								? "登録"
 								: "更新"}
+					</Button>
+					<Button
+						type="button"
+						variant="outline"
+						onClick={handleCancel}
+						disabled={isSubmitting}
+						className="h-10 sm:max-w-32 w-full"
+					>
+						キャンセル
 					</Button>
 				</div>
 			</form>

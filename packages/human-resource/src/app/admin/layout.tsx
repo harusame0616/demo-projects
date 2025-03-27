@@ -15,13 +15,6 @@ export default function PrivateLayout({
 						{children}
 					</main>
 				</div>
-				<footer className="border-t bg-background w-full">
-					<div className="container flex h-16 items-center justify-center py-4">
-						<p className="text-sm text-muted-foreground">
-							© 2024 人材管理システム All rights reserved.
-						</p>
-					</div>
-				</footer>
 			</div>
 		</SidebarProvider>
 	);

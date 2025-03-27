@@ -198,7 +198,6 @@ export function SearchForm({
 
 						<div className="col-span-4 flex gap-2 flex-wrap">
 							<Button type="submit" className="h-10 sm:max-w-32 w-full">
-								<SearchIcon className="w-4 h-4" />
 								検索
 							</Button>
 							<Button

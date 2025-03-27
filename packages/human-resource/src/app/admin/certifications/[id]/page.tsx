@@ -78,17 +78,10 @@ export default function CertificationDetailPage({
 		<>
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-2">
-					<Button variant="outline" size="sm" asChild>
-						<Link href="/admin/certifications">
-							<ArrowLeftIcon className="mr-2 h-4 w-4" />
-							戻る
-						</Link>
-					</Button>
 					<h2 className="text-3xl font-bold tracking-tight">資格詳細</h2>
 				</div>
-				<Button asChild>
+				<Button asChild variant="outline">
 					<Link href={`/admin/certifications/${certificationId}/edit`}>
-						<PencilIcon className="mr-2 h-4 w-4" />
 						編集
 					</Link>
 				</Button>

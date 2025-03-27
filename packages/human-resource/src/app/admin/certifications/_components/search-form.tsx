@@ -93,15 +93,10 @@ export function CertificationSearchForm({
 								<FormItem className="col-span-4 sm:col-span-2">
 									<FormLabel>キーワード（名称、説明）</FormLabel>
 									<FormControl>
-										<div className="relative w-full">
-											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-											<Input
-												className="pl-10 w-full h-10 rounded-lg"
-												{...field}
-												aria-label="資格を検索"
-												placeholder="資格名や説明を入力"
-											/>
-										</div>
+										<Input
+											className="h-10 rounded-lg border-gray-200"
+											{...field}
+										/>
 									</FormControl>
 								</FormItem>
 							)}

@@ -124,23 +124,19 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(handleFilterChange)}
-						className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4"
+						className="grid grid-cols-4 gap-4"
 					>
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="col-span-2">
+								<FormItem className="col-span-4 sm:col-span-2">
 									<FormLabel>キーワード（社員名、内容、コメント）</FormLabel>
 									<FormControl>
-										<div className="relative w-full">
-											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-											<Input
-												className="pl-10 w-full h-10 rounded-lg"
-												{...field}
-												aria-label="社員名や内容、コメントで検索"
-											/>
-										</div>
+										<Input
+											className="h-10 rounded-lg border-gray-200"
+											{...field}
+										/>
 									</FormControl>
 								</FormItem>
 							)}
@@ -150,7 +146,7 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 							control={form.control}
 							name="type"
 							render={({ field }) => (
-								<FormItem className="w-full">
+								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>申請タイプ</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
@@ -182,7 +178,7 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 							control={form.control}
 							name="status"
 							render={({ field }) => (
-								<FormItem className="w-full">
+								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel className="text-sm font-medium mb-1 block">
 										ステータス
 									</FormLabel>
@@ -211,7 +207,7 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 							control={form.control}
 							name="date"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>日付</FormLabel>
 									<FormControl>
 										<Popover>

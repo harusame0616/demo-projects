@@ -109,11 +109,8 @@ export function GradeForm({ grade, isNew = false }: GradeFormProps) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit} className="space-y-4">
 			<Card>
-				<CardHeader>
-					<CardTitle>{isNew ? "グレード登録" : "グレード情報"}</CardTitle>
-				</CardHeader>
 				<CardContent className="space-y-6">
 					{error && (
 						<div className="bg-red-50 p-4 rounded-md text-red-600 mb-4">
@@ -222,28 +219,31 @@ export function GradeForm({ grade, isNew = false }: GradeFormProps) {
 						</div>
 					</div>
 				</CardContent>
-				<CardFooter className="flex justify-end">
-					<div className="flex gap-2">
-						<Button
-							type="button"
-							variant="outline"
-							onClick={handleCancel}
-							disabled={isSubmitting}
-						>
-							キャンセル
-						</Button>
-						<Button type="submit" disabled={isSubmitting}>
-							{isSubmitting
-								? isNew
-									? "作成中..."
-									: "保存中..."
-								: isNew
-									? "作成"
-									: "保存"}
-						</Button>
-					</div>
-				</CardFooter>
 			</Card>
+			<div className="flex gap-2 flex-wrap">
+				<Button
+					type="submit"
+					disabled={isSubmitting}
+					className="h-10 sm:max-w-32 w-full"
+				>
+					{isSubmitting
+						? isNew
+							? "作成中..."
+							: "保存中..."
+						: isNew
+							? "作成"
+							: "保存"}
+				</Button>
+				<Button
+					type="button"
+					variant="outline"
+					className="h-10 sm:max-w-32 w-full"
+					onClick={handleCancel}
+					disabled={isSubmitting}
+				>
+					キャンセル
+				</Button>
+			</div>
 		</form>
 	);
 }

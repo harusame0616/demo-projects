@@ -133,18 +133,12 @@ export function UserForm({
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(handleSubmit)}
-				className="space-y-6"
 				noValidate
+				className="space-y-4"
 			>
 				{/* ユーザー基本情報フォーム */}
 				<Card className="shadow-sm">
-					<CardHeader className="border-b bg-muted/20 pb-3">
-						<CardTitle className="flex items-center gap-2 text-lg">
-							<UserIcon className="h-5 w-5 text-primary" />
-							ユーザー基本情報
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="pt-4">
+					<CardContent>
 						<div className="grid grid-cols-1 gap-6">
 							{isEditing && (
 								<FormField
@@ -358,12 +352,11 @@ export function UserForm({
 					</CardContent>
 				</Card>
 
-				<div className="flex justify-start pt-4 gap-2">
-					<Button type="submit">
-						<SaveIcon className="h-4 w-4 mr-2" />
+				<div className="flex justify-start gap-2 flex-wrap">
+					<Button type="submit" className="h-10 sm:max-w-32 w-full">
 						{isEditing ? "更新" : "登録"}
 					</Button>
-					<Button variant="outline" asChild>
+					<Button variant="outline" asChild className="h-10 sm:max-w-32 w-full">
 						<Link href="/admin/users">キャンセル</Link>
 					</Button>
 				</div>

@@ -46,14 +46,11 @@ export default function PositionDetailPage({
 
 	return (
 		<>
-			<div className="flex items-center gap-4 mb-6">
-				<Button variant="outline" size="icon" asChild>
-					<Link href="/admin/positions">
-						<ArrowLeftIcon className="h-4 w-4" />
-						<span className="sr-only">戻る</span>
-					</Link>
-				</Button>
+			<div className="flex items-center justify-between mb-6">
 				<h2 className="text-3xl font-bold tracking-tight">役職詳細</h2>
+				<Button variant="outline" asChild>
+					<Link href={`/admin/positions/${position.id}/edit`}>編集</Link>
+				</Button>
 			</div>
 
 			<Card>
@@ -89,29 +86,6 @@ export default function PositionDetailPage({
 						<p className="whitespace-pre-wrap">{position.description}</p>
 					</div>
 				</CardContent>
-				<CardFooter className="flex justify-between">
-					<Button variant="outline" asChild>
-						<Link href="/admin/positions">
-							<ArrowLeftIcon className="h-4 w-4 mr-2" />
-							戻る
-						</Link>
-					</Button>
-					<div className="flex gap-2">
-						<Button
-							variant="outline"
-							className="text-red-500 hover:text-red-600"
-						>
-							<TrashIcon className="h-4 w-4 mr-2" />
-							削除
-						</Button>
-						<Button variant="default" asChild>
-							<Link href={`/admin/positions/${position.id}/edit`}>
-								<Edit2Icon className="h-4 w-4 mr-2" />
-								編集
-							</Link>
-						</Button>
-					</div>
-				</CardFooter>
 			</Card>
 		</>
 	);

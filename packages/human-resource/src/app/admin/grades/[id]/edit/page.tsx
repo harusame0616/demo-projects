@@ -61,15 +61,7 @@ export default function GradeEditPage({ params }: GradeEditPageProps) {
 	return (
 		<>
 			<div className="flex items-center gap-4 mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<Link href={`/admin/grades/${gradeId}`}>
-						<ArrowLeftIcon className="mr-2 h-4 w-4" />
-						戻る
-					</Link>
-				</Button>
-				<h2 className="text-3xl font-bold tracking-tight">
-					{grade.name}の編集
-				</h2>
+				<h2 className="text-3xl font-bold tracking-tight">グレード編集</h2>
 			</div>
 
 			<Suspense fallback={<GradeFormSkeleton />}>

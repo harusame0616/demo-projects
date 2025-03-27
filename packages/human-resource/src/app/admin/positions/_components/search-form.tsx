@@ -16,7 +16,6 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { SearchIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
@@ -128,15 +127,11 @@ export function SearchForm({
 								<FormItem className="col-span-4 sm:col-span-2">
 									<FormLabel>キーワード（役職名、説明）</FormLabel>
 									<FormControl>
-										<div className="relative w-full">
-											<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-											<Input
-												placeholder="役職名や説明で検索..."
-												className="pl-10 h-10 rounded-lg border-gray-200"
-												{...field}
-												aria-label="役職名や説明で検索"
-											/>
-										</div>
+										<Input
+											className="h-10 rounded-lg border-gray-200"
+											{...field}
+											aria-label="役職名や説明で検索"
+										/>
 									</FormControl>
 								</FormItem>
 							)}

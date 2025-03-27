@@ -70,8 +70,8 @@ export default async function AttendancePage({
 	]);
 
 	return (
-		<div className="space-y-6">
-			<div className="flex justify-between items-center">
+		<div className="space-y-4">
+			<div className="flex justify-between items-center h-9 ">
 				<h1 className="text-2xl font-bold">勤怠情報（月次集計）</h1>
 			</div>
 

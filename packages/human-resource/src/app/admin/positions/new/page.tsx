@@ -21,20 +21,10 @@ export default function NewPositionPage() {
 	return (
 		<>
 			<div className="mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">役職の新規作成</h2>
-				<p className="text-muted-foreground">
-					新しい役職を作成します。必要な情報を入力してください。
-				</p>
+				<h2 className="text-3xl font-bold tracking-tight">役職新規作成</h2>
 			</div>
 
-			<Card>
-				<CardHeader>
-					<CardTitle>役職情報</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<PositionForm onSubmit={handleSubmit} />
-				</CardContent>
-			</Card>
+			<PositionForm onSubmit={handleSubmit} />
 		</>
 	);
 }

@@ -16,25 +16,12 @@ export default function NewSkillPage() {
 	return (
 		<>
 			<div className="flex items-center gap-4 mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<Link href="/admin/skills">
-						<ArrowLeftIcon className="mr-2 h-4 w-4" />
-						戻る
-					</Link>
-				</Button>
-				<h2 className="text-3xl font-bold tracking-tight">スキルの新規登録</h2>
+				<h2 className="text-3xl font-bold tracking-tight">スキル新規登録</h2>
 			</div>
 
-			<Card>
-				<CardHeader>
-					<CardTitle>スキル情報</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<Suspense fallback={<SkillFormSkeleton />}>
-						<SkillForm isNew={true} />
-					</Suspense>
-				</CardContent>
-			</Card>
+			<Suspense fallback={<SkillFormSkeleton />}>
+				<SkillForm isNew={true} />
+			</Suspense>
 		</>
 	);
 }

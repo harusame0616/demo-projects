@@ -92,21 +92,10 @@ export default function DepartmentDetailPage({
 		<>
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-2">
-					<Button variant="outline" size="sm" asChild>
-						<Link href="/admin/departments">
-							<ArrowLeftIcon className="mr-2 h-4 w-4" />
-							戻る
-						</Link>
-					</Button>
-					<h2 className="text-3xl font-bold tracking-tight">
-						{department.name}
-					</h2>
+					<h2 className="text-3xl font-bold tracking-tight">部署詳細</h2>
 				</div>
-				<Button asChild>
-					<Link href={`/admin/departments/${departmentId}/edit`}>
-						<PencilIcon className="mr-2 h-4 w-4" />
-						編集
-					</Link>
+				<Button asChild variant="outline">
+					<Link href={`/admin/departments/${departmentId}/edit`}>編集</Link>
 				</Button>
 			</div>
 

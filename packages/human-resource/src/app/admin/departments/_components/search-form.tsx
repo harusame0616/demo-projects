@@ -102,14 +102,11 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 									<FormItem className="col-span-4 sm:col-span-2">
 										<FormLabel>キーワード（部署名）</FormLabel>
 										<FormControl>
-											<div className="relative w-full">
-												<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-												<Input
-													className="pl-10 h-10 rounded-lg border-gray-200"
-													{...field}
-													aria-label="部署名で検索"
-												/>
-											</div>
+											<Input
+												className="h-10 rounded-lg border-gray-200"
+												{...field}
+												aria-label="部署名で検索"
+											/>
 										</FormControl>
 									</FormItem>
 								)}

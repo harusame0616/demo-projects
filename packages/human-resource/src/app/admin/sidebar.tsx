@@ -50,20 +50,6 @@ export function AppSidebar() {
 			<SidebarContent>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<Link href="/admin">
-							<SidebarMenuButton
-								asChild
-								isActive={pathname === "/admin"}
-								tooltip="ダッシュボード"
-							>
-								<div>
-									<LayoutDashboard className="h-5 w-5" />
-									<span>ダッシュボード</span>
-								</div>
-							</SidebarMenuButton>
-						</Link>
-					</SidebarMenuItem>
-					<SidebarMenuItem>
 						<Link href="/admin/employees">
 							<SidebarMenuButton
 								asChild
