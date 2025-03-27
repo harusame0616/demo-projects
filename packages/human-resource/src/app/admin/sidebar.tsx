@@ -88,10 +88,10 @@ export function AppSidebar() {
 
 	return (
 		<Sidebar variant="sidebar" collapsible="icon">
-			<SidebarHeader className="flex items-center">
+			<SidebarHeader className="flex items-center h-14 justify-center">
 				<div className="flex gap-2 w-full items-center justify-between">
-					{open && <h2 className="text-xl font-bold px-4 py-2">メニュー</h2>}
-					<SidebarTrigger />
+					{open && <h2 className="font-bold px-4 py-2">メニュー</h2>}
+					<SidebarTrigger className="py-2" />
 				</div>
 			</SidebarHeader>
 			<Separator />
@@ -99,7 +99,7 @@ export function AppSidebar() {
 				<SidebarMenu>
 					{MENU_ITEMS.map((item) => (
 						<SidebarMenuItem key={item.href}>
-							<Link href={item.href}>
+							<Link href={item.href} className="flex h-10 items-center">
 								<SidebarMenuButton
 									asChild
 									isActive={pathname === item.href}
@@ -107,7 +107,7 @@ export function AppSidebar() {
 									className="h-10"
 								>
 									<div>
-										<item.icon className="h-5 w-5" />
+										<item.icon className="h-5 w-5 ml-2" />
 										<span>{item.label}</span>
 									</div>
 								</SidebarMenuButton>

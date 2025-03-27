@@ -10,7 +10,7 @@ export default function PrivateLayout({
 		<SidebarProvider>
 			<div className="flex flex-col min-h-screen w-full">
 				<header className="border-b bg-background sticky top-0 z-50 md:hidden">
-					<div className="flex h-16 items-center justify-between px-6 md:peer-data-[state=collapsed]:ml-12 transition-[margin] duration-200 ease-linear">
+					<div className="flex h-16 items-center justify-between px-6 transition-[margin] duration-200 ease-linear">
 						<div className="flex items-center gap-4">
 							<div className="md:hidden">
 								<SidebarTrigger />
@@ -21,7 +21,7 @@ export default function PrivateLayout({
 				</header>
 				<div className="flex-1 flex overflow-hidden w-full">
 					<AppSidebar />
-					<main className="flex-1 p-6 overflow-auto w-full max-w-full transition-[margin] duration-200 ease-linear md:peer-data-[state=collapsed]:ml-12">
+					<main className="flex-1 p-6 overflow-auto w-full max-w-full transition-[margin] duration-200 ease-linear">
 						{children}
 					</main>
 				</div>
