@@ -2,6 +2,11 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import * as v from "valibot";
+import { valibotResolver } from "@hookform/resolvers/valibot";
 import {
 	Form,
 	FormControl,
@@ -9,51 +14,47 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import * as v from "valibot";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import type { SkillCertificationSearchParams } from "../../skills-certifications/_actions/skill-certification-actions";
 import { Card, CardContent } from "@/components/ui/card";
 
 // フォームのスキーマを定義
-const skillSearchSchema = v.object({
+const certificationSearchSchema = v.object({
 	query: v.string(),
 });
 
-type SkillSearchFormValues = {
+type CertificationSearchFormValues = {
 	query: string;
 };
 
-interface SkillSearchFormProps {
-	searchParams: SkillCertificationSearchParams;
+interface SearchFormPresenterProps {
+	defaultQuery: string;
 }
 
-export function SkillSearchForm({ searchParams }: SkillSearchFormProps) {
+export function SearchFormPresenter({
+	defaultQuery = "",
+}: SearchFormPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 
 	// フォームの初期値を設定
-	const defaultValues: SkillSearchFormValues = {
-		query: searchParams.query || "",
+	const defaultValues: CertificationSearchFormValues = {
+		query: defaultQuery,
 	};
 
 	// フォームを初期化
-	const form = useForm<SkillSearchFormValues>({
-		resolver: valibotResolver(skillSearchSchema),
+	const form = useForm<CertificationSearchFormValues>({
+		resolver: valibotResolver(certificationSearchSchema),
 		defaultValues,
 	});
 
 	// 外部からのpropsが変更されたらフォームの値をリセット
 	useEffect(() => {
 		form.reset({
-			query: searchParams.query || "",
+			query: defaultQuery || "",
 		});
-	}, [searchParams, form]);
+	}, [defaultQuery, form]);
 
 	// 検索処理
-	const handleSearch = (values: SkillSearchFormValues) => {
+	const handleSearch = (values: CertificationSearchFormValues) => {
 		const params = new URLSearchParams();
 
 		if (values.query) {
@@ -81,14 +82,16 @@ export function SkillSearchForm({ searchParams }: SkillSearchFormProps) {
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(handleSearch)}
-						className="grid grid-cols-4 gap-4"
+						className="gap-4 grid grid-cols-4"
 					>
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
 								<FormItem className="col-span-4 sm:col-span-2">
-									<FormLabel>キーワード（名称、説明）</FormLabel>
+									<FormLabel className="text-sm font-medium mb-1 block">
+										キーワード（資格名、説明、認定機関）
+									</FormLabel>
 									<FormControl>
 										<Input
 											className="h-10 rounded-lg border-gray-200"

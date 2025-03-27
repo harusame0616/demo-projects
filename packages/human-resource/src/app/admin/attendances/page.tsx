@@ -69,9 +69,9 @@ export default async function AttendancesPage({ searchParams }: PageProps) {
 	};
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-4">
 			<header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-				<h1 className="text-3xl font-bold tracking-tight">勤怠情報</h1>
+				<h1 className="text-2xl font-bold tracking-tight h-9">勤怠情報</h1>
 			</header>
 
 			<div className="flex flex-col space-y-6">

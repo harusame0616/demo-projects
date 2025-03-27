@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import {
-	getSkillCertifications,
-	type SkillCertificationSearchParams,
-} from "../skills-certifications/_actions/skill-certification-actions";
-import { CertificationList } from "./_components/certification-list";
-import { CertificationSearchForm } from "./_components/search-form";
-import type { SkillCertificationType } from "../skills-certifications/_data/skills-certifications-data";
-import { PlusIcon } from "lucide-react";
+import { Suspense } from "react";
+import { CertificationsContainer } from "./_components/certifications-container";
+import { SearchFormContainer } from "./_components/search-form-container";
+import { CertificationsSkeleton } from "./_components/certifications-skeleton";
+import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/skill-certification-actions";
+import { SearchFormPresenter } from "./_components/search-form-presenter";
 
 export const metadata: Metadata = {
 	title: "資格管理 | 人材管理システム",
@@ -24,30 +22,7 @@ export default async function CertificationsPage({
 	const resolvedParams = await searchParams;
 
 	// 検索パラメータを安全に取得
-	const query = resolvedParams.query;
-	const sort = resolvedParams.sort;
-	const order = resolvedParams.order as "asc" | "desc" | undefined;
-	const page = resolvedParams.page;
-
-	// 検索条件を基にデータを取得（常に資格のみ）
-	const paramsForFetch: SkillCertificationSearchParams = {
-		query,
-		sort,
-		order,
-		page,
-		type: "certification" as SkillCertificationType,
-	};
-	const { items: certifications, pagination } =
-		await getSkillCertifications(paramsForFetch);
-
-	// クライアントコンポーネントに渡すための安全なオブジェクト
-	const safeSearchParams: SkillCertificationSearchParams = {
-		query: query || undefined,
-		type: "certification" as SkillCertificationType,
-		sort: sort || undefined,
-		order,
-		page: page || undefined,
-	};
+	const query = resolvedParams.query || "";
 
 	return (
 		<div className="space-y-4">
@@ -58,13 +33,11 @@ export default async function CertificationsPage({
 				</Button>
 			</div>
 
-			<CertificationSearchForm searchParams={safeSearchParams} />
+			<SearchFormPresenter defaultQuery={query}  />
 
-			<CertificationList
-				certifications={certifications}
-				searchParams={safeSearchParams}
-				pagination={pagination}
-			/>
+			<Suspense fallback={<CertificationsSkeleton />}>
+				<CertificationsContainer searchParams={resolvedParams} />
+			</Suspense>
 		</div>
 	);
 }

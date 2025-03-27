@@ -14,7 +14,6 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import type { GradeSearchParams } from "../_actions/grade-actions";
 import { Card, CardContent } from "@/components/ui/card";
 
 // フォームのスキーマを定義
@@ -26,17 +25,19 @@ type GradeSearchFormValues = {
 	query: string;
 };
 
-interface SearchFormProps {
-	searchParams: GradeSearchParams;
+interface SearchFormPresenterProps {
+	defaultQuery: string;
 }
 
-export function SearchForm({ searchParams }: SearchFormProps) {
+export function SearchFormPresenter({
+	defaultQuery = "",
+}: SearchFormPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 
 	// フォームの初期値を設定
 	const defaultValues: GradeSearchFormValues = {
-		query: searchParams.query || "",
+		query: defaultQuery,
 	};
 
 	// フォームを初期化
@@ -48,9 +49,9 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 	// 外部からのpropsが変更されたらフォームの値をリセット
 	useEffect(() => {
 		form.reset({
-			query: searchParams.query || "",
+			query: defaultQuery || "",
 		});
-	}, [searchParams, form]);
+	}, [defaultQuery, form]);
 
 	// 検索処理
 	const handleSearch = (values: GradeSearchFormValues) => {

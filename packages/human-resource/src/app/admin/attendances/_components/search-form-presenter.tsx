@@ -179,7 +179,7 @@ export function SearchFormPresenter({
 
 						{/* 年月範囲選択 */}
 						<div className="col-span-4 sm:col-span-2">
-							<FormLabel>年月範囲</FormLabel>
+							<FormLabel>期間</FormLabel>
 							<div className="flex items-center gap-2">
 								<FormField
 									control={form.control}

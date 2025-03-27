@@ -21,21 +21,9 @@ import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Grade } from "../_data/grades-data";
-import type { GradeSearchParams } from "../_actions/grade-actions";
 
-// 日付をフォーマットする関数
-function formatDate(dateString: string): string {
-	const date = new Date(dateString);
-	return new Intl.DateTimeFormat("ja-JP", {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	}).format(date);
-}
-
-interface GradeListContainerProps {
+interface GradesPresenterProps {
 	grades: Grade[];
-	searchParams: GradeSearchParams;
 	pagination: {
 		total: number;
 		page: number;
@@ -44,69 +32,45 @@ interface GradeListContainerProps {
 	};
 }
 
-export function GradeListContainer({
-	grades,
-	searchParams,
-	pagination,
-}: GradeListContainerProps) {
+export function GradesPresenter({ grades, pagination }: GradesPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const params = useSearchParams();
-	const { sort = "id", order = "asc" } = searchParams;
+	const searchParams = useSearchParams();
 
-	// ソートハンドラー
-	const handleSort = (key: keyof Grade) => {
-		const newOrder = sort === key && order === "asc" ? "desc" : "asc";
-		const updatedParams = new URLSearchParams(params.toString());
+	// 現在のソート状態
+	const currentSort = searchParams.get("sort") || "id";
+	const currentOrder = searchParams.get("order") || "asc";
 
-		// 既存のパラメータを維持
-		if (searchParams.query) {
-			updatedParams.set("query", searchParams.query);
-		}
-		if (searchParams.page) {
-			updatedParams.set("page", searchParams.page.toString());
-		}
-
-		// ソート条件を更新
-		updatedParams.set("sort", key);
-		updatedParams.set("order", newOrder);
-
-		// デバッグ用ログ
-		console.log(
-			`Sorting: ${key}, Order: ${newOrder}, Params: ${updatedParams.toString()}`,
-		);
-
-		router.push(`${pathname}?${updatedParams.toString()}`);
+	// ページ変更処理
+	const handlePageChange = (page: number) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("page", page.toString());
+		router.push(`${pathname}?${params.toString()}`);
 	};
 
-	// ページ切り替え処理
-	const handlePageChange = (page: number) => {
-		const updatedParams = new URLSearchParams(params.toString());
+	// ソート処理
+	const handleSort = (column: keyof Grade) => {
+		const params = new URLSearchParams(searchParams.toString());
 
-		// 既存のパラメータを維持
-		if (searchParams.query) {
-			updatedParams.set("query", searchParams.query);
-		}
-		if (searchParams.sort) {
-			updatedParams.set("sort", searchParams.sort);
-		}
-		if (searchParams.order) {
-			updatedParams.set("order", searchParams.order);
+		// 同じカラムをクリックした場合は、昇順・降順を切り替え
+		if (currentSort === column) {
+			params.set("order", currentOrder === "asc" ? "desc" : "asc");
+		} else {
+			// 異なるカラムの場合は、そのカラムの昇順でソート
+			params.set("sort", column as string);
+			params.set("order", "asc");
 		}
 
-		// ページを更新
-		updatedParams.set("page", page.toString());
+		// ページを1に戻す
+		params.delete("page");
 
-		router.push(`${pathname}?${updatedParams.toString()}`);
+		router.push(`${pathname}?${params.toString()}`);
 	};
 
 	// ソートアイコンの表示
 	const getSortIcon = (key: keyof Grade) => {
-		// デバッグ用ログ
-		console.log(`Column: ${key}, Sort: ${sort}, Order: ${order}`);
-
-		if (sort !== key) return null;
-		return order === "asc" ? (
+		if (currentSort !== key) return null;
+		return currentOrder === "asc" ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
 		) : (
 			<ArrowDownIcon className="h-4 w-4 ml-1" />
@@ -162,7 +126,7 @@ export function GradeListContainer({
 									<TableCell className="whitespace-nowrap">
 										<Link
 											href={`/admin/grades/${grade.id}`}
-											className="font-medium  underline "
+											className="font-medium underline"
 										>
 											{grade.id}
 										</Link>
@@ -195,7 +159,7 @@ export function GradeListContainer({
 												<DropdownMenuItem asChild>
 													<Link
 														href={`/admin/grades/${grade.id}`}
-														className="underline "
+														className="underline"
 													>
 														詳細を表示
 													</Link>
@@ -203,7 +167,7 @@ export function GradeListContainer({
 												<DropdownMenuItem asChild>
 													<Link
 														href={`/admin/grades/${grade.id}/edit`}
-														className="underline "
+														className="underline"
 													>
 														編集
 													</Link>
