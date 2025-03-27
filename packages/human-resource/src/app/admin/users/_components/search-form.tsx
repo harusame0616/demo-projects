@@ -31,7 +31,7 @@ const searchFormSchema = v.object({
 	status: v.optional(v.string()),
 });
 
-type SearchFormValues = v.Input<typeof searchFormSchema>;
+type SearchFormValues = v.InferInput<typeof searchFormSchema>;
 
 interface RoleOption {
 	id: string;
@@ -112,13 +112,13 @@ export function SearchForm({
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
-						className="grid grid-cols-1 md:grid-cols-4 gap-4"
+						className="grid grid-cols-4 gap-4"
 					>
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="col-span-2">
+								<FormItem className="col-span-4 sm:col-span-2">
 									<FormLabel>
 										キーワード（名前、メールアドレス、従業員コード）
 									</FormLabel>
@@ -141,14 +141,14 @@ export function SearchForm({
 							control={form.control}
 							name="role"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>権限</FormLabel>
 									<Select
 										onValueChange={field.onChange}
 										defaultValue={field.value}
 									>
 										<FormControl>
-											<SelectTrigger className="h-10 border-gray-200 w-full min-h-10">
+											<SelectTrigger className="h-10 border-gray-200 w-full min-h-10 overflow-hidden">
 												<SelectValue placeholder="すべての権限" />
 											</SelectTrigger>
 										</FormControl>
@@ -169,14 +169,14 @@ export function SearchForm({
 							control={form.control}
 							name="status"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>ステータス</FormLabel>
 									<Select
 										onValueChange={field.onChange}
 										defaultValue={field.value}
 									>
 										<FormControl>
-											<SelectTrigger className="h-10 border-gray-200 w-full min-h-10">
+											<SelectTrigger className="h-10 border-gray-200 w-full min-h-10 overflow-hidden">
 												<SelectValue placeholder="すべてのステータス" />
 											</SelectTrigger>
 										</FormControl>
@@ -193,14 +193,14 @@ export function SearchForm({
 							)}
 						/>
 
-						<div className="col-span-4 flex gap-2">
-							<Button type="submit" className="h-10 w-24">
+						<div className="col-span-4 flex gap-2 flex-wrap">
+							<Button type="submit" className="h-10 sm:max-w-32 w-full">
 								検索
 							</Button>
 							<Button
 								type="button"
 								variant="outline"
-								className="h-10 w-24"
+								className="h-10 sm:max-w-32 w-full"
 								onClick={clearFilters}
 							>
 								クリア

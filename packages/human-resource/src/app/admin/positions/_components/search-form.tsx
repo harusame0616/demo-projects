@@ -119,13 +119,13 @@ export function SearchForm({
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(handleSearch)}
-						className="grid grid-cols-1 md:grid-cols-4 gap-4"
+						className="grid grid-cols-4 gap-4"
 					>
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="col-span-2">
+								<FormItem className="col-span-4 sm:col-span-2">
 									<FormLabel>キーワード（役職名、説明）</FormLabel>
 									<FormControl>
 										<div className="relative w-full">
@@ -146,12 +146,12 @@ export function SearchForm({
 							control={form.control}
 							name="level"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>レベル</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<SelectTrigger
-												className="min-h-10 w-full border-gray-200"
+												className="min-h-10 w-full overflow-hidden"
 												aria-label="レベルでフィルター"
 											>
 												<SelectValue placeholder="レベルでフィルター" />
@@ -170,18 +170,15 @@ export function SearchForm({
 							)}
 						/>
 
-						<div className="col-span-4 flex gap-4">
-							<Button
-								type="submit"
-								className="bg-black text-white h-10 rounded-lg w-24"
-							>
+						<div className="col-span-4 flex gap-2 flex-wrap">
+							<Button type="submit" className="h-10 sm:max-w-32 w-full">
 								検索
 							</Button>
 							<Button
 								onClick={handleClear}
 								variant="outline"
 								type="button"
-								className="border-gray-300 h-10 rounded-lg w-24"
+								className="h-10 sm:max-w-32 w-full"
 							>
 								クリア
 							</Button>

@@ -82,13 +82,13 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(handleSearch)}
-						className="gap-4 grid grid-cols-1 md:grid-cols-4"
+						className="gap-4 grid grid-cols-4"
 					>
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="col-span-2">
+								<FormItem className="col-span-4 sm:col-span-2">
 									<FormLabel className="text-sm font-medium mb-1 block">
 										キーワード（グレード）
 									</FormLabel>
@@ -107,15 +107,15 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 						/>
 
 						{/* ボタン */}
-						<div className="col-span-4 flex gap-2">
-							<Button type="submit" className="h-10 w-32">
+						<div className="col-span-4 flex gap-2 flex-wrap">
+							<Button type="submit" className="h-10 sm:max-w-32 w-full">
 								検索
 							</Button>
 							<Button
 								onClick={handleClear}
 								variant="outline"
 								type="button"
-								className="h-10 w-32"
+								className="h-10 sm:max-w-32 w-full"
 							>
 								クリア
 							</Button>

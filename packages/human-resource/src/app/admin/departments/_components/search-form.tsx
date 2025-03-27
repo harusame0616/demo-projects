@@ -94,12 +94,12 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 			<CardContent>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(handleSearch)}>
-						<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+						<div className="grid grid-cols-4 gap-4">
 							<FormField
 								control={form.control}
 								name="query"
 								render={({ field }) => (
-									<FormItem className="col-span-2">
+									<FormItem className="col-span-4 sm:col-span-2">
 										<FormLabel>キーワード（部署名）</FormLabel>
 										<FormControl>
 											<div className="relative w-full">
@@ -115,15 +115,15 @@ export function SearchForm({ searchQuery, onSearch }: SearchFormProps) {
 								)}
 							/>
 
-							<div className="col-span-4 flex gap-2">
-								<Button type="submit" className="h-10 w-24">
+							<div className="col-span-4 flex gap-2 flex-wrap">
+								<Button type="submit" className="h-10 sm:max-w-32 w-full">
 									検索
 								</Button>
 								<Button
 									onClick={handleClear}
 									variant="outline"
 									type="button"
-									className="h-10 w-24"
+									className="h-10 sm:max-w-32 w-full"
 								>
 									クリア
 								</Button>

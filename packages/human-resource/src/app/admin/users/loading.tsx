@@ -7,7 +7,7 @@ export default function Loading() {
 			<div className="flex justify-between items-center">
 				<Skeleton className="h-8 w-[200px]" />
 				<Button disabled variant="outline">
-					ユーザーを追加
+					新規作成
 				</Button>
 			</div>
 

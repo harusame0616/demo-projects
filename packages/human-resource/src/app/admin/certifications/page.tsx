@@ -6,7 +6,7 @@ import {
 	type SkillCertificationSearchParams,
 } from "../skills-certifications/_actions/skill-certification-actions";
 import { CertificationList } from "./_components/certification-list";
-import { CertificationSearchForm } from "./_components/certification-search-form";
+import { CertificationSearchForm } from "./_components/search-form";
 import type { SkillCertificationType } from "../skills-certifications/_data/skills-certifications-data";
 import { PlusIcon } from "lucide-react";
 
@@ -53,11 +53,8 @@ export default async function CertificationsPage({
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
 				<h1 className="text-2xl font-bold tracking-tight">資格一覧</h1>
-				<Button asChild>
-					<Link href="/admin/certifications/new">
-						<PlusIcon className="h-4 w-4 mr-2" />
-						資格追加
-					</Link>
+				<Button asChild variant="outline">
+					<Link href="/admin/certifications/new">新規作成</Link>
 				</Button>
 			</div>
 

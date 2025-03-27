@@ -109,14 +109,14 @@ export function SearchForm({
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(handleSubmit)}
-						className="gap-4 grid grid-cols-1 md:grid-cols-4"
+						className="gap-4 grid grid-cols-4"
 					>
 						{/* 検索クエリ（従業員名またはID） */}
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="col-span-2">
+								<FormItem className="col-span-4 sm:col-span-2">
 									<FormLabel>キーワード（名前、ID）</FormLabel>
 									<FormControl>
 										<Input
@@ -132,14 +132,14 @@ export function SearchForm({
 							control={form.control}
 							name="departmentId"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>部署</FormLabel>
 									<Select
 										onValueChange={field.onChange}
 										defaultValue={field.value}
 									>
 										<FormControl>
-											<SelectTrigger>
+											<SelectTrigger className="w-full overflow-hidden">
 												<SelectValue placeholder="部署を選択" />
 											</SelectTrigger>
 										</FormControl>
@@ -157,7 +157,7 @@ export function SearchForm({
 						/>
 
 						{/* 年月範囲選択 */}
-						<div className="col-span-2">
+						<div className="col-span-4 sm:col-span-2">
 							<FormLabel>年月範囲</FormLabel>
 							<div className="flex items-center gap-2">
 								<FormField
@@ -196,8 +196,8 @@ export function SearchForm({
 							</div>
 						</div>
 
-						<div className="col-span-4 flex gap-2">
-							<Button type="submit" className="flex items-center gap-1">
+						<div className="col-span-4 flex gap-2 flex-wrap">
+							<Button type="submit" className="h-10 sm:max-w-32 w-full">
 								<SearchIcon className="w-4 h-4" />
 								検索
 							</Button>
@@ -205,7 +205,7 @@ export function SearchForm({
 								type="button"
 								variant="outline"
 								onClick={handleReset}
-								className="flex items-center gap-1"
+								className="h-10 sm:max-w-32 w-full"
 							>
 								リセット
 							</Button>

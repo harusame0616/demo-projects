@@ -19,30 +19,32 @@ import type { SkillCertificationSearchParams } from "../../skills-certifications
 import { Card, CardContent } from "@/components/ui/card";
 
 // フォームのスキーマを定義
-const skillSearchSchema = v.object({
+const certificationSearchSchema = v.object({
 	query: v.string(),
 });
 
-type SkillSearchFormValues = {
+type CertificationSearchFormValues = {
 	query: string;
 };
 
-interface SkillSearchFormProps {
+interface CertificationSearchFormProps {
 	searchParams: SkillCertificationSearchParams;
 }
 
-export function SkillSearchForm({ searchParams }: SkillSearchFormProps) {
+export function CertificationSearchForm({
+	searchParams,
+}: CertificationSearchFormProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 
 	// フォームの初期値を設定
-	const defaultValues: SkillSearchFormValues = {
+	const defaultValues: CertificationSearchFormValues = {
 		query: searchParams.query || "",
 	};
 
 	// フォームを初期化
-	const form = useForm<SkillSearchFormValues>({
-		resolver: valibotResolver(skillSearchSchema),
+	const form = useForm<CertificationSearchFormValues>({
+		resolver: valibotResolver(certificationSearchSchema),
 		defaultValues,
 	});
 
@@ -54,7 +56,7 @@ export function SkillSearchForm({ searchParams }: SkillSearchFormProps) {
 	}, [searchParams, form]);
 
 	// 検索処理
-	const handleSearch = (values: SkillSearchFormValues) => {
+	const handleSearch = (values: CertificationSearchFormValues) => {
 		const params = new URLSearchParams();
 
 		if (values.query) {
@@ -82,13 +84,13 @@ export function SkillSearchForm({ searchParams }: SkillSearchFormProps) {
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(handleSearch)}
-						className="grid grid-cols-1 md:grid-cols-4 gap-4"
+						className="grid grid-cols-4 gap-4"
 					>
 						<FormField
 							control={form.control}
 							name="query"
 							render={({ field }) => (
-								<FormItem className="col-span-2">
+								<FormItem className="col-span-4 sm:col-span-2">
 									<FormLabel>キーワード（名称、説明）</FormLabel>
 									<FormControl>
 										<div className="relative w-full">
@@ -96,8 +98,8 @@ export function SkillSearchForm({ searchParams }: SkillSearchFormProps) {
 											<Input
 												className="pl-10 w-full h-10 rounded-lg"
 												{...field}
-												aria-label="スキルを検索"
-												placeholder="スキル名や説明を入力"
+												aria-label="資格を検索"
+												placeholder="資格名や説明を入力"
 											/>
 										</div>
 									</FormControl>
@@ -106,15 +108,15 @@ export function SkillSearchForm({ searchParams }: SkillSearchFormProps) {
 						/>
 
 						{/* ボタン */}
-						<div className="col-span-2 flex gap-4">
-							<Button type="submit" className="h-10 w-32">
+						<div className="col-span-4 flex gap-2 flex-wrap">
+							<Button type="submit" className="h-10 sm:max-w-32 w-full">
 								検索
 							</Button>
 							<Button
 								onClick={handleClear}
 								variant="outline"
 								type="button"
-								className="h-10 w-32"
+								className="h-10 sm:max-w-32 w-full"
 							>
 								クリア
 							</Button>

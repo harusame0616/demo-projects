@@ -246,15 +246,15 @@ export function SearchForm({ searchParams }: SearchFormProps) {
 						/>
 
 						{/* ボタン */}
-						<div className="col-span-4 flex gap-2">
-							<Button type="submit" className="h-10 w-32">
+						<div className="col-span-4 flex gap-2 flex-wrap">
+							<Button type="submit" className="h-10 sm:max-w-32 w-full">
 								検索
 							</Button>
 							<Button
 								onClick={handleClear}
 								variant="outline"
 								type="button"
-								className="h-10 w-32"
+								className="h-10 sm:max-w-32 w-full"
 							>
 								クリア
 							</Button>
