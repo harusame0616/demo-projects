@@ -31,7 +31,7 @@ const employeeFilterSchema = v.object({
 
 type EmployeeFilterFormValues = v.InferInput<typeof employeeFilterSchema>;
 
-interface SearchFormProps {
+interface SearchFormPresenterProps {
 	departmentOptions: { value: string; label: string }[];
 	positionOptions: { value: string; label: string }[];
 	searchQuery?: string;
@@ -39,13 +39,13 @@ interface SearchFormProps {
 	currentPosition?: string;
 }
 
-export function SearchForm({
+export function SearchFormPresenter({
 	departmentOptions,
 	positionOptions,
 	searchQuery = "",
 	currentDepartment = "all",
 	currentPosition = "all",
-}: SearchFormProps) {
+}: SearchFormPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 
@@ -137,7 +137,11 @@ export function SearchForm({
 								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>部署</FormLabel>
 									<FormControl>
-										<Select value={field.value} onValueChange={field.onChange}>
+										<Select
+											value={field.value}
+											onValueChange={field.onChange}
+											disabled={departmentOptions.length === 0}
+										>
 											<SelectTrigger
 												className="min-h-10 w-full min-w-0 overflow-hidden"
 												aria-label="部署でフィルター"
@@ -167,7 +171,11 @@ export function SearchForm({
 								<FormItem className="col-span-4 sm:col-span-1">
 									<FormLabel>役職</FormLabel>
 									<FormControl>
-										<Select value={field.value} onValueChange={field.onChange}>
+										<Select
+											value={field.value}
+											onValueChange={field.onChange}
+											disabled={positionOptions.length === 0}
+										>
 											<SelectTrigger
 												aria-label="役職でフィルター"
 												className="min-h-10 min-w-0 w-full overflow-hidden"
@@ -191,7 +199,13 @@ export function SearchForm({
 						/>
 
 						<div className="col-span-4 flex gap-2 flex-wrap">
-							<Button type="submit" className="h-10 sm:max-w-32 w-full">
+							<Button
+								type="submit"
+								className="h-10 sm:max-w-32 w-full"
+								disabled={
+									departmentOptions.length === 0 && positionOptions.length === 0
+								}
+							>
 								検索
 							</Button>
 							<Button
@@ -199,6 +213,9 @@ export function SearchForm({
 								type="button"
 								variant="outline"
 								className="h-10 sm:max-w-32 w-full"
+								disabled={
+									departmentOptions.length === 0 && positionOptions.length === 0
+								}
 							>
 								クリア
 							</Button>

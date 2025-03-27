@@ -5,7 +5,7 @@ import { EmployeeTable } from "./employee-table";
 import { PaginationNav } from "@/components/common/pagination-nav";
 import type { Employee } from "../types";
 
-interface EmployeeListContainerProps {
+interface EmployeesPresenterProps {
 	employees: Employee[];
 	searchParams: {
 		query?: string;
@@ -23,11 +23,11 @@ interface EmployeeListContainerProps {
 	};
 }
 
-export function EmployeeListContainer({
+export function EmployeesPresenter({
 	employees,
 	searchParams,
 	pagination,
-}: EmployeeListContainerProps) {
+}: EmployeesPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
