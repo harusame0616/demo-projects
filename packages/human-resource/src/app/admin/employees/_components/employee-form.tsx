@@ -18,38 +18,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import * as v from "valibot";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import {
-	ArrowLeftIcon,
-	Check,
-	ChevronsUpDown,
-	PencilIcon,
-	PlusIcon,
-	SaveIcon,
-	UserIcon,
-	XIcon,
-} from "lucide-react";
+import { UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import type { Employee } from "../_actions/employee-actions";
-import { Badge } from "@/components/ui/badge";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-} from "@/components/ui/command";
-import { cn } from "@/lib/utils";
+import * as v from "valibot";
 
 // フォーム用の拡張された従業員タイプ
 interface EmployeeFormValues {
@@ -412,10 +386,7 @@ export function EmployeeForm({
 				</Card>
 
 				<div className="flex justify-start pt-4 gap-2">
-					<Button type="submit">
-						<SaveIcon className="h-4 w-4 mr-2" />
-						{isEditing ? "更新" : "登録"}
-					</Button>
+					<Button type="submit">{isEditing ? "更新" : "登録"}</Button>
 					<Button variant="outline" asChild>
 						<Link
 							href={

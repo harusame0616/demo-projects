@@ -1,16 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
 import {
 	Command,
 	CommandEmpty,
@@ -19,16 +11,17 @@ import {
 	CommandItem,
 	CommandList,
 } from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
 import {
-	ArrowLeftIcon,
-	Check,
-	ChevronsUpDown,
-	XIcon,
-	SaveIcon,
-	GraduationCapIcon,
-} from "lucide-react";
-import Link from "next/link";
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { Check, ChevronsUpDown, GraduationCapIcon, XIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 
 // スキルと資格の選択肢
@@ -307,10 +300,7 @@ export function SkillsForm({
 				</CardContent>
 			</Card>
 			<div className="flex gap-2">
-				<Button onClick={handleSubmit}>
-					<SaveIcon className="mr-2 h-4 w-4" />
-					保存
-				</Button>
+				<Button onClick={handleSubmit}>保存</Button>
 				<Button variant="outline" asChild>
 					<Link href={`/admin/employees/${employeeId}/skills`}>キャンセル</Link>
 				</Button>
