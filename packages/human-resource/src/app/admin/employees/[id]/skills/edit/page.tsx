@@ -11,11 +11,12 @@ export const metadata = {
 	description: "従業員のスキルと資格情報を編集します",
 };
 
-export default function EmployeeSkillsEditPage({
+export default async function EmployeeSkillsEditPage({
 	params,
-}: { params: { id: string } }) {
+}: { params: Promise<{ id: string }> }) {
+	const { id } = await params;
 	// モックデータから従業員基本情報を取得
-	const employee = mockEmployees.find((emp) => emp.id === params.id);
+	const employee = mockEmployees.find((emp) => emp.id === id);
 
 	if (!employee) {
 		notFound();

@@ -10,11 +10,12 @@ export const metadata = {
 	description: "従業員の基本情報",
 };
 
-export default function EmployeeInfoPage({
+export default async function EmployeeInfoPage({
 	params,
-}: { params: { id: string } }) {
+}: { params: Promise<{ id: string }> }) {
+	const { id } = await params;
 	// モックデータから従業員基本情報を取得
-	const employee = mockEmployees.find((emp) => emp.id === params.id);
+	const employee = mockEmployees.find((emp) => emp.id === id);
 
 	if (!employee) {
 		return null; // レイアウトで処理するので、ここではnullを返す

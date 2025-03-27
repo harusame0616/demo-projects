@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
-import { Suspense, use } from "react";
+import { Suspense } from "react";
 import { type Grade, gradeData } from "../../_data/grades-data";
 import { GradeForm } from "../../_components/grade-form";
 import { GradeFormSkeleton } from "../../_components/grade-form-skeleton";
@@ -18,10 +18,10 @@ interface GradeEditPageProps {
 export async function generateMetadata({
 	params,
 }: {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-	const gradeId = params.id;
-	const grade = gradeData.find((grade: Grade) => grade.id === gradeId);
+	const { id } = await params;
+	const grade = gradeData.find((grade: Grade) => grade.id === id);
 
 	if (!grade) {
 		return {
@@ -36,17 +36,16 @@ export async function generateMetadata({
 	};
 }
 
-export default function GradeEditPage({ params }: GradeEditPageProps) {
-	// paramsをReact.use()でアンラップする
-	const { id: gradeId } = use(params);
-	const grade = gradeData.find((grade: Grade) => grade.id === gradeId);
+export default async function GradeEditPage({ params }: GradeEditPageProps) {
+	const { id } = await params;
+	const grade = gradeData.find((grade: Grade) => grade.id === id);
 
 	if (!grade) {
 		return (
 			<div className="flex flex-col items-center justify-center h-[50vh]">
 				<h2 className="text-2xl font-bold mb-4">グレードが見つかりません</h2>
 				<p className="text-gray-500 mb-6">
-					指定されたグレードID: {gradeId} のグレードは存在しません。
+					指定されたグレードID: {id} のグレードは存在しません。
 				</p>
 				<Button asChild>
 					<Link href="/admin/grades">

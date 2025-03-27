@@ -25,10 +25,11 @@ export const metadata: Metadata = {
 export default async function UserDetailPage({
 	params,
 }: {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }) {
+	const { id } = await params;
 	// モックデータからユーザー情報を取得
-	const user = await getUserById(params.id);
+	const user = await getUserById(id);
 
 	if (!user) {
 		notFound();

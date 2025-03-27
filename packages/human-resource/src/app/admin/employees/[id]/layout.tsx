@@ -10,15 +10,15 @@ import type { ReactNode } from "react";
 import { mockEmployees } from "@/app/_mocks/employees";
 import type { Employee } from "@/app/_mocks/employees";
 
-export default function EmployeeLayout({
+export default async function EmployeeLayout({
 	children,
 	params,
 }: {
 	children: ReactNode;
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }) {
-	const employeeId = params.id;
-	const employee = mockEmployees.find((emp) => emp.id === employeeId);
+	const { id } = await params;
+	const employee = mockEmployees.find((emp) => emp.id === id);
 
 	if (!employee) {
 		return (

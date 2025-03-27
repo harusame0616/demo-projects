@@ -13,19 +13,15 @@ import { type Department, departmentData } from "../_data/departments-data";
 import type { Metadata } from "next";
 
 interface DepartmentDetailPageProps {
-	params: {
-		id: string;
-	};
+	params: Promise<{ id: string }>;
 }
 
 // メタデータを動的に生成
 export async function generateMetadata({
 	params,
 }: DepartmentDetailPageProps): Promise<Metadata> {
-	const departmentId = params.id;
-	const department = departmentData.find(
-		(dept: Department) => dept.id === departmentId,
-	);
+	const { id } = await params;
+	const department = departmentData.find((dept: Department) => dept.id === id);
 
 	if (!department) {
 		return {
@@ -50,11 +46,12 @@ function formatDate(dateString: string): string {
 	}).format(date);
 }
 
-export default function DepartmentDetailPage({
+export default async function DepartmentDetailPage({
 	params,
 }: DepartmentDetailPageProps) {
+	const { id } = await params;
 	// 部署ID
-	const departmentId = params.id;
+	const departmentId = id;
 
 	// 部署データを取得
 	const department = departmentData.find(

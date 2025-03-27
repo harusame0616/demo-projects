@@ -19,10 +19,11 @@ export const metadata: Metadata = {
 export default async function EditUserPage({
 	params,
 }: {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }) {
+	const { id } = await params;
 	// モックデータからユーザー情報を取得
-	const user = await getUserById(params.id);
+	const user = await getUserById(id);
 
 	// サーバーサイドでロールとステータスのオプションを取得
 	const roleOptions = await getUserRoles();

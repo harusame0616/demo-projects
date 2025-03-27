@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
-import { Suspense, use } from "react";
+import { Suspense } from "react";
 import { type Department, departmentData } from "../../_data/departments-data";
 import { DepartmentForm } from "../../_components/department-form";
 import { DepartmentFormSkeleton } from "../../_components/department-form-skeleton";
@@ -18,12 +18,10 @@ interface DepartmentEditPageProps {
 export async function generateMetadata({
 	params,
 }: {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-	const departmentId = params.id;
-	const department = departmentData.find(
-		(dept: Department) => dept.id === departmentId,
-	);
+	const { id } = await params;
+	const department = departmentData.find((dept: Department) => dept.id === id);
 
 	if (!department) {
 		return {
@@ -38,22 +36,19 @@ export async function generateMetadata({
 	};
 }
 
-export default function DepartmentEditPage({
+export default async function DepartmentEditPage({
 	params,
 }: DepartmentEditPageProps) {
-	// paramsをReact.use()でアンラップする
-	const { id: departmentId } = use(params);
+	const { id } = await params;
 
-	const department = departmentData.find(
-		(dept: Department) => dept.id === departmentId,
-	);
+	const department = departmentData.find((dept: Department) => dept.id === id);
 
 	if (!department) {
 		return (
 			<div className="flex flex-col items-center justify-center h-[50vh]">
 				<h2 className="text-2xl font-bold mb-4">部署が見つかりません</h2>
 				<p className="text-gray-500 mb-6">
-					指定された部署ID: {departmentId} の部署は存在しません。
+					指定された部署ID: {id} の部署は存在しません。
 				</p>
 				<Button asChild>
 					<Link href="/admin/departments">

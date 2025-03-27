@@ -17,13 +17,11 @@ export const metadata: Metadata = {
 export default async function EmployeeAttendancePage({
 	params,
 }: {
-	params: {
-		id: string;
-	};
+	params: Promise<{ id: string }>;
 }) {
+	const { id } = await params;
 	// 従業員情報を取得
-	const employeeId = params.id;
-	const employee = mockEmployees.find((emp) => emp.id === employeeId);
+	const employee = mockEmployees.find((emp) => emp.id === id);
 
 	if (!employee) {
 		notFound();
@@ -33,7 +31,7 @@ export default async function EmployeeAttendancePage({
 	const employeeWithDefaults = getEmployeeWithDefaults(employee);
 
 	// 勤怠情報を取得
-	const attendanceSummary = await getEmployeeAttendanceSummary(employeeId);
+	const attendanceSummary = await getEmployeeAttendanceSummary(id);
 
 	// 勤怠情報がない場合の処理
 	if (!attendanceSummary) {

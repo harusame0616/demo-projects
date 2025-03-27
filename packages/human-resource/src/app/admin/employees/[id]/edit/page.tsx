@@ -35,9 +35,10 @@ interface FormEmployee {
 
 export default async function EmployeeEditPage({
 	params,
-}: { params: { id: string } }) {
+}: { params: Promise<{ id: string }> }) {
+	const { id } = await params;
 	// モックデータから従業員基本情報を取得
-	const employee = mockEmployees.find((emp) => emp.id === params.id);
+	const employee = mockEmployees.find((emp) => emp.id === id);
 
 	// 部署と役職のオプションを取得
 	const departmentOptions = await getDepartments();

@@ -5,12 +5,10 @@ import {
 	BadgeIcon,
 	CalendarIcon,
 	DollarSignIcon,
-	PencilIcon,
 	StarIcon,
 	UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { use } from "react";
 import { type Grade, gradeData } from "../_data/grades-data";
 
 import type { Metadata } from "next";
@@ -25,10 +23,10 @@ interface GradeDetailPageProps {
 export async function generateMetadata({
 	params,
 }: {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-	const gradeId = params.id;
-	const grade = gradeData.find((grade: Grade) => grade.id === gradeId);
+	const { id } = await params;
+	const grade = gradeData.find((grade: Grade) => grade.id === id);
 
 	if (!grade) {
 		return {
@@ -58,19 +56,20 @@ function formatSalaryRange(min: number, max: number): string {
 	return `${min.toLocaleString()}円 〜 ${max.toLocaleString()}円`;
 }
 
-export default function GradeDetailPage({ params }: GradeDetailPageProps) {
-	// paramsをReact.use()でアンラップする
-	const { id: gradeId } = use(params);
+export default async function GradeDetailPage({
+	params,
+}: GradeDetailPageProps) {
+	const { id } = await params;
 
 	// グレードデータを取得
-	const grade = gradeData.find((grade: Grade) => grade.id === gradeId);
+	const grade = gradeData.find((grade: Grade) => grade.id === id);
 
 	if (!grade) {
 		return (
 			<div className="flex flex-col items-center justify-center h-[50vh]">
 				<h2 className="text-2xl font-bold mb-4">グレードが見つかりません</h2>
 				<p className="text-gray-500 mb-6">
-					指定されたグレードID: {gradeId} のグレードは存在しません。
+					指定されたグレードID: {id} のグレードは存在しません。
 				</p>
 				<Button asChild>
 					<Link href="/admin/grades">
@@ -89,7 +88,7 @@ export default function GradeDetailPage({ params }: GradeDetailPageProps) {
 					<h2 className="text-3xl font-bold tracking-tight">グレード詳細</h2>
 				</div>
 				<Button asChild variant="outline">
-					<Link href={`/admin/grades/${gradeId}/edit`}>編集</Link>
+					<Link href={`/admin/grades/${id}/edit`}>編集</Link>
 				</Button>
 			</div>
 
