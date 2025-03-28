@@ -27,6 +27,8 @@ import * as v from "valibot";
 
 // フォーム用の拡張された従業員タイプ
 interface EmployeeFormValues {
+	certifications: never[];
+	skills: never[];
 	id?: string;
 	name: string;
 	nameKana: string;
@@ -65,13 +67,15 @@ const formSchema = v.object({
 	grade: v.string(),
 	birthDate: v.pipe(v.string(), v.minLength(1, "生年月日は必須です")),
 	joinDate: v.pipe(v.string(), v.minLength(1, "入社日は必須です")),
+	certifications: v.array(v.never()),
+	skills: v.array(v.never()),
 });
 
 interface EmployeeFormProps {
 	employee?: Partial<EmployeeFormValues>; // 編集時に使用する既存データ（スキル・資格を削除）
 	departmentOptions: { value: string; label: string }[];
 	positionOptions: { value: string; label: string }[];
-	onSubmit: (values: EmployeeFormValues) => void; // スキル・資格を削除
+	onSubmitAction: (values: EmployeeFormValues) => void; // スキル・資格を削除
 }
 
 // スキルと資格の選択肢の定義は削除可能ですが、他で参照されている可能性があるため残しておきます
@@ -80,7 +84,7 @@ export function EmployeeForm({
 	employee,
 	departmentOptions,
 	positionOptions,
-	onSubmit,
+	onSubmitAction,
 }: EmployeeFormProps) {
 	const router = useRouter();
 	const isEditing = !!employee?.id;
@@ -98,6 +102,8 @@ export function EmployeeForm({
 		grade: employee?.grade || "",
 		birthDate: employee?.birthDate || "",
 		joinDate: employee?.joinDate || new Date().toISOString().split("T")[0], // 今日の日付をデフォルト値に
+		certifications: [],
+		skills: [],
 	};
 
 	// フォーム定義
@@ -107,13 +113,13 @@ export function EmployeeForm({
 	});
 
 	// キャンセルボタンのハンドラ
-	const handleCancel = () => {
+	const _handleCancel = () => {
 		router.push("/admin/employees");
 	};
 
 	// フォーム送信ハンドラ
 	const handleSubmit = (values: EmployeeFormValues) => {
-		onSubmit(values); // スキル・資格を削除
+		onSubmitAction(values); // スキル・資格を削除
 	};
 
 	return (

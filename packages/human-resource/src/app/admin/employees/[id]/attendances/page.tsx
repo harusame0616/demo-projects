@@ -1,8 +1,4 @@
-import {
-	type Employee,
-	getEmployeeWithDefaults,
-	mockEmployees,
-} from "@/app/_mocks/employees";
+import { type Employee, mockEmployees } from "@/app/_mocks/employees";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -27,9 +23,6 @@ export default async function EmployeeAttendancePage({
 		notFound();
 	}
 
-	// デフォルト値を含む従業員情報を取得
-	const employeeWithDefaults = getEmployeeWithDefaults(employee);
-
 	// 勤怠情報を取得
 	const attendanceSummary = await getEmployeeAttendanceSummary(id);
 
@@ -46,10 +39,7 @@ export default async function EmployeeAttendancePage({
 
 	return (
 		<Suspense fallback={<div>読み込み中...</div>}>
-			<EmployeeAttendanceSummary
-				data={attendanceSummary}
-				employee={employeeWithDefaults}
-			/>
+			<EmployeeAttendanceSummary data={attendanceSummary} />
 		</Suspense>
 	);
 }

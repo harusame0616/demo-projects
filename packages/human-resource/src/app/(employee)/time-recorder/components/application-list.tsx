@@ -81,7 +81,7 @@ const mockApplications: Application[] = [
 ];
 
 export function ApplicationList() {
-	const [applications, setApplications] = useState(mockApplications);
+	const [applications, _setApplications] = useState(mockApplications);
 	const [activeTab, setActiveTab] = useState<"all" | ApplicationStatus>("all");
 
 	// タブに応じてフィルタリングされた申請リストを取得

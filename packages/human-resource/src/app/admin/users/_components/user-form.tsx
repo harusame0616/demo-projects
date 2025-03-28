@@ -92,7 +92,6 @@ export function UserForm({
 	employeeOptions,
 	onSubmit,
 }: UserFormProps) {
-	const router = useRouter();
 	const isEditing = !!user?.id;
 
 	// フォームの初期値設定
@@ -101,7 +100,7 @@ export function UserForm({
 		email: user?.email || "",
 		role: user?.role || "user",
 		status: user?.status || "active",
-		employeeId: user?.employeeId,
+		employeeId: user?.employeeId || null,
 	};
 
 	// フォーム定義
@@ -109,11 +108,6 @@ export function UserForm({
 		resolver: valibotResolver(formSchema),
 		defaultValues,
 	});
-
-	// キャンセルボタンのハンドラ
-	const handleCancel = () => {
-		router.push("/admin/users");
-	};
 
 	// フォーム送信ハンドラ
 	const handleSubmit = (values: UserFormValues) => {

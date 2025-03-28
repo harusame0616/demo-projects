@@ -863,7 +863,7 @@ export const mockPositions = [
 
 // 後方互換性のために残しておく関数
 export function getEmployeeDetailWithDefaults(
-	employeeId: string,
+	_employeeId: string,
 	employee: Employee,
 ): Employee {
 	return getEmployeeWithDefaults(employee);

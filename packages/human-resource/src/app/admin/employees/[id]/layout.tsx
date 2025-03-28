@@ -36,7 +36,7 @@ export default async function EmployeeLayout({
 
 	return (
 		<div className="space-y-6">
-			<PageHeader employeeId={employee.id} />
+			<PageHeader />
 
 			<ProfileHeader employee={employee} />
 

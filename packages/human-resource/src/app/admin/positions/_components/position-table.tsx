@@ -57,7 +57,7 @@ export function PositionTable({
 	};
 
 	// 日付をフォーマット
-	const formatDate = (dateString: string) => {
+	const _formatDate = (dateString: string) => {
 		const date = new Date(dateString);
 		return new Intl.DateTimeFormat("ja-JP", {
 			year: "numeric",

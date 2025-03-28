@@ -80,7 +80,7 @@ export default async function EmployeeEditPage({
 
 	return (
 		<>
-			<PageHeader employeeId={employee.id} />
+			<PageHeader />
 			<EmployeeFormWrapper
 				employee={formEmployee}
 				departmentOptions={departmentOptions}

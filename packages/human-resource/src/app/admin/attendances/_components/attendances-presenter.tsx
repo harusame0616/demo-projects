@@ -6,11 +6,6 @@ import type { MonthlyAttendanceSummary } from "../_actions/attendance-actions";
 import { AttendanceTable } from "./attendance-table";
 import { SearchFormPresenter } from "./search-form-presenter";
 
-interface Department {
-	id: string;
-	name: string;
-}
-
 export interface SearchFormValues {
 	query?: string;
 	departmentId?: string;
@@ -27,20 +22,17 @@ interface AttendancesPresenterProps {
 		page: number;
 		limit: number;
 	};
-	departments: Department[];
 }
 
 export function AttendancesPresenter({
 	attendances,
-	departments,
 }: AttendancesPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const [currentPage, setCurrentPage] = useState(attendances.page);
 
 	// 検索の初期値を設定
-	const defaultSearchValues = {
+	const _defaultSearchValues = {
 		query: searchParams.get("query") || "",
 		departmentId: searchParams.get("departmentId") || "all",
 		startDate: searchParams.get("startDate") || "",
@@ -49,7 +41,7 @@ export function AttendancesPresenter({
 	};
 
 	// 検索処理
-	const handleSearch = (values: SearchFormValues) => {
+	const _handleSearch = (values: SearchFormValues) => {
 		const params = new URLSearchParams();
 
 		if (values.query) params.set("query", values.query);
@@ -63,22 +55,11 @@ export function AttendancesPresenter({
 		router.push(`${pathname}?${params.toString()}`);
 	};
 
-	// ページ変更処理
-	const handlePageChange = (page: number) => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.set("page", page.toString());
-		router.push(`${pathname}?${params.toString()}`);
-		setCurrentPage(page);
-	};
-
 	return (
 		<AttendanceTable
 			attendances={attendances.items}
-			totalItems={attendances.totalItems}
 			totalPages={attendances.totalPages}
 			page={attendances.page}
-			limit={attendances.limit}
-			onPageChange={handlePageChange}
 		/>
 	);
 }

@@ -34,7 +34,6 @@ export function EmployeeFormWrapper({
 		try {
 			// APIは一部のフィールドのみ対応しているため、必要なフィールドだけ渡す
 			await createEmployee({
-				id: values.id,
 				name: values.name,
 				email: values.email,
 				department: values.department,
@@ -56,7 +55,7 @@ export function EmployeeFormWrapper({
 		<EmployeeForm
 			departmentOptions={departmentOptions}
 			positionOptions={positionOptions}
-			onSubmit={handleSubmit}
+			onSubmitAction={handleSubmit}
 		/>
 	);
 }

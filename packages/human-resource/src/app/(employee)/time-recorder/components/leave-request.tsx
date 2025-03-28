@@ -47,7 +47,7 @@ export function LeaveRequest() {
 
 	const selectedLeaveType = watch("type");
 
-	const onSubmit = (data: LeaveRequestFormData) => {
+	const onSubmit = (_data: LeaveRequestFormData) => {
 		if (!selectedDates || selectedDates.length === 0) {
 			toast.error("休暇の日付を選択してください");
 			return;

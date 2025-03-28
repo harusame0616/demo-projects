@@ -4,14 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import type { SkillCertification } from "../_data/skills-certifications-data";
 
-// 互換性のあるリダイレクトコンポーネント
-interface SkillCertificationListContainerProps {
-	skillCertifications: SkillCertification[];
-}
-
-export function SkillCertificationListContainer({
-	skillCertifications,
-}: SkillCertificationListContainerProps) {
+export function SkillCertificationListContainer() {
 	const router = useRouter();
 
 	// スキルと資格が分離されたので、適切なページにリダイレクト

@@ -83,7 +83,6 @@ function generateRandomStatus(employeeId: string): AttendanceStatus {
 // ステータスに基づいて時間情報を生成する関数
 function generateTimeInfo(
 	status: AttendanceStatus,
-	date: Date,
 	employeeId: string,
 ): {
 	clockIn: string | null;
@@ -364,7 +363,7 @@ function generateMonthlyAttendance(
 		const status = generateRandomStatus(employee.id);
 
 		// ステータスに基づいて時間情報を生成
-		const timeInfo = generateTimeInfo(status, date, employee.id);
+		const timeInfo = generateTimeInfo(status, employee.id);
 
 		// 勤怠データのID生成（employee idは3桁の数字）
 		const id = `ATT-${employee.id}-${year}${month.toString().padStart(2, "0")}${day.toString().padStart(2, "0")}`;
