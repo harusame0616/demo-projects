@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 export function EmployeesSkeleton() {
 	// テーブル行の数
 	const rowIds = [
@@ -22,19 +23,19 @@ export function EmployeesSkeleton() {
 					<div className="w-full bg-gray-50 border-b">
 						<div className="grid grid-cols-5 h-10">
 							<div className="col-span-1 flex items-center px-4">
-								<div className="h-4 w-28 bg-gray-200 animate-pulse rounded" />
+								<Skeleton className="h-4 w-28" />
 							</div>
 							<div className="col-span-1 flex items-center px-4">
-								<div className="h-4 w-20 bg-gray-200 animate-pulse rounded" />
+								<Skeleton className="h-4 w-20" />
 							</div>
 							<div className="col-span-1 flex items-center px-4">
-								<div className="h-4 w-20 bg-gray-200 animate-pulse rounded" />
+								<Skeleton className="h-4 w-20" />
 							</div>
 							<div className="col-span-1 flex items-center px-4">
-								<div className="h-4 w-20 bg-gray-200 animate-pulse rounded" />
+								<Skeleton className="h-4 w-20" />
 							</div>
 							<div className="col-span-1 flex items-center px-4">
-								<div className="h-4 w-10 bg-gray-200 animate-pulse rounded" />
+								<Skeleton className="h-4 w-10" />
 							</div>
 						</div>
 					</div>
@@ -44,19 +45,19 @@ export function EmployeesSkeleton() {
 						{rowIds.map((id) => (
 							<div key={id} className="grid grid-cols-5 h-14 bg-white">
 								<div className="col-span-1 flex items-center px-4">
-									<div className="h-4 w-16 bg-blue-100 animate-pulse rounded" />
+									<Skeleton className="h-4 w-16" />
 								</div>
 								<div className="col-span-1 flex items-center px-4">
-									<div className="h-4 w-24 bg-gray-200 animate-pulse rounded" />
+									<Skeleton className="h-4 w-24" />
 								</div>
 								<div className="col-span-1 flex items-center px-4">
-									<div className="h-4 w-20 bg-gray-200 animate-pulse rounded" />
+									<Skeleton className="h-4 w-20" />
 								</div>
 								<div className="col-span-1 flex items-center px-4">
-									<div className="h-4 w-16 bg-gray-200 animate-pulse rounded" />
+									<Skeleton className="h-4 w-16" />
 								</div>
 								<div className="col-span-1 flex items-center px-4 justify-end">
-									<div className="h-8 w-8 bg-gray-200 animate-pulse rounded-full" />
+									<Skeleton className="h-8 w-8 rounded-full" />
 								</div>
 							</div>
 						))}
@@ -68,10 +69,7 @@ export function EmployeesSkeleton() {
 			<div className="flex justify-center mt-4">
 				<div className="flex gap-1">
 					{["prev", "1", "2", "3", "next"].map((id) => (
-						<div
-							key={id}
-							className="h-9 w-9 bg-gray-200 animate-pulse rounded-md"
-						/>
+						<Skeleton key={id} className="h-9 w-9 rounded-md" />
 					))}
 				</div>
 			</div>
