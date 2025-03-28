@@ -48,24 +48,10 @@ export function DepartmentTable({
 	currentOrder,
 	onSort,
 }: DepartmentTableProps) {
-	const router = useRouter();
-	const pathname = usePathname();
-
-	// 親部署名を取得する関数
 	const getParentName = (parentId: string | null): string => {
 		if (!parentId) return "-";
 		const parent = departments.find((dept) => dept.id === parentId);
 		return parent ? parent.name : "-";
-	};
-
-	// 日付をフォーマットする関数
-	const formatDate = (dateString: string): string => {
-		const date = new Date(dateString);
-		return new Intl.DateTimeFormat("ja-JP", {
-			year: "numeric",
-			month: "numeric",
-			day: "numeric",
-		}).format(date);
 	};
 
 	// ソートアイコンの表示

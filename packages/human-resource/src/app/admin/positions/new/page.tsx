@@ -7,7 +7,7 @@ import { PositionForm } from "../_components/position-form";
 export default function NewPositionPage() {
 	const router = useRouter();
 
-	const handleSubmit = (values: {
+	const handleSubmit = (_values: {
 		name: string;
 		level: number;
 		description: string;

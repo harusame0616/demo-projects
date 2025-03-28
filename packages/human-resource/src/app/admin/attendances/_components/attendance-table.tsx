@@ -53,7 +53,7 @@ type AttendanceStatus =
 	| "holiday";
 
 // 勤怠ステータスに対応するバッジを返す
-const getStatusBadge = (status: AttendanceStatus) => {
+const _getStatusBadge = (status: AttendanceStatus) => {
 	switch (status) {
 		case "normal":
 			return (
@@ -115,7 +115,7 @@ const getStatusBadge = (status: AttendanceStatus) => {
 };
 
 // 日付フォーマット
-const formatDate = (dateString: string) => {
+const _formatDate = (dateString: string) => {
 	const date = new Date(dateString);
 	return new Intl.DateTimeFormat("ja-JP", {
 		year: "numeric",
@@ -126,7 +126,7 @@ const formatDate = (dateString: string) => {
 };
 
 // 年月表示用フォーマット
-const formatYearMonth = (dateString: string) => {
+const _formatYearMonth = (dateString: string) => {
 	const date = new Date(dateString);
 	return new Intl.DateTimeFormat("ja-JP", {
 		year: "numeric",
@@ -136,20 +136,14 @@ const formatYearMonth = (dateString: string) => {
 
 interface AttendanceTableProps {
 	attendances: MonthlyAttendanceSummary[];
-	totalItems: number;
 	totalPages: number;
 	page: number;
-	limit: number;
-	onPageChange: (page: number) => void;
 }
 
 export function AttendanceTable({
 	attendances,
-	totalItems,
 	totalPages,
 	page,
-	limit,
-	onPageChange,
 }: AttendanceTableProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -162,7 +156,7 @@ export function AttendanceTable({
 	const currentOrder = searchParams.get("order") || "desc";
 
 	// ページ切り替え
-	const handlePageChange = (page: number) => {
+	const _handlePageChange = (page: number) => {
 		const params = new URLSearchParams(searchParams.toString());
 		params.set("page", page.toString());
 		const newPath = `${pathname}?${params.toString()}`;
@@ -394,7 +388,7 @@ export function AttendanceTable({
 					<PaginationNav
 						currentPage={page}
 						totalPages={totalPages}
-						onPageChange={onPageChange}
+						onPageChange={_handlePageChange}
 					/>
 				</div>
 			)}

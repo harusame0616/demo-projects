@@ -104,14 +104,12 @@ const getStatusBadge = (status: AttendanceStatus) => {
 
 interface EmployeeAttendanceSummaryProps {
 	data: EmployeeAttendanceSummaryType | null;
-	employee: Employee;
 }
 
 export function EmployeeAttendanceSummary({
 	data,
-	employee,
 }: EmployeeAttendanceSummaryProps) {
-	const router = useRouter();
+	const _router = useRouter();
 
 	// データがnullの場合はメッセージを表示
 	if (!data) {

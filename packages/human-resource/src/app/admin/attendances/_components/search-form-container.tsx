@@ -6,28 +6,14 @@ interface Department {
 	name: string;
 }
 
-interface SearchFormValues {
-	query?: string;
-	departmentId?: string;
-	startDate?: string;
-	endDate?: string;
-	startYearMonth?: string;
-	endYearMonth?: string;
-	page?: string;
-}
-
 interface SearchFormContainerProps {
-	searchParams: {
-		query?: string;
-		departmentId?: string;
-		startDate?: string;
-		endDate?: string;
-		page?: string;
-	};
+	searchQuery?: string;
+	departmentId?: string;
 }
 
 export async function SearchFormContainer({
-	searchParams,
+	searchQuery,
+	departmentId,
 }: SearchFormContainerProps) {
 	let departments: Department[] = [];
 	try {
@@ -45,10 +31,10 @@ export async function SearchFormContainer({
 
 	// 検索フォームの初期値を設定
 	const defaultValues = {
-		query: searchParams.query || "",
-		departmentId: searchParams.departmentId || "all",
-		startYearMonth: formatDateToYearMonth(searchParams.startDate),
-		endYearMonth: formatDateToYearMonth(searchParams.endDate),
+		query: searchQuery || "",
+		departmentId: departmentId || "all",
+		startYearMonth: formatDateToYearMonth(searchQuery),
+		endYearMonth: formatDateToYearMonth(searchQuery),
 	};
 
 	return (

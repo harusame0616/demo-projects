@@ -2,11 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon, ClockIcon, PencilIcon } from "lucide-react";
 import Link from "next/link";
 
-type PageHeaderProps = {
-	employeeId: string;
-};
-
-export function PageHeader({ employeeId }: PageHeaderProps) {
+export function PageHeader() {
 	return (
 		<div className="flex items-center justify-between mb-6">
 			<div className="flex items-center">

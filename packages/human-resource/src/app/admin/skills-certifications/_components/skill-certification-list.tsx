@@ -25,8 +25,6 @@ type SkillCertificationListProps = {
 };
 
 export function SkillCertificationList({
-	skillCertifications,
-	pagination,
 	searchParams = {},
 }: SkillCertificationListProps) {
 	const router = useRouter();

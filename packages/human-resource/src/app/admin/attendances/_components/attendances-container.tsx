@@ -3,7 +3,6 @@ import type {
 	AttendanceSearchParams,
 	MonthlyAttendanceSummary,
 } from "../_actions/attendance-actions";
-import { getDepartments } from "../_actions/department-actions";
 import { AttendancesPresenter } from "./attendances-presenter";
 
 interface AttendancesContainerProps {
@@ -13,11 +12,8 @@ interface AttendancesContainerProps {
 export async function AttendancesContainer({
 	searchParams,
 }: AttendancesContainerProps) {
-	// 勤怠データと部署データを取得
-	const [attendanceData, departments] = await Promise.all([
-		getAttendances(searchParams),
-		getDepartments(),
-	]);
+	// 勤怠データを取得
+	const attendanceData = await getAttendances(searchParams);
 
 	const { attendances, pagination } = attendanceData;
 
@@ -30,7 +26,6 @@ export async function AttendancesContainer({
 				page: pagination.page,
 				limit: pagination.limit,
 			}}
-			departments={departments}
 		/>
 	);
 }

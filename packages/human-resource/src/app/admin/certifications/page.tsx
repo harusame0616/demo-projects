@@ -5,7 +5,6 @@ import { Suspense } from "react";
 import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/skill-certification-actions";
 import { CertificationsContainer } from "./_components/certifications-container";
 import { CertificationsSkeleton } from "./_components/certifications-skeleton";
-import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 
 export const metadata: Metadata = {

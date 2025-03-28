@@ -12,7 +12,6 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Pagination } from "@/components/ui/pagination";
 import {
 	Popover,
@@ -39,12 +38,13 @@ import { ja } from "date-fns/locale";
 import { Calendar, FileTextIcon, SearchIcon, XIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { PaginationNav } from "../../../../components/common/pagination-nav";
 import type {
 	Application,
+	ApplicationSearchParams,
 	ApplicationStatus,
 	ApplicationType,
-	ApprovalSearchParams,
-} from "../_actions/approval-actions";
+} from "../_actions/application-actions";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {
@@ -127,7 +127,7 @@ interface ApprovalHistoryProps {
 		limit: number;
 		totalPages: number;
 	};
-	searchParams: ApprovalSearchParams;
+	searchParams: ApplicationSearchParams;
 }
 
 export function ApprovalHistory({
@@ -367,9 +367,9 @@ export function ApprovalHistory({
 			{/* ページネーション */}
 			{pagination.totalPages > 1 && (
 				<div className="flex justify-center mt-6">
-					<Pagination
-						currentPage={pagination.page}
+					<PaginationNav
 						totalPages={pagination.totalPages}
+						currentPage={pagination.page}
 						onPageChange={handlePageChange}
 					/>
 				</div>

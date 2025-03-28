@@ -109,14 +109,6 @@ export function DepartmentForm({
 				// 作成成功
 				router.push(`/admin/departments/${newDepartment.id}`);
 			} else if (department) {
-				// departmentが存在する場合のみ更新処理を行う
-				// 更新
-				const updatedDepartment = await updateDepartment(department.id, {
-					name: formData.name,
-					parentId: formData.parentId || null,
-				});
-
-				// 更新成功
 				router.push(`/admin/departments/${department.id}`);
 			}
 

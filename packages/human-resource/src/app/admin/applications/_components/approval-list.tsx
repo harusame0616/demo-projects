@@ -1,5 +1,6 @@
 "use client";
 
+import { PaginationNav } from "@/components/common/pagination-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Pagination } from "@/components/ui/pagination";
 import {
 	Select,
 	SelectContent,
@@ -34,11 +34,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
 	type Application,
+	type ApplicationSearchParams,
 	type ApplicationType,
-	type ApprovalSearchParams,
 	approveApplication,
 	rejectApplication,
-} from "../_actions/approval-actions";
+} from "../_actions/application-actions";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {
@@ -86,7 +86,7 @@ interface ApprovalListProps {
 		limit: number;
 		totalPages: number;
 	};
-	searchParams: ApprovalSearchParams;
+	searchParams: ApplicationSearchParams;
 }
 
 export function ApprovalList({
@@ -145,7 +145,9 @@ export function ApprovalList({
 
 	// フィルターの変更を処理
 	const handleFilterChange = (value: string) => {
-		const params = new URLSearchParams(searchParams as Record<string, string>);
+		const params = new URLSearchParams(
+			searchParams as unknown as Record<string, string>,
+		);
 
 		if (value === "all") {
 			params.delete("type");
@@ -162,7 +164,9 @@ export function ApprovalList({
 
 	// 検索クエリの変更を処理
 	const handleSearchChange = (query: string) => {
-		const params = new URLSearchParams(searchParams as Record<string, string>);
+		const params = new URLSearchParams(
+			searchParams as unknown as Record<string, string>,
+		);
 
 		if (query) {
 			params.set("query", query);
@@ -179,7 +183,9 @@ export function ApprovalList({
 
 	// ページ切り替え処理
 	const handlePageChange = (page: number) => {
-		const params = new URLSearchParams(searchParams as Record<string, string>);
+		const params = new URLSearchParams(
+			searchParams as unknown as Record<string, string>,
+		);
 		params.set("page", page.toString());
 		const newPath = `${pathname}?${params.toString()}`;
 		router.push(newPath);
@@ -283,7 +289,7 @@ export function ApprovalList({
 			{/* ページネーション */}
 			{pagination.totalPages > 1 && (
 				<div className="flex justify-center mt-6">
-					<Pagination
+					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
 						onPageChange={handlePageChange}

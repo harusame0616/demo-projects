@@ -89,14 +89,12 @@ const CERTIFICATION_OPTIONS = [
 
 interface SkillsFormProps {
 	employeeId: string;
-	employeeName: string;
 	initialSkills: string[];
 	initialCertifications: string[];
 }
 
 export function SkillsForm({
 	employeeId,
-	employeeName,
 	initialSkills,
 	initialCertifications,
 }: SkillsFormProps) {

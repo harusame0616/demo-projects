@@ -1,8 +1,5 @@
-import {
-	type Attendance,
-	type AttendanceStatus,
-	SAMPLE_ATTENDANCES,
-} from "../_data/attendances-data";
+import type { Attendance, AttendanceStatus } from "@/app/_mocks/attendances";
+import { SAMPLE_ATTENDANCES } from "../_data/attendances-data";
 
 // 月次集計データの型定義
 export interface MonthlyAttendanceSummary {

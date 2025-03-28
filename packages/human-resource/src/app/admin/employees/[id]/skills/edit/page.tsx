@@ -28,7 +28,6 @@ export default async function EmployeeSkillsEditPage({
 	return (
 		<SkillsForm
 			employeeId={employee.id}
-			employeeName={employee.name}
 			initialSkills={employeeWithDefaults.skills || []}
 			initialCertifications={employeeWithDefaults.certifications || []}
 		/>

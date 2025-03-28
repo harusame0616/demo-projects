@@ -13,20 +13,21 @@ export const metadata: Metadata = {
 };
 
 // SearchParamsをIntersectionにする型定義
-type SearchParams = ApplicationSearchParams;
+type SearchParams = Promise<ApplicationSearchParams>;
 
 // 申請一覧ページ
-export default function ApplicationsPage({
+export default async function ApplicationsPage({
 	searchParams,
 }: {
 	searchParams: SearchParams;
 }) {
+	const searchParamsResolved = await searchParams;
 	return (
 		<div className="space-y-4">
 			<PageHeader heading="申請一覧" />
-			<SearchFormContainer defaultQuery={searchParams} />
+			<SearchFormContainer defaultQuery={searchParamsResolved} />
 			<Suspense fallback={<ApplicationsSkeleton />}>
-				<ApplicationsContainer searchParams={searchParams} />
+				<ApplicationsContainer searchParams={searchParamsResolved} />
 			</Suspense>
 		</div>
 	);

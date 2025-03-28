@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import type { GradeSearchParams } from "./_actions/grade-actions";
 import { GradesContainer } from "./_components/grades-container";
 import { GradesSkeleton } from "./_components/grades-skeleton";
-import { SearchFormContainer } from "./_components/search-form-container";
 
 import type { Metadata } from "next";
 import { SearchFormPresenter } from "./_components/search-form-presenter";

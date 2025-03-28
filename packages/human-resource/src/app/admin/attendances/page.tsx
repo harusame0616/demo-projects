@@ -26,16 +26,6 @@ interface PageProps {
 	}>;
 }
 
-interface SearchFormValues {
-	query?: string;
-	departmentId?: string;
-	startDate?: string;
-	endDate?: string;
-	startYearMonth?: string;
-	endYearMonth?: string;
-	page?: string;
-}
-
 export default async function AttendancesPage({ searchParams }: PageProps) {
 	// searchParamsを解決
 	const resolvedSearchParams = await searchParams;
@@ -85,7 +75,10 @@ export default async function AttendancesPage({ searchParams }: PageProps) {
 						/>
 					}
 				>
-					<SearchFormContainer searchParams={resolvedSearchParams} />
+					<SearchFormContainer
+						searchQuery={resolvedSearchParams.query}
+						departmentId={resolvedSearchParams.departmentId}
+					/>
 				</Suspense>
 
 				<Suspense
