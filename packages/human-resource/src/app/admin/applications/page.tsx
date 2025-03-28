@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import type { ApplicationSearchParams } from "./_actions/application-actions";
 import { ApplicationsContainer } from "./_components/applications-container";
 import { ApplicationsSkeleton } from "./_components/applications-skeleton";
-import { SearchFormContainer } from "./_components/search-form-container";
+import { SearchFormPresenter } from "./_components/search-form-presenter";
 
 // メタデータ
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default async function ApplicationsPage({
 	return (
 		<div className="space-y-4">
 			<PageHeader heading="申請一覧" />
-			<SearchFormContainer defaultQuery={searchParamsResolved} />
+			<SearchFormPresenter defaultQuery={searchParamsResolved} />
 			<Suspense fallback={<ApplicationsSkeleton />}>
 				<ApplicationsContainer searchParams={searchParamsResolved} />
 			</Suspense>
