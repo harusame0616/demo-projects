@@ -18,8 +18,14 @@ export async function SearchFormContainer({
 
 	return (
 		<SearchFormPresenter
-			departmentOptions={departmentOptions}
-			positionOptions={positionOptions}
+			departmentOptions={departmentOptions.map((option) => ({
+				id: option.value,
+				name: option.label,
+			}))}
+			positionOptions={positionOptions.map((option) => ({
+				id: option.value,
+				name: option.label,
+			}))}
 			searchQuery={searchQuery}
 			currentDepartment={currentDepartment}
 			currentPosition={currentPosition}

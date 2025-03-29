@@ -1,5 +1,5 @@
 // 一時的なサンプルデータ
-const SAMPLE_DEPARTMENTS = [
+export const departments = [
 	{ id: "1", name: "営業部" },
 	{ id: "2", name: "開発部" },
 	{ id: "3", name: "人事部" },
@@ -9,5 +9,5 @@ const SAMPLE_DEPARTMENTS = [
 
 export async function getDepartments() {
 	// TODO: Supabase からデータを取得するように修正
-	return SAMPLE_DEPARTMENTS;
+	return departments;
 }

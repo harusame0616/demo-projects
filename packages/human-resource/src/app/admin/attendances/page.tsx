@@ -18,8 +18,8 @@ interface PageProps {
 	searchParams: Promise<{
 		query?: string;
 		departmentId?: string;
-		startDate?: string;
-		endDate?: string;
+		startYearMonth?: string;
+		endYearMonth?: string;
 		page?: string;
 		sort?: string;
 		order?: string;
@@ -34,8 +34,8 @@ export default async function AttendancesPage({ searchParams }: PageProps) {
 	const attendanceSearchParams: AttendanceSearchParams = {
 		query: resolvedSearchParams.query,
 		departmentId: resolvedSearchParams.departmentId,
-		startDate: resolvedSearchParams.startDate,
-		endDate: resolvedSearchParams.endDate,
+		startYearMonth: resolvedSearchParams.startYearMonth,
+		endYearMonth: resolvedSearchParams.endYearMonth,
 		page: resolvedSearchParams.page
 			? Number.parseInt(resolvedSearchParams.page, 10)
 			: 1,
@@ -50,12 +50,8 @@ export default async function AttendancesPage({ searchParams }: PageProps) {
 	const defaultSearchValues = {
 		query: resolvedSearchParams.query || "",
 		departmentId: resolvedSearchParams.departmentId || "all",
-		startYearMonth: resolvedSearchParams.startDate
-			? resolvedSearchParams.startDate.substring(0, 7)
-			: "",
-		endYearMonth: resolvedSearchParams.endDate
-			? resolvedSearchParams.endDate.substring(0, 7)
-			: "",
+		startYearMonth: resolvedSearchParams.startYearMonth || "",
+		endYearMonth: resolvedSearchParams.endYearMonth || "",
 	};
 
 	return (
@@ -69,7 +65,7 @@ export default async function AttendancesPage({ searchParams }: PageProps) {
 					key={`search-form-${searchParamsKey}`}
 					fallback={
 						<SearchFormPresenter
-							departments={null}
+							departments={[]}
 							defaultValues={defaultSearchValues}
 							isLoading={true}
 						/>
@@ -78,6 +74,8 @@ export default async function AttendancesPage({ searchParams }: PageProps) {
 					<SearchFormContainer
 						searchQuery={resolvedSearchParams.query}
 						departmentId={resolvedSearchParams.departmentId}
+						startYearMonth={defaultSearchValues.startYearMonth}
+						endYearMonth={defaultSearchValues.endYearMonth}
 					/>
 				</Suspense>
 

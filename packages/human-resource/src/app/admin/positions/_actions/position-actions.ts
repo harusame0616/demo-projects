@@ -26,7 +26,7 @@ export async function getPositions(params: PositionSearchParams = {}) {
 		);
 	}
 
-	if (params.level) {
+	if (params.level && params.level !== "all") {
 		filteredData = filteredData.filter(
 			(position) => position.level.toString() === params.level,
 		);
@@ -76,11 +76,21 @@ export async function getPositions(params: PositionSearchParams = {}) {
 /**
  * レベル一覧を取得（フィルター用）
  */
-export async function getPositionLevels(): Promise<string[]> {
+export async function getPositionLevels(): Promise<
+	{
+		value: string;
+		label: string;
+	}[]
+> {
 	const levels = [
 		...new Set(positionData.map((position) => position.level.toString())),
 	];
-	return levels.sort((a, b) => Number.parseInt(b, 10) - Number.parseInt(a, 10));
+	return levels
+		.sort((a, b) => Number.parseInt(b, 10) - Number.parseInt(a, 10))
+		.map((level) => ({
+			value: level,
+			label: level,
+		}));
 }
 
 /**

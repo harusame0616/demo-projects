@@ -16,7 +16,10 @@ export async function SearchFormContainer({
 		<SearchFormPresenter
 			defaultQuery={defaultQuery}
 			defaultLevel={defaultLevel}
-			levelOptions={levelOptions}
+			levelOptions={levelOptions.map((option) => ({
+				id: option.value,
+				name: option.label,
+			}))}
 		/>
 	);
 }
