@@ -24,8 +24,8 @@ export type SortField = keyof Attendance | keyof MonthlyAttendanceSummary;
 export type AttendanceSearchParams = {
 	query?: string; // 検索クエリ (従業員名または従業員ID)
 	departmentId?: string; // 部署ID
-	startDate?: string; // 開始日
-	endDate?: string; // 終了日
+	startYearMonth?: string; // 開始日
+	endYearMonth?: string; // 終了日
 	status?: AttendanceStatus; // 勤怠ステータス
 	sort?: SortField; // ソート項目
 	order?: "asc" | "desc"; // ソート順
@@ -46,8 +46,8 @@ export const formatYearMonth = (dateString: string): string => {
 export async function getAttendances({
 	query = "",
 	departmentId,
-	startDate,
-	endDate,
+	startYearMonth,
+	endYearMonth,
 	status,
 	sort = "yearMonth",
 	order = "desc",
@@ -68,22 +68,22 @@ export async function getAttendances({
 	}
 
 	// 部署によるフィルタリング
-	if (departmentId) {
+	if (departmentId && departmentId !== "all") {
 		attendances = attendances.filter(
 			(attendance) => attendance.departmentId === departmentId,
 		);
 	}
 
 	// 日付範囲によるフィルタリング
-	if (startDate) {
+	if (startYearMonth) {
 		attendances = attendances.filter(
-			(attendance) => attendance.date >= startDate,
+			(attendance) => attendance.date >= startYearMonth,
 		);
 	}
 
-	if (endDate) {
+	if (endYearMonth) {
 		attendances = attendances.filter(
-			(attendance) => attendance.date <= endDate,
+			(attendance) => attendance.date <= endYearMonth,
 		);
 	}
 

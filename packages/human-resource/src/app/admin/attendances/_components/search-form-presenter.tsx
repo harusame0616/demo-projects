@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import * as v from "valibot";
+
+import { SearchForm } from "@/components/common/search-form";
+import { useSearchForm } from "@/components/common/use-search-form";
 import {
-	Form,
 	FormControl,
 	FormField,
 	FormItem,
@@ -17,22 +18,17 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { endOfMonth, format, parse, startOfMonth } from "date-fns";
-import { ja } from "date-fns/locale";
-import { SearchIcon } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 
-const formSchema = z.object({
-	query: z.string().optional(),
-	departmentId: z.string().optional(),
-	startYearMonth: z.string().optional(),
-	endYearMonth: z.string().optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+// フォームのスキーマを定義
+const schema = v.object(
+	{
+		query: v.optional(v.string()),
+		departmentId: v.optional(v.string()),
+		startYearMonth: v.optional(v.string()),
+		endYearMonth: v.optional(v.string()),
+	},
+	"検索フォームの入力が不正です",
+);
 
 interface Department {
 	id: string;
@@ -40,8 +36,13 @@ interface Department {
 }
 
 interface SearchFormPresenterProps {
-	defaultValues?: Partial<FormValues>;
-	departments: Department[] | null;
+	defaultValues?: {
+		query?: string;
+		departmentId?: string;
+		startYearMonth?: string;
+		endYearMonth?: string;
+	};
+	departments?: Department[];
 	isLoading?: boolean;
 }
 
@@ -50,196 +51,90 @@ export function SearchFormPresenter({
 	departments = [],
 	isLoading = false,
 }: SearchFormPresenterProps) {
-	const router = useRouter();
-	const pathname = usePathname();
-
-	const form = useForm<FormValues>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			query: defaultValues.query || "",
-			departmentId: defaultValues.departmentId || "all",
-			startYearMonth: defaultValues.startYearMonth || "",
-			endYearMonth: defaultValues.endYearMonth || "",
-		},
+	const searchForm = useSearchForm(schema, defaultValues, {
+		query: "",
+		departmentId: "all",
+		startYearMonth: "",
+		endYearMonth: "",
 	});
-
-	const handleSubmit = (values: FormValues) => {
-		const updatedValues = {
-			...values,
-			departmentId:
-				values.departmentId === "all" ? undefined : values.departmentId,
-			startDate: values.startYearMonth
-				? `${values.startYearMonth}-01`
-				: undefined,
-			endDate: values.endYearMonth
-				? (() => {
-						const [year, month] = values.endYearMonth.split("-").map(Number);
-						const lastDay = new Date(year, month, 0).getDate();
-						return `${values.endYearMonth}-${lastDay}`;
-					})()
-				: undefined,
-		};
-
-		// 検索パラメータを構築
-		const params = new URLSearchParams();
-
-		if (updatedValues.query) {
-			params.set("query", updatedValues.query);
-		}
-
-		if (updatedValues.departmentId) {
-			params.set("departmentId", updatedValues.departmentId);
-		}
-
-		if (updatedValues.startDate) {
-			params.set("startDate", updatedValues.startDate);
-		}
-
-		if (updatedValues.endDate) {
-			params.set("endDate", updatedValues.endDate);
-		}
-
-		// ページをリセット
-		params.set("page", "1");
-
-		// URLを更新して画面遷移
-		router.push(`${pathname}?${params.toString()}`);
-	};
-
-	const handleReset = () => {
-		form.reset({
-			query: "",
-			departmentId: "all",
-			startYearMonth: "",
-			endYearMonth: "",
-		});
-
-		const params = new URLSearchParams();
-		params.set("page", "1");
-		router.push(`${pathname}?${params.toString()}`);
-	};
-
-	// データがロード中またはデータが利用できない場合
-	const isDisabled = isLoading || !departments || departments.length === 0;
-
 	return (
-		<Card>
-			<CardContent>
-				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(handleSubmit)}
-						className="gap-4 grid grid-cols-4"
-					>
-						{/* 検索クエリ（従業員名またはID） */}
-						<FormField
-							control={form.control}
-							name="query"
-							render={({ field }) => (
-								<FormItem className="col-span-4 sm:col-span-2">
-									<FormLabel>キーワード（名前、ID）</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="従業員名または従業員IDで検索"
-											{...field}
-											disabled={isDisabled}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
+		<SearchForm {...searchForm}>
+			<FormField
+				name="query"
+				control={searchForm.form.control}
+				render={({ field }) => (
+					<FormItem className="col-span-4 sm:col-span-2">
+						<FormLabel>キーワード（名前、ID）</FormLabel>
+						<FormControl>
+							<Input
+								placeholder="従業員名または従業員IDで検索"
+								{...field}
+								disabled={isLoading}
+							/>
+						</FormControl>
+					</FormItem>
+				)}
+			/>
 
-						<FormField
-							control={form.control}
-							name="departmentId"
-							render={({ field }) => (
-								<FormItem className="col-span-4 sm:col-span-1">
-									<FormLabel>部署</FormLabel>
-									<Select
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-										disabled={isDisabled}
-									>
-										<FormControl>
-											<SelectTrigger className="w-full overflow-hidden">
-												<SelectValue placeholder="部署を選択" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											<SelectItem value="all">すべて</SelectItem>
-											{departments?.map((department) => (
-												<SelectItem key={department.id} value={department.id}>
-													{department.name}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</FormItem>
-							)}
-						/>
+			<FormField
+				name="departmentId"
+				control={searchForm.form.control}
+				render={({ field }) => (
+					<FormItem className="col-span-4 sm:col-span-1">
+						<FormLabel>部署</FormLabel>
+						<Select
+							onValueChange={field.onChange}
+							value={field.value}
+							disabled={isLoading}
+						>
+							<FormControl>
+								<SelectTrigger
+									className="w-full overflow-hidden"
+									value={field.value}
+								>
+									<SelectValue placeholder="部署を選択" />
+								</SelectTrigger>
+							</FormControl>
+							<SelectContent>
+								<SelectItem value="all">すべて</SelectItem>
+								{departments?.map((department) => (
+									<SelectItem key={department.id} value={department.id}>
+										{department.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</FormItem>
+				)}
+			/>
+			{/* 開始年月日と終了年月日を２行目に揃えるための空グリッド */}
+			<div />
 
-						{/* 年月範囲選択 */}
-						<div className="col-span-4 sm:col-span-2">
-							<FormLabel>期間</FormLabel>
-							<div className="flex items-center gap-2">
-								<FormField
-									control={form.control}
-									name="startYearMonth"
-									render={({ field }) => (
-										<FormItem className="flex-1">
-											<FormControl>
-												<Input
-													type="month"
-													placeholder="開始年月"
-													className="w-full h-10"
-													{...field}
-													disabled={isDisabled}
-												/>
-											</FormControl>
-										</FormItem>
-									)}
-								/>
-								<span>～</span>
-								<FormField
-									control={form.control}
-									name="endYearMonth"
-									render={({ field }) => (
-										<FormItem className="flex-1">
-											<FormControl>
-												<Input
-													type="month"
-													placeholder="終了年月"
-													className="w-full h-10"
-													{...field}
-													disabled={isDisabled}
-												/>
-											</FormControl>
-										</FormItem>
-									)}
-								/>
-							</div>
-						</div>
+			<FormField
+				name="startYearMonth"
+				control={searchForm.form.control}
+				render={({ field }) => (
+					<FormItem className="col-span-4 sm:col-span-1">
+						<FormLabel>開始年月</FormLabel>
+						<FormControl>
+							<Input type="month" {...field} disabled={isLoading} />
+						</FormControl>
+					</FormItem>
+				)}
+			/>
 
-						<div className="col-span-4 flex gap-2 flex-wrap">
-							<Button
-								type="submit"
-								className="h-10 sm:max-w-32 w-full"
-								disabled={isDisabled}
-							>
-								検索
-							</Button>
-							<Button
-								type="button"
-								variant="outline"
-								onClick={handleReset}
-								className="h-10 sm:max-w-32 w-full"
-								disabled={isDisabled}
-							>
-								リセット
-							</Button>
-						</div>
-					</form>
-				</Form>
-			</CardContent>
-		</Card>
+			<FormField
+				name="endYearMonth"
+				control={searchForm.form.control}
+				render={({ field }) => (
+					<FormItem className="col-span-4 sm:col-span-1">
+						<FormLabel>終了年月</FormLabel>
+						<FormControl>
+							<Input type="month" {...field} disabled={isLoading} />
+						</FormControl>
+					</FormItem>
+				)}
+			/>
+		</SearchForm>
 	);
 }
