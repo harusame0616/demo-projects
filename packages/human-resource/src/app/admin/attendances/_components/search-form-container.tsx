@@ -9,10 +9,14 @@ interface Department {
 interface SearchFormContainerProps {
 	searchQuery?: string;
 	departmentId?: string;
+	startYearMonth?: string;
+	endYearMonth?: string;
 }
 
 export async function SearchFormContainer({
 	searchQuery,
+	startYearMonth,
+	endYearMonth,
 	departmentId,
 }: SearchFormContainerProps) {
 	let departments: Department[] = [];
@@ -23,18 +27,12 @@ export async function SearchFormContainer({
 		// エラーが発生した場合は空の配列のままにする
 	}
 
-	// 日付をYYYY-MM形式に変換
-	const formatDateToYearMonth = (dateString?: string) => {
-		if (!dateString) return "";
-		return dateString.substring(0, 7); // YYYY-MM-DD → YYYY-MM
-	};
-
 	// 検索フォームの初期値を設定
 	const defaultValues = {
 		query: searchQuery || "",
 		departmentId: departmentId || "all",
-		startYearMonth: formatDateToYearMonth(searchQuery),
-		endYearMonth: formatDateToYearMonth(searchQuery),
+		startYearMonth: startYearMonth || "",
+		endYearMonth: endYearMonth || "",
 	};
 
 	return (

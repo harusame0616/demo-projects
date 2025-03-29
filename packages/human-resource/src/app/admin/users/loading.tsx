@@ -13,13 +13,7 @@ export default function Loading() {
 				</Button>
 			</div>
 
-			<SearchFormPresenter
-				roleOptions={[]}
-				statusOptions={[]}
-				searchQuery={""}
-				currentRole={""}
-				currentStatus={""}
-			/>
+			<SearchFormPresenter />
 
 			<UsersSkeleton />
 		</div>

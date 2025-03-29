@@ -22,6 +22,7 @@ export default async function ApplicationsPage({
 	searchParams: SearchParams;
 }) {
 	const searchParamsResolved = await searchParams;
+
 	return (
 		<div className="space-y-4">
 			<PageHeader heading="申請一覧" />

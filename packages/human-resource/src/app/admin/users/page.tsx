@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 import { UsersContainer } from "./_components/users-container";
 import { UsersSkeleton } from "./_components/users-skeleton";
@@ -38,24 +37,11 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
 				</Button>
 			</div>
 
-			<Suspense
-				fallback={
-					<SearchFormPresenter
-						roleOptions={[]}
-						statusOptions={[]}
-						searchQuery={resolvedParams.query}
-						currentRole={resolvedParams.role}
-						currentStatus={resolvedParams.status}
-					/>
-				}
-				key={`search-form-${JSON.stringify(resolvedParams)}`}
-			>
-				<SearchFormContainer
-					searchQuery={resolvedParams.query}
-					currentRole={resolvedParams.role}
-					currentStatus={resolvedParams.status}
-				/>
-			</Suspense>
+			<SearchFormPresenter
+				searchQuery={resolvedParams.query}
+				currentRole={resolvedParams.role}
+				currentStatus={resolvedParams.status}
+			/>
 
 			<div className="w-full">
 				<Suspense
