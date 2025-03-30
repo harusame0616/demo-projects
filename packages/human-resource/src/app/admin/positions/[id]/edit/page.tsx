@@ -1,5 +1,6 @@
 "use client";
 
+import { PageHeader } from "@/components/common/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -42,9 +43,7 @@ export default function PositionEditPage({ params }: PositionEditPageProps) {
 
 	return (
 		<>
-			<div className="mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">役職の編集</h2>
-			</div>
+			<PageHeader title="役職の編集" />
 
 			<PositionForm position={position} onSubmit={handleSubmit} />
 		</>

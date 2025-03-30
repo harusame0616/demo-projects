@@ -1,4 +1,8 @@
 import { mockEmployees } from "@/app/_mocks/employees";
+import { PageHeader } from "@/components/common/page-header";
+import { Button } from "@/components/ui/button";
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 import { getUserRoles, getUserStatuses } from "../_actions/user-actions";
 import { UserFormWrapper } from "./_components/user-form-wrapper";
 
@@ -22,9 +26,7 @@ export default async function NewUserPage() {
 
 	return (
 		<>
-			<div className="mb-6">
-				<h1 className="text-2xl font-bold tracking-tight">ユーザー新規登録</h1>
-			</div>
+			<PageHeader title="ユーザー新規登録" />
 
 			<UserFormWrapper
 				roleOptions={roleOptions}

@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -32,13 +33,15 @@ export default async function EmployeesPage({
 	const resolvedParams = await searchParams;
 
 	return (
-		<div className="space-y-4">
-			<div className="flex justify-between items-center">
-				<h1 className="text-2xl font-bold tracking-tight">従業員一覧</h1>
-				<Button asChild variant="outline">
-					<Link href="/admin/employees/new">新規作成</Link>
-				</Button>
-			</div>
+		<>
+			<PageHeader
+				title="従業員一覧"
+				operations={[
+					<Button key="new-employee" asChild variant="outline">
+						<Link href="/admin/employees/new">新規作成</Link>
+					</Button>,
+				]}
+			/>
 
 			<Suspense
 				fallback={
@@ -59,14 +62,12 @@ export default async function EmployeesPage({
 				/>
 			</Suspense>
 
-			<div className="w-full">
-				<Suspense
-					fallback={<EmployeesSkeleton />}
-					key={`employees-${JSON.stringify(resolvedParams)}`}
-				>
-					<EmployeesContainer searchParams={resolvedParams} />
-				</Suspense>
-			</div>
-		</div>
+			<Suspense
+				fallback={<EmployeesSkeleton />}
+				key={`employees-${JSON.stringify(resolvedParams)}`}
+			>
+				<EmployeesContainer searchParams={resolvedParams} />
+			</Suspense>
+		</>
 	);
 }

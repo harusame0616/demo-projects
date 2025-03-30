@@ -1,14 +1,10 @@
 import { mockEmployees } from "@/app/_mocks/employees";
-import type { Employee } from "@/app/_mocks/employees";
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import {
-	EmployeeInfoNavigation,
-	PageHeader,
-	ProfileHeader,
-} from "./_components";
+import { EmployeeInfoNavigation, ProfileHeader } from "./_components";
 
 export default async function EmployeeLayout({
 	children,
@@ -35,14 +31,14 @@ export default async function EmployeeLayout({
 	}
 
 	return (
-		<div className="space-y-6">
-			<PageHeader />
+		<>
+			<PageHeader title="従業員詳細" />
 
 			<ProfileHeader employee={employee} />
 
 			<EmployeeInfoNavigation employeeId={employee.id} />
 
 			<div>{children}</div>
-		</div>
+		</>
 	);
 }

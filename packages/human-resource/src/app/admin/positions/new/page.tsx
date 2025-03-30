@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader } from "@/components/common/page-header";
 import { useRouter } from "next/navigation";
 import { PositionForm } from "../_components/position-form";
 
@@ -20,10 +20,7 @@ export default function NewPositionPage() {
 
 	return (
 		<>
-			<div className="mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">役職新規作成</h2>
-			</div>
-
+			<PageHeader title="役職新規作成" />
 			<PositionForm onSubmit={handleSubmit} />
 		</>
 	);

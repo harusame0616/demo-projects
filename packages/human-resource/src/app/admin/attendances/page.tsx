@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import type {
@@ -55,10 +56,8 @@ export default async function AttendancesPage({ searchParams }: PageProps) {
 	};
 
 	return (
-		<div className="space-y-4">
-			<header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-				<h1 className="text-2xl font-bold tracking-tight h-9">勤怠情報</h1>
-			</header>
+		<>
+			<PageHeader title="勤怠情報" />
 
 			<div className="flex flex-col space-y-6">
 				<Suspense
@@ -86,6 +85,6 @@ export default async function AttendancesPage({ searchParams }: PageProps) {
 					<AttendancesContainer searchParams={attendanceSearchParams} />
 				</Suspense>
 			</div>
-		</div>
+		</>
 	);
 }

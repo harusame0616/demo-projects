@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeftIcon } from "lucide-react";
@@ -15,9 +16,7 @@ export const metadata: Metadata = {
 export default function NewCertificationPage() {
 	return (
 		<>
-			<div className="flex items-center gap-4 mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">資格新規登録</h2>
-			</div>
+			<PageHeader title="資格新規登録" />
 
 			<Suspense fallback={<CertificationFormSkeleton />}>
 				<CertificationForm isNew={true} />

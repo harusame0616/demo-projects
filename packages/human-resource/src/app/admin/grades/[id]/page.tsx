@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -83,84 +84,78 @@ export default async function GradeDetailPage({
 
 	return (
 		<>
-			<div className="flex items-center justify-between mb-6">
-				<div className="flex items-center gap-2">
-					<h2 className="text-3xl font-bold tracking-tight">グレード詳細</h2>
-				</div>
-				<Button asChild variant="outline">
-					<Link href={`/admin/grades/${id}/edit`}>編集</Link>
-				</Button>
-			</div>
+			<PageHeader
+				title="グレード詳細"
+				operations={[
+					<Button key="edit-grade" asChild variant="outline">
+						<Link href={`/admin/grades/${id}/edit`}>編集</Link>
+					</Button>,
+				]}
+			/>
 
-			<div className="space-y-6">
-				{/* グレード基本情報 */}
-				<Card>
-					<CardContent>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-							<div>
-								<dl className="space-y-4">
-									<div>
-										<dt className="text-sm font-medium text-gray-500">
-											グレード名
-										</dt>
-										<dd className="mt-1 text-lg font-semibold flex items-center">
-											<BadgeIcon className="h-5 w-5 mr-1 text-gray-500" />
-											{grade.name}
-										</dd>
-									</div>
-									<div>
-										<dt className="text-sm font-medium text-gray-500">
-											レベル
-										</dt>
-										<dd className="mt-1 flex items-center">
-											<StarIcon className="h-4 w-4 mr-1 text-yellow-500" />
-											レベル {grade.level}
-										</dd>
-									</div>
-									<div>
-										<dt className="text-sm font-medium text-gray-500">説明</dt>
-										<dd className="mt-1">{grade.description}</dd>
-									</div>
-								</dl>
-							</div>
-							<div>
-								<dl className="space-y-4">
-									<div>
-										<dt className="text-sm font-medium text-gray-500">
-											給与範囲
-										</dt>
-										<dd className="mt-1 flex items-center">
-											<DollarSignIcon className="h-4 w-4 mr-1 text-gray-500" />
-											{formatSalaryRange(
-												grade.salaryRange.min,
-												grade.salaryRange.max,
-											)}
-										</dd>
-									</div>
-									<div>
-										<dt className="text-sm font-medium text-gray-500">
-											所属人数
-										</dt>
-										<dd className="mt-1 flex items-center">
-											<UsersIcon className="h-4 w-4 mr-1 text-gray-500" />
-											{grade.employeeCount}人
-										</dd>
-									</div>
-									<div>
-										<dt className="text-sm font-medium text-gray-500">
-											作成日
-										</dt>
-										<dd className="mt-1 flex items-center">
-											<CalendarIcon className="h-4 w-4 mr-1 text-gray-500" />
-											{formatDate(grade.createdAt)}
-										</dd>
-									</div>
-								</dl>
-							</div>
+			{/* グレード基本情報 */}
+			<Card>
+				<CardContent>
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<dl className="space-y-4">
+								<div>
+									<dt className="text-sm font-medium text-gray-500">
+										グレード名
+									</dt>
+									<dd className="mt-1 text-lg font-semibold flex items-center">
+										<BadgeIcon className="h-5 w-5 mr-1 text-gray-500" />
+										{grade.name}
+									</dd>
+								</div>
+								<div>
+									<dt className="text-sm font-medium text-gray-500">レベル</dt>
+									<dd className="mt-1 flex items-center">
+										<StarIcon className="h-4 w-4 mr-1 text-yellow-500" />
+										レベル {grade.level}
+									</dd>
+								</div>
+								<div>
+									<dt className="text-sm font-medium text-gray-500">説明</dt>
+									<dd className="mt-1">{grade.description}</dd>
+								</div>
+							</dl>
 						</div>
-					</CardContent>
-				</Card>
-			</div>
+						<div>
+							<dl className="space-y-4">
+								<div>
+									<dt className="text-sm font-medium text-gray-500">
+										給与範囲
+									</dt>
+									<dd className="mt-1 flex items-center">
+										<DollarSignIcon className="h-4 w-4 mr-1 text-gray-500" />
+										{formatSalaryRange(
+											grade.salaryRange.min,
+											grade.salaryRange.max,
+										)}
+									</dd>
+								</div>
+								<div>
+									<dt className="text-sm font-medium text-gray-500">
+										所属人数
+									</dt>
+									<dd className="mt-1 flex items-center">
+										<UsersIcon className="h-4 w-4 mr-1 text-gray-500" />
+										{grade.employeeCount}人
+									</dd>
+								</div>
+								<div>
+									<dt className="text-sm font-medium text-gray-500">作成日</dt>
+									<dd className="mt-1 flex items-center">
+										<CalendarIcon className="h-4 w-4 mr-1 text-gray-500" />
+										{formatDate(grade.createdAt)}
+									</dd>
+								</div>
+							</dl>
+						</div>
+					</div>
+				</CardContent>
+			</Card>
 		</>
 	);
 }

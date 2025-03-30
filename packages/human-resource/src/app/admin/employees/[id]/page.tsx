@@ -3,6 +3,9 @@ import {
 	getEmployeeWithDefaults,
 	mockEmployees,
 } from "@/app/_mocks/employees";
+import { PageHeader } from "@/components/common/page-header";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { ContactInfoCard } from "./_components";
 
 export const metadata = {

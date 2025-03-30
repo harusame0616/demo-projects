@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -50,12 +51,14 @@ export default async function PositionDetailPage({
 
 	return (
 		<>
-			<div className="flex items-center justify-between mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">役職詳細</h2>
-				<Button variant="outline" asChild>
-					<Link href={`/admin/positions/${position.id}/edit`}>編集</Link>
-				</Button>
-			</div>
+			<PageHeader
+				title="役職詳細"
+				operations={[
+					<Button key="edit-position" variant="outline" asChild>
+						<Link href={`/admin/positions/${position.id}/edit`}>編集</Link>
+					</Button>,
+				]}
+			/>
 
 			<Card>
 				<CardHeader>

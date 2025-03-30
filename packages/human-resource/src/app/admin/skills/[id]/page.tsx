@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -74,14 +75,14 @@ export default async function SkillDetailPage({
 
 	return (
 		<>
-			<div className="flex items-center justify-between mb-6">
-				<div className="flex items-center gap-2">
-					<h2 className="text-3xl font-bold tracking-tight">スキル詳細</h2>
-				</div>
-				<Button asChild variant="outline">
-					<Link href={`/admin/skills/${id}/edit`}>編集</Link>
-				</Button>
-			</div>
+			<PageHeader
+				title="スキル詳細"
+				operations={[
+					<Button key="edit-skill" asChild variant="outline">
+						<Link href={`/admin/skills/${id}/edit`}>編集</Link>
+					</Button>,
+				]}
+			/>
 
 			<div className="space-y-6">
 				{/* スキル基本情報 */}

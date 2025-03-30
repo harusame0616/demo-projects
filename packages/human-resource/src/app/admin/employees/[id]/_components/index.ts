@@ -1,4 +1,3 @@
-export * from "./page-header";
 export * from "./profile-header";
 export * from "./contact-info-card";
 export * from "./skills-and-certifications-card";

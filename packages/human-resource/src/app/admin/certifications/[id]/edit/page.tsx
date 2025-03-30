@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
@@ -58,9 +59,7 @@ export default async function CertificationEditPage({
 
 	return (
 		<>
-			<div className="flex items-center gap-4 mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">資格編集</h2>
-			</div>
+			<PageHeader title="資格編集" />
 
 			<Suspense fallback={<CertificationFormSkeleton />}>
 				<CertificationForm certification={certification} isNew={false} />

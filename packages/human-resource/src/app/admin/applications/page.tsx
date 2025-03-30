@@ -24,12 +24,12 @@ export default async function ApplicationsPage({
 	const searchParamsResolved = await searchParams;
 
 	return (
-		<div className="space-y-4">
-			<PageHeader heading="申請一覧" />
+		<>
+			<PageHeader title="申請一覧" />
 			<SearchFormPresenter defaultQuery={searchParamsResolved} />
 			<Suspense fallback={<ApplicationsSkeleton />}>
 				<ApplicationsContainer searchParams={searchParamsResolved} />
 			</Suspense>
-		</div>
+		</>
 	);
 }

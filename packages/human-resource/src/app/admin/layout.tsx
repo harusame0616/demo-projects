@@ -21,7 +21,7 @@ export default function PrivateLayout({
 				</header>
 				<div className="flex-1 flex overflow-hidden w-full">
 					<AppSidebar />
-					<main className="flex-1 p-6 overflow-auto w-full max-w-full transition-[margin] duration-200 ease-linear [scrollbar-gutter:stable]">
+					<main className="flex-1 p-6 overflow-auto w-full max-w-full transition-[margin] duration-200 ease-linear [scrollbar-gutter:stable] gap-4 flex flex-col">
 						{children}
 					</main>
 				</div>
