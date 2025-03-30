@@ -1,68 +1,67 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 
 export function UsersSkeleton() {
 	// テーブル行の数
-	const rowIds = [
-		"id-1",
-		"id-2",
-		"id-3",
-		"id-4",
-		"id-5",
-		"id-6",
-		"id-7",
-		"id-8",
-		"id-9",
-		"id-10",
-	];
+	const rows = Array(10).fill(0);
 
 	return (
 		<div className="space-y-6 w-full">
 			{/* テーブルスケルトン */}
 			<div className="w-full overflow-auto">
-				<div className="rounded-md border w-full overflow-hidden">
-					{/* テーブルヘッダー */}
-					<div className="w-full bg-gray-50 border-b">
-						<div className="grid grid-cols-5 h-10">
-							<div className="col-span-1 flex items-center px-4">
-								<Skeleton className="h-4 w-28" />
-							</div>
-							<div className="col-span-1 flex items-center px-4">
-								<Skeleton className="h-4 w-24" />
-							</div>
-							<div className="col-span-1 flex items-center px-4">
-								<Skeleton className="h-4 w-20" />
-							</div>
-							<div className="col-span-1 flex items-center px-4">
-								<Skeleton className="h-4 w-20" />
-							</div>
-							<div className="col-span-1 flex items-center px-4">
-								<Skeleton className="h-4 w-10" />
-							</div>
-						</div>
-					</div>
-
-					{/* テーブル行 */}
-					<div className="divide-y">
-						{rowIds.map((id) => (
-							<div key={id} className="grid grid-cols-5 h-14 bg-white">
-								<div className="col-span-1 flex items-center px-4">
-									<Skeleton className="h-4 w-32" />
-								</div>
-								<div className="col-span-1 flex items-center px-4">
-									<Skeleton className="h-4 w-36" />
-								</div>
-								<div className="col-span-1 flex items-center px-4">
+				<div className="rounded-md border w-full">
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead className="w-[180px] whitespace-nowrap">
+									<Skeleton className="h-4 w-28" />
+								</TableHead>
+								<TableHead className="w-[220px] whitespace-nowrap">
+									<Skeleton className="h-4 w-24" />
+								</TableHead>
+								<TableHead className="w-[150px] whitespace-nowrap">
 									<Skeleton className="h-4 w-20" />
-								</div>
-								<div className="col-span-1 flex items-center px-4">
-									<Skeleton className="h-4 w-16" />
-								</div>
-								<div className="col-span-1 flex items-center px-4 justify-end">
-									<Skeleton className="h-8 w-8 rounded-full" />
-								</div>
-							</div>
-						))}
-					</div>
+								</TableHead>
+								<TableHead className="w-[120px] whitespace-nowrap">
+									<Skeleton className="h-4 w-20" />
+								</TableHead>
+								<TableHead className="w-[80px]">
+									<Skeleton className="h-4 w-10" />
+								</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{rows.map((_, index) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey: スケルトン表示用の静的リスト
+								<TableRow key={`user-skeleton-row-${index}`}>
+									<TableCell className="whitespace-nowrap">
+										<Skeleton className="h-4 w-32" />
+									</TableCell>
+									<TableCell className="whitespace-nowrap">
+										<Skeleton className="h-4 w-36" />
+									</TableCell>
+									<TableCell className="whitespace-nowrap">
+										<Skeleton className="h-4 w-20" />
+									</TableCell>
+									<TableCell className="whitespace-nowrap">
+										<Skeleton className="h-4 w-16" />
+									</TableCell>
+									<TableCell className="whitespace-nowrap">
+										<div className="flex justify-end">
+											<Skeleton className="h-8 w-8 rounded-full" />
+										</div>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
 				</div>
 			</div>
 
