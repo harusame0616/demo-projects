@@ -25,9 +25,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="ja">
+		<html lang="ja" className="[scrollbar-gutter:stable]">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				// SelectBox で選択肢を表示するなどすると data-scroll-locked が追加されてマージンが右側に追加される
+				// scrollbar-gutter:stable が設定されるとデザインが崩れてしまうため、data-[scroll-locked="1"]:mr-0! を追加してマージンを削除する
+				className={`${geistSans.variable} ${geistMono.variable} antialiased data-[scroll-locked="1"]:mr-0!`}
 			>
 				{children}
 				<Toaster />
