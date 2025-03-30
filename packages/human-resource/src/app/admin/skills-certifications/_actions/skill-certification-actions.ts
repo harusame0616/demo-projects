@@ -20,6 +20,7 @@ export interface SkillCertificationSearchParams {
 export async function getSkillCertifications(
 	searchParams: SkillCertificationSearchParams = {},
 ) {
+	await new Promise((resolve) => setTimeout(resolve, 200));
 	const {
 		query = "",
 		type = "all",

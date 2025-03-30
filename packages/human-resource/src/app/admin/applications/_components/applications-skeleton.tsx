@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
 	Table,
@@ -12,89 +11,64 @@ import {
 export function ApplicationsSkeleton() {
 	return (
 		<div className="space-y-4 w-full">
-			{/* 検索フォームスケルトン */}
-			<Card>
-				<CardHeader>
-					<CardTitle>
-						<Skeleton className="h-6 w-32" />
-					</CardTitle>
-					<Skeleton className="h-4 w-64" />
-				</CardHeader>
-				<CardContent>
-					<div className="space-y-4">
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							{Array.from({ length: 4 }).map((_, i) => (
-								// biome-ignore lint/suspicious/noArrayIndexKey:
-								<div key={i} className="space-y-2">
-									<Skeleton className="h-4 w-24" />
-									<Skeleton className="h-10 w-full" />
-								</div>
-							))}
-						</div>
-						<div className="flex justify-end gap-2">
-							<Skeleton className="h-10 w-24" />
-							<Skeleton className="h-10 w-24" />
-						</div>
-					</div>
-				</CardContent>
-			</Card>
-
 			{/* 申請テーブルスケルトン */}
 			<div className="w-full overflow-auto">
 				<div className="min-w-full rounded-md border">
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="w-[100px]">
+								<TableHead className="w-[100px] whitespace-nowrap">
 									<Skeleton className="h-4 w-20" />
 								</TableHead>
-								<TableHead className="w-[120px]">
+								<TableHead className="w-[120px] whitespace-nowrap">
 									<Skeleton className="h-4 w-20" />
 								</TableHead>
-								<TableHead className="w-[100px]">
+								<TableHead className="w-[100px] whitespace-nowrap">
 									<Skeleton className="h-4 w-20" />
 								</TableHead>
-								<TableHead className="w-[150px]">
+								<TableHead className="w-[150px] whitespace-nowrap">
 									<Skeleton className="h-4 w-20" />
 								</TableHead>
-								<TableHead className="w-[120px]">
+								<TableHead className="w-[120px] whitespace-nowrap">
 									<Skeleton className="h-4 w-20" />
 								</TableHead>
-								<TableHead className="min-w-[150px]">
+								<TableHead className="min-w-[150px] whitespace-nowrap">
 									<Skeleton className="h-4 w-20" />
 								</TableHead>
-								<TableHead className="w-[80px] text-right">
+								<TableHead className="w-[80px] text-right whitespace-nowrap">
 									<Skeleton className="h-4 w-14 ml-auto" />
 								</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{Array.from({ length: 8 }).map((_, i) => (
-								// biome-ignore lint/suspicious/noArrayIndexKey:
-								<TableRow key={i}>
-									<TableCell>
-										<Skeleton className="h-4 w-16" />
-									</TableCell>
-									<TableCell>
-										<Skeleton className="h-6 w-24" />
-									</TableCell>
-									<TableCell>
-										<Skeleton className="h-6 w-20" />
-									</TableCell>
-									<TableCell>
-										<Skeleton className="h-4 w-24" />
-									</TableCell>
-									<TableCell>
-										<Skeleton className="h-4 w-20" />
-									</TableCell>
-									<TableCell>
-										<Skeleton className="h-4 w-48" />
-									</TableCell>
-									<TableCell className="text-right">
-										<Skeleton className="h-8 w-8 ml-auto" />
-									</TableCell>
-								</TableRow>
-							))}
+							{Array(8)
+								.fill(0)
+								.map((_, index) => (
+									// biome-ignore lint/suspicious/noArrayIndexKey: スケルトン表示用の静的リスト
+									<TableRow key={`application-skeleton-row-${index}`}>
+										<TableCell className="whitespace-nowrap">
+											<Skeleton className="h-4 w-16" />
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											<Skeleton className="h-6 w-24" />
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											<Skeleton className="h-6 w-20" />
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											<Skeleton className="h-4 w-24" />
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											<Skeleton className="h-4 w-20" />
+										</TableCell>
+										<TableCell className="whitespace-nowrap">
+											<Skeleton className="h-4 w-48" />
+										</TableCell>
+										<TableCell className="text-right whitespace-nowrap">
+											<Skeleton className="h-8 w-8 ml-auto" />
+										</TableCell>
+									</TableRow>
+								))}
 						</TableBody>
 					</Table>
 				</div>
@@ -103,9 +77,8 @@ export function ApplicationsSkeleton() {
 			{/* ページネーションスケルトン */}
 			<div className="mt-4 flex justify-center">
 				<div className="flex gap-1">
-					{Array.from({ length: 5 }).map((_, i) => (
-						// biome-ignore lint/suspicious/noArrayIndexKey:
-						<Skeleton key={i} className="h-10 w-10" />
+					{["prev", "1", "2", "3", "next"].map((id) => (
+						<Skeleton key={id} className="h-10 w-10" />
 					))}
 				</div>
 			</div>

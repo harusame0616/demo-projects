@@ -11,28 +11,23 @@ import {
 
 export function DepartmentsSkeleton() {
 	return (
-		<div className="space-y-4">
-			{/* 検索フォームのスケルトン部分はSearchFormPresenterで対応 */}
-
+		<div className="space-y-6 w-full">
 			{/* 部署テーブルのスケルトン */}
-			<div className="space-y-6 w-full">
-				<div className="w-full overflow-auto">
+			<div className="w-full overflow-auto">
+				<div className="rounded-md border w-full">
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="w-[200px]">
+								<TableHead className="w-[100px] whitespace-nowrap">
 									<Skeleton className="h-4 w-20" />
 								</TableHead>
-								<TableHead>
+								<TableHead className="w-[200px] whitespace-nowrap">
 									<Skeleton className="h-4 w-16" />
 								</TableHead>
-								<TableHead>
+								<TableHead className="w-[200px] whitespace-nowrap">
 									<Skeleton className="h-4 w-24" />
 								</TableHead>
-								<TableHead className="text-right">
-									<Skeleton className="h-4 w-16 ml-auto" />
-								</TableHead>
-								<TableHead className="w-[100px]">
+								<TableHead className="w-[80px] whitespace-nowrap">
 									<Skeleton className="h-4 w-16" />
 								</TableHead>
 							</TableRow>
@@ -41,23 +36,19 @@ export function DepartmentsSkeleton() {
 							{Array(5)
 								.fill(0)
 								.map((_, index) => (
-									// biome-ignore lint/suspicious/noArrayIndexKey:
-									<TableRow key={`skeleton-row-${index}`}>
-										<TableCell>
+									// biome-ignore lint/suspicious/noArrayIndexKey: スケルトン表示用の静的リスト
+									<TableRow key={`department-skeleton-row-${index}`}>
+										<TableCell className="font-medium whitespace-nowrap">
 											<Skeleton className="h-5 w-32" />
 										</TableCell>
-										<TableCell>
-											<Skeleton className="h-5 w-16" />
+										<TableCell className="font-medium whitespace-nowrap">
+											<Skeleton className="h-5 w-40" />
 										</TableCell>
-										<TableCell>
+										<TableCell className="whitespace-nowrap">
 											<Skeleton className="h-5 w-24" />
 										</TableCell>
-										<TableCell className="text-right">
-											<Skeleton className="h-5 w-12 ml-auto" />
-										</TableCell>
-										<TableCell>
-											<div className="flex justify-end gap-2">
-												<Skeleton className="h-8 w-8 rounded-full" />
+										<TableCell className="whitespace-nowrap">
+											<div className="flex justify-end">
 												<Skeleton className="h-8 w-8 rounded-full" />
 											</div>
 										</TableCell>
@@ -66,9 +57,9 @@ export function DepartmentsSkeleton() {
 						</TableBody>
 					</Table>
 				</div>
-				<div className="mt-4 flex justify-center">
-					<Skeleton className="h-10 w-64" />
-				</div>
+			</div>
+			<div className="mt-4 flex justify-center">
+				<Skeleton className="h-10 w-64" />
 			</div>
 		</div>
 	);
