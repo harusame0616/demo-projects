@@ -34,10 +34,10 @@ export function PositionsSkeleton() {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{Array(5)
+							{Array(20)
 								.fill(0)
 								.map((_, i) => (
-									// biome-ignore lint/suspicious/noArrayIndexKey:
+									// biome-ignore lint/suspicious/noArrayIndexKey: スケルトン表示用の静的リスト
 									<TableRow key={`position-skeleton-row-${i}`}>
 										<TableCell>
 											<Skeleton className="h-5 w-20" />
