@@ -1,6 +1,5 @@
 import { AppSidebar } from "@/app/admin/sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import Loading from "./loading";
 
 export default function PrivateLayout({
 	children,
