@@ -10,7 +10,7 @@ import {
 
 export function UsersSkeleton() {
 	// テーブル行の数
-	const rows = Array(10).fill(0);
+	const rows = Array(20).fill(0);
 
 	return (
 		<div className="space-y-6 w-full">

@@ -41,7 +41,7 @@ export function ApplicationsSkeleton() {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{Array(8)
+							{Array(20)
 								.fill(0)
 								.map((_, index) => (
 									// biome-ignore lint/suspicious/noArrayIndexKey: スケルトン表示用の静的リスト

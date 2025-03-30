@@ -40,7 +40,7 @@ export function AttendancesSkeleton() {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{Array(5)
+						{Array(20)
 							.fill(0)
 							.map((_, index) => (
 								// biome-ignore lint/suspicious/noArrayIndexKey: スケルトン表示用の静的リスト
