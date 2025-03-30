@@ -1,4 +1,5 @@
 import { mockEmployees } from "@/app/_mocks/employees";
+import { PageHeader } from "@/components/common/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,17 +62,15 @@ export default async function UserDetailPage({
 		: "ログイン履歴なし";
 
 	return (
-		<div className="space-y-6">
-			<div className="flex items-center justify-between">
-				<div>
-					<h1 className="text-2xl font-bold tracking-tight mb-1">
-						ユーザー詳細
-					</h1>
-				</div>
-				<Button asChild variant="outline">
-					<Link href={`/admin/users/${user.id}/edit`}>編集</Link>
-				</Button>
-			</div>
+		<>
+			<PageHeader
+				title="ユーザー詳細"
+				operations={[
+					<Button key="edit-user" asChild variant="outline">
+						<Link href={`/admin/users/${user.id}/edit`}>編集</Link>
+					</Button>,
+				]}
+			/>
 
 			<div className="grid grid-cols-1 gap-6">
 				{/* ユーザー基本情報 */}
@@ -196,6 +195,6 @@ export default async function UserDetailPage({
 					</CardContent>
 				</Card>
 			</div>
-		</div>
+		</>
 	);
 }

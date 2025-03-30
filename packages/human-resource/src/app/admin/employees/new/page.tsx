@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { getDepartments, getPositions } from "../_actions/employee-actions";
 import { EmployeeFormWrapper } from "./_components/employee-form-wrapper";
 
@@ -15,10 +16,7 @@ export default async function NewEmployeePage() {
 
 	return (
 		<>
-			<div className="mb-6">
-				<h1 className="text-2xl font-bold tracking-tight">従業員新規登録</h1>
-			</div>
-
+			<PageHeader title="従業員新規登録" />
 			<EmployeeFormWrapper
 				departmentOptions={departmentOptions}
 				positionOptions={positionOptions}

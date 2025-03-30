@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -11,17 +12,12 @@ export const metadata: Metadata = {
 
 export default function Loading() {
 	return (
-		<div className="space-y-4">
-			<div className="flex justify-between items-center">
-				<h1 className="text-2xl font-bold tracking-tight">資格一覧</h1>
-				<Button asChild variant="outline">
-					<Link href="/admin/certifications/new">新規作成</Link>
-				</Button>
-			</div>
+		<>
+			<PageHeader title="資格一覧" />
 
 			<SearchFormPresenter defaultQuery={""} />
 
 			<CertificationsSkeleton />
-		</div>
+		</>
 	);
 }

@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -28,13 +29,15 @@ export default async function PositionsPage({
 	const level = resolvedParams.level || "all";
 
 	return (
-		<div className="space-y-4">
-			<div className="flex justify-between items-center">
-				<h1 className="text-2xl font-bold tracking-tight">役職一覧</h1>
-				<Button asChild variant="outline">
-					<Link href="/admin/positions/new">新規作成</Link>
-				</Button>
-			</div>
+		<>
+			<PageHeader
+				title="役職一覧"
+				operations={[
+					<Button key="new-position" asChild variant="outline">
+						<Link href="/admin/positions/new">新規作成</Link>
+					</Button>,
+				]}
+			/>
 
 			<Suspense
 				fallback={
@@ -52,6 +55,6 @@ export default async function PositionsPage({
 			<Suspense fallback={<PositionsSkeleton />}>
 				<PositionsContainer searchParams={resolvedParams} />
 			</Suspense>
-		</div>
+		</>
 	);
 }

@@ -127,9 +127,6 @@ export function DepartmentForm({
 	return (
 		<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
 			<Card>
-				<CardHeader>
-					<CardTitle>{isNew ? "部署登録" : "部署情報"}</CardTitle>
-				</CardHeader>
 				<CardContent className="space-y-6">
 					{error && (
 						<div className="bg-red-50 p-4 rounded-md text-red-600 mb-4">

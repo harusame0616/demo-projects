@@ -1,4 +1,5 @@
 import { mockEmployees } from "@/app/_mocks/employees";
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
@@ -51,10 +52,7 @@ export default async function EditUserPage({
 
 	return (
 		<>
-			<div className="mb-6">
-				<h1 className="text-2xl font-bold tracking-tight">ユーザー編集</h1>
-				<p className="text-muted-foreground mt-1">{user.email}</p>
-			</div>
+			<PageHeader title="ユーザー編集" />
 
 			<UserFormWrapper
 				user={{

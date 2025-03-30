@@ -3,12 +3,12 @@ import {
 	getEmployeeWithDefaults,
 	mockEmployees,
 } from "@/app/_mocks/employees";
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getDepartments, getPositions } from "../../_actions/employee-actions";
-import { PageHeader } from "./_components";
 import { EmployeeFormWrapper } from "./_components/employee-form-wrapper";
 
 export const metadata: Metadata = {
@@ -80,7 +80,7 @@ export default async function EmployeeEditPage({
 
 	return (
 		<>
-			<PageHeader />
+			<PageHeader title="従業員編集" />
 			<EmployeeFormWrapper
 				employee={formEmployee}
 				departmentOptions={departmentOptions}

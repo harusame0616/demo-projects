@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -25,19 +26,21 @@ export default async function SkillsPage({
 	const query = resolvedParams.query || "";
 
 	return (
-		<div className="space-y-4">
-			<div className="flex justify-between items-center">
-				<h1 className="text-2xl font-bold tracking-tight">スキル一覧</h1>
-				<Button asChild variant="outline">
-					<Link href="/admin/skills/new">新規作成</Link>
-				</Button>
-			</div>
+		<>
+			<PageHeader
+				title="スキル一覧"
+				operations={[
+					<Button key="new-skill" asChild variant="outline">
+						<Link href="/admin/skills/new">新規作成</Link>
+					</Button>,
+				]}
+			/>
 
 			<SearchFormPresenter defaultQuery={query} />
 
 			<Suspense fallback={<SkillsSkeleton />}>
 				<SkillsContainer searchParams={resolvedParams} />
 			</Suspense>
-		</div>
+		</>
 	);
 }

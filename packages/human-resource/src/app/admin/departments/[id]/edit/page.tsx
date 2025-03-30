@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
@@ -62,9 +63,7 @@ export default async function DepartmentEditPage({
 
 	return (
 		<>
-			<div className="flex items-center gap-4 mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">部署編集</h2>
-			</div>
+			<PageHeader title="部署編集" />
 
 			<Suspense fallback={<DepartmentFormSkeleton />}>
 				<DepartmentForm department={department} isNew={false} />

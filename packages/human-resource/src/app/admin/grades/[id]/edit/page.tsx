@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
@@ -59,9 +60,7 @@ export default async function GradeEditPage({ params }: GradeEditPageProps) {
 
 	return (
 		<>
-			<div className="flex items-center gap-4 mb-6">
-				<h2 className="text-3xl font-bold tracking-tight">グレード編集</h2>
-			</div>
+			<PageHeader title="グレード編集" />
 
 			<Suspense fallback={<GradeFormSkeleton />}>
 				<GradeForm grade={grade} isNew={false} />

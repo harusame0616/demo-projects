@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -6,10 +7,9 @@ import {
 	FileTextIcon,
 	UsersIcon,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getSkillCertificationById } from "../../skills-certifications/_actions/skill-certification-actions";
-
-import type { Metadata } from "next";
 
 interface CertificationDetailPageProps {
 	params: Promise<{ id: string }>;
@@ -72,14 +72,14 @@ export default async function CertificationDetailPage({
 
 	return (
 		<>
-			<div className="flex items-center justify-between mb-6">
-				<div className="flex items-center gap-2">
-					<h2 className="text-3xl font-bold tracking-tight">資格詳細</h2>
-				</div>
-				<Button asChild variant="outline">
-					<Link href={`/admin/certifications/${id}/edit`}>編集</Link>
-				</Button>
-			</div>
+			<PageHeader
+				title="資格詳細"
+				operations={[
+					<Button key="edit-certification" variant="outline" asChild>
+						<Link href={`/admin/certifications/${id}/edit`}>編集</Link>
+					</Button>,
+				]}
+			/>
 
 			<div className="space-y-6">
 				{/* 資格基本情報 */}
