@@ -16,6 +16,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { OrderDirection } from "@/lib/order";
 import {
 	ArrowDownIcon,
 	ArrowUpIcon,
@@ -25,31 +26,19 @@ import {
 	TrashIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import type { Employee } from "../types";
-import type { User } from "../types";
+import { useRouter } from "next/navigation";
+import { type UserOrder, UserOrderField } from "../order";
+import type { Employee, User } from "../types";
 import type { UserRole, UserStatus } from "../user";
 
 interface UserTableProps {
 	users: User[];
 	employees: Employee[];
-	searchParams: {
-		query?: string;
-		role?: string;
-		status?: string;
-		sortBy?: string;
-		sortOrder?: "asc" | "desc";
-		page?: string;
-	};
-	onSort: (column: string) => void;
+	order: UserOrder;
+	onSort: (column: UserOrderField) => void;
 }
 
-export function UserTable({
-	users,
-	employees,
-	searchParams,
-	onSort,
-}: UserTableProps) {
+export function UserTable({ users, employees, order, onSort }: UserTableProps) {
 	const router = useRouter();
 
 	// 従業員IDから従業員情報を取得する関数
@@ -58,10 +47,11 @@ export function UserTable({
 	};
 
 	// ソート状態に応じたアイコンを表示
-	const getSortIcon = (column: string) => {
-		if (searchParams.sortBy !== column) return null;
+	const getSortIcon = (column: UserOrderField) => {
+		const sortValue = column;
+		if (order.field !== sortValue) return null;
 
-		return searchParams.sortOrder === "asc" ? (
+		return order.direction === OrderDirection.Asc ? (
 			<ArrowUpIcon className="ml-1 h-4 w-4" />
 		) : (
 			<ArrowDownIcon className="ml-1 h-4 w-4" />
@@ -141,55 +131,58 @@ export function UserTable({
 					<TableRow>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[80px] whitespace-nowrap"
-							onClick={() => onSort("id")}
+							onClick={() => onSort(UserOrderField.UserCode)}
 						>
 							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
-								ユーザーコード {getSortIcon("id")}
+								ユーザーコード {getSortIcon(UserOrderField.UserCode)}
 							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
-							onClick={() => onSort("employeeId")}
+							onClick={() => onSort(UserOrderField.EmployeeId)}
 						>
 							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
-								従業員コード {getSortIcon("employeeId")}
-							</div>
-						</TableHead>
-						<TableHead className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap">
-							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
-								名前
-							</div>
-						</TableHead>
-						<TableHead
-							className="cursor-pointer hover:bg-gray-50 w-[200px] whitespace-nowrap"
-							onClick={() => onSort("email")}
-						>
-							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
-								メールアドレス {getSortIcon("email")}
-							</div>
-						</TableHead>
-						<TableHead
-							className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
-							onClick={() => onSort("role")}
-						>
-							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
-								権限 {getSortIcon("role")}
-							</div>
-						</TableHead>
-						<TableHead
-							className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
-							onClick={() => onSort("status")}
-						>
-							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
-								ステータス {getSortIcon("status")}
+								従業員コード {getSortIcon(UserOrderField.EmployeeId)}
 							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"
-							onClick={() => onSort("lastLogin")}
+							onClick={() => onSort(UserOrderField.Name)}
 						>
 							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
-								最終ログイン {getSortIcon("lastLogin")}
+								名前 {getSortIcon(UserOrderField.Name)}
+							</div>
+						</TableHead>
+						<TableHead
+							className="cursor-pointer hover:bg-gray-50 w-[200px] whitespace-nowrap"
+							onClick={() => onSort(UserOrderField.Email)}
+						>
+							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+								メールアドレス {getSortIcon(UserOrderField.Email)}
+							</div>
+						</TableHead>
+						<TableHead
+							className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
+							onClick={() => onSort(UserOrderField.Role)}
+						>
+							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+								権限 {getSortIcon(UserOrderField.Role)}
+							</div>
+						</TableHead>
+						<TableHead
+							className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
+							onClick={() => onSort(UserOrderField.Status)}
+						>
+							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+								ステータス {getSortIcon(UserOrderField.Status)}
+							</div>
+						</TableHead>
+						<TableHead
+							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"
+							onClick={() => onSort(UserOrderField.LastLogin)}
+						>
+							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
+								最終ログイン {getSortIcon(UserOrderField.LastLogin)}
 							</div>
 						</TableHead>
 						<TableHead className="w-[60px]">操作</TableHead>

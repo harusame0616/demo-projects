@@ -21,3 +21,10 @@ export function parseSearchParamsPagination(value: unknown) {
 export type Pagination = v.InferOutput<typeof SearchParamsPaginationSchema>;
 
 export const PaginationItemCount = 20;
+
+export interface PaginationResult {
+	total: number;
+	page: number;
+	limit: number;
+	totalPages: number;
+}

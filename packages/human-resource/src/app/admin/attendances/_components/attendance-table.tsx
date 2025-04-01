@@ -155,14 +155,6 @@ export function AttendanceTable({
 	const currentSort = (searchParams.get("sort") as SortField) || "yearMonth";
 	const currentOrder = searchParams.get("order") || "desc";
 
-	// ページ切り替え
-	const _handlePageChange = (page: number) => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.set("page", page.toString());
-		const newPath = `${pathname}?${params.toString()}`;
-		router.push(newPath);
-	};
-
 	// 従業員詳細ページへ移動
 	const navigateToEmployeeDetail = (employeeId: string) => {
 		router.push(`/admin/employees/${employeeId}`);
@@ -385,11 +377,7 @@ export function AttendanceTable({
 			{/* ページネーション */}
 			{totalPages > 1 && (
 				<div className="flex justify-center mt-4">
-					<PaginationNav
-						currentPage={page}
-						totalPages={totalPages}
-						onPageChange={_handlePageChange}
-					/>
+					<PaginationNav currentPage={page} totalPages={totalPages} />
 				</div>
 			)}
 

@@ -130,13 +130,11 @@ export function ApplicationsPresenter({
 	pagination,
 }: ApplicationsPresenterProps) {
 	const router = useRouter();
-	const pathname = usePathname();
 	const [selectedApplication, setSelectedApplication] =
 		useState<Application | null>(null);
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 	const [comment, setComment] = useState("");
 	const [isProcessing, setIsProcessing] = useState(false);
-	const searchParams = useSearchParams();
 
 	// 申請の詳細を表示する
 	const openDetails = (application: Application) => {
@@ -177,15 +175,6 @@ export function ApplicationsPresenter({
 		} finally {
 			setIsProcessing(false);
 		}
-	};
-
-	// ページ切り替え処理
-	const handlePageChange = (page: number) => {
-		const newSearchParams = new URLSearchParams(searchParams);
-
-		newSearchParams.set("page", page.toString());
-		const newPath = `${pathname}?${newSearchParams}`;
-		router.push(newPath);
 	};
 
 	// 申請IDを作成（実際のidから）
@@ -294,7 +283,6 @@ export function ApplicationsPresenter({
 					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
-						onPageChange={handlePageChange}
 					/>
 				</div>
 			)}

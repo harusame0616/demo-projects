@@ -1,9 +1,10 @@
 import * as v from "valibot";
+import { UserRole, UserStatus } from "./user";
 
 export const searchParamsUserQuerySchema = v.object({
 	query: v.optional(v.string(), ""),
 	role: v.union([
-		v.string(),
+		v.pipe(v.string(), v.enum(UserRole)),
 		v.literal("all"),
 		v.pipe(
 			v.any(),
@@ -11,16 +12,13 @@ export const searchParamsUserQuerySchema = v.object({
 		),
 	]),
 	status: v.union([
-		v.string(),
+		v.pipe(v.string(), v.enum(UserStatus)),
 		v.literal("all"),
 		v.pipe(
 			v.any(),
 			v.transform(() => "all" as const),
 		),
 	]),
-	sortBy: v.optional(v.string(), "id"),
-	sortOrder: v.optional(v.union([v.literal("asc"), v.literal("desc")]), "asc"),
-	page: v.optional(v.string(), "1"),
 });
 
 export type UserSearchQuery = v.InferOutput<typeof searchParamsUserQuerySchema>;

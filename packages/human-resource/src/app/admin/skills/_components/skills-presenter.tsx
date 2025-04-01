@@ -41,13 +41,6 @@ export function SkillsPresenter({ skills, pagination }: SkillsPresenterProps) {
 	const currentSort = searchParams.get("sort") || "name";
 	const currentOrder = searchParams.get("order") || "asc";
 
-	// ページ変更処理
-	const handlePageChange = (page: number) => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.set("page", page.toString());
-		router.push(`${pathname}?${params.toString()}`);
-	};
-
 	// ソート処理
 	const handleSort = (column: keyof SkillCertification) => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -171,7 +164,6 @@ export function SkillsPresenter({ skills, pagination }: SkillsPresenterProps) {
 					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
-						onPageChange={handlePageChange}
 					/>
 				</div>
 			)}

@@ -23,11 +23,11 @@ import {
 } from "../search-query";
 // 検索フォームのスキーマ
 
-interface SearchFormPresenterProps {
+interface Props {
 	searchQuery: UserSearchQuery;
 }
 
-export function SearchFormPresenter({ searchQuery }: SearchFormPresenterProps) {
+export function SearchFormPresenter({ searchQuery }: Props) {
 	const searchForm = useSearchForm(searchParamsUserQuerySchema, searchQuery, {
 		query: "",
 		role: "all",

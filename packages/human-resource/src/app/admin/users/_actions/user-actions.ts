@@ -7,18 +7,14 @@ import {
 	userRoles,
 	userStatuses,
 } from "@/app/_mocks/users";
-import { type Pagination, PaginationItemCount } from "@/lib/pagination";
+import {
+	type Pagination,
+	PaginationItemCount,
+	type PaginationResult,
+} from "@/lib/pagination";
 import { OrderDirection } from "../../../../lib/order";
 import { type UserOrder, UserOrderField } from "../order";
 import type { UserSearchQuery } from "../search-query";
-
-// ページネーション用の型定義
-interface PaginationResult {
-	total: number;
-	page: number;
-	limit: number;
-	totalPages: number;
-}
 
 // 検索結果の型定義
 interface UserSearchResult {
@@ -42,9 +38,14 @@ export async function getUsers(
 			? searchQuery.query.toLowerCase()
 			: "";
 
-	// 従業員IDと名前のマッピングを作成
+	// 従業員IDと名前のマッピングを作成（検索用）
 	const employeeMap = new Map(
 		mockEmployees.map((employee) => [employee.id, employee.name.toLowerCase()]),
+	);
+
+	// ソート用の名前マッピング
+	const employeeNameMap = new Map(
+		mockEmployees.map((employee) => [employee.id, employee.name]),
 	);
 
 	// 検索条件に基づいてフィルタリング
@@ -107,9 +108,12 @@ export async function getUsers(
 						? a.status.localeCompare(b.status)
 						: b.status.localeCompare(a.status);
 				case UserOrderField.Name: {
-					// 名前はemployeeMapから取得する必要があるかもしれません
-					const nameA = a.employeeId ? employeeMap.get(a.employeeId) || "" : "";
-					const nameB = b.employeeId ? employeeMap.get(b.employeeId) || "" : "";
+					const nameA = a.employeeId
+						? employeeNameMap.get(a.employeeId) || ""
+						: "";
+					const nameB = b.employeeId
+						? employeeNameMap.get(b.employeeId) || ""
+						: "";
 					return order.direction === OrderDirection.Asc
 						? nameA.localeCompare(nameB)
 						: nameB.localeCompare(nameA);

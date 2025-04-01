@@ -20,9 +20,6 @@ export default function Loading() {
 					query: "",
 					role: "all",
 					status: "all",
-					sortBy: "id",
-					sortOrder: "desc",
-					page: "1",
 				}}
 			/>
 			<UsersSkeleton />

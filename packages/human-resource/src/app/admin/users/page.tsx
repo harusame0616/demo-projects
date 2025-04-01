@@ -4,11 +4,7 @@ import { parseSearchParamsPagination } from "@/lib/pagination";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import {
-	SearchFormContainer,
-	SearchFormPresenter,
-	SearchFormSkeleton,
-} from "./_search-form";
+import { SearchFormPresenter } from "./_search-form";
 import { UsersContainer, UsersSkeleton } from "./_users";
 import { parseSearchParamsUserOrder } from "./order";
 import { parseSearchParamsUserSearchQuery } from "./search-query";

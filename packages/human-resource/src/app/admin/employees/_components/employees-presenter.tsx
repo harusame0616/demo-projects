@@ -66,28 +66,6 @@ export function EmployeesPresenter({
 		router.push(url);
 	};
 
-	const handlePageChange = (page: number) => {
-		// 現在のURLパラメータを取得
-		const newParams = new URLSearchParams(params.toString());
-
-		// 既存のパラメータを維持
-		if (searchParams.query) newParams.set("query", searchParams.query);
-		if (searchParams.department)
-			newParams.set("department", searchParams.department);
-		if (searchParams.position) newParams.set("position", searchParams.position);
-		if (searchParams.sortBy) newParams.set("sortBy", searchParams.sortBy);
-		if (searchParams.sortOrder)
-			newParams.set("sortOrder", searchParams.sortOrder);
-
-		// ページを更新
-		newParams.set("page", page.toString());
-
-		// URLをアップデート
-		const queryString = newParams.toString();
-		const url = queryString ? `${pathname}?${queryString}` : pathname;
-		router.push(url);
-	};
-
 	return (
 		<div className="space-y-6 w-full">
 			<div className="w-full overflow-auto">
@@ -106,7 +84,6 @@ export function EmployeesPresenter({
 					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
-						onPageChange={handlePageChange}
 					/>
 				</div>
 			)}

@@ -8,6 +8,7 @@ export const UserOrderField = {
 	Status: "status",
 	Name: "name",
 	LastLogin: "lastLogin",
+	EmployeeId: "employeeId",
 } as const;
 
 export type UserOrderField =
