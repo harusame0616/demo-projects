@@ -1,15 +1,8 @@
 "use server";
 
-// 申請タイプの定義
-export type ApplicationType =
-	| "attendance_correction"
-	| "leave_request"
-	| "remote_work"
-	| "overtime"
-	| "business_trip";
-
-// 申請ステータスの定義
-export type ApplicationStatus = "pending" | "approved" | "rejected";
+import type { Pagination } from "@/lib/pagination";
+import type { ApplicationStatus, ApplicationType } from "../application";
+import type { SearchQuery } from "../search-query";
 
 // 申請データの型定義
 export interface Application {
@@ -45,63 +38,63 @@ const pendingApplications: Application[] = [
 		employeeName: "佐藤太郎",
 		submittedDate: "2023-04-10",
 		targetDate: "2023-04-08",
-		content: "出勤時間修正: 9:00 → 8:30",
+		content: "出勤：9:00 → 8:30",
 		reason: "電車遅延のため、実際は8:30に出社していました。",
 		status: "pending",
 	},
 	{
 		id: "app-002",
-		type: "leave_request",
+		type: "paid_holiday",
 		employeeId: "emp-002",
 		employeeName: "鈴木花子",
 		submittedDate: "2023-04-12",
 		targetDate: "2023-04-20",
-		content: "有給休暇: 1日",
+		content: "有給休暇：1日",
 		reason: "私用のため",
 		status: "pending",
 	},
 	{
 		id: "app-003",
-		type: "remote_work",
+		type: "paid_holiday",
 		employeeId: "emp-003",
 		employeeName: "田中誠",
 		submittedDate: "2023-04-14",
 		targetDate: "2023-04-21",
-		content: "リモートワーク: 1日",
+		content: "有給休暇：1日",
 		reason: "自宅での作業環境が整ったため",
 		status: "pending",
 	},
 	{
 		id: "app-004",
-		type: "overtime",
+		type: "attendance_correction",
 		employeeId: "emp-004",
 		employeeName: "伊藤健太",
 		submittedDate: "2023-04-15",
 		targetDate: "2023-04-15",
-		content: "残業申請: 3時間 (18:00-21:00)",
+		content: "退勤：18:00 → 21:00",
 		reason: "プロジェクト締め切りのため",
 		status: "pending",
 	},
 	{
 		id: "app-005",
-		type: "business_trip",
+		type: "paid_holiday",
 		employeeId: "emp-005",
 		employeeName: "山本美咲",
 		submittedDate: "2023-04-16",
 		targetDate: "2023-04-25",
-		content: "出張申請: 大阪 (1泊2日)",
+		content: "有給休暇：1日",
 		reason: "クライアントミーティングのため",
 		status: "pending",
 	},
 	// 追加データ
 	{
 		id: "app-006",
-		type: "leave_request",
+		type: "paid_holiday",
 		employeeId: "emp-006",
 		employeeName: "中村正人",
 		submittedDate: "2023-04-16",
 		targetDate: "2023-04-22",
-		content: "有給休暇: 1日",
+		content: "有給休暇：1日",
 		reason: "家族の用事のため",
 		status: "pending",
 	},
@@ -112,51 +105,51 @@ const pendingApplications: Application[] = [
 		employeeName: "小林裕子",
 		submittedDate: "2023-04-17",
 		targetDate: "2023-04-15",
-		content: "退勤時間修正: 18:00 → 19:30",
+		content: "退勤：18:00 → 19:30",
 		reason: "システム障害対応のため残業しました",
 		status: "pending",
 	},
 	{
 		id: "app-008",
-		type: "remote_work",
+		type: "paid_holiday",
 		employeeId: "emp-008",
 		employeeName: "加藤聡",
 		submittedDate: "2023-04-17",
 		targetDate: "2023-04-24",
-		content: "リモートワーク: 3日間 (4/24-4/26)",
+		content: "有給休暇：3日間",
 		reason: "在宅での集中作業が必要なタスクのため",
 		status: "pending",
 	},
 	{
 		id: "app-009",
-		type: "overtime",
+		type: "attendance_correction",
 		employeeId: "emp-009",
 		employeeName: "吉田直樹",
 		submittedDate: "2023-04-18",
 		targetDate: "2023-04-20",
-		content: "残業申請: 2時間 (18:00-20:00)",
+		content: "退勤：18:00 → 20:00",
 		reason: "月末レポート作成のため",
 		status: "pending",
 	},
 	{
 		id: "app-010",
-		type: "business_trip",
+		type: "paid_holiday",
 		employeeId: "emp-010",
 		employeeName: "松本恵",
 		submittedDate: "2023-04-18",
 		targetDate: "2023-04-27",
-		content: "出張申請: 福岡 (2泊3日)",
+		content: "有給休暇：3日間",
 		reason: "新規顧客との商談のため",
 		status: "pending",
 	},
 	{
 		id: "app-011",
-		type: "leave_request",
+		type: "paid_holiday",
 		employeeId: "emp-011",
 		employeeName: "高橋俊介",
 		submittedDate: "2023-04-19",
 		targetDate: "2023-05-01",
-		content: "有給休暇: 2日間 (5/1-5/2)",
+		content: "有給休暇：2日間",
 		reason: "連休を利用した旅行のため",
 		status: "pending",
 	},
@@ -167,51 +160,51 @@ const pendingApplications: Application[] = [
 		employeeName: "渡辺明",
 		submittedDate: "2023-04-20",
 		targetDate: "2023-04-19",
-		content: "出勤時間修正: 9:00 → 9:30",
+		content: "出勤：9:00 → 9:30",
 		reason: "通勤電車の遅延のため",
 		status: "pending",
 	},
 	{
 		id: "app-013",
-		type: "remote_work",
+		type: "paid_holiday",
 		employeeId: "emp-013",
 		employeeName: "斎藤真理子",
 		submittedDate: "2023-04-21",
 		targetDate: "2023-04-28",
-		content: "リモートワーク: 1日",
+		content: "有給休暇：1日",
 		reason: "自宅での作業が効率的なタスクのため",
 		status: "pending",
 	},
 	{
 		id: "app-014",
-		type: "overtime",
+		type: "attendance_correction",
 		employeeId: "emp-014",
 		employeeName: "近藤拓也",
 		submittedDate: "2023-04-21",
 		targetDate: "2023-04-25",
-		content: "残業申請: 4時間 (18:00-22:00)",
+		content: "退勤：18:00 → 22:00",
 		reason: "システムリリース前の最終チェックのため",
 		status: "pending",
 	},
 	{
 		id: "app-015",
-		type: "business_trip",
+		type: "paid_holiday",
 		employeeId: "emp-015",
 		employeeName: "井上雅彦",
 		submittedDate: "2023-04-22",
 		targetDate: "2023-05-10",
-		content: "出張申請: 名古屋 (日帰り)",
+		content: "有給休暇：1日",
 		reason: "パートナー企業との打ち合わせのため",
 		status: "pending",
 	},
 	{
 		id: "app-016",
-		type: "leave_request",
+		type: "paid_holiday",
 		employeeId: "emp-016",
 		employeeName: "木村典子",
 		submittedDate: "2023-04-23",
 		targetDate: "2023-05-15",
-		content: "有給休暇: 1日",
+		content: "有給休暇：1日",
 		reason: "健康診断のため",
 		status: "pending",
 	},
@@ -222,40 +215,40 @@ const pendingApplications: Application[] = [
 		employeeName: "林孝之",
 		submittedDate: "2023-04-24",
 		targetDate: "2023-04-21",
-		content: "退勤時間修正: 17:30 → 18:45",
+		content: "退勤：17:30 → 18:45",
 		reason: "クライアント対応で遅くなりました",
 		status: "pending",
 	},
 	{
 		id: "app-018",
-		type: "remote_work",
+		type: "paid_holiday",
 		employeeId: "emp-018",
 		employeeName: "山田由美",
 		submittedDate: "2023-04-24",
 		targetDate: "2023-05-02",
-		content: "リモートワーク: 3日間 (5/2-5/4)",
+		content: "有給休暇：3日間",
 		reason: "連休中の業務継続のため",
 		status: "pending",
 	},
 	{
 		id: "app-019",
-		type: "overtime",
+		type: "attendance_correction",
 		employeeId: "emp-019",
 		employeeName: "清水謙太",
 		submittedDate: "2023-04-25",
 		targetDate: "2023-04-30",
-		content: "残業申請: 3時間 (18:00-21:00)",
+		content: "退勤：18:00 → 21:00",
 		reason: "月末処理対応のため",
 		status: "pending",
 	},
 	{
 		id: "app-020",
-		type: "business_trip",
+		type: "paid_holiday",
 		employeeId: "emp-020",
 		employeeName: "村上理沙",
 		submittedDate: "2023-04-26",
 		targetDate: "2023-05-08",
-		content: "出張申請: 札幌 (3泊4日)",
+		content: "有給休暇：4日間",
 		reason: "新規支店開設準備のため",
 		status: "pending",
 	},
@@ -265,12 +258,12 @@ const pendingApplications: Application[] = [
 const approvedApplications: Application[] = [
 	{
 		id: "app-101",
-		type: "leave_request",
+		type: "paid_holiday",
 		employeeId: "emp-001",
 		employeeName: "佐藤太郎",
 		submittedDate: "2023-03-15",
 		targetDate: "2023-03-20",
-		content: "有給休暇: 1日",
+		content: "有給休暇：1日",
 		reason: "私用のため",
 		status: "approved",
 		approvedDate: "2023-03-16",
@@ -279,12 +272,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-102",
-		type: "remote_work",
+		type: "paid_holiday",
 		employeeId: "emp-002",
 		employeeName: "鈴木花子",
 		submittedDate: "2023-03-18",
 		targetDate: "2023-03-25",
-		content: "リモートワーク: 1日",
+		content: "有給休暇：1日",
 		reason: "在宅での作業効率向上のため",
 		status: "approved",
 		approvedDate: "2023-03-19",
@@ -293,12 +286,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-103",
-		type: "overtime",
+		type: "attendance_correction",
 		employeeId: "emp-003",
 		employeeName: "田中誠",
 		submittedDate: "2023-03-20",
 		targetDate: "2023-03-22",
-		content: "残業申請: 2時間 (18:00-20:00)",
+		content: "退勤：18:00 → 20:00",
 		reason: "納期対応のため",
 		status: "approved",
 		approvedDate: "2023-03-21",
@@ -307,12 +300,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-104",
-		type: "business_trip",
+		type: "paid_holiday",
 		employeeId: "emp-004",
 		employeeName: "伊藤健太",
 		submittedDate: "2023-03-22",
 		targetDate: "2023-03-28",
-		content: "出張申請: 京都 (1泊2日)",
+		content: "有給休暇：2日間",
 		reason: "取引先訪問のため",
 		status: "rejected",
 		approvedDate: "2023-03-23",
@@ -327,7 +320,7 @@ const approvedApplications: Application[] = [
 		employeeName: "山本美咲",
 		submittedDate: "2023-03-25",
 		targetDate: "2023-03-24",
-		content: "出勤時間修正: 9:00 → 8:45",
+		content: "出勤：9:00 → 8:45",
 		reason: "実際には8:45に出社していました",
 		status: "approved",
 		approvedDate: "2023-03-26",
@@ -337,12 +330,12 @@ const approvedApplications: Application[] = [
 	// 追加データ
 	{
 		id: "app-106",
-		type: "leave_request",
+		type: "paid_holiday",
 		employeeId: "emp-006",
 		employeeName: "中村正人",
 		submittedDate: "2023-03-26",
 		targetDate: "2023-04-01",
-		content: "有給休暇: 1日",
+		content: "有給休暇：1日",
 		reason: "私用のため",
 		status: "approved",
 		approvedDate: "2023-03-27",
@@ -351,12 +344,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-107",
-		type: "remote_work",
+		type: "paid_holiday",
 		employeeId: "emp-007",
 		employeeName: "小林裕子",
 		submittedDate: "2023-03-27",
 		targetDate: "2023-04-03",
-		content: "リモートワーク: 2日間 (4/3-4/4)",
+		content: "有給休暇：2日間",
 		reason: "集中作業が必要なプロジェクトのため",
 		status: "approved",
 		approvedDate: "2023-03-28",
@@ -365,12 +358,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-108",
-		type: "overtime",
+		type: "attendance_correction",
 		employeeId: "emp-008",
 		employeeName: "加藤聡",
 		submittedDate: "2023-03-28",
 		targetDate: "2023-03-30",
-		content: "残業申請: 3時間 (18:00-21:00)",
+		content: "退勤：18:00 → 21:00",
 		reason: "月末のシステム更新対応のため",
 		status: "approved",
 		approvedDate: "2023-03-29",
@@ -379,12 +372,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-109",
-		type: "business_trip",
+		type: "paid_holiday",
 		employeeId: "emp-009",
 		employeeName: "吉田直樹",
 		submittedDate: "2023-03-29",
 		targetDate: "2023-04-05",
-		content: "出張申請: 名古屋 (日帰り)",
+		content: "有給休暇：1日",
 		reason: "クライアントミーティングのため",
 		status: "rejected",
 		approvedDate: "2023-03-30",
@@ -399,7 +392,7 @@ const approvedApplications: Application[] = [
 		employeeName: "松本恵",
 		submittedDate: "2023-03-30",
 		targetDate: "2023-03-29",
-		content: "退勤時間修正: 18:00 → 19:15",
+		content: "退勤：18:00 → 19:15",
 		reason: "クライアント対応で遅くなりました",
 		status: "approved",
 		approvedDate: "2023-03-31",
@@ -408,12 +401,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-111",
-		type: "leave_request",
+		type: "paid_holiday",
 		employeeId: "emp-011",
 		employeeName: "高橋俊介",
 		submittedDate: "2023-03-31",
 		targetDate: "2023-04-07",
-		content: "有給休暇: 半日 (午後)",
+		content: "有給休暇：半日",
 		reason: "歯科検診のため",
 		status: "approved",
 		approvedDate: "2023-04-01",
@@ -422,12 +415,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-112",
-		type: "remote_work",
+		type: "paid_holiday",
 		employeeId: "emp-012",
 		employeeName: "渡辺明",
 		submittedDate: "2023-04-01",
 		targetDate: "2023-04-10",
-		content: "リモートワーク: 1日",
+		content: "有給休暇：1日",
 		reason: "自宅での作業効率向上のため",
 		status: "approved",
 		approvedDate: "2023-04-02",
@@ -436,12 +429,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-113",
-		type: "overtime",
+		type: "attendance_correction",
 		employeeId: "emp-013",
 		employeeName: "斎藤真理子",
 		submittedDate: "2023-04-02",
 		targetDate: "2023-04-05",
-		content: "残業申請: 2時間 (18:00-20:00)",
+		content: "退勤：18:00 → 20:00",
 		reason: "データ移行作業のため",
 		status: "approved",
 		approvedDate: "2023-04-03",
@@ -450,12 +443,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-114",
-		type: "business_trip",
+		type: "paid_holiday",
 		employeeId: "emp-014",
 		employeeName: "近藤拓也",
 		submittedDate: "2023-04-03",
 		targetDate: "2023-04-12",
-		content: "出張申請: 大阪 (1泊2日)",
+		content: "有給休暇：2日間",
 		reason: "パートナー企業との打ち合わせのため",
 		status: "approved",
 		approvedDate: "2023-04-04",
@@ -469,7 +462,7 @@ const approvedApplications: Application[] = [
 		employeeName: "井上雅彦",
 		submittedDate: "2023-04-04",
 		targetDate: "2023-04-03",
-		content: "出勤時間修正: 9:00 → 8:30",
+		content: "出勤：9:00 → 8:30",
 		reason: "実際には8:30に出社していました",
 		status: "approved",
 		approvedDate: "2023-04-05",
@@ -478,12 +471,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-116",
-		type: "leave_request",
+		type: "paid_holiday",
 		employeeId: "emp-016",
 		employeeName: "木村典子",
 		submittedDate: "2023-04-05",
 		targetDate: "2023-04-14",
-		content: "有給休暇: 1日",
+		content: "有給休暇：1日",
 		reason: "家族の用事のため",
 		status: "rejected",
 		approvedDate: "2023-04-06",
@@ -493,12 +486,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-117",
-		type: "remote_work",
+		type: "paid_holiday",
 		employeeId: "emp-017",
 		employeeName: "林孝之",
 		submittedDate: "2023-04-06",
 		targetDate: "2023-04-17",
-		content: "リモートワーク: 3日間 (4/17-4/19)",
+		content: "有給休暇：3日間",
 		reason: "プロジェクト集中期間のため",
 		status: "approved",
 		approvedDate: "2023-04-07",
@@ -507,12 +500,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-118",
-		type: "overtime",
+		type: "attendance_correction",
 		employeeId: "emp-018",
 		employeeName: "山田由美",
 		submittedDate: "2023-04-07",
 		targetDate: "2023-04-10",
-		content: "残業申請: 4時間 (18:00-22:00)",
+		content: "退勤：18:00 → 22:00",
 		reason: "プロジェクト納期対応のため",
 		status: "approved",
 		approvedDate: "2023-04-08",
@@ -521,12 +514,12 @@ const approvedApplications: Application[] = [
 	},
 	{
 		id: "app-119",
-		type: "business_trip",
+		type: "paid_holiday",
 		employeeId: "emp-019",
 		employeeName: "清水謙太",
 		submittedDate: "2023-04-08",
 		targetDate: "2023-04-18",
-		content: "出張申請: 福岡 (2泊3日)",
+		content: "有給休暇：3日間",
 		reason: "新規顧客訪問のため",
 		status: "approved",
 		approvedDate: "2023-04-09",
@@ -540,7 +533,7 @@ const approvedApplications: Application[] = [
 		employeeName: "村上理沙",
 		submittedDate: "2023-04-09",
 		targetDate: "2023-04-07",
-		content: "退勤時間修正: 17:30 → 18:45",
+		content: "退勤：17:30 → 18:45",
 		reason: "急な問い合わせ対応で残業しました",
 		status: "approved",
 		approvedDate: "2023-04-10",
@@ -553,26 +546,31 @@ const approvedApplications: Application[] = [
 let allApplications = [...pendingApplications, ...approvedApplications];
 
 // 申請一覧を取得（未承認申請と承認履歴を統合）
-export async function getApplicationList(params: ApplicationSearchParams) {
+export type Condition = {
+	pagination: Pagination;
+	searchQuery: SearchQuery;
+};
+export async function getApplicationList(condition: Condition) {
 	let applications = allApplications;
 
 	// ステータスでフィルタリング
-	if (params.status && params.status !== "all") {
+	if (condition.searchQuery.status && condition.searchQuery.status !== "all") {
 		applications = applications.filter(
-			(app) => app.status === (params.status as ApplicationStatus),
+			(app) =>
+				app.status === (condition.searchQuery.status as ApplicationStatus),
 		);
 	}
 
 	// タイプでフィルタリング
-	if (params.type && params.type !== "all") {
+	if (condition.searchQuery.type && condition.searchQuery.type !== "all") {
 		applications = applications.filter(
-			(app) => app.type === (params.type as ApplicationType),
+			(app) => app.type === (condition.searchQuery.type as ApplicationType),
 		);
 	}
 
 	// 日付でフィルタリング
-	if (params.date) {
-		const date = params.date;
+	if (condition.searchQuery.date) {
+		const date = condition.searchQuery.date;
 		applications = applications.filter((app) => {
 			// 未承認申請の場合は提出日でフィルタリング
 			if (app.status === "pending") {
@@ -584,8 +582,8 @@ export async function getApplicationList(params: ApplicationSearchParams) {
 	}
 
 	// 検索クエリでフィルタリング
-	if (params.query) {
-		const query = params.query.toLowerCase();
+	if (condition.searchQuery.query) {
+		const query = condition.searchQuery.query.toLowerCase();
 		applications = applications.filter(
 			(app) =>
 				app.employeeName.toLowerCase().includes(query) ||
@@ -599,7 +597,7 @@ export async function getApplicationList(params: ApplicationSearchParams) {
 	applications = applications.sort((a, b) => a.id.localeCompare(b.id));
 
 	// ページネーション
-	const page = params.page ? Number.parseInt(params.page, 10) : 1;
+	const page = condition.pagination.page;
 	const limit = 10; // 1ページあたりの表示数
 	const total = applications.length;
 	const totalPages = Math.ceil(total / limit);
@@ -616,37 +614,6 @@ export async function getApplicationList(params: ApplicationSearchParams) {
 			totalPages,
 		},
 	};
-}
-
-// 未承認の申請を取得
-export async function getPendingApplications(params: {
-	searchQuery?: string;
-	type?: string;
-	page?: string;
-}) {
-	return getApplicationList({
-		query: params.searchQuery,
-		type: params.type,
-		status: "pending",
-		page: params.page,
-	});
-}
-
-// 承認履歴を取得
-export async function getApprovalHistory(params: {
-	searchQuery?: string;
-	type?: string;
-	status?: string;
-	date?: string;
-	page?: string;
-}) {
-	return getApplicationList({
-		query: params.searchQuery,
-		type: params.type,
-		status: params.status === "all" ? undefined : params.status,
-		date: params.date,
-		page: params.page,
-	});
 }
 
 // 申請を承認する

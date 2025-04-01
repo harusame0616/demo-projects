@@ -1,9 +1,10 @@
 "use client";
 
-import { useSearchForm } from "@/components/common/use-search-form";
 import * as v from "valibot";
 
+import { userRoles, userStatuses } from "@/app/_mocks/users";
 import { SearchForm } from "@/components/common/search-form";
+import { useSearchForm } from "@/components/common/use-search-form";
 import {
 	FormControl,
 	FormField,
@@ -14,58 +15,43 @@ import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-
-// フォームのスキーマ定義
-const schema = v.object({
-	query: v.optional(v.string()),
-	type: v.optional(v.string()),
-	status: v.optional(v.string()),
-	date: v.optional(v.string()),
-});
+import {
+	searchParamsUserQuerySchema,
+	type UserSearchQuery,
+} from "../search-query";
+// 検索フォームのスキーマ
 
 interface SearchFormPresenterProps {
-	defaultQuery?: {
-		query?: string;
-		type?: string;
-		status?: string;
-		date?: string;
-	};
+	searchQuery: UserSearchQuery;
 }
 
-export function SearchFormPresenter({
-	defaultQuery,
-}: SearchFormPresenterProps) {
+export function SearchFormPresenter({ searchQuery }: SearchFormPresenterProps) {
 	const searchForm = useSearchForm(
-		schema,
-		{
-			query: defaultQuery?.query || "",
-			type: defaultQuery?.type || "all",
-			status: defaultQuery?.status || "all",
-			date: defaultQuery?.date || "",
-		},
+		searchParamsUserQuerySchema,
+		searchQuery,
 		{
 			query: "",
-			type: "all",
+			role: "all",
 			status: "all",
-			date: "",
 		},
 	);
-
 	return (
 		<SearchForm {...searchForm}>
 			<FormField
 				name="query"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-2">
-						<FormLabel>検索キーワード</FormLabel>
+						<FormLabel>
+							キーワード（名前、メールアドレス、従業員コード）
+						</FormLabel>
 						<FormControl>
 							<Input
-								placeholder="社員名または内容で検索"
+								className="h-10 rounded-lg border-gray-200"
 								{...field}
 								value={field.value || ""}
 							/>
@@ -75,20 +61,24 @@ export function SearchFormPresenter({
 			/>
 
 			<FormField
-				name="type"
+				name="role"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-1">
-						<FormLabel>申請種別</FormLabel>
+						<FormLabel>権限</FormLabel>
 						<Select onValueChange={field.onChange} value={field.value}>
 							<FormControl>
 								<SelectTrigger className="h-10 border-gray-200 w-full min-h-10 overflow-hidden">
-									<SelectValue placeholder="すべての種別" />
+									<SelectValue placeholder="すべての権限" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="all">すべての種別</SelectItem>
-								<SelectItem value="vacation">休暇申請</SelectItem>
-								<SelectItem value="overtime">残業申請</SelectItem>
+								<SelectItem value="all">すべて</SelectItem>
+								{userRoles.map((role) => (
+									<SelectItem key={role.id} value={role.id}>
+										{role.name}
+									</SelectItem>
+								))}
 							</SelectContent>
 						</Select>
 					</FormItem>
@@ -97,6 +87,7 @@ export function SearchFormPresenter({
 
 			<FormField
 				name="status"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-1">
 						<FormLabel>ステータス</FormLabel>
@@ -107,24 +98,14 @@ export function SearchFormPresenter({
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="all">すべてのステータス</SelectItem>
-								<SelectItem value="pending">承認待ち</SelectItem>
-								<SelectItem value="approved">承認済み</SelectItem>
-								<SelectItem value="rejected">却下</SelectItem>
+								<SelectItem value="all">すべて</SelectItem>
+								{userStatuses.map((status) => (
+									<SelectItem key={status.id} value={status.id}>
+										{status.name}
+									</SelectItem>
+								))}
 							</SelectContent>
 						</Select>
-					</FormItem>
-				)}
-			/>
-
-			<FormField
-				name="date"
-				render={({ field }) => (
-					<FormItem className="col-span-4 sm:col-span-1">
-						<FormLabel>申請日</FormLabel>
-						<FormControl>
-							<Input type="month" {...field} value={field.value || ""} />
-						</FormControl>
 					</FormItem>
 				)}
 			/>

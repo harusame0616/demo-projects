@@ -3,15 +3,17 @@
 import { mockEmployees } from "@/app/_mocks/employees";
 import {
 	type User,
-	type UserRole,
-	type UserStatus,
 	mockUsers,
 	userRoles,
 	userStatuses,
 } from "@/app/_mocks/users";
+import { type Pagination, PaginationItemCount } from "@/lib/pagination";
+import { type UserOrder, UserOrderField } from "../order";
+import { OrderDirection } from "../../../../lib/order";
+import type { UserSearchQuery } from "../search-query";
 
 // ページネーション用の型定義
-interface Pagination {
+interface PaginationResult {
 	total: number;
 	page: number;
 	limit: number;
@@ -21,37 +23,24 @@ interface Pagination {
 // 検索結果の型定義
 interface UserSearchResult {
 	items: User[];
+	pagination: PaginationResult;
+}
+
+export type Condition = {
 	pagination: Pagination;
-}
-
-// 検索パラメータの型定義
-interface UserSearchParams {
-	searchQuery?: string | null;
-	role?: string;
-	status?: string;
-	sortBy?: string;
-	sortOrder?: "asc" | "desc";
-	page?: number;
-	limit?: number;
-}
-
-// ユーザー一覧を取得する関数
+	searchQuery: UserSearchQuery;
+	order: UserOrder;
+};
 export async function getUsers(
-	params: UserSearchParams,
+	condition: Condition,
 ): Promise<UserSearchResult> {
-	const {
-		searchQuery,
-		role,
-		status,
-		sortBy = "id",
-		sortOrder = "asc",
-		page = 1,
-		limit = 20,
-	} = params;
+	const { pagination, searchQuery, order } = condition;
 
 	// クエリを安全に文字列に変換
 	const safeQuery =
-		typeof searchQuery === "string" ? searchQuery.toLowerCase() : "";
+		typeof searchQuery.query === "string"
+			? searchQuery.query.toLowerCase()
+			: "";
 
 	// 従業員IDと名前のマッピングを作成
 	const employeeMap = new Map(
@@ -82,45 +71,65 @@ export async function getUsers(
 		}
 
 		// 役割でフィルタリング
-		const matchesRole = !role || role === "all" || user.role === role;
+		const matchesRole =
+			!searchQuery.role ||
+			searchQuery.role === "all" ||
+			user.role === searchQuery.role;
 
 		// ステータスでフィルタリング
-		const matchesStatus = !status || status === "all" || user.status === status;
+		const matchesStatus =
+			!searchQuery.status ||
+			searchQuery.status === "all" ||
+			user.status === searchQuery.status;
 
 		return matchesQuery && matchesRole && matchesStatus;
 	});
 
 	// ソート
-	if (sortBy) {
+	if (order.field) {
 		filteredUsers = filteredUsers.sort((a, b) => {
-			// 型安全にアクセス
-			const valueA = sortBy in a ? a[sortBy as keyof User] : "";
-			const valueB = sortBy in b ? b[sortBy as keyof User] : "";
-
-			if (typeof valueA === "string" && typeof valueB === "string") {
-				return sortOrder === "asc"
-					? valueA.localeCompare(valueB)
-					: valueB.localeCompare(valueA);
+			// 各フィールドタイプに合わせた比較を行う
+			switch (order.field) {
+				case UserOrderField.UserCode:
+					return order.direction === OrderDirection.Asc
+						? a.id.localeCompare(b.id)
+						: b.id.localeCompare(a.id);
+				case UserOrderField.Email:
+					return order.direction === OrderDirection.Asc
+						? a.email.localeCompare(b.email)
+						: b.email.localeCompare(a.email);
+				case UserOrderField.Role:
+					return order.direction === OrderDirection.Asc
+						? a.role.localeCompare(b.role)
+						: b.role.localeCompare(a.role);
+				case UserOrderField.Status:
+					return order.direction === OrderDirection.Asc
+						? a.status.localeCompare(b.status)
+						: b.status.localeCompare(a.status);
+				case UserOrderField.Name: {
+					// 名前はemployeeMapから取得する必要があるかもしれません
+					const nameA = a.employeeId ? employeeMap.get(a.employeeId) || "" : "";
+					const nameB = b.employeeId ? employeeMap.get(b.employeeId) || "" : "";
+					return order.direction === OrderDirection.Asc
+						? nameA.localeCompare(nameB)
+						: nameB.localeCompare(nameA);
+				}
+				case UserOrderField.LastLogin: {
+					const dateA = a.lastLogin ? new Date(a.lastLogin).getTime() : 0;
+					const dateB = b.lastLogin ? new Date(b.lastLogin).getTime() : 0;
+					return order.direction === OrderDirection.Asc
+						? dateA - dateB
+						: dateB - dateA;
+				}
+				default: {
+					// デフォルトの比較
+					const valueA = String(a[order.field as keyof User] || "");
+					const valueB = String(b[order.field as keyof User] || "");
+					return order.direction === OrderDirection.Asc
+						? valueA.localeCompare(valueB)
+						: valueB.localeCompare(valueA);
+				}
 			}
-
-			// 日付の比較（lastLogin, createdAt, updatedAt）
-			if (
-				sortBy === "lastLogin" ||
-				sortBy === "createdAt" ||
-				sortBy === "updatedAt"
-			) {
-				const dateA = valueA ? new Date(valueA as string).getTime() : 0;
-				const dateB = valueB ? new Date(valueB as string).getTime() : 0;
-				return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-			}
-
-			// デフォルトの比較（文字列化して比較）
-			const strA = String(valueA);
-			const strB = String(valueB);
-
-			return sortOrder === "asc"
-				? strA.localeCompare(strB)
-				: strB.localeCompare(strA);
 		});
 	}
 
@@ -128,19 +137,19 @@ export async function getUsers(
 	const total = filteredUsers.length;
 
 	// 総ページ数の計算
-	const totalPages = Math.ceil(total / limit);
+	const totalPages = Math.ceil(total / PaginationItemCount);
 
 	// ページネーション
-	const start = (page - 1) * limit;
-	const end = start + limit;
+	const start = (pagination.page - 1) * PaginationItemCount;
+	const end = start + PaginationItemCount;
 	const paginatedUsers = filteredUsers.slice(start, end);
 
 	return {
 		items: paginatedUsers,
 		pagination: {
 			total,
-			page,
-			limit,
+			page: pagination.page,
+			limit: PaginationItemCount,
 			totalPages,
 		},
 	};

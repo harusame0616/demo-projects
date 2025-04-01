@@ -1,7 +1,8 @@
 "use client";
 
-import type { Employee } from "@/app/_mocks/employees";
-import type { User, UserRole, UserStatus } from "@/app/_mocks/users";
+import type { Employee } from "../types";
+import type { User } from "../types";
+import type { UserRole, UserStatus } from "../user";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {

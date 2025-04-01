@@ -17,7 +17,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
 	Table,
@@ -34,30 +33,22 @@ import {
 	MoreHorizontalIcon,
 	XIcon,
 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import {
 	type Application,
-	type ApplicationSearchParams,
-	type ApplicationStatus,
-	type ApplicationType,
 	approveApplication,
 	rejectApplication,
 } from "../_actions/application-actions";
+import type { ApplicationType, ApplicationStatus } from "../application";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {
 	switch (type) {
 		case "attendance_correction":
 			return "勤怠修正";
-		case "leave_request":
-			return "休暇申請";
-		case "remote_work":
-			return "リモートワーク";
-		case "overtime":
-			return "残業申請";
-		case "business_trip":
-			return "出張申請";
+		case "paid_holiday":
+			return "有給休暇";
 		default:
 			return "不明";
 	}
@@ -75,40 +66,13 @@ const getApplicationTypeBadge = (type: ApplicationType) => {
 					勤怠修正
 				</Badge>
 			);
-		case "leave_request":
+		case "paid_holiday":
 			return (
 				<Badge
 					variant="outline"
 					className="bg-purple-50 text-purple-700 border-purple-200"
 				>
-					休暇申請
-				</Badge>
-			);
-		case "remote_work":
-			return (
-				<Badge
-					variant="outline"
-					className="bg-green-50 text-green-700 border-green-200"
-				>
-					リモートワーク
-				</Badge>
-			);
-		case "overtime":
-			return (
-				<Badge
-					variant="outline"
-					className="bg-orange-50 text-orange-700 border-orange-200"
-				>
-					残業申請
-				</Badge>
-			);
-		case "business_trip":
-			return (
-				<Badge
-					variant="outline"
-					className="bg-cyan-50 text-cyan-700 border-cyan-200"
-				>
-					出張申請
+					有給休暇
 				</Badge>
 			);
 		default:
@@ -159,13 +123,11 @@ interface ApplicationsPresenterProps {
 		limit: number;
 		totalPages: number;
 	};
-	searchParams: ApplicationSearchParams;
 }
 
 export function ApplicationsPresenter({
 	applications,
 	pagination,
-	searchParams,
 }: ApplicationsPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -174,6 +136,7 @@ export function ApplicationsPresenter({
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 	const [comment, setComment] = useState("");
 	const [isProcessing, setIsProcessing] = useState(false);
+	const searchParams = useSearchParams();
 
 	// 申請の詳細を表示する
 	const openDetails = (application: Application) => {
@@ -218,9 +181,10 @@ export function ApplicationsPresenter({
 
 	// ページ切り替え処理
 	const handlePageChange = (page: number) => {
-		const params = new URLSearchParams(searchParams as Record<string, string>);
-		params.set("page", page.toString());
-		const newPath = `${pathname}?${params.toString()}`;
+		const newSearchParams = new URLSearchParams(searchParams);
+
+		newSearchParams.set("page", page.toString());
+		const newPath = `${pathname}?${newSearchParams}`;
 		router.push(newPath);
 	};
 
