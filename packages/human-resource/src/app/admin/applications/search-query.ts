@@ -1,5 +1,5 @@
-import { ApplicationStatus, ApplicationType } from "./application";
 import * as v from "valibot";
+import { ApplicationStatus, ApplicationType } from "./application";
 
 export const searchParamsQuerySchema = v.object({
 	query: v.optional(v.string(), ""),

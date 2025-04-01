@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SearchFormSkeleton } from "./_search-form";
+import { SearchFormPresenter } from "./_search-form";
 import { UsersSkeleton } from "./_users";
 
 export default function Loading() {
@@ -15,7 +15,16 @@ export default function Loading() {
 					</Button>,
 				]}
 			/>
-			<SearchFormSkeleton />
+			<SearchFormPresenter
+				searchQuery={{
+					query: "",
+					role: "all",
+					status: "all",
+					sortBy: "id",
+					sortOrder: "desc",
+					page: "1",
+				}}
+			/>
 			<UsersSkeleton />
 		</>
 	);

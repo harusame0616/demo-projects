@@ -1,10 +1,9 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
+import { parseSearchParamsPagination } from "@/lib/pagination";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { parseSearchParamsPagination } from "@/lib/pagination";
-import { parseSearchParamsUserSearchQuery } from "./search-query";
 import {
 	SearchFormContainer,
 	SearchFormPresenter,
@@ -12,6 +11,7 @@ import {
 } from "./_search-form";
 import { UsersContainer, UsersSkeleton } from "./_users";
 import { parseSearchParamsUserOrder } from "./order";
+import { parseSearchParamsUserSearchQuery } from "./search-query";
 
 export const metadata: Metadata = {
 	title: "ユーザー一覧 | 人材管理システム",

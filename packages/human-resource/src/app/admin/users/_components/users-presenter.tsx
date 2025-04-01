@@ -4,7 +4,7 @@ import { PaginationNav } from "@/components/common/pagination-nav";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { User, Employee } from "../types";
+import type { Employee, User } from "../types";
 import { UserTable } from "./user-table";
 
 interface UsersPresenterProps {

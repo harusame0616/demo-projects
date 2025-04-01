@@ -8,8 +8,8 @@ import {
 	userStatuses,
 } from "@/app/_mocks/users";
 import { type Pagination, PaginationItemCount } from "@/lib/pagination";
-import { type UserOrder, UserOrderField } from "../order";
 import { OrderDirection } from "../../../../lib/order";
+import { type UserOrder, UserOrderField } from "../order";
 import type { UserSearchQuery } from "../search-query";
 
 // ページネーション用の型定義

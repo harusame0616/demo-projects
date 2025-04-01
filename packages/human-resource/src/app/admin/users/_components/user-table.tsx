@@ -1,8 +1,5 @@
 "use client";
 
-import type { Employee } from "../types";
-import type { User } from "../types";
-import type { UserRole, UserStatus } from "../user";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +26,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import type { Employee } from "../types";
+import type { User } from "../types";
+import type { UserRole, UserStatus } from "../user";
 
 interface UserTableProps {
 	users: User[];

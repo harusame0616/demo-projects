@@ -17,8 +17,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { type SearchQuery, searchParamsQuerySchema } from "../search-query";
 import { ApplicationStatusLabel, ApplicationTypeLabel } from "../application";
+import { type SearchQuery, searchParamsQuerySchema } from "../search-query";
 
 interface Params {
 	searchQuery: SearchQuery;

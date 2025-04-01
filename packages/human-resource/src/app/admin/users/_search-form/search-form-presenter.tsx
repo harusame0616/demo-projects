@@ -1,7 +1,5 @@
 "use client";
 
-import * as v from "valibot";
-
 import { userRoles, userStatuses } from "@/app/_mocks/users";
 import { SearchForm } from "@/components/common/search-form";
 import { useSearchForm } from "@/components/common/use-search-form";
@@ -20,8 +18,8 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import {
-	searchParamsUserQuerySchema,
 	type UserSearchQuery,
+	searchParamsUserQuerySchema,
 } from "../search-query";
 // 検索フォームのスキーマ
 
@@ -30,15 +28,11 @@ interface SearchFormPresenterProps {
 }
 
 export function SearchFormPresenter({ searchQuery }: SearchFormPresenterProps) {
-	const searchForm = useSearchForm(
-		searchParamsUserQuerySchema,
-		searchQuery,
-		{
-			query: "",
-			role: "all",
-			status: "all",
-		},
-	);
+	const searchForm = useSearchForm(searchParamsUserQuerySchema, searchQuery, {
+		query: "",
+		role: "all",
+		status: "all",
+	});
 	return (
 		<SearchForm {...searchForm}>
 			<FormField

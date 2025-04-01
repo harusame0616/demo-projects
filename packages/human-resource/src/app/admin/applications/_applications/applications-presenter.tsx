@@ -40,7 +40,7 @@ import {
 	approveApplication,
 	rejectApplication,
 } from "../_actions/application-actions";
-import type { ApplicationType, ApplicationStatus } from "../application";
+import type { ApplicationStatus, ApplicationType } from "../application";
 
 // 申請タイプに応じた表示名を取得する関数
 const getApplicationTypeName = (type: ApplicationType): string => {
