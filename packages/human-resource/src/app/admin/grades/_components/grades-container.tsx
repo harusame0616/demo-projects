@@ -1,14 +1,16 @@
 import { getGrades } from "../_actions/grade-actions";
-import type { GradeSearchParams } from "../_actions/grade-actions";
 import { GradesPresenter } from "./grades-presenter";
 
-interface GradesContainerProps {
-	searchParams: GradeSearchParams;
-}
+type Props = Parameters<typeof getGrades>[0];
 
-export async function GradesContainer({ searchParams }: GradesContainerProps) {
-	// データ取得
-	const { items, pagination } = await getGrades(searchParams);
+export async function GradesContainer(props: Props) {
+	const { items, pagination } = await getGrades(props);
 
-	return <GradesPresenter grades={items} pagination={pagination} />;
+	return (
+		<GradesPresenter
+			grades={items}
+			pagination={pagination}
+			order={props.order}
+		/>
+	);
 }
