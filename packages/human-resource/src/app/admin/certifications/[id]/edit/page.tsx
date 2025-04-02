@@ -4,7 +4,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getSkillCertificationById } from "../../../skills-certifications/_actions/skill-certification-actions";
+import { getSkillCertificationById } from "../../../skills-certifications/_actions/certification-actions";
 import { CertificationForm } from "../../_components/certification-form";
 import { CertificationFormSkeleton } from "../../_components/certification-form-skeleton";
 

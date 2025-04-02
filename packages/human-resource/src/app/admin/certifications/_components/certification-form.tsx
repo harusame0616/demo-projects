@@ -21,7 +21,7 @@ import * as v from "valibot";
 import {
 	createSkillCertification,
 	updateSkillCertification,
-} from "../../skills-certifications/_actions/skill-certification-actions";
+} from "../../skills-certifications/_actions/certification-actions";
 import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
 
 // フォームのバリデーションスキーマ
