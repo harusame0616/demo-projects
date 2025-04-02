@@ -15,16 +15,10 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import {
-	ArrowDownIcon,
-	ArrowUpIcon,
-	BuildingIcon,
-	MoreHorizontalIcon,
-	UsersIcon,
-} from "lucide-react";
+import { OrderDirection } from "@/lib/order";
+import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { DepartmentSearchParams } from "../_actions/department-actions";
+import { type DepartmentOrder, DepartmentOrderField } from "../order";
 
 type Department = {
 	id: string;
@@ -37,15 +31,13 @@ type Department = {
 
 interface DepartmentTableProps {
 	departments: Department[];
-	currentSort: string;
-	currentOrder: string;
+	order: DepartmentOrder;
 	onSort: (column: string) => void;
 }
 
 export function DepartmentTable({
 	departments,
-	currentSort,
-	currentOrder,
+	order,
 	onSort,
 }: DepartmentTableProps) {
 	const getParentName = (parentId: string | null): string => {
@@ -56,8 +48,8 @@ export function DepartmentTable({
 
 	// ソートアイコンの表示
 	const getSortIcon = (column: string) => {
-		if (currentSort !== column) return null;
-		return currentOrder === "asc" ? (
+		if (order.field !== column) return null;
+		return order.direction === OrderDirection.Asc ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
 		) : (
 			<ArrowDownIcon className="h-4 w-4 ml-1" />
@@ -71,18 +63,18 @@ export function DepartmentTable({
 					<TableRow>
 						<TableHead
 							className="cursor-pointer w-[100px] whitespace-nowrap"
-							onClick={() => onSort("id")}
+							onClick={() => onSort(DepartmentOrderField.DepartmentCode)}
 						>
 							<div className="flex items-center">
-								部署コード {getSortIcon("id")}
+								部署コード {getSortIcon(DepartmentOrderField.DepartmentCode)}
 							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer w-[200px] whitespace-nowrap"
-							onClick={() => onSort("name")}
+							onClick={() => onSort(DepartmentOrderField.DepartmentName)}
 						>
 							<div className="flex items-center">
-								部署名 {getSortIcon("name")}
+								部署名 {getSortIcon(DepartmentOrderField.DepartmentName)}
 							</div>
 						</TableHead>
 						<TableHead className="w-[200px] whitespace-nowrap">

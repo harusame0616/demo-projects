@@ -11,33 +11,20 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { DepartmentSearchQuery } from "../search-query";
 
-// フォームのスキーマを定義
-const schema = v.object(
-	{
-		query: v.string(),
-	},
-	"検索フォームの入力が不正です",
-);
+const formSchema = v.object({
+	query: v.string(),
+});
 
-interface SearchFormPresenterProps {
-	defaultValue?: string;
-	isLoading?: boolean;
+interface Props {
+	searchQuery: DepartmentSearchQuery;
 }
 
-export function SearchFormPresenter({
-	defaultValue = "",
-	isLoading = false,
-}: SearchFormPresenterProps) {
-	const searchForm = useSearchForm(
-		schema,
-		{
-			query: defaultValue,
-		},
-		{
-			query: "",
-		},
-	);
+export function SearchFormPresenter({ searchQuery }: Props) {
+	const searchForm = useSearchForm(formSchema, searchQuery, {
+		query: "",
+	});
 
 	return (
 		<SearchForm {...searchForm}>
@@ -47,11 +34,7 @@ export function SearchFormPresenter({
 					<FormItem className="col-span-4 sm:col-span-2">
 						<FormLabel>キーワード（部署名）</FormLabel>
 						<FormControl>
-							<Input
-								className="h-10 rounded-lg border-gray-200"
-								{...field}
-								disabled={isLoading}
-							/>
+							<Input className="h-10 rounded-lg border-gray-200" {...field} />
 						</FormControl>
 					</FormItem>
 				)}

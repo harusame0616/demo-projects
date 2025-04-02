@@ -1,43 +1,34 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import type { DepartmentSearchParams } from "./_actions/department-actions";
 import { DepartmentsContainer } from "./_components/departments-container";
 import { DepartmentsSkeleton } from "./_components/departments-skeleton";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 
+import { parseSearchParamsPagination } from "@/lib/pagination";
+import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
+import { parseSearchParamsDepartmentOrder } from "./order";
+import { parseSearchParamsDepartmentSearchQuery } from "./search-query";
 
 export const metadata: Metadata = {
 	title: "部署管理 | 人材管理システム",
 	description: "部署の一覧と管理",
 };
 
-interface DepartmentsPageProps {
-	searchParams: Promise<DepartmentSearchParams>;
-}
+type Props = {
+	searchParams: NextSearchParams;
+};
 
-export default async function DepartmentsPage({
-	searchParams,
-}: DepartmentsPageProps) {
-	// searchParamsをawaitして取得
+export default async function DepartmentsPage({ searchParams }: Props) {
 	const resolvedParams = await searchParams;
 
-	// 検索パラメータを安全に取得
-	const searchParamsObj: DepartmentSearchParams = {
-		query: resolvedParams.query,
-		sort: resolvedParams.sort,
-		order: resolvedParams.order,
-		page: resolvedParams.page,
-	};
+	const searchQuery = parseSearchParamsDepartmentSearchQuery(resolvedParams);
+	const pagination = parseSearchParamsPagination(resolvedParams);
+	const order = parseSearchParamsDepartmentOrder(resolvedParams);
 
-	// Suspenseのキーとして使用するためのクエリパラメータのJSON文字列化
 	const searchParamsKey = JSON.stringify(resolvedParams);
-
-	// 検索フォームの初期値を設定
-	const searchQuery = resolvedParams.query || "";
 
 	return (
 		<>
@@ -50,13 +41,20 @@ export default async function DepartmentsPage({
 				]}
 			/>
 
-			<SearchFormPresenter defaultValue={searchQuery} isLoading={false} />
+			<SearchFormPresenter
+				searchQuery={searchQuery}
+				key={`search-form-${searchParamsKey}`}
+			/>
 
 			<Suspense
 				key={`departments-${searchParamsKey}`}
 				fallback={<DepartmentsSkeleton />}
 			>
-				<DepartmentsContainer searchParams={searchParamsObj} />
+				<DepartmentsContainer
+					searchQuery={searchQuery}
+					order={order}
+					pagination={pagination}
+				/>
 			</Suspense>
 		</>
 	);
