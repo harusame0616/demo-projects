@@ -1,33 +1,32 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
+import { parseSearchParamsPagination } from "@/lib/pagination";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
-import { UsersContainer } from "./_components/users-container";
-import { UsersSkeleton } from "./_components/users-skeleton";
+import { SearchFormPresenter } from "./_search-form";
+import { UsersContainer, UsersSkeleton } from "./_users";
+import { parseSearchParamsUserOrder } from "./order";
+import { parseSearchParamsUserSearchQuery } from "./search-query";
 
 export const metadata: Metadata = {
 	title: "ユーザー一覧 | 人材管理システム",
 	description: "人材管理システムのユーザー一覧",
 };
 
-interface UserSearchParams {
-	query?: string;
-	role?: string;
-	status?: string;
-	sortBy?: string;
-	sortOrder?: "asc" | "desc";
-	page?: string;
-}
+// SearchParamsをIntersectionにする型定義
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-interface UsersPageProps {
-	searchParams: Promise<UserSearchParams>;
-}
-
-export default async function UsersPage({ searchParams }: UsersPageProps) {
+export default async function UsersPage({
+	searchParams,
+}: {
+	searchParams: SearchParams;
+}) {
 	// searchParamsをawaitして取得
-	const resolvedParams = await searchParams;
+	const awaitedSearchParams = await searchParams;
+	const searchQuery = parseSearchParamsUserSearchQuery(awaitedSearchParams);
+	const pagination = parseSearchParamsPagination(awaitedSearchParams);
+	const order = parseSearchParamsUserOrder(awaitedSearchParams);
 
 	return (
 		<>
@@ -40,17 +39,14 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
 				]}
 			/>
 
-			<SearchFormPresenter
-				searchQuery={resolvedParams.query}
-				currentRole={resolvedParams.role}
-				currentStatus={resolvedParams.status}
-			/>
+			<SearchFormPresenter searchQuery={searchQuery} />
 
-			<Suspense
-				fallback={<UsersSkeleton />}
-				key={`users-${JSON.stringify(resolvedParams)}`}
-			>
-				<UsersContainer searchParams={resolvedParams} />
+			<Suspense fallback={<UsersSkeleton />}>
+				<UsersContainer
+					order={order}
+					pagination={pagination}
+					searchQuery={searchQuery}
+				/>
 			</Suspense>
 		</>
 	);

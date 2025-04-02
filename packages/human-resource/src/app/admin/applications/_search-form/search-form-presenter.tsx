@@ -1,7 +1,6 @@
 "use client";
 
 import { useSearchForm } from "@/components/common/use-search-form";
-import * as v from "valibot";
 
 import { SearchForm } from "@/components/common/search-form";
 import {
@@ -14,52 +13,30 @@ import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { ApplicationStatusLabel, ApplicationTypeLabel } from "../application";
+import { type SearchQuery, searchParamsQuerySchema } from "../search-query";
 
-// フォームのスキーマ定義
-const schema = v.object({
-	query: v.optional(v.string()),
-	type: v.optional(v.string()),
-	status: v.optional(v.string()),
-	date: v.optional(v.string()),
-});
-
-interface SearchFormPresenterProps {
-	defaultQuery?: {
-		query?: string;
-		type?: string;
-		status?: string;
-		date?: string;
-	};
+interface Params {
+	searchQuery: SearchQuery;
 }
 
-export function SearchFormPresenter({
-	defaultQuery,
-}: SearchFormPresenterProps) {
-	const searchForm = useSearchForm(
-		schema,
-		{
-			query: defaultQuery?.query || "",
-			type: defaultQuery?.type || "all",
-			status: defaultQuery?.status || "all",
-			date: defaultQuery?.date || "",
-		},
-		{
-			query: "",
-			type: "all",
-			status: "all",
-			date: "",
-		},
-	);
+export function SearchFormPresenter({ searchQuery }: Params) {
+	const searchForm = useSearchForm(searchParamsQuerySchema, searchQuery, {
+		query: "",
+		type: "all",
+		status: "all",
+		date: "",
+	});
 
 	return (
 		<SearchForm {...searchForm}>
 			<FormField
 				name="query"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-2">
 						<FormLabel>検索キーワード</FormLabel>
@@ -76,19 +53,23 @@ export function SearchFormPresenter({
 
 			<FormField
 				name="type"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-1">
 						<FormLabel>申請種別</FormLabel>
 						<Select onValueChange={field.onChange} value={field.value}>
 							<FormControl>
 								<SelectTrigger className="h-10 border-gray-200 w-full min-h-10 overflow-hidden">
-									<SelectValue placeholder="すべての種別" />
+									<SelectValue />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="all">すべての種別</SelectItem>
-								<SelectItem value="vacation">休暇申請</SelectItem>
-								<SelectItem value="overtime">残業申請</SelectItem>
+								<SelectItem value="all">すべて</SelectItem>
+								{Object.entries(ApplicationTypeLabel).map(([key, label]) => (
+									<SelectItem key={key} value={key}>
+										{label}
+									</SelectItem>
+								))}
 							</SelectContent>
 						</Select>
 					</FormItem>
@@ -97,20 +78,23 @@ export function SearchFormPresenter({
 
 			<FormField
 				name="status"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-1">
 						<FormLabel>ステータス</FormLabel>
 						<Select onValueChange={field.onChange} value={field.value}>
 							<FormControl>
 								<SelectTrigger className="h-10 border-gray-200 w-full min-h-10 overflow-hidden">
-									<SelectValue placeholder="すべてのステータス" />
+									<SelectValue />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="all">すべてのステータス</SelectItem>
-								<SelectItem value="pending">承認待ち</SelectItem>
-								<SelectItem value="approved">承認済み</SelectItem>
-								<SelectItem value="rejected">却下</SelectItem>
+								<SelectItem value="all">すべて</SelectItem>
+								{Object.entries(ApplicationStatusLabel).map(([key, label]) => (
+									<SelectItem key={key} value={key}>
+										{label}
+									</SelectItem>
+								))}
 							</SelectContent>
 						</Select>
 					</FormItem>
@@ -119,6 +103,7 @@ export function SearchFormPresenter({
 
 			<FormField
 				name="date"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-1">
 						<FormLabel>申請日</FormLabel>

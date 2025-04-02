@@ -1,7 +1,5 @@
 "use client";
 
-import * as v from "valibot";
-
 import { userRoles, userStatuses } from "@/app/_mocks/users";
 import { SearchForm } from "@/components/common/search-form";
 import { useSearchForm } from "@/components/common/use-search-form";
@@ -19,44 +17,27 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	type UserSearchQuery,
+	searchParamsUserQuerySchema,
+} from "../search-query";
 // 検索フォームのスキーマ
-const schema = v.object(
-	{
-		query: v.pipe(v.string()),
-		role: v.optional(v.string()),
-		status: v.optional(v.string()),
-	},
-	"検索フォームの入力が不正です",
-);
 
-interface SearchFormPresenterProps {
-	searchQuery?: string;
-	currentRole?: string;
-	currentStatus?: string;
+interface Props {
+	searchQuery: UserSearchQuery;
 }
 
-export function SearchFormPresenter({
-	searchQuery = "",
-	currentRole = "all",
-	currentStatus = "all",
-}: SearchFormPresenterProps) {
-	const searchForm = useSearchForm(
-		schema,
-		{
-			query: searchQuery,
-			role: currentRole,
-			status: currentStatus,
-		},
-		{
-			query: "",
-			role: "all",
-			status: "all",
-		},
-	);
+export function SearchFormPresenter({ searchQuery }: Props) {
+	const searchForm = useSearchForm(searchParamsUserQuerySchema, searchQuery, {
+		query: "",
+		role: "all",
+		status: "all",
+	});
 	return (
 		<SearchForm {...searchForm}>
 			<FormField
 				name="query"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-2">
 						<FormLabel>
@@ -75,6 +56,7 @@ export function SearchFormPresenter({
 
 			<FormField
 				name="role"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-1">
 						<FormLabel>権限</FormLabel>
@@ -85,7 +67,7 @@ export function SearchFormPresenter({
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="all">すべての権限</SelectItem>
+								<SelectItem value="all">すべて</SelectItem>
 								{userRoles.map((role) => (
 									<SelectItem key={role.id} value={role.id}>
 										{role.name}
@@ -99,6 +81,7 @@ export function SearchFormPresenter({
 
 			<FormField
 				name="status"
+				control={searchForm.form.control}
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-1">
 						<FormLabel>ステータス</FormLabel>
@@ -109,7 +92,7 @@ export function SearchFormPresenter({
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="all">すべてのステータス</SelectItem>
+								<SelectItem value="all">すべて</SelectItem>
 								{userStatuses.map((status) => (
 									<SelectItem key={status.id} value={status.id}>
 										{status.name}

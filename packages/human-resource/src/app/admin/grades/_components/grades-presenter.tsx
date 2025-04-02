@@ -41,13 +41,6 @@ export function GradesPresenter({ grades, pagination }: GradesPresenterProps) {
 	const currentSort = searchParams.get("sort") || "id";
 	const currentOrder = searchParams.get("order") || "asc";
 
-	// ページ変更処理
-	const handlePageChange = (page: number) => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.set("page", page.toString());
-		router.push(`${pathname}?${params.toString()}`);
-	};
-
 	// ソート処理
 	const handleSort = (column: keyof Grade) => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -187,7 +180,6 @@ export function GradesPresenter({ grades, pagination }: GradesPresenterProps) {
 					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
-						onPageChange={handlePageChange}
 					/>
 				</div>
 			)}

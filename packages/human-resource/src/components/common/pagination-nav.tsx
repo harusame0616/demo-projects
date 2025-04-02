@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Pagination,
 	PaginationContent,
@@ -7,21 +9,29 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 
 interface PaginationNavProps {
 	currentPage: number;
 	totalPages: number;
-	onPageChange: (page: number) => void;
 	className?: string;
 }
 
 export function PaginationNav({
 	currentPage,
 	totalPages,
-	onPageChange,
 	className,
 }: PaginationNavProps) {
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+
+	const createPageUrl = (page: number): string => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("page", page.toString());
+		return `${pathname}?${params.toString()}`;
+	};
+
 	// ページボタンの範囲を計算
 	const renderPageNumbers = () => {
 		const maxVisiblePages = 7;
@@ -33,11 +43,7 @@ export function PaginationNav({
 				items.push(
 					<PaginationItem key={i}>
 						<PaginationLink
-							href="#"
-							onClick={(e) => {
-								e.preventDefault();
-								onPageChange(i);
-							}}
+							href={createPageUrl(i)}
 							isActive={i === currentPage}
 						>
 							{i}
@@ -52,14 +58,7 @@ export function PaginationNav({
 			// 最初のページを追加
 			items.push(
 				<PaginationItem key={1}>
-					<PaginationLink
-						href="#"
-						onClick={(e) => {
-							e.preventDefault();
-							onPageChange(1);
-						}}
-						isActive={1 === currentPage}
-					>
+					<PaginationLink href={createPageUrl(1)} isActive={1 === currentPage}>
 						1
 					</PaginationLink>
 				</PaginationItem>,
@@ -82,11 +81,7 @@ export function PaginationNav({
 				items.push(
 					<PaginationItem key={i}>
 						<PaginationLink
-							href="#"
-							onClick={(e) => {
-								e.preventDefault();
-								onPageChange(i);
-							}}
+							href={createPageUrl(i)}
 							isActive={i === currentPage}
 						>
 							{i}
@@ -109,11 +104,7 @@ export function PaginationNav({
 				items.push(
 					<PaginationItem key={totalPages}>
 						<PaginationLink
-							href="#"
-							onClick={(e) => {
-								e.preventDefault();
-								onPageChange(totalPages);
-							}}
+							href={createPageUrl(totalPages)}
 							isActive={totalPages === currentPage}
 						>
 							{totalPages}
@@ -135,13 +126,7 @@ export function PaginationNav({
 				<PaginationContent>
 					<PaginationItem>
 						<PaginationPrevious
-							href="#"
-							onClick={(e) => {
-								e.preventDefault();
-								if (!isPreviousDisabled) {
-									onPageChange(currentPage - 1);
-								}
-							}}
+							href={!isPreviousDisabled ? createPageUrl(currentPage - 1) : ""}
 							aria-disabled={isPreviousDisabled}
 							className={
 								isPreviousDisabled ? "pointer-events-none opacity-50" : ""
@@ -153,13 +138,7 @@ export function PaginationNav({
 
 					<PaginationItem>
 						<PaginationNext
-							href="#"
-							onClick={(e) => {
-								e.preventDefault();
-								if (!isNextDisabled) {
-									onPageChange(currentPage + 1);
-								}
-							}}
+							href={!isNextDisabled ? createPageUrl(currentPage + 1) : ""}
 							aria-disabled={isNextDisabled}
 							className={isNextDisabled ? "pointer-events-none opacity-50" : ""}
 						/>

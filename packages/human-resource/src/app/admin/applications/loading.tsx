@@ -1,12 +1,19 @@
 import { PageHeader } from "@/components/common/page-header";
-import { ApplicationsSkeleton } from "./_components/applications-skeleton";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { ApplicationsSkeleton } from "./_applications";
+import { SearchFormPresenter } from "./_search-form";
 
 export default function Loading() {
 	return (
 		<>
 			<PageHeader title="申請一覧" />
-			<SearchFormPresenter defaultQuery={{}} />
+			<SearchFormPresenter
+				searchQuery={{
+					status: "all",
+					type: "all",
+					query: "",
+					date: "",
+				}}
+			/>
 			<ApplicationsSkeleton />
 		</>
 	);

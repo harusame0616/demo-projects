@@ -23,13 +23,6 @@ export function PositionsPresenter({
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	// ページ変更処理
-	const handlePageChange = (page: number) => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.set("page", page.toString());
-		router.push(`${pathname}?${params.toString()}`);
-	};
-
 	// 現在のソート状態
 	const currentSort = searchParams.get("sort") || "level";
 	const currentOrder = searchParams.get("order") || "desc";
@@ -71,7 +64,6 @@ export function PositionsPresenter({
 					<PaginationNav
 						currentPage={pagination.page}
 						totalPages={pagination.totalPages}
-						onPageChange={handlePageChange}
 					/>
 				</div>
 			)}
