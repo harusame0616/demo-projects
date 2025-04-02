@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/skill-certification-actions";
+import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/certification-actions";
 import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 import { SkillsContainer } from "./_components/skills-container";

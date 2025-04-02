@@ -8,7 +8,7 @@ import {
 	UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { getSkillCertificationById } from "../../skills-certifications/_actions/skill-certification-actions";
+import { getSkillCertificationById } from "../../skills-certifications/_actions/certification-actions";
 
 import type { Metadata } from "next";
 
