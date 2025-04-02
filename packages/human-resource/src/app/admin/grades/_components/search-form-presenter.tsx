@@ -11,6 +11,7 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import type { GradeSearchQuery } from "../search-query";
 
 // フォームのスキーマを定義
 const schema = v.object(
@@ -20,18 +21,12 @@ const schema = v.object(
 	"検索フォームの入力が不正です",
 );
 
-interface SearchFormPresenterProps {
-	defaultQuery?: string;
+interface Props {
+	searchQuery: GradeSearchQuery;
 }
 
-export function SearchFormPresenter({
-	defaultQuery = "",
-}: SearchFormPresenterProps) {
-	const searchForm = useSearchForm(
-		schema,
-		{ query: defaultQuery },
-		{ query: "" },
-	);
+export function SearchFormPresenter({ searchQuery }: Props) {
+	const searchForm = useSearchForm(schema, searchQuery, { query: "" });
 
 	return (
 		<SearchForm {...searchForm}>

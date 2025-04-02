@@ -1,45 +1,41 @@
 "use server";
 
+import { OrderDirection } from "@/lib/order";
+import type { Pagination } from "@/lib/pagination";
 import { type Grade, gradeData } from "../_data/grades-data";
+import type { GradeSearchQuery } from "../search-query";
+import type { GradeOrder } from "../order";
 
 export interface GradeSearchParams {
-	query?: string;
-	sort?: keyof Grade | "salaryMin" | "salaryMax";
-	order?: "asc" | "desc";
-	page?: string;
+	searchQuery: GradeSearchQuery;
+	order: GradeOrder;
+	pagination: Pagination;
 }
 
 /**
  * グレードデータを検索・ソートするサーバーアクション
  */
-export async function getGrades(searchParams: GradeSearchParams = {}) {
-	const { query = "", sort = "id", order = "asc" } = searchParams;
+export async function getGrades(searchParams: GradeSearchParams) {
+	const { searchQuery, order, pagination } = searchParams;
 
 	// フィルター処理
 	let filteredData = [...gradeData];
 
 	// 検索クエリでフィルタリング
-	if (query) {
+	if (searchQuery.query) {
 		filteredData = filteredData.filter(
 			(item) =>
-				item.name.toLowerCase().includes(query.toLowerCase()) ||
-				item.description.toLowerCase().includes(query.toLowerCase()),
+				item.name.toLowerCase().includes(searchQuery.query.toLowerCase()) ||
+				item.description
+					.toLowerCase()
+					.includes(searchQuery.query.toLowerCase()),
 		);
 	}
 
 	// ソート処理
 	filteredData.sort((a, b) => {
-		let aValue: unknown = a[sort as keyof Grade];
-		let bValue: unknown = b[sort as keyof Grade];
-
-		// 給与最小・最大値でのソート対応
-		if (sort === "salaryMin") {
-			aValue = a.salaryRange.min;
-			bValue = b.salaryRange.min;
-		} else if (sort === "salaryMax") {
-			aValue = a.salaryRange.max;
-			bValue = b.salaryRange.max;
-		}
+		const aValue = a[order.field as keyof Grade];
+		const bValue = b[order.field as keyof Grade];
 
 		// 比較のための型変換
 		if (
@@ -47,18 +43,18 @@ export async function getGrades(searchParams: GradeSearchParams = {}) {
 			(typeof aValue === "string" && typeof bValue === "string")
 		) {
 			if (aValue < bValue) {
-				return order === "asc" ? -1 : 1;
+				return order.direction === OrderDirection.Asc ? -1 : 1;
 			}
 			if (aValue > bValue) {
-				return order === "asc" ? 1 : -1;
+				return order.direction === OrderDirection.Asc ? 1 : -1;
 			}
 		}
 		return 0;
 	});
 
 	// ページネーション
-	const page = searchParams.page ? Number.parseInt(searchParams.page, 10) : 1;
-	const limit = 20; // 1ページあたりの表示数
+	const page = pagination.page;
+	const limit = 20;
 	const total = filteredData.length;
 	const totalPages = Math.ceil(total / limit);
 	const start = (page - 1) * limit;
@@ -74,13 +70,6 @@ export async function getGrades(searchParams: GradeSearchParams = {}) {
 			totalPages,
 		},
 	};
-}
-
-/**
- * IDに基づいてグレードを取得
- */
-export async function getGradeById(id: string): Promise<Grade | null> {
-	return gradeData.find((item) => item.id === id) || null;
 }
 
 /**
@@ -114,15 +103,4 @@ export async function updateGrade(
 	gradeData[index] = updatedItem;
 
 	return updatedItem;
-}
-
-/**
- * グレードを削除
- */
-export async function deleteGrade(id: string): Promise<boolean> {
-	const index = gradeData.findIndex((item) => item.id === id);
-	if (index === -1) return false;
-
-	gradeData.splice(index, 1);
-	return true;
 }
