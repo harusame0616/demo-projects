@@ -39,13 +39,17 @@ export default async function UsersPage({
 				]}
 			/>
 
-			<SearchFormPresenter searchQuery={searchQuery} />
+			<SearchFormPresenter
+				searchQuery={searchQuery}
+				key={`search-form-${JSON.stringify(searchQuery)}`}
+			/>
 
 			<Suspense fallback={<UsersSkeleton />}>
 				<UsersContainer
 					order={order}
 					pagination={pagination}
 					searchQuery={searchQuery}
+					key={`users-container-${JSON.stringify({ order, pagination, searchQuery })}`}
 				/>
 			</Suspense>
 		</>

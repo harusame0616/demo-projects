@@ -1,32 +1,33 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
+import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import type { PositionSearchParams } from "./_actions/position-actions";
 import { PositionsContainer } from "./_components/positions-container";
 import { PositionsSkeleton } from "./_components/positions-skeleton";
-import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { parseSearchParamsPositionOrder } from "./order";
+import { parseSearchParamsPositionSearchQuery } from "./search-query";
+import { parseSearchParamsPagination } from "@/lib/pagination";
 
 export const metadata: Metadata = {
 	title: "役職管理 | 人材管理システム",
 	description: "役職の一覧と管理",
 };
 
-interface PositionsPageProps {
-	searchParams: Promise<PositionSearchParams>;
+interface Props {
+	searchParams: NextSearchParams;
 }
 
-export default async function PositionsPage({
-	searchParams,
-}: PositionsPageProps) {
-	// searchParamsをawaitして取得
+export default async function PositionsPage({ searchParams }: Props) {
 	const resolvedParams = await searchParams;
 
-	// 検索パラメータを安全に取得
-	const query = resolvedParams.query || "";
-	const level = resolvedParams.level || "all";
+	const searchQuery = parseSearchParamsPositionSearchQuery(resolvedParams);
+	const order = parseSearchParamsPositionOrder(resolvedParams);
+	const pagination = parseSearchParamsPagination(resolvedParams);
+
+	const searchParamsKey = JSON.stringify(resolvedParams);
 
 	return (
 		<>
@@ -39,21 +40,20 @@ export default async function PositionsPage({
 				]}
 			/>
 
-			<Suspense
-				fallback={
-					<SearchFormPresenter
-						defaultQuery={query}
-						levelOptions={[]}
-						isLoading={false}
-						defaultLevel={level}
-					/>
-				}
-			>
-				<SearchFormContainer defaultQuery={query} defaultLevel={level} />
-			</Suspense>
+			<SearchFormPresenter
+				key={`search-form-${searchParamsKey}`}
+				searchQuery={searchQuery}
+			/>
 
-			<Suspense fallback={<PositionsSkeleton />}>
-				<PositionsContainer searchParams={resolvedParams} />
+			<Suspense
+				fallback={<PositionsSkeleton />}
+				key={`positions-${searchParamsKey}`}
+			>
+				<PositionsContainer
+					searchQuery={searchQuery}
+					order={order}
+					pagination={pagination}
+				/>
 			</Suspense>
 		</>
 	);
