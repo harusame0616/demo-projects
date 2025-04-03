@@ -8,9 +8,9 @@ import {
 	UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { getSkillCertificationById } from "../../skills-certifications/_actions/skill-certification-actions";
 
 import type { Metadata } from "next";
+import { getSkillById } from "../_action/skill-actions";
 
 interface SkillDetailPageProps {
 	params: Promise<{
@@ -23,9 +23,9 @@ export async function generateMetadata({
 	params,
 }: SkillDetailPageProps): Promise<Metadata> {
 	const { id } = await params;
-	const skill = await getSkillCertificationById(id);
+	const skill = await getSkillById(id);
 
-	if (!skill || skill.type !== "skill") {
+	if (!skill) {
 		return {
 			title: "スキルが見つかりません | 人材管理システム",
 			description: "指定されたスキルが見つかりませんでした。",
@@ -38,25 +38,14 @@ export async function generateMetadata({
 	};
 }
 
-// 日付をフォーマットする関数
-function formatDate(dateString: string): string {
-	const date = new Date(dateString);
-	return new Intl.DateTimeFormat("ja-JP", {
-		year: "numeric",
-		month: "numeric",
-		day: "numeric",
-	}).format(date);
-}
-
 export default async function SkillDetailPage({
 	params,
 }: SkillDetailPageProps) {
 	const { id } = await params;
 	// サーバーアクションを使ってスキルデータを取得
-	const skillPromise = getSkillCertificationById(id);
-	const skill = await skillPromise;
+	const skill = await getSkillById(id);
 
-	if (!skill || skill.type !== "skill") {
+	if (!skill) {
 		return (
 			<div className="flex flex-col items-center justify-center h-[50vh]">
 				<h2 className="text-2xl font-bold mb-4">スキルが見つかりません</h2>
@@ -121,7 +110,7 @@ export default async function SkillDetailPage({
 										<dt className="text-sm font-medium text-gray-500">
 											レベル
 										</dt>
-										<dd className="mt-1">{skill.levelOrAuthority}</dd>
+										<dd className="mt-1">{skill.level}</dd>
 									</div>
 									{skill.requirements && (
 										<div>
@@ -131,24 +120,6 @@ export default async function SkillDetailPage({
 											<dd className="mt-1">{skill.requirements}</dd>
 										</div>
 									)}
-									<div>
-										<dt className="text-sm font-medium text-gray-500">
-											保有者数
-										</dt>
-										<dd className="mt-1 flex items-center">
-											<UsersIcon className="h-4 w-4 mr-1 text-gray-500" />
-											{skill.holdersCount}人
-										</dd>
-									</div>
-									<div>
-										<dt className="text-sm font-medium text-gray-500">
-											登録日
-										</dt>
-										<dd className="mt-1 flex items-center">
-											<CalendarIcon className="h-4 w-4 mr-1 text-gray-500" />
-											{formatDate(skill.createdAt)}
-										</dd>
-									</div>
 								</dl>
 							</div>
 						</div>

@@ -1,10 +1,6 @@
 import { PageHeader } from "@/components/common/page-header";
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import type { PositionSearchParams } from "./_actions/position-actions";
-import { PositionsContainer } from "./_components/positions-container";
 import { PositionsSkeleton } from "./_components/positions-skeleton";
-import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 
 export const metadata: Metadata = {
@@ -17,18 +13,7 @@ export default async function Loading() {
 		<>
 			<PageHeader title="役職一覧" />
 
-			<Suspense
-				fallback={
-					<SearchFormPresenter
-						defaultQuery={""}
-						levelOptions={[]}
-						isLoading={false}
-						defaultLevel={""}
-					/>
-				}
-			>
-				<SearchFormContainer defaultQuery={""} defaultLevel={""} />
-			</Suspense>
+			<SearchFormPresenter searchQuery={{ query: "", level: "all" }} />
 
 			<PositionsSkeleton />
 		</>

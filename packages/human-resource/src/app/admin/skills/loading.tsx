@@ -7,7 +7,11 @@ export default async function Loading() {
 		<>
 			<PageHeader title="スキル一覧" />
 
-			<SearchFormPresenter defaultQuery={""} />
+			<SearchFormPresenter
+				searchQuery={{
+					query: "",
+				}}
+			/>
 
 			<SkillsSkeleton />
 		</>

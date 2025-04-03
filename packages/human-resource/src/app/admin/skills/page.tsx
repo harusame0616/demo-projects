@@ -1,13 +1,15 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
+import { parseSearchParamsPagination } from "@/lib/pagination";
+import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/skill-certification-actions";
-import { SearchFormContainer } from "./_components/search-form-container";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 import { SkillsContainer } from "./_components/skills-container";
 import { SkillsSkeleton } from "./_components/skills-skeleton";
+import { parseSearchParamsSkillOrder } from "./order";
+import { parseSearchParamsSkillSearchQuery } from "./search-query";
 
 export const metadata: Metadata = {
 	title: "スキル管理 | 人材管理システム",
@@ -17,13 +19,15 @@ export const metadata: Metadata = {
 export default async function SkillsPage({
 	searchParams,
 }: {
-	searchParams: Promise<SkillCertificationSearchParams>;
+	searchParams: NextSearchParams;
 }) {
 	// searchParamsをawaitして取得
 	const resolvedParams = await searchParams;
+	const searchQuery = parseSearchParamsSkillSearchQuery(resolvedParams);
+	const order = parseSearchParamsSkillOrder(resolvedParams);
+	const pagination = parseSearchParamsPagination(resolvedParams);
 
-	// 検索パラメータを安全に取得
-	const query = resolvedParams.query || "";
+	const searchParamsKey = JSON.stringify(resolvedParams);
 
 	return (
 		<>
@@ -36,10 +40,17 @@ export default async function SkillsPage({
 				]}
 			/>
 
-			<SearchFormPresenter defaultQuery={query} />
+			<SearchFormPresenter
+				key={`search-form-${searchParamsKey}`}
+				searchQuery={searchQuery}
+			/>
 
-			<Suspense fallback={<SkillsSkeleton />}>
-				<SkillsContainer searchParams={resolvedParams} />
+			<Suspense fallback={<SkillsSkeleton />} key={`skills-${searchParamsKey}`}>
+				<SkillsContainer
+					searchQuery={searchQuery}
+					order={order}
+					pagination={pagination}
+				/>
 			</Suspense>
 		</>
 	);

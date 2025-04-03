@@ -2,12 +2,15 @@ import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
-import type { GradeSearchParams } from "./_actions/grade-actions";
 import { GradesContainer } from "./_components/grades-container";
 import { GradesSkeleton } from "./_components/grades-skeleton";
 
+import { parseSearchParamsPagination } from "@/lib/pagination";
+import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { parseSearchParamsGradeOrder } from "./order";
+import { parseSearchParamsGradeSearchQuery } from "./search-query";
 
 export const metadata: Metadata = {
 	title: "グレード管理 | 人材管理システム",
@@ -17,13 +20,15 @@ export const metadata: Metadata = {
 export default async function GradePage({
 	searchParams,
 }: {
-	searchParams: Promise<GradeSearchParams>;
+	searchParams: NextSearchParams;
 }) {
-	// searchParamsをawaitして取得
 	const resolvedParams = await searchParams;
 
-	// 検索パラメータを安全に取得
-	const query = resolvedParams.query || "";
+	const searchQuery = parseSearchParamsGradeSearchQuery(resolvedParams);
+	const pagination = parseSearchParamsPagination(resolvedParams);
+	const order = parseSearchParamsGradeOrder(resolvedParams);
+
+	const searchParamsKey = JSON.stringify(resolvedParams);
 
 	return (
 		<>
@@ -36,10 +41,17 @@ export default async function GradePage({
 				]}
 			/>
 
-			<SearchFormPresenter defaultQuery={query} />
+			<SearchFormPresenter
+				searchQuery={searchQuery}
+				key={`search-form-${searchParamsKey}`}
+			/>
 
-			<Suspense fallback={<GradesSkeleton />}>
-				<GradesContainer searchParams={resolvedParams} />
+			<Suspense fallback={<GradesSkeleton />} key={`grades-${searchParamsKey}`}>
+				<GradesContainer
+					searchQuery={searchQuery}
+					order={order}
+					pagination={pagination}
+				/>
 			</Suspense>
 		</>
 	);

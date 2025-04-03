@@ -4,7 +4,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getSkillCertificationById } from "../../../skills-certifications/_actions/skill-certification-actions";
+import { getSkillById } from "../../_action/skill-actions";
 import { SkillForm } from "../../_components/skill-form";
 import { SkillFormSkeleton } from "../../_components/skill-form-skeleton";
 
@@ -19,9 +19,9 @@ export async function generateMetadata({
 	params,
 }: SkillEditPageProps): Promise<Metadata> {
 	const { id } = await params;
-	const skill = await getSkillCertificationById(id);
+	const skill = await getSkillById(id);
 
-	if (!skill || skill.type !== "skill") {
+	if (!skill) {
 		return {
 			title: "スキルが見つかりません | 人材管理システム",
 			description: "指定されたスキルが見つかりませんでした。",
@@ -37,10 +37,9 @@ export async function generateMetadata({
 export default async function SkillEditPage({ params }: SkillEditPageProps) {
 	const { id } = await params;
 	// サーバーアクションを使ってスキルデータを取得
-	const skillPromise = getSkillCertificationById(id);
-	const skill = await skillPromise;
+	const skill = await getSkillById(id);
 
-	if (!skill || skill.type !== "skill") {
+	if (!skill) {
 		return (
 			<div className="flex flex-col items-center justify-center h-[50vh]">
 				<h2 className="text-2xl font-bold mb-4">スキルが見つかりません</h2>

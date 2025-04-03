@@ -1,21 +1,16 @@
-import { getSkillCertifications } from "../../skills-certifications/_actions/skill-certification-actions";
-import type { SkillCertificationSearchParams } from "../../skills-certifications/_actions/skill-certification-actions";
-import type { SkillCertificationType } from "../../skills-certifications/_data/skills-certifications-data";
+import { getSkills } from "../_action/skill-actions";
 import { SkillsPresenter } from "./skills-presenter";
 
-interface SkillsContainerProps {
-	searchParams: SkillCertificationSearchParams;
-}
+type Props = Parameters<typeof getSkills>[0];
 
-export async function SkillsContainer({ searchParams }: SkillsContainerProps) {
-	// 検索条件を基にデータを取得（常にスキルのみ）
-	const paramsForFetch: SkillCertificationSearchParams = {
-		...searchParams,
-		type: "skill" as SkillCertificationType,
-	};
+export async function SkillsContainer(props: Props) {
+	const { items, pagination } = await getSkills(props);
 
-	// データ取得
-	const { items, pagination } = await getSkillCertifications(paramsForFetch);
-
-	return <SkillsPresenter skills={items} pagination={pagination} />;
+	return (
+		<SkillsPresenter
+			skills={items}
+			pagination={pagination}
+			order={props.order}
+		/>
+	);
 }

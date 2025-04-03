@@ -17,56 +17,56 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { OrderDirection } from "@/lib/order";
+import type { PaginationResult } from "@/lib/pagination";
 import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
+import type { CertificationOrder } from "../order";
 
 interface CertificationsPresenterProps {
 	certifications: SkillCertification[];
-	pagination: {
-		total: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
+	pagination: PaginationResult;
+	order: CertificationOrder;
 }
 
 export function CertificationsPresenter({
 	certifications,
 	pagination,
+	order,
 }: CertificationsPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	// 現在のソート状態
-	const currentSort = searchParams.get("sort") || "name";
-	const currentOrder = searchParams.get("order") || "asc";
-
-	// ソート処理
 	const handleSort = (column: keyof SkillCertification) => {
 		const params = new URLSearchParams(searchParams.toString());
 
 		// 同じカラムをクリックした場合は、昇順・降順を切り替え
-		if (currentSort === column) {
-			params.set("order", currentOrder === "asc" ? "desc" : "asc");
+		if (order.field === column) {
+			params.set(
+				"direction",
+				order.direction === OrderDirection.Asc
+					? OrderDirection.Desc
+					: OrderDirection.Asc,
+			);
 		} else {
 			// 異なるカラムの場合は、そのカラムの昇順でソート
-			params.set("sort", column as string);
-			params.set("order", "asc");
+			params.set("field", column as string);
+			params.set("direction", OrderDirection.Asc);
 		}
 
 		// ページを1に戻す
 		params.delete("page");
 
-		router.push(`${pathname}?${params.toString()}`);
+		router.push(`${pathname}?${params}`);
 	};
 
 	// ソートアイコンの表示
 	const getSortIcon = (key: keyof SkillCertification) => {
-		if (currentSort !== key) return null;
-		return currentOrder === "asc" ? (
+		if (order.field !== key) return null;
+		return order.direction === OrderDirection.Asc ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
 		) : (
 			<ArrowDownIcon className="h-4 w-4 ml-1" />

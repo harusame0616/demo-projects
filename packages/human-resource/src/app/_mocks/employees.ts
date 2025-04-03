@@ -1,3 +1,6 @@
+import { skillCertificationData } from "../admin/skills-certifications/_data/skills-certifications-data";
+import { skills } from "./skills";
+
 // 基本的な従業員データ型定義
 export type Employee = {
 	id: string;
@@ -68,8 +71,8 @@ export const mockEmployees: Employee[] = [
 		phone: "090-1234-5678",
 		address: "東京都渋谷区神宮前3-15-8 渋谷グリーンハイツ801",
 		birthDate: "1985-05-15",
-		skills: ["Excel", "PowerPoint", "営業戦略立案"],
-		certifications: ["TOEIC 800点", "営業士2級"],
+		skills: ["TypeScript", "React", "Node.js"],
+		certifications: ["TOEIC 800点以上", "基本情報技術者試験"],
 		evaluations: [
 			{ period: "2023年上期", overallRating: "A", date: "2023-06-30" },
 			{ period: "2022年下期", overallRating: "B", date: "2023-01-31" },
@@ -117,18 +120,18 @@ export const mockEmployees: Employee[] = [
 		birthDate: "1975-03-10",
 		grade: "G5",
 		skills: [
-			"システムアーキテクチャ設計",
-			"プロジェクトマネジメント",
+			"TypeScript",
+			"React",
+			"Next.js",
 			"AWS",
-			"Azure",
 			"Kubernetes",
-			"マイクロサービス",
-			"アジャイル開発",
+			"Node.js",
+			"Docker",
 		],
 		certifications: [
-			"情報処理技術者試験 プロジェクトマネージャ",
-			"AWS Solutions Architect Professional",
-			"TOEIC 850点",
+			"応用情報技術者試験",
+			"AWS認定ソリューションアーキテクト - アソシエイト",
+			"TOEIC 800点以上",
 		],
 		evaluations: [
 			{ period: "2023年上期", overallRating: "S", date: "2023-06-30" },
@@ -164,17 +167,11 @@ export const mockEmployees: Employee[] = [
 		address: "東京都目黒区中目黒2-11-17 目黒アーバンハイツ503",
 		birthDate: "1995-07-25",
 		grade: "G1",
-		skills: [
-			"デジタルマーケティング",
-			"SNS運用",
-			"コンテンツ制作",
-			"Google Analytics",
-			"Adobe Photoshop",
-		],
+		skills: ["JavaScript", "React", "Vue.js", "HTML/CSS", "Git"],
 		certifications: [
-			"Google Analytics認定資格",
-			"Facebook Blueprint認定",
-			"TOEIC 780点",
+			"基本情報技術者試験",
+			"Google Cloud Professional Cloud Architect",
+			"TOEIC 800点以上",
 		],
 		evaluations: [
 			{ period: "2023年上期", overallRating: "A", date: "2023-06-30" },
@@ -221,8 +218,8 @@ export const mockEmployees: Employee[] = [
 		phone: "090-3456-7890",
 		address: "東京都中央区銀座6-10-1 銀座スカイレジデンス1501",
 		birthDate: "1988-07-15",
-		skills: ["Java", "React", "プロジェクト管理"],
-		certifications: ["基本情報技術者", "TOEIC 750点"],
+		skills: ["Java", "React", "PostgreSQL"],
+		certifications: ["基本情報技術者試験", "TOEIC 800点以上"],
 		evaluations: [
 			{ period: "2023年上期", overallRating: "A", date: "2023-06-30" },
 			{ period: "2022年下期", overallRating: "A", date: "2023-01-31" },
@@ -317,12 +314,12 @@ export const mockEmployees: Employee[] = [
 			"Node.js",
 			"Python",
 			"Docker",
-			"CI/CD",
+			"Git",
 		],
 		certifications: [
-			"応用情報技術者",
-			"AWS Solutions Architect Associate",
-			"TOEIC 800点",
+			"応用情報技術者試験",
+			"AWS認定ソリューションアーキテクト - アソシエイト",
+			"TOEIC 800点以上",
 		],
 		evaluations: [
 			{ period: "2023年上期", overallRating: "A", date: "2023-06-30" },
@@ -466,18 +463,11 @@ export const mockEmployees: Employee[] = [
 		phone: "090-9876-5432",
 		address: "東京都江戸川区西葛西5-8-13 葛西セントラルマンション908",
 		birthDate: "1990-08-20",
-		skills: [
-			"Java",
-			"Spring Boot",
-			"MySQL",
-			"Redis",
-			"Kubernetes",
-			"テスト自動化",
-		],
+		skills: ["Java", "Spring Boot", "PostgreSQL", "Redis", "Kubernetes", "Git"],
 		certifications: [
-			"情報処理安全確保支援士",
-			"Oracle Certified Professional",
-			"TOEIC 820点",
+			"情報セキュリティマネジメント試験",
+			"Oracle Certified Professional, Java SE Programmer",
+			"TOEIC 800点以上",
 		],
 		evaluations: [
 			{ period: "2023年上期", overallRating: "A", date: "2023-06-30" },
@@ -603,14 +593,12 @@ export const mockEmployees: Employee[] = [
 		phone: "090-3333-4444",
 		address: "東京都目黒区自由が丘1-25-12 自由が丘マンション705",
 		birthDate: "1987-06-10",
-		skills: [
-			"ソリューション営業",
-			"プレゼンテーション",
-			"商談交渉",
-			"マーケット分析",
-			"Salesforce",
+		skills: ["JavaScript", "TypeScript", "React", "Vue.js", "Node.js"],
+		certifications: [
+			"情報セキュリティマネジメント試験",
+			"基本情報技術者試験",
+			"TOEIC 800点以上",
 		],
-		certifications: ["営業マネージャー認定", "ITパスポート", "TOEIC 750点"],
 		evaluations: [
 			{ period: "2023年上期", overallRating: "S", date: "2023-06-30" },
 			{ period: "2022年下期", overallRating: "A", date: "2023-01-31" },
@@ -640,6 +628,8 @@ export const mockEmployees: Employee[] = [
 		email: "noguchi.mari@example.com",
 		joinDate: "2020-04-01",
 		address: "東京都世田谷区下北沢3-8-15 下北沢グリーンハイツ402",
+		skills: ["JavaScript", "React", "Vue.js"],
+		certifications: ["基本情報技術者試験", "TOEIC 800点以上"],
 	},
 	{
 		id: "039",
@@ -649,6 +639,8 @@ export const mockEmployees: Employee[] = [
 		email: "takeuchi.shunsuke@example.com",
 		joinDate: "2014-04-01",
 		address: "東京都渋谷区広尾5-12-9 広尾レジデンス1105",
+		skills: ["JavaScript", "TypeScript", "React"],
+		certifications: ["応用情報技術者試験", "情報セキュリティマネジメント試験"],
 	},
 	{
 		id: "040",
@@ -658,6 +650,8 @@ export const mockEmployees: Employee[] = [
 		email: "ichikawa.haruka@example.com",
 		joinDate: "2022-04-01",
 		address: "東京都中野区東中野1-15-8 東中野パークマンション605",
+		skills: ["Python", "TypeScript", "Next.js"],
+		certifications: ["基本情報技術者試験"],
 	},
 	{
 		id: "041",
@@ -667,6 +661,8 @@ export const mockEmployees: Employee[] = [
 		email: "kondo.yusuke@example.com",
 		joinDate: "2023-04-01",
 		address: "東京都杉並区阿佐ヶ谷3-18-7 阿佐ヶ谷グリーンコート805",
+		skills: ["JavaScript", "Git"],
+		certifications: ["TOEIC 800点以上"],
 	},
 	{
 		id: "042",
@@ -676,6 +672,8 @@ export const mockEmployees: Employee[] = [
 		email: "miyazaki.emi@example.com",
 		joinDate: "2019-04-01",
 		address: "東京都豊島区巣鴨4-9-12 巣鴨パークサイド505",
+		skills: ["JavaScript", "React"],
+		certifications: ["情報セキュリティマネジメント試験"],
 	},
 	{
 		id: "043",
@@ -685,6 +683,12 @@ export const mockEmployees: Employee[] = [
 		email: "yokoyama.yuta@example.com",
 		joinDate: "2012-04-01",
 		address: "東京都北区王子2-7-8 王子ガーデンハウス705",
+		skills: ["TypeScript", "React", "Next.js", "Node.js", "AWS", "Kubernetes"],
+		certifications: [
+			"応用情報技術者試験",
+			"AWS認定ソリューションアーキテクト - アソシエイト",
+			"Google Cloud Professional Cloud Architect",
+		],
 	},
 	{
 		id: "044",
@@ -694,6 +698,8 @@ export const mockEmployees: Employee[] = [
 		email: "sakurai.mika@example.com",
 		joinDate: "2022-04-01",
 		address: "東京都荒川区西日暮里5-13-6 日暮里レジデンス905",
+		skills: ["JavaScript", "Vue.js"],
+		certifications: ["TOEIC 800点以上"],
 	},
 	{
 		id: "045",
@@ -703,6 +709,8 @@ export const mockEmployees: Employee[] = [
 		email: "uchida.kenji@example.com",
 		joinDate: "2015-04-01",
 		address: "東京都板橋区志村2-11-14 志村パークタワー1205",
+		skills: ["TypeScript", "React", "PostgreSQL"],
+		certifications: ["応用情報技術者試験"],
 	},
 	{
 		id: "046",
@@ -712,6 +720,8 @@ export const mockEmployees: Employee[] = [
 		email: "takagi.hiromi@example.com",
 		joinDate: "2018-04-01",
 		address: "東京都練馬区光が丘1-5-8 光が丘パークハウス305",
+		skills: ["JavaScript", "TypeScript", "Vue.js", "Node.js"],
+		certifications: ["基本情報技術者試験", "TOEIC 800点以上"],
 	},
 	{
 		id: "047",
@@ -721,6 +731,8 @@ export const mockEmployees: Employee[] = [
 		email: "mori.kazuya@example.com",
 		joinDate: "2016-04-01",
 		address: "東京都足立区綾瀬4-15-9 綾瀬グランドマンション805",
+		skills: ["JavaScript", "React"],
+		certifications: ["情報セキュリティマネジメント試験", "基本情報技術者試験"],
 	},
 	{
 		id: "048",
@@ -730,6 +742,8 @@ export const mockEmployees: Employee[] = [
 		email: "ueda.mariko@example.com",
 		joinDate: "2021-04-01",
 		address: "東京都葛飾区立石3-8-12 立石パークサイド605",
+		skills: ["JavaScript", "React"],
+		certifications: ["TOEIC 800点以上"],
 	},
 	{
 		id: "049",
@@ -739,6 +753,8 @@ export const mockEmployees: Employee[] = [
 		email: "kawano.tomoya@example.com",
 		joinDate: "2017-04-01",
 		address: "東京都江戸川区小岩1-23-7 小岩レジデンス505",
+		skills: ["TypeScript", "React"],
+		certifications: ["基本情報技術者試験"],
 	},
 	{
 		id: "050",
@@ -748,6 +764,8 @@ export const mockEmployees: Employee[] = [
 		email: "taniguchi.megumi@example.com",
 		joinDate: "2022-04-01",
 		address: "東京都千代田区九段南2-3-8 九段下パレス1005",
+		skills: ["JavaScript"],
+		certifications: ["TOEIC 800点以上"],
 	},
 	{
 		id: "051",
@@ -757,6 +775,11 @@ export const mockEmployees: Employee[] = [
 		email: "hirata.osamu@example.com",
 		joinDate: "2014-04-01",
 		address: "東京都中央区月島3-15-9 月島ガーデンハウス705",
+		skills: ["TypeScript", "React", "Next.js", "AWS", "Docker"],
+		certifications: [
+			"応用情報技術者試験",
+			"AWS認定ソリューションアーキテクト - アソシエイト",
+		],
 	},
 	{
 		id: "052",
@@ -766,6 +789,8 @@ export const mockEmployees: Employee[] = [
 		email: "hattori.yumiko@example.com",
 		joinDate: "2023-04-01",
 		address: "東京都港区白金1-8-11 白金パークマンション505",
+		skills: ["JavaScript"],
+		certifications: ["基本情報技術者試験"],
 	},
 	{
 		id: "053",
@@ -775,6 +800,8 @@ export const mockEmployees: Employee[] = [
 		email: "yoshikawa.takuma@example.com",
 		joinDate: "2020-04-01",
 		address: "東京都新宿区神楽坂4-12-6 神楽坂レジデンス805",
+		skills: ["JavaScript", "TypeScript", "Vue.js"],
+		certifications: ["基本情報技術者試験", "TOEIC 800点以上"],
 	},
 	{
 		id: "054",
@@ -784,6 +811,8 @@ export const mockEmployees: Employee[] = [
 		email: "kubo.chiharu@example.com",
 		joinDate: "2013-04-01",
 		address: "東京都文京区千駄木2-7-15 千駄木パークハウス405",
+		skills: ["TypeScript", "React"],
+		certifications: ["情報セキュリティマネジメント試験", "応用情報技術者試験"],
 	},
 	{
 		id: "055",
@@ -793,6 +822,8 @@ export const mockEmployees: Employee[] = [
 		email: "nishida.yasuhiro@example.com",
 		joinDate: "2018-04-01",
 		address: "東京都台東区入谷1-9-8 入谷グリーンコート605",
+		skills: ["JavaScript", "TypeScript", "React"],
+		certifications: ["基本情報技術者試験"],
 	},
 	{
 		id: "056",
@@ -802,6 +833,8 @@ export const mockEmployees: Employee[] = [
 		email: "arai.miki@example.com",
 		joinDate: "2021-04-01",
 		address: "東京都墨田区押上3-11-14 スカイツリーレジデンス1505",
+		skills: ["JavaScript", "React", "Next.js"],
+		certifications: ["基本情報技術者試験"],
 	},
 	{
 		id: "057",
@@ -811,6 +844,8 @@ export const mockEmployees: Employee[] = [
 		email: "iida.kentaro@example.com",
 		joinDate: "2019-04-01",
 		address: "東京都江東区東陽5-6-7 東陽町パークタワー905",
+		skills: ["JavaScript", "TypeScript"],
+		certifications: ["情報セキュリティマネジメント試験", "TOEIC 800点以上"],
 	},
 	{
 		id: "058",
@@ -820,6 +855,8 @@ export const mockEmployees: Employee[] = [
 		email: "shinohara.aya@example.com",
 		joinDate: "2016-04-01",
 		address: "東京都品川区五反田1-18-9 五反田パークハイツ705",
+		skills: ["JavaScript", "React", "Vue.js"],
+		certifications: ["基本情報技術者試験", "TOEIC 800点以上"],
 	},
 	{
 		id: "059",
@@ -829,6 +866,8 @@ export const mockEmployees: Employee[] = [
 		email: "ishida.makoto@example.com",
 		joinDate: "2022-04-01",
 		address: "東京都目黒区祐天寺2-8-15 祐天寺レジデンス505",
+		skills: ["JavaScript"],
+		certifications: ["基本情報技術者試験"],
 	},
 	{
 		id: "060",
@@ -838,6 +877,8 @@ export const mockEmployees: Employee[] = [
 		email: "enomoto.mayumi@example.com",
 		joinDate: "2017-04-01",
 		address: "東京都世田谷区経堂3-12-7 経堂グリーンハイツ605",
+		skills: ["TypeScript", "React"],
+		certifications: ["応用情報技術者試験", "情報セキュリティマネジメント試験"],
 	},
 ];
 

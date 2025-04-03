@@ -1,12 +1,15 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
+import { parseSearchParamsPagination } from "@/lib/pagination";
+import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/skill-certification-actions";
 import { CertificationsContainer } from "./_components/certifications-container";
 import { CertificationsSkeleton } from "./_components/certifications-skeleton";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { parseSearchParamsCertificationOrder } from "./order";
+import { parseSearchParamsCertificationSearchQuery } from "./search-query";
 
 export const metadata: Metadata = {
 	title: "資格管理 | 人材管理システム",
@@ -16,13 +19,15 @@ export const metadata: Metadata = {
 export default async function CertificationsPage({
 	searchParams,
 }: {
-	searchParams: Promise<SkillCertificationSearchParams>;
+	searchParams: NextSearchParams;
 }) {
-	// searchParamsをawaitして取得
 	const resolvedParams = await searchParams;
 
-	// 検索パラメータを安全に取得
-	const query = resolvedParams.query || "";
+	const searchQuery = parseSearchParamsCertificationSearchQuery(resolvedParams);
+	const pagination = parseSearchParamsPagination(resolvedParams);
+	const order = parseSearchParamsCertificationOrder(resolvedParams);
+
+	const searchParamsKey = JSON.stringify(resolvedParams);
 
 	return (
 		<div className="space-y-4">
@@ -35,10 +40,20 @@ export default async function CertificationsPage({
 				]}
 			/>
 
-			<SearchFormPresenter defaultQuery={query} />
+			<SearchFormPresenter
+				searchQuery={searchQuery}
+				key={`search-form-${searchParamsKey}`}
+			/>
 
-			<Suspense fallback={<CertificationsSkeleton />}>
-				<CertificationsContainer searchParams={resolvedParams} />
+			<Suspense
+				key={`certifications-${searchParamsKey}`}
+				fallback={<CertificationsSkeleton />}
+			>
+				<CertificationsContainer
+					searchQuery={searchQuery}
+					pagination={pagination}
+					order={order}
+				/>
 			</Suspense>
 		</div>
 	);

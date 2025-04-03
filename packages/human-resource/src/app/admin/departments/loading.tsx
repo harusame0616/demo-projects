@@ -7,7 +7,11 @@ export default async function Loading() {
 		<>
 			<PageHeader title="部署一覧" />
 
-			<SearchFormPresenter defaultValue={""} isLoading={false} />
+			<SearchFormPresenter
+				searchQuery={{
+					query: "",
+				}}
+			/>
 
 			<DepartmentsSkeleton />
 		</>

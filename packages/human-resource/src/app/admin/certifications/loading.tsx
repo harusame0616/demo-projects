@@ -1,7 +1,5 @@
 import { PageHeader } from "@/components/common/page-header";
-import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { CertificationsSkeleton } from "./_components/certifications-skeleton";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 
@@ -15,7 +13,11 @@ export default function Loading() {
 		<>
 			<PageHeader title="資格一覧" />
 
-			<SearchFormPresenter defaultQuery={""} />
+			<SearchFormPresenter
+				searchQuery={{
+					query: "",
+				}}
+			/>
 
 			<CertificationsSkeleton />
 		</>

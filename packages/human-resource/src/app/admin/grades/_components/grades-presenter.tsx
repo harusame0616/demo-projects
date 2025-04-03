@@ -17,53 +17,56 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { OrderDirection } from "@/lib/order";
+import type { PaginationResult } from "@/lib/pagination";
 import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Grade } from "../_data/grades-data";
+import { type GradeOrder, GradeOrderField } from "../order";
 
 interface GradesPresenterProps {
 	grades: Grade[];
-	pagination: {
-		total: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
+	pagination: PaginationResult;
+	order: GradeOrder;
 }
 
-export function GradesPresenter({ grades, pagination }: GradesPresenterProps) {
+export function GradesPresenter({
+	grades,
+	pagination,
+	order,
+}: GradesPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-
-	// 現在のソート状態
-	const currentSort = searchParams.get("sort") || "id";
-	const currentOrder = searchParams.get("order") || "asc";
 
 	// ソート処理
 	const handleSort = (column: keyof Grade) => {
 		const params = new URLSearchParams(searchParams.toString());
 
 		// 同じカラムをクリックした場合は、昇順・降順を切り替え
-		if (currentSort === column) {
-			params.set("order", currentOrder === "asc" ? "desc" : "asc");
+		if (order.field === column) {
+			params.set(
+				"direction",
+				order.direction === OrderDirection.Asc
+					? OrderDirection.Desc
+					: OrderDirection.Asc,
+			);
 		} else {
-			// 異なるカラムの場合は、そのカラムの昇順でソート
-			params.set("sort", column as string);
-			params.set("order", "asc");
+			params.set("field", column as string);
+			params.set("direction", OrderDirection.Asc);
 		}
 
 		// ページを1に戻す
 		params.delete("page");
 
-		router.push(`${pathname}?${params.toString()}`);
+		router.push(`${pathname}?${params}`);
 	};
 
 	// ソートアイコンの表示
 	const getSortIcon = (key: keyof Grade) => {
-		if (currentSort !== key) return null;
-		return currentOrder === "asc" ? (
+		if (order.field !== key) return null;
+		return order.direction === OrderDirection.Asc ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
 		) : (
 			<ArrowDownIcon className="h-4 w-4 ml-1" />
@@ -78,29 +81,29 @@ export function GradesPresenter({ grades, pagination }: GradesPresenterProps) {
 						<TableRow>
 							<TableHead
 								className="w-[100px] cursor-pointer whitespace-nowrap"
-								onClick={() => handleSort("id")}
+								onClick={() => handleSort(GradeOrderField.GradeCode)}
 							>
 								<div className="flex items-center">
 									グレードコード
-									{getSortIcon("id")}
+									{getSortIcon(GradeOrderField.GradeCode)}
 								</div>
 							</TableHead>
 							<TableHead
 								className="w-[180px] cursor-pointer whitespace-nowrap"
-								onClick={() => handleSort("name")}
+								onClick={() => handleSort(GradeOrderField.GradeName)}
 							>
 								<div className="flex items-center">
 									グレード名
-									{getSortIcon("name")}
+									{getSortIcon(GradeOrderField.GradeName)}
 								</div>
 							</TableHead>
 							<TableHead
 								className="w-[100px] cursor-pointer whitespace-nowrap"
-								onClick={() => handleSort("level")}
+								onClick={() => handleSort(GradeOrderField.GradeLevel)}
 							>
 								<div className="flex items-center">
 									レベル
-									{getSortIcon("level")}
+									{getSortIcon(GradeOrderField.GradeLevel)}
 								</div>
 							</TableHead>
 							<TableHead className="w-[80px]">操作</TableHead>

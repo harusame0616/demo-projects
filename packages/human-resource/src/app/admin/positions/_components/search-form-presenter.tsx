@@ -18,9 +18,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { positionData } from "../_data/positions-data";
+import type { PositionSearchQuery } from "../search-query";
 
 // フォームのスキーマを定義
-const schema = v.object(
+const formSchema = v.object(
 	{
 		query: v.string(),
 		level: v.string(),
@@ -28,35 +30,30 @@ const schema = v.object(
 	"検索フォームの入力が不正です",
 );
 
-interface LevelOption {
-	id: string;
-	name: string;
-}
-
 interface SearchFormPresenterProps {
-	defaultQuery?: string;
-	defaultLevel?: string;
-	levelOptions?: LevelOption[];
-	isLoading?: boolean;
+	searchQuery: PositionSearchQuery;
 }
 
-export function SearchFormPresenter({
-	defaultQuery = "",
-	defaultLevel = "all",
-	levelOptions = [],
-	isLoading = false,
-}: SearchFormPresenterProps) {
-	const searchForm = useSearchForm(
-		schema,
-		{
-			query: defaultQuery,
-			level: defaultLevel,
-		},
-		{
-			query: "",
-			level: "all",
-		},
-	);
+export function SearchFormPresenter({ searchQuery }: SearchFormPresenterProps) {
+	const searchForm = useSearchForm(formSchema, searchQuery, {
+		query: "",
+		level: "all",
+	});
+	const levelOptions = positionData
+		.map((position) => ({
+			id: position.level.toString(),
+			name: position.level.toString(),
+		}))
+		.reduce(
+			(acc, curr) => {
+				if (!acc.find((option) => option.id === curr.id)) {
+					acc.push(curr);
+				}
+				return acc;
+			},
+			[] as { id: string; name: string }[],
+		);
+
 	return (
 		<SearchForm {...searchForm}>
 			<FormField
@@ -66,11 +63,7 @@ export function SearchFormPresenter({
 					<FormItem className="col-span-4 sm:col-span-2">
 						<FormLabel>キーワード（ポジション名）</FormLabel>
 						<FormControl>
-							<Input
-								className="h-10 rounded-lg border-gray-200"
-								{...field}
-								disabled={isLoading}
-							/>
+							<Input className="h-10 rounded-lg border-gray-200" {...field} />
 						</FormControl>
 					</FormItem>
 				)}
@@ -82,21 +75,17 @@ export function SearchFormPresenter({
 				render={({ field }) => (
 					<FormItem className="col-span-4 sm:col-span-1">
 						<FormLabel>レベル</FormLabel>
-						<Select
-							onValueChange={field.onChange}
-							value={field.value}
-							disabled={isLoading}
-						>
+						<Select onValueChange={field.onChange} value={field.value}>
 							<FormControl>
 								<SelectTrigger
 									className="h-10 border-gray-200 w-full min-h-10 overflow-hidden"
 									value={field.value}
 								>
-									<SelectValue placeholder="すべてのレベル" />
+									<SelectValue placeholder="すべて" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="all">すべてのレベル</SelectItem>
+								<SelectItem value="all">すべて</SelectItem>
 								{levelOptions.map((level) => (
 									<SelectItem key={level.id} value={level.id}>
 										{level.name}

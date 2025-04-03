@@ -1,5 +1,6 @@
 "use client";
 
+import type { Skill } from "@/app/_mocks/skills";
 import { PaginationNav } from "@/components/common/pagination-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,53 +18,49 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { OrderDirection } from "@/lib/order";
+import type { PaginationResult } from "@/lib/pagination";
 import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
+import { type SkillOrder, SkillOrderField } from "../order";
 
-interface SkillsPresenterProps {
-	skills: SkillCertification[];
-	pagination: {
-		total: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
-}
+type Props = {
+	skills: Skill[];
+	pagination: PaginationResult;
+	order: SkillOrder;
+};
 
-export function SkillsPresenter({ skills, pagination }: SkillsPresenterProps) {
+export function SkillsPresenter({ skills, pagination, order }: Props) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	// 現在のソート状態
-	const currentSort = searchParams.get("sort") || "name";
-	const currentOrder = searchParams.get("order") || "asc";
-
-	// ソート処理
-	const handleSort = (column: keyof SkillCertification) => {
+	const handleSort = (column: SkillOrderField) => {
 		const params = new URLSearchParams(searchParams.toString());
 
 		// 同じカラムをクリックした場合は、昇順・降順を切り替え
-		if (currentSort === column) {
-			params.set("order", currentOrder === "asc" ? "desc" : "asc");
+		if (order.field === column) {
+			params.set(
+				"direction",
+				order.direction === OrderDirection.Asc
+					? OrderDirection.Desc
+					: OrderDirection.Asc,
+			);
 		} else {
-			// 異なるカラムの場合は、そのカラムの昇順でソート
-			params.set("sort", column as string);
-			params.set("order", "asc");
+			params.set("field", column as string);
+			params.set("direction", OrderDirection.Asc);
 		}
 
-		// ページを1に戻す
 		params.delete("page");
 
-		router.push(`${pathname}?${params.toString()}`);
+		router.push(`${pathname}?${params}`);
 	};
 
 	// ソートアイコンの表示
-	const getSortIcon = (key: keyof SkillCertification) => {
-		if (currentSort !== key) return null;
-		return currentOrder === "asc" ? (
+	const getSortIcon = (key: SkillOrderField) => {
+		if (order.field !== key) return null;
+		return order.direction === OrderDirection.Asc ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
 		) : (
 			<ArrowDownIcon className="h-4 w-4 ml-1" />
@@ -78,20 +75,20 @@ export function SkillsPresenter({ skills, pagination }: SkillsPresenterProps) {
 						<TableRow>
 							<TableHead
 								className="w-[180px] cursor-pointer whitespace-nowrap"
-								onClick={() => handleSort("name")}
+								onClick={() => handleSort(SkillOrderField.SkillName)}
 							>
 								<div className="flex items-center">
 									スキル名
-									{getSortIcon("name")}
+									{getSortIcon(SkillOrderField.SkillName)}
 								</div>
 							</TableHead>
 							<TableHead
 								className="w-[180px] cursor-pointer whitespace-nowrap"
-								onClick={() => handleSort("levelOrAuthority")}
+								onClick={() => handleSort(SkillOrderField.SkillLevel)}
 							>
 								<div className="flex items-center">
 									レベル
-									{getSortIcon("levelOrAuthority")}
+									{getSortIcon(SkillOrderField.SkillLevel)}
 								</div>
 							</TableHead>
 							<TableHead className="hidden md:table-cell w-[300px]">
@@ -109,17 +106,17 @@ export function SkillsPresenter({ skills, pagination }: SkillsPresenterProps) {
 							</TableRow>
 						) : (
 							skills.map((skill) => (
-								<TableRow key={skill.id}>
+								<TableRow key={skill.code}>
 									<TableCell className="whitespace-nowrap">
 										<Link
-											href={`/admin/skills/${skill.id}`}
+											href={`/admin/skills/${skill.code}`}
 											className="font-medium underline"
 										>
 											{skill.name}
 										</Link>
 									</TableCell>
 									<TableCell className="whitespace-nowrap">
-										<Badge variant="outline">{skill.levelOrAuthority}</Badge>
+										<Badge variant="outline">{skill.level}</Badge>
 									</TableCell>
 									<TableCell className="hidden md:table-cell">
 										<p className="truncate max-w-xs">{skill.description}</p>
@@ -135,7 +132,7 @@ export function SkillsPresenter({ skills, pagination }: SkillsPresenterProps) {
 											<DropdownMenuContent align="end">
 												<DropdownMenuItem asChild>
 													<Link
-														href={`/admin/skills/${skill.id}`}
+														href={`/admin/skills/${skill.code}`}
 														className="underline"
 													>
 														詳細を表示
@@ -143,7 +140,7 @@ export function SkillsPresenter({ skills, pagination }: SkillsPresenterProps) {
 												</DropdownMenuItem>
 												<DropdownMenuItem asChild>
 													<Link
-														href={`/admin/skills/${skill.id}/edit`}
+														href={`/admin/skills/${skill.code}/edit`}
 														className="underline"
 													>
 														編集

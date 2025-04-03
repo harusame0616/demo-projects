@@ -1,16 +1,16 @@
 import { getPositions } from "../_actions/position-actions";
-import type { PositionSearchParams } from "../_actions/position-actions";
 import { PositionsPresenter } from "./positions-presenter";
 
-interface PositionsContainerProps {
-	searchParams: PositionSearchParams;
-}
+type Props = Parameters<typeof getPositions>[0];
 
-export async function PositionsContainer({
-	searchParams,
-}: PositionsContainerProps) {
-	// データ取得
-	const { items: positions, pagination } = await getPositions(searchParams);
+export async function PositionsContainer(props: Props) {
+	const { items: positions, pagination } = await getPositions(props);
 
-	return <PositionsPresenter positions={positions} pagination={pagination} />;
+	return (
+		<PositionsPresenter
+			positions={positions}
+			pagination={pagination}
+			order={props.order}
+		/>
+	);
 }

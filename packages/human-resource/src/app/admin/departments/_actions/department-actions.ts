@@ -1,35 +1,35 @@
 "use server";
 
+import { OrderDirection } from "@/lib/order";
+import type { Pagination } from "@/lib/pagination";
 import { type Department, departmentData } from "../_data/departments-data";
+import type { DepartmentOrder } from "../order";
+import type { DepartmentSearchQuery } from "../search-query";
 
-export type DepartmentSearchParams = {
-	query?: string;
-	sort?: keyof Department;
-	order?: "asc" | "desc";
-	page?: string;
+export type Condition = {
+	searchQuery: DepartmentSearchQuery;
+	order: DepartmentOrder;
+	pagination: Pagination;
 };
 
-/**
- * 部署データを検索・ソートするサーバーアクション
- */
-export async function getDepartments(
-	searchParams: DepartmentSearchParams = {},
-) {
-	const { query = "", sort = "name", order = "asc" } = searchParams;
-
+export async function getDepartments({
+	searchQuery,
+	order,
+	pagination,
+}: Condition) {
 	// フィルター処理
 	let filteredData = [...departmentData];
 
 	// 検索クエリでフィルタリング
-	if (query) {
+	if (searchQuery.query) {
 		filteredData = filteredData.filter((item) =>
-			item.name.toLowerCase().includes(query.toLowerCase()),
+			item.name.toLowerCase().includes(searchQuery.query.toLowerCase()),
 		);
 	}
 
 	// ソート処理
 	filteredData.sort((a, b) => {
-		const sortKey = sort as keyof Department;
+		const sortKey = order.field as keyof Department;
 
 		// null/undefinedチェックをして安全に比較
 		const aValue = a[sortKey];
@@ -37,10 +37,10 @@ export async function getDepartments(
 
 		if (aValue !== undefined && bValue !== undefined) {
 			if (aValue === null && bValue !== null) {
-				return order === "asc" ? -1 : 1;
+				return order.direction === OrderDirection.Asc ? -1 : 1;
 			}
 			if (aValue !== null && bValue === null) {
-				return order === "asc" ? 1 : -1;
+				return order.direction === OrderDirection.Asc ? 1 : -1;
 			}
 			if (aValue === null && bValue === null) {
 				return 0;
@@ -51,10 +51,10 @@ export async function getDepartments(
 			const nonNullBValue = bValue as Exclude<typeof bValue, null>;
 
 			if (nonNullAValue < nonNullBValue) {
-				return order === "asc" ? -1 : 1;
+				return order.direction === OrderDirection.Asc ? -1 : 1;
 			}
 			if (nonNullAValue > nonNullBValue) {
-				return order === "asc" ? 1 : -1;
+				return order.direction === OrderDirection.Asc ? 1 : -1;
 			}
 		}
 		return 0;
@@ -64,7 +64,7 @@ export async function getDepartments(
 	const totalItems = filteredData.length;
 
 	// ページネーションの適用
-	const page = searchParams.page ? Number.parseInt(searchParams.page, 10) : 1;
+	const page = pagination.page;
 	const limit = 20; // 1ページあたり20件
 	const startIndex = (page - 1) * limit;
 	const endIndex = page * limit;
@@ -82,15 +82,6 @@ export async function getDepartments(
 			totalPages: Math.ceil(totalItems / limit),
 		},
 	};
-}
-
-/**
- * IDに基づいて部署を取得
- */
-export async function getDepartmentById(
-	id: string,
-): Promise<Department | null> {
-	return departmentData.find((item) => item.id === id) || null;
 }
 
 /**
@@ -123,15 +114,4 @@ export async function updateDepartment(
 	departmentData[index] = updatedItem;
 
 	return updatedItem;
-}
-
-/**
- * 部署を削除
- */
-export async function deleteDepartment(id: string): Promise<boolean> {
-	const index = departmentData.findIndex((item) => item.id === id);
-	if (index === -1) return false;
-
-	departmentData.splice(index, 1);
-	return true;
 }

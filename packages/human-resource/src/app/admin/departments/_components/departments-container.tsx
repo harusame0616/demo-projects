@@ -1,18 +1,17 @@
 import { getDepartments } from "../_actions/department-actions";
-import type { DepartmentSearchParams } from "../_actions/department-actions";
 import { DepartmentsPresenter } from "./departments-presenter";
 
-interface DepartmentsContainerProps {
-	searchParams: DepartmentSearchParams;
-}
+type Props = Parameters<typeof getDepartments>[0];
 
-export async function DepartmentsContainer({
-	searchParams,
-}: DepartmentsContainerProps) {
+export async function DepartmentsContainer(props: Props) {
 	// データ取得
-	const { items: departments, pagination } = await getDepartments(searchParams);
+	const { items: departments, pagination } = await getDepartments(props);
 
 	return (
-		<DepartmentsPresenter departments={departments} pagination={pagination} />
+		<DepartmentsPresenter
+			departments={departments}
+			pagination={pagination}
+			order={props.order}
+		/>
 	);
 }

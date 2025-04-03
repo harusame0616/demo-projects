@@ -4,7 +4,6 @@ import { PaginationNav } from "@/components/common/pagination-nav";
 import type { PaginationResult } from "@/lib/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { UserOrder } from "../order";
-import type { UserSearchQuery } from "../search-query";
 import type { Employee, User } from "../types";
 import { UserTable } from "./user-table";
 
@@ -13,7 +12,6 @@ interface Props {
 	employees: Employee[];
 	pagination: PaginationResult;
 	order: UserOrder;
-	searchQuery: UserSearchQuery;
 }
 
 export function UsersPresenter({ users, employees, pagination, order }: Props) {

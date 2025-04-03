@@ -13,7 +13,6 @@ export async function UsersContainer(props: Props) {
 			employees={employees}
 			pagination={usersData.pagination}
 			order={props.order}
-			searchQuery={props.searchQuery}
 		/>
 	);
 }

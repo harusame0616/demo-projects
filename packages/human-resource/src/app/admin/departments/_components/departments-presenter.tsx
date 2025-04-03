@@ -1,7 +1,10 @@
 "use client";
 
 import { PaginationNav } from "@/components/common/pagination-nav";
+import { OrderDirection } from "@/lib/order";
+import type { PaginationResult } from "@/lib/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { DepartmentOrder } from "../order";
 import { DepartmentTable } from "./department-table";
 
 type Department = {
@@ -15,52 +18,45 @@ type Department = {
 
 interface DepartmentsPresenterProps {
 	departments: Department[];
-	pagination: {
-		total: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
+	pagination: PaginationResult;
+	order: DepartmentOrder;
 }
 
 export function DepartmentsPresenter({
 	departments,
 	pagination,
+	order,
 }: DepartmentsPresenterProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	// 現在のソート状態
-	const currentSort = searchParams.get("sort") || "name";
-	const currentOrder = searchParams.get("order") || "asc";
-
-	// ソート処理
 	const handleSort = (column: string) => {
-		const params = new URLSearchParams(searchParams.toString());
+		const newSearchParams = new URLSearchParams(searchParams.toString());
 
-		// 同じカラムをクリックした場合は、昇順・降順を切り替え
-		if (currentSort === column) {
-			params.set("order", currentOrder === "asc" ? "desc" : "asc");
+		if (order.field === column) {
+			newSearchParams.set(
+				"direction",
+				order.direction === OrderDirection.Asc
+					? OrderDirection.Desc
+					: OrderDirection.Asc,
+			);
 		} else {
-			// 異なるカラムの場合は、そのカラムの昇順でソート
-			params.set("sort", column);
-			params.set("order", "asc");
+			newSearchParams.set("field", column);
+			newSearchParams.set("direction", OrderDirection.Asc);
 		}
 
-		// ページを1に戻す
-		params.delete("page");
+		newSearchParams.delete("page");
 
-		router.push(`${pathname}?${params.toString()}`);
+		router.push(`${pathname}?${newSearchParams.toString()}`);
 	};
 
 	return (
-		<div className="space-y-6 w-full">
+		<div className="space-y-4 w-full">
 			<div className="w-full overflow-auto">
 				<DepartmentTable
 					departments={departments}
-					currentSort={currentSort}
-					currentOrder={currentOrder}
+					order={order}
 					onSort={handleSort}
 				/>
 			</div>
