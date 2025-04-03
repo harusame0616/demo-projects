@@ -8,11 +8,9 @@ export default async function Loading() {
 			<PageHeader title="従業員一覧" />
 
 			<SearchFormPresenter
-				departmentOptions={[]}
-				positionOptions={[]}
-				searchQuery={""}
-				currentDepartment={""}
-				currentPosition={""}
+				departments={[]}
+				positions={[]}
+				searchQuery={{ query: "", department: "all", position: "all" }}
 			/>
 
 			<EmployeesSkeleton />

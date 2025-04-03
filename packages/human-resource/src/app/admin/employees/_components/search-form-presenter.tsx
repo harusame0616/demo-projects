@@ -18,6 +18,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import type { EmployeeSearchQuery } from "../search-query";
 
 // フォームのスキーマを定義
 const schema = v.object(
@@ -34,34 +35,22 @@ interface Option {
 	name: string;
 }
 
-interface SearchFormPresenterProps {
-	departmentOptions: Option[];
-	positionOptions: Option[];
-	searchQuery?: string;
-	currentDepartment?: string;
-	currentPosition?: string;
+interface Props {
+	departments: Option[];
+	positions: Option[];
+	searchQuery: EmployeeSearchQuery;
 }
 
 export function SearchFormPresenter({
-	departmentOptions,
-	positionOptions,
-	searchQuery = "",
-	currentDepartment = "all",
-	currentPosition = "all",
-}: SearchFormPresenterProps) {
-	const searchForm = useSearchForm(
-		schema,
-		{
-			query: searchQuery,
-			department: currentDepartment,
-			position: currentPosition,
-		},
-		{
-			query: "",
-			department: "all",
-			position: "all",
-		},
-	);
+	departments,
+	positions,
+	searchQuery,
+}: Props) {
+	const searchForm = useSearchForm(schema, searchQuery, {
+		query: "",
+		department: "all",
+		position: "all",
+	});
 
 	return (
 		<SearchForm {...searchForm}>
@@ -91,7 +80,7 @@ export function SearchFormPresenter({
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								{departmentOptions.map((department) => (
+								{departments.map((department) => (
 									<SelectItem key={department.id} value={department.id}>
 										{department.name}
 									</SelectItem>
@@ -115,7 +104,7 @@ export function SearchFormPresenter({
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								{positionOptions.map((position) => (
+								{positions.map((position) => (
 									<SelectItem key={position.id} value={position.id}>
 										{position.name}
 									</SelectItem>

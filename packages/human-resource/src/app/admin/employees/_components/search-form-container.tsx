@@ -1,34 +1,27 @@
 import { getDepartments, getPositions } from "../_actions/employee-actions";
+import type { EmployeeSearchQuery } from "../search-query";
 import { SearchFormPresenter } from "./search-form-presenter";
 
-interface SearchFormContainerProps {
-	searchQuery?: string;
-	currentDepartment?: string;
-	currentPosition?: string;
+interface Props {
+	searchQuery: EmployeeSearchQuery;
 }
 
-export async function SearchFormContainer({
-	searchQuery,
-	currentDepartment,
-	currentPosition,
-}: SearchFormContainerProps) {
+export async function SearchFormContainer({ searchQuery }: Props) {
 	// 部署と役職のオプションを取得
 	const departmentOptions = await getDepartments();
 	const positionOptions = await getPositions();
 
 	return (
 		<SearchFormPresenter
-			departmentOptions={departmentOptions.map((option) => ({
+			departments={departmentOptions.map((option) => ({
 				id: option.value,
 				name: option.label,
 			}))}
-			positionOptions={positionOptions.map((option) => ({
+			positions={positionOptions.map((option) => ({
 				id: option.value,
 				name: option.label,
 			}))}
 			searchQuery={searchQuery}
-			currentDepartment={currentDepartment}
-			currentPosition={currentPosition}
 		/>
 	);
 }
