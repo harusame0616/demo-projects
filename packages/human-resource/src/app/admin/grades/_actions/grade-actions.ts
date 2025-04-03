@@ -3,8 +3,8 @@
 import { OrderDirection } from "@/lib/order";
 import type { Pagination } from "@/lib/pagination";
 import { type Grade, gradeData } from "../_data/grades-data";
-import type { GradeSearchQuery } from "../search-query";
 import type { GradeOrder } from "../order";
+import type { GradeSearchQuery } from "../search-query";
 
 export interface GradeSearchParams {
 	searchQuery: GradeSearchQuery;

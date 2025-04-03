@@ -1,12 +1,12 @@
 "use client";
 
 import { PaginationNav } from "@/components/common/pagination-nav";
+import { OrderDirection } from "@/lib/order";
+import type { PaginationResult } from "@/lib/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Position } from "../_data/positions-data";
-import { PositionTable } from "./position-table";
 import type { PositionOrder, PositionOrderField } from "../order";
-import type { PaginationResult } from "@/lib/pagination";
-import { OrderDirection } from "@/lib/order";
+import { PositionTable } from "./position-table";
 
 type Props = {
 	positions: Position[];

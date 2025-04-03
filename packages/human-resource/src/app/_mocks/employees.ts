@@ -1,5 +1,5 @@
-import { skills } from "./skills";
 import { skillCertificationData } from "../admin/skills-certifications/_data/skills-certifications-data";
+import { skills } from "./skills";
 
 // 基本的な従業員データ型定義
 export type Employee = {

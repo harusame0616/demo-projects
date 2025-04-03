@@ -11,7 +11,7 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { DepartmentSearchQuery } from "../search-query";
+import type { DepartmentSearchQuery } from "../search-query";
 
 const formSchema = v.object({
 	query: v.string(),

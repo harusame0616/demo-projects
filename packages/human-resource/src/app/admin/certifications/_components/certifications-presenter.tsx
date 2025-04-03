@@ -17,13 +17,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { OrderDirection } from "@/lib/order";
+import type { PaginationResult } from "@/lib/pagination";
 import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
-import type { PaginationResult } from "@/lib/pagination";
 import type { CertificationOrder } from "../order";
-import { OrderDirection } from "@/lib/order";
 
 interface CertificationsPresenterProps {
 	certifications: SkillCertification[];

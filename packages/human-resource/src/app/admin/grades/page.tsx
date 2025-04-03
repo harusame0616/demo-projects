@@ -5,12 +5,12 @@ import { Suspense } from "react";
 import { GradesContainer } from "./_components/grades-container";
 import { GradesSkeleton } from "./_components/grades-skeleton";
 
+import { parseSearchParamsPagination } from "@/lib/pagination";
+import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
-import type { NextSearchParams } from "@/lib/search-params";
-import { parseSearchParamsGradeSearchQuery } from "./search-query";
 import { parseSearchParamsGradeOrder } from "./order";
-import { parseSearchParamsPagination } from "@/lib/pagination";
+import { parseSearchParamsGradeSearchQuery } from "./search-query";
 
 export const metadata: Metadata = {
 	title: "グレード管理 | 人材管理システム",
