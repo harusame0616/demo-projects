@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { GradesSkeleton } from "./_components/grades-skeleton";
 
 import { PageHeader } from "@/components/common/page-header";
@@ -10,7 +8,11 @@ export default async function Loading() {
 		<>
 			<PageHeader title="グレード一覧" />
 
-			<SearchFormPresenter defaultQuery={""} />
+			<SearchFormPresenter
+				searchQuery={{
+					query: "",
+				}}
+			/>
 
 			<GradesSkeleton />
 		</>

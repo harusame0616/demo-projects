@@ -1,10 +1,10 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { parseSearchParamsPagination } from "@/lib/pagination";
+import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import type { SkillCertificationSearchParams } from "../skills-certifications/_actions/certification-actions";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 import { SkillsContainer } from "./_components/skills-container";
 import { SkillsSkeleton } from "./_components/skills-skeleton";
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default async function SkillsPage({
 	searchParams,
 }: {
-	searchParams: Promise<SkillCertificationSearchParams>;
+	searchParams: NextSearchParams;
 }) {
 	// searchParamsをawaitして取得
 	const resolvedParams = await searchParams;
