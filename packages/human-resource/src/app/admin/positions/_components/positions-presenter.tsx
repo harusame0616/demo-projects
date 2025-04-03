@@ -4,43 +4,36 @@ import { PaginationNav } from "@/components/common/pagination-nav";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Position } from "../_data/positions-data";
 import { PositionTable } from "./position-table";
+import type { PositionOrder, PositionOrderField } from "../order";
+import type { PaginationResult } from "@/lib/pagination";
+import { OrderDirection } from "@/lib/order";
 
-interface PositionsPresenterProps {
+type Props = {
 	positions: Position[];
-	pagination: {
-		total: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
-}
+	order: PositionOrder;
+	pagination: PaginationResult;
+};
 
-export function PositionsPresenter({
-	positions,
-	pagination,
-}: PositionsPresenterProps) {
+export function PositionsPresenter({ positions, pagination, order }: Props) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	// 現在のソート状態
-	const currentSort = searchParams.get("sort") || "level";
-	const currentOrder = searchParams.get("order") || "desc";
-
-	// ソート処理
-	const handleSort = (column: keyof Position) => {
+	const handleSort = (column: PositionOrderField) => {
 		const params = new URLSearchParams(searchParams.toString());
 
-		// 同じカラムをクリックした場合は、昇順・降順を切り替え
-		if (currentSort === column) {
-			params.set("order", currentOrder === "asc" ? "desc" : "asc");
+		if (order.field === column) {
+			params.set(
+				"order",
+				order.direction === OrderDirection.Asc
+					? OrderDirection.Desc
+					: OrderDirection.Asc,
+			);
 		} else {
-			// 異なるカラムの場合は、そのカラムの昇順でソート
-			params.set("sort", column as string);
-			params.set("order", "asc");
+			params.set("field", column as string);
+			params.set("direction", OrderDirection.Asc);
 		}
 
-		// ページを1に戻す
 		params.delete("page");
 
 		router.push(`${pathname}?${params.toString()}`);
@@ -51,10 +44,7 @@ export function PositionsPresenter({
 			<div className="w-full overflow-auto">
 				<PositionTable
 					positions={positions}
-					searchParams={{
-						sort: currentSort as keyof Position,
-						order: currentOrder as "asc" | "desc",
-					}}
+					order={order}
 					onSort={handleSort}
 				/>
 			</div>

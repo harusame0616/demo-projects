@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -22,48 +21,28 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-	ArrowDownIcon,
-	ArrowUpIcon,
-	BuildingIcon,
-	InfoIcon,
-	MoreHorizontalIcon,
-} from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
-import type { PositionSearchParams } from "../_actions/position-actions";
 import type { Position } from "../_data/positions-data";
+import { type PositionOrder, PositionOrderField } from "../order";
 
-interface PositionTableProps {
+type Props = {
 	positions: Position[];
-	searchParams: PositionSearchParams;
-	onSort: (column: keyof Position) => void;
-}
+	order: PositionOrder;
+	onSort: (column: PositionOrderField) => void;
+};
 
-export function PositionTable({
-	positions,
-	searchParams,
-	onSort,
-}: PositionTableProps) {
-	const { sort = "id", order = "asc" } = searchParams;
+export function PositionTable({ positions, order, onSort }: Props) {
+	const { field = "id", direction = "asc" } = order;
 
 	// ソートアイコンを表示
-	const getSortIcon = (column: keyof Position) => {
-		if (sort !== column) return null;
-		return order === "asc" ? (
+	const getSortIcon = (column: PositionOrderField) => {
+		if (field !== column) return null;
+		return direction === "asc" ? (
 			<ArrowUpIcon className="h-4 w-4 ml-1" />
 		) : (
 			<ArrowDownIcon className="h-4 w-4 ml-1" />
 		);
-	};
-
-	// 日付をフォーマット
-	const _formatDate = (dateString: string) => {
-		const date = new Date(dateString);
-		return new Intl.DateTimeFormat("ja-JP", {
-			year: "numeric",
-			month: "numeric",
-			day: "numeric",
-		}).format(date);
 	};
 
 	return (
@@ -73,26 +52,26 @@ export function PositionTable({
 					<TableRow>
 						<TableHead
 							className="w-[100px] cursor-pointer whitespace-nowrap"
-							onClick={() => onSort("id")}
+							onClick={() => onSort(PositionOrderField.PositionCode)}
 						>
 							<div className="flex items-center">
-								役職コード {getSortIcon("id")}
+								役職コード {getSortIcon(PositionOrderField.PositionCode)}
 							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer w-[150px] whitespace-nowrap"
-							onClick={() => onSort("name")}
+							onClick={() => onSort(PositionOrderField.PositionName)}
 						>
 							<div className="flex items-center">
-								役職名 {getSortIcon("name")}
+								役職名 {getSortIcon(PositionOrderField.PositionName)}
 							</div>
 						</TableHead>
 						<TableHead
 							className="cursor-pointer w-[100px] whitespace-nowrap"
-							onClick={() => onSort("level")}
+							onClick={() => onSort(PositionOrderField.PositionLevel)}
 						>
 							<div className="flex items-center">
-								レベル {getSortIcon("level")}
+								レベル {getSortIcon(PositionOrderField.PositionLevel)}
 							</div>
 						</TableHead>
 						<TableHead className="hidden md:table-cell w-[300px]">

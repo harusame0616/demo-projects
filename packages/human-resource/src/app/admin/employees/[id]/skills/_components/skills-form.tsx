@@ -1,5 +1,7 @@
 "use client";
 
+import { skills } from "@/app/_mocks/skills";
+import { skillCertificationData } from "@/app/admin/skills-certifications/_data/skills-certifications-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,67 +27,11 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 // スキルと資格の選択肢
-const SKILL_OPTIONS = [
-	"HTML/CSS",
-	"JavaScript",
-	"TypeScript",
-	"React",
-	"Next.js",
-	"Node.js",
-	"Express",
-	"SQL",
-	"Python",
-	"Java",
-	"C#",
-	"PHP",
-	"Laravel",
-	"Docker",
-	"AWS",
-	"Azure",
-	"GCP",
-	"Excel",
-	"PowerPoint",
-	"Word",
-	"UI/UXデザイン",
-	"Figma",
-	"Adobe XD",
-	"Photoshop",
-	"Illustrator",
-	"動画編集",
-	"営業",
-	"マーケティング",
-	"企画",
-	"プロジェクト管理",
-];
+const SKILL_OPTIONS = skills.map((skill) => skill.name);
 
-const CERTIFICATION_OPTIONS = [
-	"TOEIC 600点",
-	"TOEIC 730点",
-	"TOEIC 800点",
-	"TOEIC 900点",
-	"英検2級",
-	"英検準1級",
-	"英検1級",
-	"日商簿記3級",
-	"日商簿記2級",
-	"日商簿記1級",
-	"基本情報技術者",
-	"応用情報技術者",
-	"ネットワークスペシャリスト",
-	"データベーススペシャリスト",
-	"情報セキュリティスペシャリスト",
-	"プロジェクトマネージャ",
-	"AWS認定ソリューションアーキテクト",
-	"Google Cloud認定プロフェッショナル",
-	"Microsoft認定ソリューションアーキテクト",
-	"PMP",
-	"ITIL",
-	"Oracle認定Java資格",
-	"Cisco認定資格",
-	"営業士2級",
-	"マーケティング検定",
-	"簿記検定",
-];
+const CERTIFICATION_OPTIONS = skillCertificationData
+	.filter((cert) => cert.type === "certification")
+	.map((cert) => cert.name);
 
 interface SkillsFormProps {
 	employeeId: string;

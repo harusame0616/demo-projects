@@ -18,11 +18,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
-import {
-	createSkillCertification,
-	updateSkillCertification,
-} from "../../skills-certifications/_actions/certification-actions";
-import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
+import type { Skill } from "@/app/_mocks/skills";
+import { createSkill, updateSkill } from "../_action/skill-actions";
 
 // フォームのバリデーションスキーマ
 const formSchema = v.object({
@@ -41,7 +38,7 @@ const formSchema = v.object({
 		v.minLength(1, "説明は必須です"),
 		v.maxLength(500, "説明は500文字以内で入力してください"),
 	),
-	levelOrAuthority: v.pipe(
+	level: v.pipe(
 		v.string(),
 		v.minLength(1, "レベルは必須です"),
 		v.maxLength(50, "レベルは50文字以内で入力してください"),
@@ -56,12 +53,12 @@ interface SkillFormValues {
 	code: string;
 	name: string;
 	description: string;
-	levelOrAuthority: string;
+	level: string;
 	requirements: string;
 }
 
 interface SkillFormProps {
-	skill?: SkillCertification;
+	skill?: Skill;
 	isNew?: boolean;
 }
 
@@ -75,7 +72,7 @@ export function SkillForm({ skill, isNew = true }: SkillFormProps) {
 		code: skill?.code || "",
 		name: skill?.name || "",
 		description: skill?.description || "",
-		levelOrAuthority: skill?.levelOrAuthority || "",
+		level: skill?.level.toString() || "",
 		requirements: skill?.requirements || "",
 	};
 
@@ -93,9 +90,11 @@ export function SkillForm({ skill, isNew = true }: SkillFormProps) {
 		try {
 			if (isNew) {
 				// 新規作成の場合
-				const newSkill = await createSkillCertification({
+				const newSkill = await createSkill({
 					...values,
-					type: "skill",
+					level: Number.parseInt(values.level, 10),
+					category: "プログラミング言語",
+					categoryId: "CAT_001",
 				});
 
 				toast({
@@ -103,12 +102,12 @@ export function SkillForm({ skill, isNew = true }: SkillFormProps) {
 					description: `「${newSkill.name}」が正常に登録されました。`,
 				});
 
-				router.push(`/admin/skills/${newSkill.id}`);
+				router.push(`/admin/skills/${newSkill.code}`);
 			} else if (skill) {
 				// 更新の場合
-				const updatedSkill = await updateSkillCertification(skill.id, {
+				const updatedSkill = await updateSkill(skill.code, {
 					...values,
-					type: "skill",
+					level: Number.parseInt(values.level, 10),
 				});
 
 				toast({
@@ -116,7 +115,7 @@ export function SkillForm({ skill, isNew = true }: SkillFormProps) {
 					description: `「${updatedSkill?.name}」の情報が更新されました。`,
 				});
 
-				router.push(`/admin/skills/${skill.id}`);
+				router.push(`/admin/skills/${skill.code}`);
 			}
 
 			router.refresh();
@@ -191,7 +190,7 @@ export function SkillForm({ skill, isNew = true }: SkillFormProps) {
 
 						<FormField
 							control={form.control}
-							name="levelOrAuthority"
+							name="level"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>レベル *</FormLabel>

@@ -1,24 +1,25 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import type { Pagination } from "@/lib/pagination";
 import { type Position, positionData } from "../_data/positions-data";
+import type { PositionOrder } from "../order";
+import type { PositionSearchQuery } from "../search-query";
 
-export interface PositionSearchParams {
-	query?: string;
-	level?: string;
-	sort?: keyof Position;
-	order?: "asc" | "desc";
-	page?: string;
-}
+type Condition = {
+	searchQuery: PositionSearchQuery;
+	order: PositionOrder;
+	pagination: Pagination;
+};
 
-/**
- * 役職データを検索・ソートするサーバーアクション
- */
-export async function getPositions(params: PositionSearchParams = {}) {
+export async function getPositions({
+	searchQuery,
+	order,
+	pagination,
+}: Condition) {
 	// 検索とフィルタリング
 	let filteredData = [...positionData];
-	if (params.query) {
-		const query = params.query.toLowerCase();
+	if (searchQuery.query) {
+		const query = searchQuery.query.toLowerCase();
 		filteredData = filteredData.filter(
 			(position) =>
 				position.name.toLowerCase().includes(query) ||
@@ -26,15 +27,15 @@ export async function getPositions(params: PositionSearchParams = {}) {
 		);
 	}
 
-	if (params.level && params.level !== "all") {
+	if (searchQuery.level && searchQuery.level !== "all") {
 		filteredData = filteredData.filter(
-			(position) => position.level.toString() === params.level,
+			(position) => position.level.toString() === searchQuery.level,
 		);
 	}
 
 	// ソート
-	const sortField = params.sort || "level";
-	const sortOrder = params.order || "desc";
+	const sortField = order.field || "level";
+	const sortOrder = order.direction || "desc";
 
 	filteredData.sort((a, b) => {
 		const aValue = a[sortField];
@@ -54,7 +55,7 @@ export async function getPositions(params: PositionSearchParams = {}) {
 	});
 
 	// ページネーション
-	const page = params.page ? Number.parseInt(params.page, 10) : 1;
+	const page = pagination.page;
 	const limit = 20; // 1ページあたりの表示数
 	const total = filteredData.length;
 	const totalPages = Math.ceil(total / limit);
@@ -98,48 +99,4 @@ export async function getPositionLevels(): Promise<
  */
 export async function getPositionById(id: string): Promise<Position | null> {
 	return positionData.find((item) => item.id === id) || null;
-}
-
-/**
- * 新しい役職を作成
- */
-export async function createPosition(
-	data: Omit<Position, "id" | "createdAt" | "memberCount">,
-): Promise<Position> {
-	const newItem: Position = {
-		...data,
-		id: `pos-${Date.now()}`,
-		createdAt: new Date().toISOString().split("T")[0],
-		memberCount: 0,
-	};
-
-	positionData.push(newItem);
-	return newItem;
-}
-
-/**
- * 既存の役職を更新
- */
-export async function updatePosition(
-	id: string,
-	data: Partial<Omit<Position, "id" | "createdAt" | "memberCount">>,
-): Promise<Position | null> {
-	const index = positionData.findIndex((item) => item.id === id);
-	if (index === -1) return null;
-
-	const updatedItem = { ...positionData[index], ...data };
-	positionData[index] = updatedItem;
-
-	return updatedItem;
-}
-
-/**
- * 役職を削除
- */
-export async function deletePosition(id: string): Promise<boolean> {
-	const index = positionData.findIndex((item) => item.id === id);
-	if (index === -1) return false;
-
-	positionData.splice(index, 1);
-	return true;
 }
