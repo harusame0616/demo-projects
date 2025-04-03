@@ -23,7 +23,7 @@ import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Grade } from "../_data/grades-data";
-import { GradeOrderField, type GradeOrder } from "../order";
+import { type GradeOrder, GradeOrderField } from "../order";
 
 interface GradesPresenterProps {
 	grades: Grade[];

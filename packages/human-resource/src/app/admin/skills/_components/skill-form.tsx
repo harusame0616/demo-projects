@@ -1,5 +1,6 @@
 "use client";
 
+import type { Skill } from "@/app/_mocks/skills";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -18,7 +19,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
-import type { Skill } from "@/app/_mocks/skills";
 import { createSkill, updateSkill } from "../_action/skill-actions";
 
 // フォームのバリデーションスキーマ

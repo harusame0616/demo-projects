@@ -1,5 +1,6 @@
 "use server";
 
+import { type Skill, skills } from "@/app/_mocks/skills";
 import { OrderDirection } from "@/lib/order";
 import type { Pagination } from "@/lib/pagination";
 import type { CertificationOrder } from "../../certifications/order";
@@ -8,7 +9,6 @@ import {
 	type SkillCertification,
 	skillCertificationData,
 } from "../../skills-certifications/_data/skills-certifications-data";
-import { type Skill, skills } from "@/app/_mocks/skills";
 import type { SkillOrder, SkillOrderField } from "../order";
 import type { SkillSearchQuery } from "../search-query";
 

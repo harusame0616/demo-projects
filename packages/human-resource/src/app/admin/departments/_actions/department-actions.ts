@@ -1,10 +1,10 @@
 "use server";
 
+import { OrderDirection } from "@/lib/order";
 import type { Pagination } from "@/lib/pagination";
 import { type Department, departmentData } from "../_data/departments-data";
 import type { DepartmentOrder } from "../order";
 import type { DepartmentSearchQuery } from "../search-query";
-import { OrderDirection } from "@/lib/order";
 
 export type Condition = {
 	searchQuery: DepartmentSearchQuery;

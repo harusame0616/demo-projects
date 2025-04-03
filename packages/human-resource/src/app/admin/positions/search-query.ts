@@ -1,6 +1,5 @@
 import * as v from "valibot";
 
-
 export const searchParamsPositionQuerySchema = v.object({
 	query: v.optional(v.string(), ""),
 	level: v.optional(v.string(), "all"),

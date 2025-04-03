@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
+import { parseSearchParamsPagination } from "@/lib/pagination";
 import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -9,7 +10,6 @@ import { PositionsSkeleton } from "./_components/positions-skeleton";
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 import { parseSearchParamsPositionOrder } from "./order";
 import { parseSearchParamsPositionSearchQuery } from "./search-query";
-import { parseSearchParamsPagination } from "@/lib/pagination";
 
 export const metadata: Metadata = {
 	title: "役職管理 | 人材管理システム",

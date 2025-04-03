@@ -18,8 +18,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { PositionSearchQuery } from "../search-query";
 import { positionData } from "../_data/positions-data";
+import type { PositionSearchQuery } from "../search-query";
 
 // フォームのスキーマを定義
 const formSchema = v.object(

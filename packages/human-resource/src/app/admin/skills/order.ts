@@ -1,5 +1,5 @@
-import * as v from "valibot";
 import { OrderDirection } from "@/lib/order";
+import * as v from "valibot";
 
 export const SkillOrderField = {
 	SkillCode: "code",

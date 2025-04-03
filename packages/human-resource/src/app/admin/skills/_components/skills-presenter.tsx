@@ -1,5 +1,6 @@
 "use client";
 
+import type { Skill } from "@/app/_mocks/skills";
 import { PaginationNav } from "@/components/common/pagination-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,13 +18,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { OrderDirection } from "@/lib/order";
+import type { PaginationResult } from "@/lib/pagination";
 import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { PaginationResult } from "@/lib/pagination";
-import { SkillOrderField, type SkillOrder } from "../order";
-import { OrderDirection } from "@/lib/order";
-import type { Skill } from "@/app/_mocks/skills";
+import { type SkillOrder, SkillOrderField } from "../order";
 
 type Props = {
 	skills: Skill[];

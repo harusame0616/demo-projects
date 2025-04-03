@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
+import { parseSearchParamsPagination } from "@/lib/pagination";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -7,9 +8,8 @@ import type { SkillCertificationSearchParams } from "../skills-certifications/_a
 import { SearchFormPresenter } from "./_components/search-form-presenter";
 import { SkillsContainer } from "./_components/skills-container";
 import { SkillsSkeleton } from "./_components/skills-skeleton";
-import { parseSearchParamsSkillSearchQuery } from "./search-query";
 import { parseSearchParamsSkillOrder } from "./order";
-import { parseSearchParamsPagination } from "@/lib/pagination";
+import { parseSearchParamsSkillSearchQuery } from "./search-query";
 
 export const metadata: Metadata = {
 	title: "スキル管理 | 人材管理システム",
