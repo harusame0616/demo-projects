@@ -1,7 +1,7 @@
-import { GradesSkeleton } from "./_components/grades-skeleton";
+import { GradesSkeleton } from "./_grades/grades-skeleton";
 
 import { PageHeader } from "@/components/common/page-header";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
 
 export default async function Loading() {
 	return (

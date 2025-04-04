@@ -4,9 +4,9 @@ import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getSkillCertificationById } from "../../../skills-certifications/_actions/certification-actions";
-import { CertificationForm } from "../../_components/certification-form";
-import { CertificationFormSkeleton } from "../../_components/certification-form-skeleton";
+import { getSkillCertificationById } from "../../_actions/certification-actions";
+import { CertificationForm } from "../../_form/certification-form";
+import { CertificationFormSkeleton } from "../../_form/certification-form-skeleton";
 
 interface CertificationEditPageProps {
 	params: Promise<{ id: string }>;

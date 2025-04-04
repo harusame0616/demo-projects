@@ -1,3 +1,3 @@
-export * from "../_components/users-container";
-export * from "../_components/users-presenter";
-export * from "../_components/users-skeleton";
+export * from "./users-container";
+export * from "./users-presenter";
+export * from "./users-skeleton";

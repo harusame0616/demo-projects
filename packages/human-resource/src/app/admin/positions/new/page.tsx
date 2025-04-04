@@ -2,7 +2,7 @@
 
 import { PageHeader } from "@/components/common/page-header";
 import { useRouter } from "next/navigation";
-import { PositionForm } from "../_components/position-form";
+import { PositionForm } from "../_edit-form/position-form";
 
 export default function NewPositionPage() {
 	const router = useRouter();

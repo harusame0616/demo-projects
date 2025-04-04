@@ -1,8 +1,4 @@
-import {
-	type Employee,
-	getEmployeeWithDefaults,
-	mockEmployees,
-} from "@/app/_mocks/employees";
+import { getEmployeeWithDefaults, mockEmployees } from "@/app/_mocks/employees";
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";

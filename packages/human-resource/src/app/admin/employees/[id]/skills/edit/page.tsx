@@ -1,8 +1,4 @@
-import {
-	type Employee,
-	getEmployeeWithDefaults,
-	mockEmployees,
-} from "@/app/_mocks/employees";
+import { getEmployeeWithDefaults, mockEmployees } from "@/app/_mocks/employees";
 import { notFound } from "next/navigation";
 import { SkillsForm } from "../_components/skills-form";
 

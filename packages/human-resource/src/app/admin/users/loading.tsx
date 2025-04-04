@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SearchFormPresenter } from "./_search-form";
-import { UsersSkeleton } from "./_users";
+import { UsersSkeleton } from "./_users/users-skeleton";
 
 export default function Loading() {
 	return (

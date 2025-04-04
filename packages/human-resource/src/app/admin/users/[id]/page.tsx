@@ -1,17 +1,8 @@
 import { mockEmployees } from "@/app/_mocks/employees";
 import { PageHeader } from "@/components/common/page-header";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-	ArrowLeftIcon,
-	Calendar,
-	MailIcon,
-	PencilIcon,
-	Shield,
-	UserCheck,
-	UserIcon,
-} from "lucide-react";
+import { Shield, UserCheck, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getUserById } from "../_actions/user-actions";

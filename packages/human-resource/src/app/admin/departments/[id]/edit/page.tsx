@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { DepartmentForm } from "../../_components/department-form";
-import { DepartmentFormSkeleton } from "../../_components/department-form-skeleton";
 import { type Department, departmentData } from "../../_data/departments-data";
+import { DepartmentForm } from "../../_form/department-form";
+import { DepartmentFormSkeleton } from "../../_form/department-form-skeleton";
 
 import type { Metadata } from "next";
 

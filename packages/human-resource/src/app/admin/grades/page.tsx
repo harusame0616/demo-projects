@@ -2,13 +2,13 @@ import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
-import { GradesContainer } from "./_components/grades-container";
-import { GradesSkeleton } from "./_components/grades-skeleton";
+import { GradesContainer } from "./_grades/grades-container";
+import { GradesSkeleton } from "./_grades/grades-skeleton";
 
 import { parseSearchParamsPagination } from "@/lib/pagination";
 import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
 import { parseSearchParamsGradeOrder } from "./order";
 import { parseSearchParamsGradeSearchQuery } from "./search-query";
 

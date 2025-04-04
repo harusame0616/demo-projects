@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/common/page-header";
-import { AttendancesSkeleton } from "./_components/attendances-skeleton";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { AttendancesSkeleton } from "./_attendances/attendances-skeleton";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
 
 export default function Loading() {
 	return (

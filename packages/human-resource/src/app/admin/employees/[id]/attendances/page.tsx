@@ -1,4 +1,4 @@
-import { type Employee, mockEmployees } from "@/app/_mocks/employees";
+import { mockEmployees } from "@/app/_mocks/employees";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";

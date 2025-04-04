@@ -22,7 +22,7 @@ import type { PaginationResult } from "@/lib/pagination";
 import { ArrowDownIcon, ArrowUpIcon, MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
+import type { SkillCertification } from "../_data/skills-certifications-data";
 import type { CertificationOrder } from "../order";
 
 interface CertificationsPresenterProps {

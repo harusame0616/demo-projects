@@ -1,10 +1,8 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 import type { MonthlyAttendanceSummary } from "../_actions/attendance-actions";
 import { AttendanceTable } from "./attendance-table";
-import { SearchFormPresenter } from "./search-form-presenter";
 
 export interface SearchFormValues {
 	query?: string;

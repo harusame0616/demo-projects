@@ -4,11 +4,9 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeftIcon, Edit2Icon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { positionData } from "../_data/positions-data";

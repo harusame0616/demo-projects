@@ -1,11 +1,7 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
-import {
-	type DefaultValues,
-	type UseFormReturn,
-	useForm,
-} from "react-hook-form";
+import { type DefaultValues, useForm } from "react-hook-form";
 import type * as v from "valibot";
 
 export function useSearchForm<

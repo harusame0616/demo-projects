@@ -2,12 +2,12 @@
 
 import { OrderDirection } from "@/lib/order";
 import type { Pagination } from "@/lib/pagination";
-import type { CertificationOrder } from "../../certifications/order";
-import type { CertificationSearchQuery } from "../../certifications/search-query";
 import {
 	type SkillCertification,
 	skillCertificationData,
 } from "../_data/skills-certifications-data";
+import type { CertificationOrder } from "../order";
+import type { CertificationSearchQuery } from "../search-query";
 
 export type Condition = {
 	searchQuery: CertificationSearchQuery;

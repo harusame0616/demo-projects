@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getSkillCertificationById } from "../../skills-certifications/_actions/certification-actions";
+import { getSkillCertificationById } from "../_actions/certification-actions";
 
 interface CertificationDetailPageProps {
 	params: Promise<{ id: string }>;

@@ -1,4 +1,4 @@
-import { getCertifications } from "../../skills-certifications/_actions/certification-actions";
+import { getCertifications } from "../_actions/certification-actions";
 import { CertificationsPresenter } from "./certifications-presenter";
 
 type Props = Parameters<typeof getCertifications>[0];

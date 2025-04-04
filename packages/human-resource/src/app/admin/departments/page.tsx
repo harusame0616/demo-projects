@@ -2,9 +2,9 @@ import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
-import { DepartmentsContainer } from "./_components/departments-container";
-import { DepartmentsSkeleton } from "./_components/departments-skeleton";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { DepartmentsContainer } from "./_departments/departments-container";
+import { DepartmentsSkeleton } from "./_departments/departments-skeleton";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
 
 import { parseSearchParamsPagination } from "@/lib/pagination";
 import type { NextSearchParams } from "@/lib/search-params";
