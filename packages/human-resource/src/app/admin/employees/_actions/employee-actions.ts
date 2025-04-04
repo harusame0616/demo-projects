@@ -3,146 +3,109 @@
 import { mockEmployees } from "@/app/_mocks/employees";
 import type { Employee } from "@/app/_mocks/employees";
 import { mockDepartments, mockPositions } from "@/app/_mocks/employees";
-
-// ページネーション用の型定義
-interface Pagination {
-	total: number;
-	page: number;
-	limit: number;
-	totalPages: number;
-}
+import {
+	type Pagination,
+	PaginationItemCount,
+	type PaginationResult,
+} from "@/lib/pagination";
+import type { EmployeeOrder } from "../order";
+import type { EmployeeSearchQuery } from "../search-query";
 
 // 検索結果の型定義
 interface EmployeeSearchResult {
 	items: Employee[];
-	pagination: Pagination;
+	pagination: PaginationResult;
 }
 
 // 検索パラメータの型定義
-interface EmployeeSearchParams {
-	searchQuery?: string | null;
-	department?: string;
-	position?: string;
-	sortBy?: string;
-	sortOrder?: "asc" | "desc";
-	page?: number;
-	limit?: number;
+interface Condition {
+	searchQuery: EmployeeSearchQuery;
+	order: EmployeeOrder;
+	pagination: Pagination;
 }
 
 // 従業員一覧を取得する関数（オブジェクトパラメータ版）
 export async function getEmployees(
-	params: EmployeeSearchParams,
+	condition: Condition,
 ): Promise<EmployeeSearchResult> {
-	const {
-		searchQuery,
-		department,
-		position,
-		sortBy = "id",
-		sortOrder = "asc",
-		page = 1,
-		limit = 20,
-	} = params;
+	const { searchQuery, order, pagination } = condition;
 
 	// クエリを安全に文字列に変換
 	const safeQuery =
-		typeof searchQuery === "string" ? searchQuery.toLowerCase() : "";
+		typeof searchQuery.query === "string"
+			? searchQuery.query.toLowerCase()
+			: "";
 
 	// 検索条件に基づいてフィルタリング
 	let filteredEmployees = mockEmployees.filter((employee) => {
 		// 検索クエリでフィルタリング（名前、メールアドレス）
 		const matchesQuery =
-			!searchQuery ||
+			!searchQuery.query ||
 			employee.name.toLowerCase().includes(safeQuery) ||
 			employee.email.toLowerCase().includes(safeQuery);
 
 		// 部署でフィルタリング
 		const matchesDepartment =
-			!department || department === "all" || employee.department === department;
+			!searchQuery.department ||
+			searchQuery.department === "all" ||
+			employee.department === searchQuery.department;
 
 		// 役職でフィルタリング
 		const matchesPosition =
-			!position || position === "all" || employee.position === position;
+			!searchQuery.position ||
+			searchQuery.position === "all" ||
+			employee.position === searchQuery.position;
 
 		return matchesQuery && matchesDepartment && matchesPosition;
 	});
 
 	// ソート
-	if (sortBy) {
+	if (order.field) {
 		filteredEmployees = filteredEmployees.sort((a, b) => {
 			// 型安全にアクセス
-			const valueA = sortBy in a ? a[sortBy as keyof Employee] : "";
-			const valueB = sortBy in b ? b[sortBy as keyof Employee] : "";
+			const valueA = order.field in a ? a[order.field as keyof Employee] : "";
+			const valueB = order.field in b ? b[order.field as keyof Employee] : "";
 
 			if (typeof valueA === "string" && typeof valueB === "string") {
-				return sortOrder === "asc"
+				return order.direction === "asc"
 					? valueA.localeCompare(valueB)
 					: valueB.localeCompare(valueA);
 			}
 
 			// 数値型の場合
 			if (typeof valueA === "number" && typeof valueB === "number") {
-				return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
+				return order.direction === "asc" ? valueA - valueB : valueB - valueA;
 			}
 
 			// デフォルトの比較（文字列化して比較）
 			const strA = String(valueA);
 			const strB = String(valueB);
 
-			return sortOrder === "asc"
+			return order.direction === "asc"
 				? strA.localeCompare(strB)
 				: strB.localeCompare(strA);
 		});
 	}
 
 	// 総件数
-	const total = filteredEmployees.length;
 
 	// 総ページ数の計算
-	const totalPages = Math.ceil(total / limit);
+	const totalPages = Math.ceil(filteredEmployees.length / PaginationItemCount);
 
 	// ページネーション
-	const start = (page - 1) * limit;
-	const end = start + limit;
+	const start = (pagination.page - 1) * PaginationItemCount;
+	const end = start + PaginationItemCount;
 	const paginatedEmployees = filteredEmployees.slice(start, end);
 
 	return {
 		items: paginatedEmployees,
 		pagination: {
-			total,
-			page,
-			limit,
+			total: filteredEmployees.length,
+			page: pagination.page,
+			limit: PaginationItemCount,
 			totalPages,
 		},
 	};
-}
-
-// 従業員一覧を取得する関数（互換性のための元のバージョンを維持）
-export async function getEmployeesList(
-	query?: string | null,
-	department?: string,
-	position?: string,
-): Promise<Employee[]> {
-	// クエリを安全に文字列に変換
-	const safeQuery = typeof query === "string" ? query.toLowerCase() : "";
-
-	// 検索条件に基づいてフィルタリング
-	return mockEmployees.filter((employee) => {
-		// 検索クエリでフィルタリング（名前、メールアドレス）
-		const matchesQuery =
-			!query ||
-			employee.name.toLowerCase().includes(safeQuery) ||
-			employee.email.toLowerCase().includes(safeQuery);
-
-		// 部署でフィルタリング
-		const matchesDepartment =
-			!department || department === "all" || employee.department === department;
-
-		// 役職でフィルタリング
-		const matchesPosition =
-			!position || position === "all" || employee.position === position;
-
-		return matchesQuery && matchesDepartment && matchesPosition;
-	});
 }
 
 // 指定したIDの従業員を取得する関数

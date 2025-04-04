@@ -1,33 +1,19 @@
 "use client";
 
 import { PaginationNav } from "@/components/common/pagination-nav";
+import type { PaginationResult } from "@/lib/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { type EmployeeOrder, OrderDirection } from "../order";
 import type { Employee } from "../types";
 import { EmployeeTable } from "./employee-table";
 
-interface EmployeesPresenterProps {
+interface Props {
 	employees: Employee[];
-	searchParams: {
-		query?: string;
-		department?: string;
-		position?: string;
-		sortBy?: string;
-		sortOrder?: "asc" | "desc";
-		page?: string;
-	};
-	pagination: {
-		total: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
+	order: EmployeeOrder;
+	pagination: PaginationResult;
 }
 
-export function EmployeesPresenter({
-	employees,
-	searchParams,
-	pagination,
-}: EmployeesPresenterProps) {
+export function EmployeesPresenter({ employees, order, pagination }: Props) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const params = useSearchParams();
@@ -37,27 +23,24 @@ export function EmployeesPresenter({
 		const newParams = new URLSearchParams(params.toString());
 
 		// 検索クエリがあれば維持
-		if (searchParams.query) newParams.set("query", searchParams.query);
-		if (searchParams.department)
-			newParams.set("department", searchParams.department);
-		if (searchParams.position) newParams.set("position", searchParams.position);
+		if (order.field) newParams.set("field", order.field);
+		if (order.direction) newParams.set("direction", order.direction);
 
 		// 現在のページを維持
-		if (searchParams.page) newParams.set("page", searchParams.page);
+		if (pagination.page) newParams.set("page", pagination.page.toString());
 
-		// ソート条件を更新
-		const currentSortBy = searchParams.sortBy;
-		const currentSortOrder = searchParams.sortOrder;
-
-		if (currentSortBy === column) {
+		if (order.field === column) {
 			// 同じカラムの場合、ソート順を切り替え
-			const newOrder = currentSortOrder === "asc" ? "desc" : "asc";
-			newParams.set("sortBy", column);
-			newParams.set("sortOrder", newOrder);
+			const newOrder =
+				order.direction === OrderDirection.Asc
+					? OrderDirection.Desc
+					: OrderDirection.Asc;
+			newParams.set("field", column);
+			newParams.set("direction", newOrder);
 		} else {
 			// 異なるカラムの場合、新しいカラムでソート（デフォルト昇順）
-			newParams.set("sortBy", column);
-			newParams.set("sortOrder", "asc");
+			newParams.set("field", column);
+			newParams.set("direction", "asc");
 		}
 
 		// URLをアップデート
@@ -71,10 +54,7 @@ export function EmployeesPresenter({
 			<div className="w-full overflow-auto">
 				<EmployeeTable
 					employees={employees}
-					searchParams={{
-						sortBy: searchParams.sortBy,
-						sortOrder: searchParams.sortOrder as "asc" | "desc" | undefined,
-					}}
+					order={order}
 					onSort={handleSort}
 				/>
 			</div>

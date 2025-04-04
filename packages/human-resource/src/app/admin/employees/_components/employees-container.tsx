@@ -1,55 +1,25 @@
+import type { Pagination } from "@/lib/pagination";
 import {
 	getDepartments,
 	getEmployees,
 	getPositions,
 } from "../_actions/employee-actions";
+import type { EmployeeOrder } from "../order";
+import type { EmployeeSearchQuery } from "../search-query";
 import { EmployeesPresenter } from "./employees-presenter";
 
-interface EmployeeSearchParams {
-	query?: string;
-	department?: string;
-	position?: string;
-	sortBy?: string;
-	sortOrder?: "asc" | "desc";
-	page?: string;
-}
+type Props = Parameters<typeof getEmployees>[0];
 
-interface EmployeesContainerProps {
-	searchParams: EmployeeSearchParams;
-}
-
-export async function EmployeesContainer({
-	searchParams,
-}: EmployeesContainerProps) {
-	// ページ番号のパラメータを処理（デフォルトは1ページ目）
-	const currentPage = searchParams.page
-		? Number.parseInt(searchParams.page, 10)
-		: 1;
-
-	// 検索とソートパラメータの取得
-	const query = searchParams.query;
-	const department = searchParams.department;
-	const position = searchParams.position;
-	const sortBy = searchParams.sortBy;
-	const sortOrder = searchParams.sortOrder;
-
+export async function EmployeesContainer(props: Props) {
 	// サーバーサイドでデータを取得
-	const employeesData = await getEmployees({
-		searchQuery: query,
-		department,
-		position,
-		sortBy,
-		sortOrder: sortOrder as "asc" | "desc",
-		page: currentPage,
-		limit: 20, // 1ページあたり20件
-	});
+	const { items, pagination } = await getEmployees(props);
 
 	// データのみを返すのではなく、プレゼンターコンポーネントをレンダリングする
 	return (
 		<EmployeesPresenter
-			employees={employeesData.items}
-			searchParams={searchParams}
-			pagination={employeesData.pagination}
+			employees={items}
+			order={props.order}
+			pagination={pagination}
 		/>
 	);
 }

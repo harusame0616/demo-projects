@@ -23,45 +23,29 @@ import {
 	MoreHorizontalIcon,
 } from "lucide-react";
 import Link from "next/link";
+import type { EmployeeOrder } from "../order";
+import { EmployeeOrderField, OrderDirection } from "../order";
 
 interface EmployeeTableProps {
 	employees: Employee[];
-	searchParams: {
-		sortBy?: string;
-		sortOrder?: "asc" | "desc";
-	};
+	order: EmployeeOrder;
 	onSort: (column: string) => void;
 }
 
 export function EmployeeTable({
 	employees,
-	searchParams,
+	order,
 	onSort,
 }: EmployeeTableProps) {
 	// ソート状態に応じたアイコンを表示
 	const getSortIcon = (column: string) => {
-		// デバッグ用ログ
-		console.log(
-			`Column: ${column}, SortBy: ${searchParams.sortBy}, SortOrder: ${searchParams.sortOrder}`,
-		);
+		if (order.field !== column) return null;
 
-		if (searchParams.sortBy !== column) return null;
-
-		return searchParams.sortOrder === "asc" ? (
+		return order.direction === OrderDirection.Asc ? (
 			<ArrowUpIcon className="ml-1 h-4 w-4" />
 		) : (
 			<ArrowDownIcon className="ml-1 h-4 w-4" />
 		);
-	};
-
-	// 日付をフォーマット
-	const _formatDate = (dateString: string) => {
-		const date = new Date(dateString);
-		return new Intl.DateTimeFormat("ja-JP", {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-		}).format(date);
 	};
 
 	return (
@@ -71,7 +55,7 @@ export function EmployeeTable({
 					<TableRow>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[100px] whitespace-nowrap"
-							onClick={() => onSort("id")}
+							onClick={() => onSort(EmployeeOrderField.Id)}
 						>
 							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
 								従業員コード {getSortIcon("id")}
@@ -79,7 +63,7 @@ export function EmployeeTable({
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"
-							onClick={() => onSort("name")}
+							onClick={() => onSort(EmployeeOrderField.Name)}
 						>
 							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
 								氏名 {getSortIcon("name")}
@@ -87,7 +71,7 @@ export function EmployeeTable({
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[150px] whitespace-nowrap"
-							onClick={() => onSort("department")}
+							onClick={() => onSort(EmployeeOrderField.Department)}
 						>
 							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
 								部署 {getSortIcon("department")}
@@ -95,7 +79,7 @@ export function EmployeeTable({
 						</TableHead>
 						<TableHead
 							className="cursor-pointer hover:bg-gray-50 w-[120px] whitespace-nowrap"
-							onClick={() => onSort("position")}
+							onClick={() => onSort(EmployeeOrderField.Position)}
 						>
 							<div className="flex items-center whitespace-nowrap text-xs font-medium gap-1">
 								役職 {getSortIcon("position")}
