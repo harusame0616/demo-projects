@@ -12,7 +12,6 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -29,13 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import {
-	ChevronDown,
-	ChevronUp,
-	FileEdit,
-	PlusCircle,
-	Trash2,
-} from "lucide-react";
+import { FileEdit, PlusCircle, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 // Key Result (KR) の型定義

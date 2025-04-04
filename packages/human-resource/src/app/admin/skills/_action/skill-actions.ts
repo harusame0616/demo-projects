@@ -3,13 +3,7 @@
 import { type Skill, skills } from "@/app/_mocks/skills";
 import { OrderDirection } from "@/lib/order";
 import type { Pagination } from "@/lib/pagination";
-import type { CertificationOrder } from "../../certifications/order";
-import type { CertificationSearchQuery } from "../../certifications/search-query";
-import {
-	type SkillCertification,
-	skillCertificationData,
-} from "../../skills-certifications/_data/skills-certifications-data";
-import type { SkillOrder, SkillOrderField } from "../order";
+import type { SkillOrder } from "../order";
 import type { SkillSearchQuery } from "../search-query";
 
 export type Condition = {

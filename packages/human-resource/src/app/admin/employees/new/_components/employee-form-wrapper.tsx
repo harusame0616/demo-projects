@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createEmployee } from "../../_actions/employee-actions";
-import { EmployeeForm } from "../../_components/employee-form";
+import { EmployeeForm } from "../../_form/employee-form";
 
 interface EmployeeFormWrapperProps {
 	departmentOptions: { value: string; label: string }[];

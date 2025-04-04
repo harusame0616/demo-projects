@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/common/page-header";
-import { DepartmentsSkeleton } from "./_components/departments-skeleton";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { DepartmentsSkeleton } from "./_departments/departments-skeleton";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
 
 export default async function Loading() {
 	return (

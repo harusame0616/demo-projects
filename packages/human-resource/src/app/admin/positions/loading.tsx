@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/common/page-header";
 import type { Metadata } from "next";
-import { PositionsSkeleton } from "./_components/positions-skeleton";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { PositionsSkeleton } from "./_positions/positions-skeleton";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
 
 export const metadata: Metadata = {
 	title: "役職管理 | 人材管理システム",

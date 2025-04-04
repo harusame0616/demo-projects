@@ -37,9 +37,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { MonthlyAttendanceSummary } from "../_actions/attendance-actions";
 import {
-	type AttendanceSearchParams,
 	type SortField,
-	getAttendanceStatusName,
 	minutesToHoursMinutes,
 } from "../_actions/attendance-actions";
 

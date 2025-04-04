@@ -1,26 +1,4 @@
 "use client";
-
-import { cn } from "@/lib/utils";
-import {
-	Award,
-	BadgeCheck,
-	BookOpenCheck,
-	Briefcase,
-	Building2,
-	ClipboardCheck,
-	Clock,
-	LayoutDashboard,
-	LogOut,
-	MenuIcon,
-	PanelLeftIcon,
-	PanelRightIcon,
-	UserCog,
-	Users,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
 	Sidebar,
@@ -32,7 +10,21 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import {
+	Award,
+	BadgeCheck,
+	BookOpenCheck,
+	Briefcase,
+	Building2,
+	ClipboardCheck,
+	Clock,
+	LogOut,
+	UserCog,
+	Users,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const MENU_ITEMS = [
 	{

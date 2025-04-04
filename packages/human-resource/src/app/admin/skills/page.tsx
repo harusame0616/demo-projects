@@ -5,9 +5,9 @@ import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
-import { SkillsContainer } from "./_components/skills-container";
-import { SkillsSkeleton } from "./_components/skills-skeleton";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
+import { SkillsContainer } from "./_skills/skills-container";
+import { SkillsSkeleton } from "./_skills/skills-skeleton";
 import { parseSearchParamsSkillOrder } from "./order";
 import { parseSearchParamsSkillSearchQuery } from "./search-query";
 

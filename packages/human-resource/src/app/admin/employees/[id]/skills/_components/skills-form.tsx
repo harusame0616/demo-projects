@@ -1,7 +1,7 @@
 "use client";
 
 import { skills } from "@/app/_mocks/skills";
-import { skillCertificationData } from "@/app/admin/skills-certifications/_data/skills-certifications-data";
+import { skillCertificationData } from "@/app/admin/certifications/_data/skills-certifications-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

@@ -1,13 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -19,10 +13,7 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {
-	createDepartment,
-	updateDepartment,
-} from "../_actions/department-actions";
+import { createDepartment } from "../_actions/department-actions";
 import { type Department, departmentData } from "../_data/departments-data";
 
 interface DepartmentFormProps {

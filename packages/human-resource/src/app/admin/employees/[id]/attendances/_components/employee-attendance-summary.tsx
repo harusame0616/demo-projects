@@ -1,7 +1,6 @@
 "use client";
 
 import type { AttendanceStatus } from "@/app/_mocks/attendances";
-import type { Employee } from "@/app/_mocks/employees";
 import { Badge } from "@/components/ui/badge";
 import {
 	Card,
@@ -29,7 +28,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
 	type EmployeeAttendanceSummary as EmployeeAttendanceSummaryType,
-	type MonthlyAttendanceSummary,
 	formatWorkingHours,
 } from "../_actions/employee-attendance-actions";
 

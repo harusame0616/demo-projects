@@ -33,7 +33,7 @@ import {
 	MoreHorizontalIcon,
 	XIcon,
 } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
 	type Application,

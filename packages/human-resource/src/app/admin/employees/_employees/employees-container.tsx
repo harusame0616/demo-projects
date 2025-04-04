@@ -1,11 +1,4 @@
-import type { Pagination } from "@/lib/pagination";
-import {
-	getDepartments,
-	getEmployees,
-	getPositions,
-} from "../_actions/employee-actions";
-import type { EmployeeOrder } from "../order";
-import type { EmployeeSearchQuery } from "../search-query";
+import { getEmployees } from "../_actions/employee-actions";
 import { EmployeesPresenter } from "./employees-presenter";
 
 type Props = Parameters<typeof getEmployees>[0];

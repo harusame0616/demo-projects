@@ -1,5 +1,5 @@
 import { HomeIcon, PlusIcon } from "lucide-react";
-import { type PropsWithChildren, type ReactNode, Suspense } from "react";
+import { type ReactNode, Suspense } from "react";
 
 import { Avatar } from "@/components/avatar/avatar";
 import { Link } from "@/components/link";

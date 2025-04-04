@@ -21,8 +21,8 @@ import * as v from "valibot";
 import {
 	createSkillCertification,
 	updateSkillCertification,
-} from "../../skills-certifications/_actions/certification-actions";
-import type { SkillCertification } from "../../skills-certifications/_data/skills-certifications-data";
+} from "../_actions/certification-actions";
+import type { SkillCertification } from "../_data/skills-certifications-data";
 
 // フォームのバリデーションスキーマ
 const formSchema = v.object({

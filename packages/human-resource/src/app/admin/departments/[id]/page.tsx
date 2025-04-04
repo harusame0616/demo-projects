@@ -5,7 +5,6 @@ import {
 	ArrowLeftIcon,
 	BuildingIcon,
 	CalendarIcon,
-	PencilIcon,
 	UsersIcon,
 } from "lucide-react";
 import Link from "next/link";

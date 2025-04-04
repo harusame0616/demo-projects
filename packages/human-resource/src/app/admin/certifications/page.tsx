@@ -5,9 +5,9 @@ import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { CertificationsContainer } from "./_components/certifications-container";
-import { CertificationsSkeleton } from "./_components/certifications-skeleton";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { CertificationsContainer } from "./_certifications/certifications-container";
+import { CertificationsSkeleton } from "./_certifications/certifications-skeleton";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
 import { parseSearchParamsCertificationOrder } from "./order";
 import { parseSearchParamsCertificationSearchQuery } from "./search-query";
 

@@ -1,13 +1,12 @@
 "use client";
 
 import { PageHeader } from "@/components/common/page-header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 import { use } from "react";
-import { PositionForm } from "../../_components/position-form";
 import { positionData } from "../../_data/positions-data";
+import { PositionForm } from "../../_edit-form/position-form";
 
 interface PositionEditPageProps {
 	params: Promise<{

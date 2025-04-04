@@ -1,11 +1,8 @@
 import { PageHeader } from "@/components/common/page-header";
-import { Button } from "@/components/ui/button";
-import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
-import { SkillForm } from "../_components/skill-form";
-import { SkillFormSkeleton } from "../_components/skill-form-skeleton";
+import { SkillForm } from "../_edit-form/skill-form";
+import { SkillFormSkeleton } from "../_edit-form/skill-form-skeleton";
 
 export const metadata: Metadata = {
 	title: "スキル登録 | 人材管理システム",

@@ -1,8 +1,4 @@
-import {
-	type Employee,
-	getEmployeeWithDefaults,
-	mockEmployees,
-} from "@/app/_mocks/employees";
+import { getEmployeeWithDefaults, mockEmployees } from "@/app/_mocks/employees";
 import { GoalsCard } from "../_components";
 
 export const metadata = {

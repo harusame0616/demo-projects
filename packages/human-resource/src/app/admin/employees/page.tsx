@@ -5,10 +5,10 @@ import type { NextSearchParams } from "@/lib/search-params";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { EmployeesSkeleton } from "./_components/employee-list-skeleton";
-import { EmployeesContainer } from "./_components/employees-container";
-import { SearchFormContainer } from "./_components/search-form-container";
-import { SearchFormPresenter } from "./_components/search-form-presenter";
+import { EmployeesContainer } from "./_employees/employees-container";
+import { EmployeesSkeleton } from "./_employees/employees-skeleton";
+import { SearchFormContainer } from "./_search-form/search-form-container";
+import { SearchFormPresenter } from "./_search-form/search-form-presenter";
 import { parseSearchParamsEmployeeOrder } from "./order";
 import { parseSearchParamsEmployeeSearchQuery } from "./search-query";
 

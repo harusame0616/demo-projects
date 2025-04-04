@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -23,7 +22,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, PlusCircle, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // MBO目標の型定義(mbo-listと同じ)

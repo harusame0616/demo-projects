@@ -10,7 +10,6 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { usePathname, useSearchParams } from "next/navigation";
-import React from "react";
 
 interface PaginationNavProps {
 	currentPage: number;

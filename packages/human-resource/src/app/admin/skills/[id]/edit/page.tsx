@@ -5,8 +5,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getSkillById } from "../../_action/skill-actions";
-import { SkillForm } from "../../_components/skill-form";
-import { SkillFormSkeleton } from "../../_components/skill-form-skeleton";
+import { SkillForm } from "../../_edit-form/skill-form";
+import { SkillFormSkeleton } from "../../_edit-form/skill-form-skeleton";
 
 interface SkillEditPageProps {
 	params: Promise<{
