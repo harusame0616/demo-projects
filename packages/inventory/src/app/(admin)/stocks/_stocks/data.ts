@@ -1,10 +1,10 @@
 import { mockStocks } from "@/app/_mocks/stocks";
+import { OrderDirection } from "@/lib/order";
 import type { Pagination, PaginationResult } from "@/lib/pagination";
 import { PaginationItemCount } from "@/lib/pagination";
-import type { Stock } from "../type";
-import { OrderDirection } from "@/lib/order";
 import type { StockOrder } from "../order";
 import { StockOrderField } from "../order";
+import type { Stock } from "../type";
 
 export type Condition = {
 	searchQuery: {

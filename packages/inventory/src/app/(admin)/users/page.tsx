@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { parseSearchParamsPagination } from "@/lib/pagination";
+import { PlusIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -8,7 +9,6 @@ import { SearchFormPresenter } from "./_search-form";
 import { UsersContainer, UsersSkeleton } from "./_users";
 import { parseSearchParamsUserOrder } from "./order";
 import { parseSearchParamsUserSearchQuery } from "./search-query";
-import { PlusIcon } from "lucide-react";
 
 export const metadata: Metadata = {
 	title: "ユーザー一覧 | 人材管理システム",

@@ -1,7 +1,7 @@
 "use client";
 
-import type { Stock } from "@/app/(admin)/stocks/type";
 import { StockForm } from "@/app/(admin)/stocks/_components/stock-form";
+import type { Stock } from "@/app/(admin)/stocks/type";
 import { updateStock } from "../../actions";
 
 interface StockEditPresenterProps {

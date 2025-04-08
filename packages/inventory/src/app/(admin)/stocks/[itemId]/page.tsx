@@ -1,12 +1,12 @@
-import { StockDetailContainer } from "./_components/stock-detail-container";
 import { PageHeader } from "@/components/common/page-header";
-import { Suspense } from "react";
-import { StockDetailSkeleton } from "./_components/stock-detail-skeleton";
 import { Button } from "@/components/ui/button";
+import { parseSearchParamsPagination } from "@/lib/pagination";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { DeleteButton } from "./_components/delete-button";
-import { parseSearchParamsPagination } from "@/lib/pagination";
+import { StockDetailContainer } from "./_components/stock-detail-container";
+import { StockDetailSkeleton } from "./_components/stock-detail-skeleton";
 
 export default async function StockPage({
 	params,

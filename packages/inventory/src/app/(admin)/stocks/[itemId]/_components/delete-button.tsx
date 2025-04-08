@@ -1,9 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { TrashIcon } from "lucide-react";
-import { useTransition } from "react";
-import { deleteStock } from "../actions";
 import {
 	AlertDialog,
 	AlertDialogCancel,
@@ -14,8 +10,12 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { useState } from "react";
+import { deleteStock } from "../actions";
 
 // 削除ボタンコンポーネント
 export function DeleteButton({ stockId }: { stockId: string }) {

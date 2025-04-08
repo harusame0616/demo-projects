@@ -3,14 +3,6 @@
 import type { Stock } from "@/app/(admin)/stocks/type";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { SaveIcon } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as v from "valibot";
 import {
 	Form,
 	FormControl,
@@ -19,6 +11,14 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { SaveIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as v from "valibot";
 
 // バリデーションスキーマの定義
 const StockSchema = v.object({

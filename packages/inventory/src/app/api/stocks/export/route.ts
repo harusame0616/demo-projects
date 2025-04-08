@@ -1,5 +1,5 @@
-import { type NextRequest, NextResponse } from "next/server";
 import { mockStocks } from "@/app/_mocks/stocks";
+import { type NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 300;
 

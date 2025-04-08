@@ -1,9 +1,9 @@
+import { type User, mockUsers } from "@/app/_mocks/users";
+import { OrderDirection } from "@/lib/order";
 import type { Pagination, PaginationResult } from "@/lib/pagination";
+import { PaginationItemCount } from "@/lib/pagination";
 import type { UserOrder } from "../order";
 import type { UserSearchQuery } from "../search-query";
-import { mockUsers, type User } from "@/app/_mocks/users";
-import { PaginationItemCount } from "@/lib/pagination";
-import { OrderDirection } from "@/lib/order";
 
 export type GetUsersCondition = {
 	pagination: Pagination;

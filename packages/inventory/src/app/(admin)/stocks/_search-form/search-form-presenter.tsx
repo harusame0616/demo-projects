@@ -1,7 +1,8 @@
 "use client";
 
-import { useSearchForm } from "@/components/common/use-search-form";
 import { SearchForm } from "@/components/common/search-form";
+import { useSearchForm } from "@/components/common/use-search-form";
+import { Button } from "@/components/ui/button";
 import {
 	FormControl,
 	FormField,
@@ -10,7 +11,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { type SearchQuery, searchParamsQuerySchema } from "../search-query";
-import { Button } from "@/components/ui/button";
 
 interface Params {
 	searchQuery: SearchQuery;

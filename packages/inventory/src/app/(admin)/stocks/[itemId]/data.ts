@@ -1,8 +1,8 @@
 import { mockStocks } from "@/app/_mocks/stocks";
 import {
+	type Pagination,
 	PaginationItemCount,
 	type PaginationResult,
-	type Pagination,
 } from "@/lib/pagination";
 import type { Stock } from "../type";
 

@@ -1,6 +1,6 @@
 import { getUsers } from "./data";
-import { UsersPresenter } from "./users-presenter";
 import type { GetUsersCondition } from "./data";
+import { UsersPresenter } from "./users-presenter";
 
 type Props = GetUsersCondition;
 export async function UsersContainer(props: Props) {

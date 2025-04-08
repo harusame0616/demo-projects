@@ -1,10 +1,10 @@
-import { Suspense } from "react";
-import { StocksPresenter } from "./stocks-presenter";
-import { StocksSkeleton } from "./stocks-skeleton";
-import { getStocks } from "./data";
 import type { Pagination } from "@/lib/pagination";
+import { Suspense } from "react";
 import type { StockOrder } from "../order";
 import type { SearchQuery } from "../search-query";
+import { getStocks } from "./data";
+import { StocksPresenter } from "./stocks-presenter";
+import { StocksSkeleton } from "./stocks-skeleton";
 
 interface StocksContainerProps {
 	pagination: Pagination;

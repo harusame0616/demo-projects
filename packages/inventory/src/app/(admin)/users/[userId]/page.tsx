@@ -5,9 +5,9 @@ import { Pencil, Shield } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getUserById } from "./data";
-import { UserDeletionButton } from "./_components/user-deletion-button";
 import type { Metadata } from "next";
+import { UserDeletionButton } from "./_components/user-deletion-button";
+import { getUserById } from "./data";
 
 export const metadata: Metadata = {
 	title: "ユーザー詳細 | 人材管理システム",

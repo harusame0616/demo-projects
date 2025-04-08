@@ -1,8 +1,8 @@
-import { StockDetailPresenter } from "./stock-detail-presenter";
 import { Button } from "@/components/ui/button";
-import { getStockById } from "../data";
 import type { Pagination } from "@/lib/pagination";
 import Link from "next/link";
+import { getStockById } from "../data";
+import { StockDetailPresenter } from "./stock-detail-presenter";
 interface Props {
 	itemId: string;
 	pagination: Pagination;

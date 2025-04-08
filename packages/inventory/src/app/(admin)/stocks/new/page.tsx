@@ -1,8 +1,8 @@
 import { PageHeader } from "@/components/common/page-header";
 import type { Metadata } from "next";
 import { v4 as uuidv4 } from "uuid";
-import type { Stock } from "../type";
 import { StockForm } from "../_components/stock-form";
+import type { Stock } from "../type";
 
 // メタデータ
 export const metadata: Metadata = {

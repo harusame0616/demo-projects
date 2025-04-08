@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Suspense } from "react";
-import { StockEditSkeleton } from "./_components/stock-edit-skeleton";
 import { StockEditContainer } from "./_components/stock-edit-container";
+import { StockEditSkeleton } from "./_components/stock-edit-skeleton";
 
 export default function StockEditPage({
 	params,
