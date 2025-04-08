@@ -1,13 +1,13 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { parseSearchParamsPagination } from "@/lib/pagination";
+import type { NextSearchParams } from "@/lib/search-params";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { DeleteButton } from "./_components/delete-button";
 import { StockDetailContainer } from "./_components/stock-detail-container";
 import { StockDetailSkeleton } from "./_components/stock-detail-skeleton";
-import type { NextSearchParams } from "@/lib/search-params";
 
 export default async function StockPage({
 	params,
