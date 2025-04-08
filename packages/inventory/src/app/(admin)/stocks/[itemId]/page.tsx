@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { parseSearchParamsPagination } from "@/lib/pagination";
+import type { NextSearchParams } from "@/lib/search-params";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -12,9 +13,10 @@ export default async function StockPage({
 	params,
 	searchParams,
 }: {
-	params: { itemId: string };
-	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+	params: Promise<{ itemId: string }>;
+	searchParams: NextSearchParams;
 }) {
+	const { itemId } = await params;
 	const pagination = parseSearchParamsPagination(await searchParams);
 
 	return (
@@ -23,16 +25,16 @@ export default async function StockPage({
 				title="在庫詳細"
 				operations={[
 					<Button key="edit" asChild variant="outline">
-						<Link href={`/stocks/${params.itemId}/edit`}>
+						<Link href={`/stocks/${itemId}/edit`}>
 							<PencilIcon className="h-4 w-4" />
 							編集
 						</Link>
 					</Button>,
-					<DeleteButton key="delete" stockId={params.itemId} />,
+					<DeleteButton key="delete" stockId={itemId} />,
 				]}
 			/>
 			<Suspense fallback={<StockDetailSkeleton />} key={pagination.page}>
-				<StockDetailContainer itemId={params.itemId} pagination={pagination} />
+				<StockDetailContainer itemId={itemId} pagination={pagination} />
 			</Suspense>
 		</>
 	);
