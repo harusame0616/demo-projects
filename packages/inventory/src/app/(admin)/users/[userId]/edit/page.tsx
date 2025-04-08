@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function EditUserPage({
 	params,
 }: {
-	params: Promise<{ id: string }>;
+	params: Promise<{ userId: string }>;
 }) {
 	const { userId } = await params;
 	// モックデータからユーザー情報を取得

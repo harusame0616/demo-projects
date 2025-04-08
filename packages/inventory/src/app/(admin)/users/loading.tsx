@@ -19,7 +19,6 @@ export default function Loading() {
 				searchQuery={{
 					query: "",
 					role: "all",
-					status: "all",
 				}}
 			/>
 			<UsersSkeleton />

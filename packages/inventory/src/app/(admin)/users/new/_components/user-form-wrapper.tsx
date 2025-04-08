@@ -3,24 +3,21 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UserForm } from "../../_edit-form/user-form";
+import { createUser } from "../_actions/create-user";
 
 export function UserFormWrapper() {
 	const router = useRouter();
 
 	const handleSubmit = async (values: {
-		id?: string;
+		name: string;
 		email: string;
 		role: string;
-		status: string;
-		employeeId: string | null;
 	}) => {
 		try {
 			await createUser({
+				name: values.name,
 				email: values.email,
 				role: values.role as "admin" | "user",
-				status: values.status as "active" | "inactive",
-				employeeId: values.employeeId,
-				lastLogin: null,
 			});
 
 			toast.success("ユーザーを登録しました");
